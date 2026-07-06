@@ -1,0 +1,20 @@
+services:
+  dev:
+    image: node:24.18.0-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+      - upmo-ds-pnpm-store:/root/.local/share/pnpm/store
+      - upmo-ds-corepack:/root/.cache/node/corepack
+    environment:
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+    ports:
+      - "4321:4321"
+    entrypoint: ["sh", "-c", "corepack enable && exec \"$$@\"", "--"]
+    command: ["pnpm", "dev"]
+
+volumes:
+  upmo-ds-pnpm-store:
+    name: upmo-ds-pnpm-store
+  upmo-ds-corepack:
+    name: upmo-ds-corepack

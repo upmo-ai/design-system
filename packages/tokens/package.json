@@ -1,0 +1,33 @@
+{
+  "name": "@upmo-ai/tokens",
+  "version": "0.0.0",
+  "description": "Upmo design tokens: CSS variables for the light, dark and high-contrast themes, and a typed object of every value.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "homepage": "https://design.upmo.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/upmo-ai/design-system.git",
+    "directory": "packages/tokens"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/tokens.d.ts",
+      "default": "./dist/tokens.js"
+    },
+    "./tokens.css": "./dist/tokens.css",
+    "./tokens.json": "./dist/tokens.json"
+  },
+  "scripts": {
+    "build": "node scripts/build.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

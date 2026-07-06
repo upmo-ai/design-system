@@ -1,0 +1,12 @@
+packages:
+  - packages/*
+  - apps/*
+
+# Keep the store in the home directory even when it is on another filesystem than the
+# repository (the Docker volume in compose.yml); by default pnpm would create .pnpm-store here.
+storeDir: ${HOME}/.local/share/pnpm/store
+
+# Neither needs its install script: esbuild and sharp ship prebuilt binaries per platform.
+allowBuilds:
+  esbuild: false
+  sharp: false
