@@ -1,0 +1,30 @@
+{
+  "name": "@upmo-ai/icons",
+  "version": "0.0.0",
+  "description": "Upmo icon concept map (concept to Tabler Icons name) and the caret and status marks as SVG.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "homepage": "https://design.upmo.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/upmo-ai/design-system.git",
+    "directory": "packages/icons"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./icons.json": "./dist/icons.json",
+    "./svg/*": "./dist/svg/*"
+  },
+  "scripts": {
+    "build": "node scripts/build.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
