@@ -1,0 +1,30 @@
+{
+  "name": "@upmo-ai/brands",
+  "version": "0.0.0",
+  "description": "Official marks of the services Upmo connects to, as SVG, with a manifest.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "homepage": "https://design.upmo.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/upmo-ai/design-system.git",
+    "directory": "packages/brands"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./brands.json": "./dist/brands.json",
+    "./svg/*": "./dist/svg/*"
+  },
+  "scripts": {
+    "build": "node scripts/build.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
