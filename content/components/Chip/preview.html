@@ -1,0 +1,12 @@
+<!-- @dsCard group="Inputs" height=110 subtitle="Toggle chips. You can remove the last one" -->
+<div class="u-preview">
+  <button class="u-chip" aria-pressed="true" data-chip>finance-policies</button>
+  <button class="u-chip" aria-pressed="false" data-chip>vendor-contracts</button>
+  <button class="u-chip" aria-pressed="false" data-chip>onboarding</button>
+  <button class="u-chip" aria-pressed="true" data-chip><svg class="u-icon u-icon--sm" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Search the web</button>
+  <span class="u-chip u-chip--checked" style="cursor: default">invoice-oct.pdf<button class="u-chip-x" type="button" aria-label="Remove invoice-oct.pdf" data-remove><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></span>
+</div>
+<script>
+  document.querySelectorAll('[data-chip]').forEach(function (c) { c.addEventListener('click', function () { c.setAttribute('aria-pressed', c.getAttribute('aria-pressed') !== 'true'); }); });
+  document.querySelector('[data-remove]').addEventListener('click', function () { this.parentElement.remove(); });
+</script>

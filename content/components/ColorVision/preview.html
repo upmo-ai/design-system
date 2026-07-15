@@ -1,0 +1,71 @@
+<!-- @dsCard group="Foundations" height=560 width=1100 subtitle="Status, chart colours and a card under colour-vision simulation, in each theme. The word and icon stay readable when the hue is gone" -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="cv-protan"><feColorMatrix type="matrix" values="0.567 0.433 0 0 0  0.558 0.442 0 0 0  0 0.242 0.758 0 0  0 0 0 1 0"/></filter>
+  <filter id="cv-deutan"><feColorMatrix type="matrix" values="0.625 0.375 0 0 0  0.7 0.3 0 0 0  0 0.3 0.7 0 0  0 0 0 1 0"/></filter>
+  <filter id="cv-tritan"><feColorMatrix type="matrix" values="0.95 0.05 0 0 0  0 0.433 0.567 0 0  0 0.475 0.525 0 0  0 0 0 1 0"/></filter>
+  <filter id="cv-achroma"><feColorMatrix type="matrix" values="0.299 0.587 0.114 0 0  0.299 0.587 0.114 0 0  0.299 0.587 0.114 0 0  0 0 0 1 0"/></filter>
+</svg>
+<style>
+  .cv-wrap { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .cv-bar { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  .cv-stage { border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-000); color: var(--ink); padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .cv-stage h4 { margin: 0 0 10px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); }
+  .cv-sw { display: flex; gap: 8px; }
+  .cv-sw div { flex: 1; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: flex-end; padding: 4px 6px; font-size: 11px; font-weight: 600; color: var(--ink-on-brand); }
+  .cv-dots { display: flex; gap: 10px; }
+  .cv-dots span { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+  .cv-stage[data-theme="hc"] .u-btn, .cv-stage[data-theme="hc"] .u-card { border-color: var(--border-strong); }
+  .cv-f-protan { filter: url(#cv-protan); } .cv-f-deutan { filter: url(#cv-deutan); } .cv-f-tritan { filter: url(#cv-tritan); } .cv-f-achroma { filter: url(#cv-achroma); }
+  .cv-note { font-size: 13px; color: var(--ink-muted); }
+</style>
+<div class="cv-wrap">
+  <div class="cv-bar">
+    <div class="u-seg" role="group" aria-label="Simulation" id="cv-sim">
+      <button aria-pressed="true" data-f="">Normal</button><button aria-pressed="false" data-f="protan">Protan</button><button aria-pressed="false" data-f="deutan">Deutan</button><button aria-pressed="false" data-f="tritan">Tritan</button><button aria-pressed="false" data-f="achroma">Greyscale</button>
+    </div>
+    <div class="u-seg" role="group" aria-label="Theme" id="cv-theme">
+      <button aria-pressed="true" data-t="light">Light</button><button aria-pressed="false" data-t="dark">Dark</button><button aria-pressed="false" data-t="hc">High contrast</button>
+    </div>
+    <span class="cv-note" id="cv-note">Status hues alone: light worst pair danger ↔ warning, ΔE 3.3 under deutan. The word and icon carry it.</span>
+  </div>
+  <div class="cv-stage" id="cv-stage" data-theme="light">
+    <div>
+      <h4>Status: colour, icon and word</h4>
+      <div class="u-stack" style="gap: 8px; align-items: flex-start">
+        <span class="u-badge u-badge--success"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Done</span>
+        <span class="u-badge u-badge--danger"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>Failed</span>
+        <span class="u-badge u-badge--warning"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Needs approval</span>
+        <span class="u-badge u-badge--info"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Queued</span>
+      </div>
+      <h4 style="margin-top: 16px">Status as dots only (what the system forbids)</h4>
+      <div class="cv-dots"><span style="background: var(--success)"></span><span style="background: var(--danger)"></span><span style="background: var(--warning)"></span><span style="background: var(--info)"></span></div>
+    </div>
+    <div>
+      <h4>Chart series 1 to 6</h4>
+      <div class="cv-sw">
+        <div style="background: var(--chart-1)">1</div><div style="background: var(--chart-2)">2</div><div style="background: var(--chart-3)">3</div><div style="background: var(--chart-4)">4</div><div style="background: var(--chart-5)">5</div><div style="background: var(--chart-6)">6</div>
+      </div>
+      <h4 style="margin-top: 16px">A card</h4>
+      <article class="u-card" style="max-width: 360px">
+        <div class="u-card-head"><h4 class="u-card-title" style="margin: 0; font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--ink)">Daily finance digest</h4><span class="u-badge u-badge--success"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Done</span></div>
+        <div class="u-card-meta">Upmo · 38k tok · €0.42</div>
+        <div class="u-card-foot"><button class="u-btn u-btn--subtle u-btn--sm">Archive</button><button class="u-btn u-btn--filled u-btn--sm">Follow up</button></div>
+      </article>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var stage = document.getElementById('cv-stage'), note = document.getElementById('cv-note');
+  var notes = { light: 'Status hues alone: light worst pair danger ↔ warning, ΔE 3.3 under deutan. The word and icon carry it.', dark: 'Status hues alone: dark worst pair danger ↔ success, ΔE 1.7 under protan. Done and Failed share a hue; the caret and the X do not.', hc: 'High contrast: every text pair 7:1 or better. Status hues still merge under deutan (ΔE 1.6); shape and word carry it.' };
+  function seg(id, attr, fn) {
+    document.getElementById(id).addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      fn(b.dataset[attr]);
+    });
+  }
+  seg('cv-sim', 'f', function (f) { stage.className = 'cv-stage' + (f ? ' cv-f-' + f : ''); });
+  seg('cv-theme', 't', function (t) { stage.setAttribute('data-theme', t); note.textContent = notes[t]; });
+})();
+</script>

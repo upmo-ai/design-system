@@ -1,0 +1,14 @@
+<!-- @dsCard group="Inputs" height=140 subtitle="Takes effect at once. The word beside it changes with the state" -->
+<div class="u-preview" style="align-items: flex-start; gap: 20px">
+  <div class="u-stack" style="gap: 14px">
+    <label class="u-switch"><input type="checkbox" checked data-sw><span class="u-track"></span><span>Run on schedule</span><span class="u-switch-state">On</span></label>
+    <label class="u-switch"><input type="checkbox" data-sw><span class="u-track"></span><span>Notify on failure</span><span class="u-switch-state">Off</span></label>
+    <label class="u-switch"><input type="checkbox" disabled checked><span class="u-track"></span><span style="color: var(--ink-disabled)">Verify artifacts</span><span class="u-switch-state">Always on</span></label>
+  </div>
+  <div class="u-note" style="max-width: 280px">A switch saves at once and shows a short "Saved" caret beside it. If saving fails, the switch flips back and a toast says what happened.</div>
+</div>
+<script>
+  document.querySelectorAll('[data-sw]').forEach(function (i) {
+    i.addEventListener('change', function () { i.parentElement.querySelector('.u-switch-state').textContent = i.checked ? 'On' : 'Off'; });
+  });
+</script>

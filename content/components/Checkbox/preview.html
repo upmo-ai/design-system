@@ -1,0 +1,14 @@
+<!-- @dsCard group="Inputs" height=190 subtitle="Click to toggle. The check is the caret" -->
+<div class="u-preview" style="align-items: flex-start; gap: 24px">
+  <div class="u-stack" style="gap: 12px">
+    <label class="u-check"><input type="checkbox" checked><span class="u-box"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="u-check-text">Search the web</span></label>
+    <label class="u-check"><input type="checkbox"><span class="u-box"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="u-check-text">Read the knowledge base<span class="u-desc">Folders you have shared with this agent.</span></span></label>
+    <label class="u-check"><input type="checkbox" id="cb-ind"><span class="u-box"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="u-check-text">All tools</span></label>
+    <label class="u-check"><input type="checkbox" disabled checked><span class="u-box"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="u-check-text">Remember facts<span class="u-desc">Required for tasks. Managed in Settings.</span></span></label>
+  </div>
+  <div class="u-field">
+    <label class="u-check u-check--invalid"><input type="checkbox" aria-invalid="true" aria-describedby="cb-msg"><span class="u-box"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="u-check-text">I understand this deletes the workspace</span></label>
+    <div class="u-msg u-msg--error" id="cb-msg"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>Tick the box to continue.</div>
+  </div>
+</div>
+<script>document.getElementById('cb-ind').indeterminate = true;</script>

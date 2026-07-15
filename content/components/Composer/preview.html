@@ -1,0 +1,23 @@
+<!-- @dsCard group="Inputs" height=230 subtitle="Type; the send caret enables with text, Enter sends" -->
+<div class="u-preview u-preview--col">
+  <div class="u-composer">
+    <div class="u-row" style="gap: 6px"><button class="u-chip" aria-pressed="true" style="height: 28px">finance-policies</button><button class="u-chip" style="height: 28px"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add context</button></div>
+    <textarea id="cm-ta" rows="1" placeholder="Message Upmo…" aria-label="Message"></textarea>
+    <div class="u-composer-row">
+      <button class="u-btn u-btn--subtle u-btn--sm" aria-haspopup="listbox">Auto<svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+      <button class="u-aicon u-aicon--sm" aria-label="Attach file"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3L18 10a3 3 0 0 0-4.5-4.5L7 12a5 5 0 0 0 7 7l4-4"/></svg></button>
+      <button class="u-aicon u-aicon--sm" aria-label="Dictate"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4M8 21h8"/></svg></button>
+      <span class="u-spacer"></span>
+      <button class="u-aicon u-aicon--filled" id="cm-send" aria-label="Send message" aria-disabled="true"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+  <div class="u-composer-hint"><kbd class="u-kbd">Enter</kbd> to send · <kbd class="u-kbd">Shift</kbd> <kbd class="u-kbd">Enter</kbd> for a new line</div>
+</div>
+<script>
+  var ta = document.getElementById('cm-ta'), send = document.getElementById('cm-send');
+  function sync() { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight, 194) + 'px'; var empty = !ta.value.trim(); send.setAttribute('aria-disabled', empty); send.style.background = empty ? 'var(--surface-200)' : ''; send.style.color = empty ? 'var(--ink-disabled)' : ''; }
+  ta.addEventListener('input', sync);
+  ta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (ta.value.trim()) { ta.value = ''; sync(); } } });
+  send.addEventListener('click', function () { if (ta.value.trim()) { ta.value = ''; sync(); } ta.focus(); });
+  sync();
+</script>

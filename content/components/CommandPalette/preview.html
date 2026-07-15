@@ -1,0 +1,27 @@
+<!-- @dsCard group="Navigation" height=380 subtitle="⌘K launcher: type to filter, arrows move, Enter runs" -->
+<div class="u-preview" style="justify-content: center">
+  <div class="u-cmd" role="dialog" aria-label="Search or jump to">
+    <div class="u-cmd-input"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--ink-muted)"><circle cx="10" cy="10" r="6"/><path d="m20 20-5-5"/></svg><input id="cp-in" placeholder="Search or jump to…" autocomplete="off" aria-controls="cp-list" aria-activedescendant="cp-0" value="mis"><kbd class="u-kbd">Esc</kbd></div>
+    <div class="u-cmd-list" id="cp-list" role="listbox"></div>
+    <div class="u-cmd-foot"><span><kbd class="u-kbd">↑</kbd> <kbd class="u-kbd">↓</kbd> move</span><span><kbd class="u-kbd">Enter</kbd> open</span><span><kbd class="u-kbd">⌘</kbd> <kbd class="u-kbd">K</kbd> toggle</span></div>
+  </div>
+</div>
+<script>
+  var items = [
+    { g: 'Actions', t: 'New task', m: 'N', i: 'M12 5v14M5 12h14' }, { g: 'Actions', t: 'New chat', m: 'C', i: 'M4 20l1.5-4A8 8 0 1 1 8 18.5L4 20z' },
+    { g: 'Pages', t: 'Tasks', m: 'Go to', i: 'M5 12 12 5l7 7' }, { g: 'Pages', t: 'Automations', m: 'Go to', i: 'M12 7v5l3 3' }, { g: 'Pages', t: 'Settings', m: 'Go to', i: 'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z' },
+    { g: 'Recent', t: 'Daily finance digest', m: 'Task · run 14', i: 'M5 12 12 5l7 7' }, { g: 'Recent', t: 'Vendor contract review', m: 'Task · done', i: 'M5 12 12 5l7 7' }, { g: 'Recent', t: 'Task budget policy', m: 'Knowledge', i: 'M4 5a2 2 0 0 1 2-2h5v18H6a2 2 0 0 1-2-2V5z' }
+  ];
+  var input = document.getElementById('cp-in'), list = document.getElementById('cp-list'), active = 0;
+  function render() {
+    var q = input.value.trim().toLowerCase(), rows = items.filter(function (x) { return !q || x.t.toLowerCase().indexOf(q) > -1; });
+    active = Math.min(active, Math.max(0, rows.length - 1)); var html = '', g = '';
+    rows.forEach(function (x, i) { if (x.g !== g) { g = x.g; html += '<div class="u-opt-group">' + g + '</div>'; } var t = q ? x.t.replace(new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'i'), '<mark>$1</mark>') : x.t; html += '<div class="u-cmd-item" role="option" id="cp-' + i + '" data-active="' + (i === active) + '" aria-selected="' + (i === active) + '"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + x.i + '"/></svg>' + t + '<span class="u-cmd-meta">' + x.m + '</span></div>'; });
+    list.innerHTML = html || '<div class="u-cmd-item" style="color: var(--ink-muted); cursor: default">No match. Press Enter to search knowledge for “' + input.value + '”.</div>';
+    input.setAttribute('aria-activedescendant', 'cp-' + active);
+    list.querySelectorAll('.u-cmd-item[id]').forEach(function (el, i) { el.addEventListener('mousemove', function () { if (active !== i) { active = i; render(); } }); });
+  }
+  input.addEventListener('input', function () { active = 0; render(); });
+  input.addEventListener('keydown', function (e) { var n = list.querySelectorAll('.u-cmd-item[id]').length; if (e.key === 'ArrowDown') { e.preventDefault(); active = (active + 1) % n; render(); } if (e.key === 'ArrowUp') { e.preventDefault(); active = (active - 1 + n) % n; render(); } });
+  render();
+</script>

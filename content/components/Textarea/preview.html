@@ -1,0 +1,15 @@
+<!-- @dsCard group="Inputs" height=230 subtitle="Grows to 8 lines. The counter turns red over the limit" -->
+<div class="u-preview" style="align-items: flex-start">
+  <div class="u-field" style="width: 420px; max-width: 100%">
+    <label class="u-label" for="ta-goal">Task goal</label>
+    <textarea class="u-input" id="ta-goal" rows="3" maxlength="600" aria-describedby="ta-goal-desc ta-goal-msg" placeholder="What should the agent deliver, and how will you know it is done?">Summarise last month's invoices from the finance mailbox into one table with vendor, amount and due date. Flag anything over €5,000.</textarea>
+    <div class="u-msg" id="ta-goal-msg"><span class="u-desc" id="ta-goal-desc">Write it the way you would brief a colleague.</span><span class="u-count" id="ta-count" aria-live="polite">0 / 600</span></div>
+  </div>
+</div>
+<script>
+  var ta = document.getElementById('ta-goal'), c = document.getElementById('ta-count');
+  function grow() { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight, 8 * 22 + 18) + 'px'; }
+  function count() { var n = ta.value.length; c.textContent = n + ' / 600'; c.classList.toggle('u-count--over', n > 540); }
+  ta.addEventListener('input', function () { grow(); count(); });
+  grow(); count();
+</script>

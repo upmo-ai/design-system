@@ -1,0 +1,21 @@
+<!-- @dsCard group="Navigation" height=190 subtitle="Views of one object. Arrow keys move between tabs" -->
+<div class="u-preview u-preview--col" style="max-width: 560px; gap: 0">
+  <div class="u-tabs" role="tablist" aria-label="Task views" data-tabs>
+    <button class="u-tab" role="tab" aria-selected="true" aria-controls="tp-0" id="tb-0">Activity</button>
+    <button class="u-tab" role="tab" aria-selected="false" aria-controls="tp-1" id="tb-1" tabindex="-1">Artifacts<span class="u-badge u-badge--count">3</span></button>
+    <button class="u-tab" role="tab" aria-selected="false" aria-controls="tp-2" id="tb-2" tabindex="-1">Sources</button>
+    <button class="u-tab" role="tab" aria-selected="false" aria-controls="tp-3" id="tb-3" tabindex="-1">Cost</button>
+  </div>
+  <div class="u-tabpanel" role="tabpanel" id="tp-0" aria-labelledby="tb-0">Planned 4 steps. Working on step 2: querying the ledger for October invoices.</div>
+  <div class="u-tabpanel" role="tabpanel" id="tp-1" aria-labelledby="tb-1" hidden>invoices-oct.csv · summary.md · digest.pdf</div>
+  <div class="u-tabpanel" role="tabpanel" id="tp-2" aria-labelledby="tb-2" hidden>Finance mailbox (Gmail), finance-policies folder.</div>
+  <div class="u-tabpanel" role="tabpanel" id="tp-3" aria-labelledby="tb-3" hidden>€0.42 so far · 38k tokens · gpt-5.2</div>
+</div>
+<script>
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[data-tabs] [role="tab"]'));
+  function select(t) { tabs.forEach(function (x, i) { var on = x === t; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1; document.getElementById('tp-' + i).hidden = !on; }); t.focus(); }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(t); });
+    t.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') select(tabs[(i + 1) % tabs.length]); if (e.key === 'ArrowLeft') select(tabs[(i - 1 + tabs.length) % tabs.length]); });
+  });
+</script>

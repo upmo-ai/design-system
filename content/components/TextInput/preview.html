@@ -1,0 +1,52 @@
+<!-- @dsCard group="Inputs" height=300 subtitle="Type in the key field. It checks on blur, then live once it has been wrong" -->
+<div class="u-preview" style="align-items: flex-start">
+  <div class="u-field" style="width: 300px">
+    <label class="u-label" for="ti-key">API key</label>
+    <div class="u-input-wrap">
+      <input class="u-input u-input--with-right" id="ti-key" type="password" placeholder="sk-…" autocomplete="off" aria-describedby="ti-key-desc ti-key-msg">
+      <div class="u-input-right u-input-right--btn"><button class="u-aicon u-aicon--sm" type="button" aria-label="Show key" data-reveal><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+    </div>
+    <div class="u-desc" id="ti-key-desc">From the OpenAI dashboard, under API keys.</div>
+    <div class="u-msg" id="ti-key-msg" aria-live="polite"></div>
+  </div>
+  <div class="u-field" style="width: 300px">
+    <label class="u-label" for="ti-repo">Repository <span class="u-opt">(optional)</span></label>
+    <div class="u-input-wrap">
+      <div class="u-input-left"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a3 3 0 1 0 0 6 3 3 0 0 0 0-6M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 9a9 9 0 0 1-9 9"/></svg></div>
+      <input class="u-input u-input--with-left u-input--success" id="ti-repo" value="upmo-hq/upmo" aria-describedby="ti-repo-msg">
+    </div>
+    <div class="u-msg u-msg--success" id="ti-repo-msg"><svg class="u-icon u-icon--sm" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Found. You can push to it.</div>
+  </div>
+  <div class="u-field" style="width: 300px">
+    <label class="u-label" for="ti-dis">Instance name</label>
+    <input class="u-input" id="ti-dis" value="acme-prod" disabled aria-describedby="ti-dis-desc">
+    <div class="u-desc" id="ti-dis-desc">Set at install. Change it in the compose file.</div>
+  </div>
+  <div class="u-field" style="width: 300px">
+    <label class="u-label" for="ti-sm">Port</label>
+    <input class="u-input u-input--sm" id="ti-sm" inputmode="numeric" value="8300" style="width: 120px">
+  </div>
+</div>
+<script>
+  var key = document.getElementById('ti-key'), msg = document.getElementById('ti-key-msg'), touched = false;
+  function check() {
+    var v = key.value.trim();
+    if (!v) { set('Enter the key to connect this provider.', 'error'); return; }
+    if (!/^sk-[A-Za-z0-9_-]{8,}$/.test(v)) { set('Enter a key that starts with sk- followed by at least 8 characters.', 'error'); return; }
+    set('Looks right. Press Connect to test it.', 'success');
+  }
+  function set(text, kind) {
+    msg.className = 'u-msg u-msg--' + kind;
+    key.setAttribute('aria-invalid', kind === 'error');
+    key.classList.toggle('u-input--success', kind === 'success');
+    msg.innerHTML = (kind === 'error'
+      ? '<svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>'
+      : '<svg class="u-icon u-icon--sm" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>') + text;
+  }
+  key.addEventListener('blur', function () { touched = true; check(); });
+  key.addEventListener('input', function () { if (touched) check(); });
+  document.querySelector('[data-reveal]').addEventListener('click', function () {
+    var show = key.type === 'password'; key.type = show ? 'text' : 'password';
+    this.setAttribute('aria-label', show ? 'Hide key' : 'Show key');
+  });
+</script>

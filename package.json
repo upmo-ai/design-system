@@ -9,8 +9,10 @@
   },
   "scripts": {
     "build": "pnpm -r build",
+    "dev": "pnpm -r --filter \"./packages/*\" build && pnpm --filter @upmo-ai/docs dev",
+    "gen": "pnpm --filter @upmo-ai/docs gen",
     "test": "vitest run",
-    "lint": "tsc -p tsconfig.json"
+    "lint": "tsc -p tsconfig.json && pnpm --filter @upmo-ai/docs lint"
   },
   "devDependencies": {
     "@types/node": "24.13.2",

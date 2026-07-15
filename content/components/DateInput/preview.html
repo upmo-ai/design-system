@@ -1,0 +1,33 @@
+<!-- @dsCard group="Inputs" height=360 subtitle="Date and time fields with the calendar open. Click a day" -->
+<div class="u-preview" style="align-items: flex-start; gap: 24px">
+  <div class="u-stack" style="gap: 16px">
+    <div class="u-field" style="width: 220px"><label class="u-label" for="di-date">Start date</label><div class="u-input-wrap"><input class="u-input u-input--with-right" id="di-date" value="20 Oct 2026" aria-describedby="di-desc"><div class="u-input-right" style="right: 12px"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/></svg></div></div><div class="u-desc" id="di-desc">Europe/Amsterdam</div></div>
+    <div class="u-field" style="width: 220px"><label class="u-label" for="di-time">Time</label><div class="u-input-wrap"><input class="u-input" id="di-time" type="time" value="08:00" step="300"></div></div>
+  </div>
+  <div class="u-cal" role="group" aria-label="October 2026">
+    <div class="u-cal-head"><button class="u-aicon u-aicon--sm" aria-label="Previous month"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button><span>October 2026</span><button class="u-aicon u-aicon--sm" aria-label="Next month"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div>
+    <div class="u-cal-grid" id="di-grid"></div>
+    <span class="u-sr" id="di-past">Past dates can't be picked</span>
+  </div>
+</div>
+<script>
+  // 1 October 2026 is a Thursday. The grid is one Tab stop; arrow keys move by day.
+  var grid = document.getElementById('di-grid'), sel = 20, focus = 20, days = {};
+  ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].forEach(function (d) { var s = document.createElement('div'); s.className = 'u-cal-dow'; s.textContent = d; grid.appendChild(s); });
+  function render() {
+    grid.querySelectorAll('button').forEach(function (b) { b.remove(); });
+    for (var i = 0; i < 35; i++) {
+      var day = i - 2, b = document.createElement('button'); b.type = 'button'; b.tabIndex = -1;
+      if (day < 1) { b.textContent = 30 + day; b.dataset.outside = 'true'; b.setAttribute('aria-label', b.textContent + ' September 2026'); } else if (day > 31) { b.textContent = day - 31; b.dataset.outside = 'true'; b.setAttribute('aria-label', b.textContent + ' November 2026'); } else { b.textContent = day; b.setAttribute('aria-label', day + ' October 2026'); days[day] = b; if (day === 20) b.dataset.today = 'true'; if (day === sel) b.setAttribute('aria-pressed', 'true'); if (day === focus) b.tabIndex = 0; if (day < 20) { b.setAttribute('aria-disabled', 'true'); b.setAttribute('aria-describedby', 'di-past'); } (function (d) { b.addEventListener('click', function () { if (d < 20) return; sel = focus = d; document.getElementById('di-date').value = d + ' Oct 2026'; render(); days[d].focus(); }); })(day); }
+      grid.appendChild(b);
+    }
+  }
+  grid.addEventListener('keydown', function (e) {
+    var step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
+    if (!step) return;
+    e.preventDefault();
+    var next = Math.max(1, Math.min(31, focus + step));
+    days[focus].tabIndex = -1; focus = next; days[focus].tabIndex = 0; days[focus].focus();
+  });
+  render();
+</script>

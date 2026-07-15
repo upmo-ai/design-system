@@ -1,0 +1,31 @@
+<!-- @dsCard group="Actions" height=230 subtitle="Press any button: it reacts at once, then shows loading for 1.5 s" -->
+<div class="u-preview u-preview--col">
+  <div class="u-row">
+    <button class="u-btn u-btn--filled" data-demo>Start task</button>
+    <button class="u-btn u-btn--light" data-demo>Save draft</button>
+    <button class="u-btn u-btn--outline" data-demo>Export</button>
+    <button class="u-btn u-btn--subtle" data-demo>Cancel</button>
+    <button class="u-btn u-btn--danger" data-demo>Delete task</button>
+    <button class="u-btn u-btn--danger-outline" data-demo>Archive</button>
+  </div>
+  <div class="u-row">
+    <button class="u-btn u-btn--filled u-btn--sm" data-demo><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Send</button>
+    <button class="u-btn u-btn--filled" data-demo><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New task</button>
+    <button class="u-btn u-btn--filled u-btn--lg" data-demo>Self-host in 10 minutes</button>
+    <button class="u-btn u-btn--filled" aria-disabled="true" title="Pick a provider first">Connect</button>
+    <button class="u-btn u-btn--filled" aria-busy="true"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="u-draw" pathLength="100" d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Starting…</button>
+  </div>
+  <div class="u-note">Filled is the one main action per view. Light is for a second action, outline for neutral ones, subtle for the least important. Danger is for actions that destroy something. While loading, the button keeps its width and shows the draw caret in place of its icon.</div>
+</div>
+<script>
+  document.querySelectorAll('[data-demo]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (b.getAttribute('aria-busy') === 'true') return;
+      var html = b.innerHTML, w = b.offsetWidth;
+      b.style.minWidth = w + 'px';
+      b.setAttribute('aria-busy', 'true');
+      b.innerHTML = '<svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="u-draw" pathLength="100" d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>' + b.textContent.replace(/…$/, '') + '…';
+      setTimeout(function () { b.innerHTML = html; b.removeAttribute('aria-busy'); b.style.minWidth = ''; }, 1500);
+    });
+  });
+</script>

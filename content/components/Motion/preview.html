@@ -1,0 +1,75 @@
+<!-- @dsCard group="Foundations" height=620 width=1100 subtitle="Every motion in the catalogue, ready to replay. The toggle shows what reduced motion does." -->
+<style>
+  .mo-wrap { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .mo-bar { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .mo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+  .mo-tile { border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-100); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .mo-tile header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .mo-tile header b { font-size: 13px; font-weight: 600; }
+  .mo-tile header small { font-size: 11px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+  .mo-stage { height: 72px; display: flex; align-items: center; justify-content: center; gap: 12px; position: relative; overflow: hidden; border-radius: var(--radius-md); background: var(--surface-000); }
+  .mo-stage svg.mo-caret { width: 40px; height: 40px; }
+  .mo-caret path { fill: none; stroke: var(--ink); stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 36; stroke-dashoffset: 36; }
+  .mo-draw .mo-caret path:nth-child(1) { animation: mo-stroke 200ms cubic-bezier(.2,0,0,1) forwards; }
+  .mo-draw .mo-caret path:nth-child(2) { animation: mo-stroke 200ms cubic-bezier(.2,0,0,1) 200ms forwards; }
+  @keyframes mo-stroke { to { stroke-dashoffset: 0 } }
+  .mo-done .mo-caret path { stroke-dashoffset: 0; animation: mo-green 200ms cubic-bezier(.4,0,.2,1) forwards; }
+  @keyframes mo-green { from { stroke: var(--ink) } to { stroke: var(--emerald) } }
+  .mo-lift .mo-caret { animation: u-lift 4000ms cubic-bezier(.4,0,.2,1) infinite; }
+  .mo-lift .mo-caret path { stroke-dashoffset: 0; }
+  .mo-loader .mo-caret path { stroke-dasharray: 100; animation: u-draw 1600ms cubic-bezier(.4,0,.2,1) infinite; }
+  .mo-sheet { position: absolute; inset: 8px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); background: var(--surface-100); box-shadow: var(--shadow-lg); display: flex; align-items: center; justify-content: center; font-size: 12px; opacity: 0; transform: scale(.98); }
+  .mo-in .mo-sheet { animation: mo-enter 240ms cubic-bezier(.4,0,.2,1) forwards; }
+  .mo-out .mo-sheet { opacity: 1; transform: none; animation: mo-leave 160ms cubic-bezier(.4,0,1,1) forwards; }
+  @keyframes mo-enter { to { opacity: 1; transform: none } }
+  @keyframes mo-leave { to { opacity: 0; transform: scale(.98) } }
+  .mo-toast { position: absolute; bottom: 8px; left: 12px; right: 12px; height: 40px; border-radius: var(--radius-md); background: var(--surface-inverse); color: var(--ink-inverse); font-size: 12px; display: flex; align-items: center; padding: 0 12px; opacity: 0; transform: translateY(8px); }
+  .mo-in .mo-toast { animation: mo-toast-in 240ms cubic-bezier(.4,0,.2,1) forwards; }
+  @keyframes mo-toast-in { to { opacity: 1; transform: none } }
+  .mo-bar-track { width: 160px; height: 6px; border-radius: 99px; background: var(--surface-200); overflow: hidden; }
+  .mo-bar-track div { height: 100%; width: 20%; background: var(--emerald-deep); border-radius: 99px; transition: width 200ms cubic-bezier(.4,0,.2,1); }
+  .mo-indet div { width: 30%; animation: mo-sweep 1200ms linear infinite; }
+  @keyframes mo-sweep { from { transform: translateX(-100%) } to { transform: translateX(333%) } }
+  .mo-chev { transition: transform 200ms cubic-bezier(.4,0,.2,1); }
+  .mo-open .mo-chev { transform: rotate(180deg); }
+  .mo-box { height: 0; overflow: hidden; transition: height 200ms cubic-bezier(.4,0,.2,1); font-size: 12px; color: var(--ink-muted); }
+  .mo-open .mo-box { height: 32px; }
+  .mo-reduced *, .mo-reduced *::before, .mo-reduced *::after { animation-duration: 0s !important; transition-duration: 0s !important; }
+  .mo-reduced .mo-caret path { stroke-dashoffset: 0 !important; }
+  .mo-reduced .mo-sheet, .mo-reduced .mo-toast { transition: opacity 120ms !important; animation: none !important; }
+  .mo-reduced .mo-in .mo-sheet, .mo-reduced .mo-in .mo-toast { opacity: 1; transform: none; }
+</style>
+<div class="mo-wrap" id="mo">
+  <div class="mo-bar">
+    <label class="u-switch"><input type="checkbox" id="mo-rm"><span class="u-track"></span><span class="u-switch-label">Reduced motion</span></label>
+    <span class="u-caption" style="color: var(--ink-muted)">Each tile replays on its button; press the real controls too.</span>
+  </div>
+  <div class="mo-grid">
+    <div class="mo-tile"><header><b>Press</b><small>120ms · scale .98</small></header><div class="mo-stage"><button class="u-btn u-btn--filled">Start task</button><button class="u-btn u-btn--outline">Cancel</button></div></div>
+    <div class="mo-tile"><header><b>Check and switch</b><small>120 / 200ms</small></header><div class="mo-stage"><label class="u-check"><input type="checkbox"><span class="u-box"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Notify</span></label><label class="u-switch"><input type="checkbox" checked><span class="u-track"></span></label></div></div>
+    <div class="mo-tile"><header><b>Caret draw</b><small>200 + 200ms</small></header><div class="mo-stage" id="mo-s-draw"><svg class="mo-caret" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44"/><path d="M32 22l22 22"/></svg><button class="u-btn u-btn--subtle u-btn--sm" data-replay="mo-draw" data-target="mo-s-draw">Replay</button></div></div>
+    <div class="mo-tile"><header><b>Done</b><small>200ms fade to emerald</small></header><div class="mo-stage" id="mo-s-done"><svg class="mo-caret" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44"/><path d="M32 22l22 22"/></svg><button class="u-btn u-btn--subtle u-btn--sm" data-replay="mo-done" data-target="mo-s-done">Replay</button></div></div>
+    <div class="mo-tile"><header><b>Loader</b><small>1.6s loop</small></header><div class="mo-stage mo-loader"><svg class="mo-caret" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 44 32 22l22 22"/></svg><button class="u-btn u-btn--filled u-btn--sm" aria-busy="true"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="u-draw" d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100"/></svg>Testing…</button></div></div>
+    <div class="mo-tile"><header><b>Lift</b><small>4s period, working only</small></header><div class="mo-stage mo-lift"><svg class="mo-caret" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 44 32 22l22 22"/></svg><span style="font-size: 13px; font-weight: 600">Working</span></div></div>
+    <div class="mo-tile"><header><b>Skeleton shimmer</b><small>1.8s, after 300ms</small></header><div class="mo-stage" style="flex-direction: column; align-items: stretch; padding: 12px; gap: 8px"><div class="u-skel" style="height: 12px; width: 70%"></div><div class="u-skel" style="height: 12px; width: 90%"></div><div class="u-skel" style="height: 12px; width: 40%"></div></div></div>
+    <div class="mo-tile"><header><b>Expand</b><small>200ms, chevron 180°</small></header><div class="mo-stage" style="flex-direction: column; justify-content: flex-start; padding: 8px 12px; align-items: stretch" id="mo-s-exp"><button class="u-btn u-btn--subtle u-btn--sm" style="justify-content: space-between" data-toggle="mo-open" data-target="mo-s-exp">Show 2 tool calls <svg class="u-icon mo-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="mo-box">read_file · 0.4 s<br>search_kb · 1.1 s</div></div></div>
+    <div class="mo-tile"><header><b>Modal in / out</b><small>240 / 160ms</small></header><div class="mo-stage" id="mo-s-modal"><div class="mo-sheet">Dialog</div><button class="u-btn u-btn--subtle u-btn--sm" data-replay="mo-in" data-target="mo-s-modal" style="position: relative; z-index: 1">Open</button><button class="u-btn u-btn--subtle u-btn--sm" data-replay="mo-out" data-target="mo-s-modal" style="position: relative; z-index: 1">Close</button></div></div>
+    <div class="mo-tile"><header><b>Toast</b><small>240ms slide 8px</small></header><div class="mo-stage" id="mo-s-toast"><div class="mo-toast">Task started</div><button class="u-btn u-btn--subtle u-btn--sm" data-replay="mo-in" data-target="mo-s-toast">Fire</button></div></div>
+    <div class="mo-tile"><header><b>Progress</b><small>200ms width</small></header><div class="mo-stage" style="flex-direction: column"><div class="mo-bar-track" id="mo-prog"><div></div></div><button class="u-btn u-btn--subtle u-btn--sm" id="mo-step">Advance</button></div></div>
+    <div class="mo-tile"><header><b>Indeterminate</b><small>1.2s sweep</small></header><div class="mo-stage"><div class="mo-bar-track mo-indet"><div></div></div></div></div>
+  </div>
+</div>
+<script>
+(function () {
+  var root = document.getElementById('mo');
+  document.getElementById('mo-rm').addEventListener('change', function () { root.classList.toggle('mo-reduced', this.checked); });
+  root.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-replay],[data-toggle]'); if (!b) return;
+    var t = document.getElementById(b.dataset.target);
+    if (b.dataset.toggle) { t.classList.toggle(b.dataset.toggle); return; }
+    var cls = b.dataset.replay;
+    t.classList.remove('mo-draw', 'mo-done', 'mo-in', 'mo-out'); void t.offsetWidth; t.classList.add(cls);
+  });
+  var p = 20; document.getElementById('mo-step').addEventListener('click', function () { p = p >= 100 ? 20 : p + 20; document.querySelector('#mo-prog div').style.width = p + '%'; });
+})();
+</script>

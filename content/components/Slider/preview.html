@@ -1,0 +1,28 @@
+<!-- @dsCard group="Inputs" height=260 subtitle="Drag or use the arrow keys. The value follows the thumb" -->
+<div class="u-preview u-preview--col" style="max-width: 420px; gap: 28px">
+  <div class="u-field">
+    <label class="u-label" for="sl-temp">Temperature <span class="u-opt">(creativity)</span></label>
+    <div class="u-slider" style="margin-top: 20px">
+      <input type="range" id="sl-temp" min="0" max="2" step="0.1" value="0.7" aria-valuetext="0.7, balanced">
+      <div class="u-slider-track"><div class="u-slider-fill" id="sl-fill" style="width: 35%"></div><div class="u-slider-thumb" id="sl-thumb" style="left: 35%"></div><div class="u-slider-value" id="sl-val" style="left: 35%">0.7</div></div>
+      <div class="u-slider-marks"><span>0 precise</span><span>1</span><span>2 creative</span></div>
+    </div>
+  </div>
+  <div class="u-field">
+    <label class="u-label" for="sl-budget">Monthly budget</label>
+    <div class="u-slider" style="margin-top: 20px">
+      <input type="range" id="sl-budget" min="0" max="500" step="10" value="120" aria-valuetext="€120">
+      <div class="u-slider-track"><div class="u-slider-fill" id="sl-fill2" style="width: 24%"></div><div class="u-slider-thumb" id="sl-thumb2" style="left: 24%"></div><div class="u-slider-value" id="sl-val2" style="left: 24%">€120</div></div>
+      <div class="u-slider-marks"><span>€0</span><span>€250</span><span>€500</span></div>
+    </div>
+  </div>
+</div>
+<script>
+  function wire(id, fill, thumb, val, fmt) {
+    var i = document.getElementById(id);
+    function upd() { var p = (i.value - i.min) / (i.max - i.min) * 100; document.getElementById(fill).style.width = p + '%'; document.getElementById(thumb).style.left = p + '%'; var v = document.getElementById(val); v.style.left = p + '%'; v.textContent = fmt(i.value); i.setAttribute('aria-valuetext', fmt(i.value)); }
+    i.addEventListener('input', upd); upd();
+  }
+  wire('sl-temp', 'sl-fill', 'sl-thumb', 'sl-val', function (v) { return String(v); });
+  wire('sl-budget', 'sl-fill2', 'sl-thumb2', 'sl-val2', function (v) { return '€' + v; });
+</script>

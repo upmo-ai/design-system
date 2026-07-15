@@ -1,0 +1,162 @@
+/* Live preview block on component pages (markup from scripts/lib.ts previewBlock). */
+.ds-preview {
+  margin-block: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.ds-preview-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-200);
+}
+.ds-seg {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: var(--radius-md);
+  background: var(--surface-hover);
+}
+.ds-seg button {
+  padding: 6px 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-muted);
+  font: inherit;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+}
+.ds-seg button:hover {
+  color: var(--ink);
+}
+.ds-seg button[aria-pressed='true'] {
+  background: var(--surface-100);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+.ds-preview-open {
+  margin-inline-start: auto;
+  color: var(--emerald-deep);
+  font-size: 13px;
+  font-weight: 600;
+}
+.ds-preview-frame {
+  overflow-x: auto;
+  background: var(--surface-200);
+}
+.ds-preview-frame iframe {
+  display: block;
+  max-width: none;
+  margin-inline: auto;
+  border: 0;
+}
+
+/* Tokens page */
+.ds-swatch {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-inline-end: var(--space-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xs);
+  vertical-align: middle;
+}
+.ds-ground {
+  display: inline-flex;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-000);
+}
+.ds-shadow {
+  display: block;
+  width: 2.5rem;
+  height: 1.5rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-100);
+}
+.ds-space {
+  display: inline-block;
+  height: 0.75rem;
+  border-radius: 2px;
+  background: var(--emerald);
+  vertical-align: middle;
+}
+.ds-radius {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-100);
+  vertical-align: middle;
+}
+.ds-icon {
+  display: inline-flex;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-100);
+  color: var(--ink);
+}
+
+/* Brand grids */
+.ds-brands,
+.ds-assets {
+  display: grid;
+  gap: var(--space-3);
+  margin-block: var(--space-6);
+}
+.ds-brands {
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+}
+.ds-assets {
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+}
+.ds-brand,
+.ds-asset {
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.ds-brand-art {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.ds-brand-art > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: var(--surface-100);
+  color: var(--ink);
+}
+.ds-on-dark .u-brand--deep {
+  fill: currentColor;
+}
+.ds-asset-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  padding: var(--space-4);
+  background: var(--surface-000);
+}
+.ds-asset-art img {
+  max-width: 100%;
+  max-height: 8rem;
+}
+.ds-brand figcaption,
+.ds-asset figcaption {
+  padding: var(--space-2);
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}

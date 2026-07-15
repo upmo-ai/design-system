@@ -1,0 +1,31 @@
+<!-- @dsCard group="Actions" height=200 subtitle="Opens the code editor for a task that works on files in its sandbox. Read only while the task is Working" -->
+<div class="u-preview u-stack" style="gap: 20px; align-items: flex-start">
+  <div class="u-stack" style="gap: 6px">
+    <span class="u-note">Fix flaky ledger test · Working</span>
+    <div class="u-row" style="gap: 8px">
+      <button type="button" class="u-btn u-btn--outline u-btn--sm" aria-describedby="ce-ro ce-ro-why" data-editor><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8l-4 4l4 4"/><path d="M17 8l4 4l-4 4"/><path d="M14 4l-4 16"/></svg><span data-editor-label>Open in code editor</span><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"/><path d="M11 13l9 -9"/><path d="M15 4h5v5"/></svg><span class="u-sr">, opens in a new tab</span></button>
+      <span class="u-badge" id="ce-ro"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"/><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"/><path d="M8 11v-4a4 4 0 1 1 8 0v4"/></svg>Read only</span>
+      <span class="u-card-meta" id="ce-ro-why">You can edit the files when the task stops.</span>
+    </div>
+  </div>
+  <div class="u-stack" style="gap: 6px">
+    <span class="u-note">Migrate ledger to pgvector 0.8 · Done</span>
+    <div class="u-row" style="gap: 8px">
+      <button type="button" class="u-btn u-btn--outline u-btn--sm" data-editor><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8l-4 4l4 4"/><path d="M17 8l4 4l-4 4"/><path d="M14 4l-4 16"/></svg><span data-editor-label>Open in code editor</span><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"/><path d="M11 13l9 -9"/><path d="M15 4h5v5"/></svg><span class="u-sr">, opens in a new tab</span></button>
+    </div>
+  </div>
+</div>
+<script>
+  // The code editor starts on demand. The preview shows the starting state, then returns.
+  document.querySelectorAll('[data-editor]').forEach(function (b) {
+    var label = b.querySelector('[data-editor-label]'), icon = b.querySelector('svg'), idle = icon.outerHTML;
+    var draw = '<svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="u-draw" pathLength="100" d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    b.addEventListener('click', function () {
+      if (b.getAttribute('aria-busy') === 'true') return;
+      b.setAttribute('aria-busy', 'true');
+      b.querySelector('svg').outerHTML = draw;
+      label.textContent = 'Starting the code editor…';
+      setTimeout(function () { b.removeAttribute('aria-busy'); b.querySelector('svg').outerHTML = idle; label.textContent = 'Open in code editor'; }, 2500);
+    });
+  });
+</script>

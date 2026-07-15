@@ -1,0 +1,195 @@
+<!-- @dsCard group="Inputs" height=560 subtitle="Custom select: the trigger is a TextInput, the list is a Menu panel; keyboard, typeahead, search with groups" -->
+<div class="u-preview" style="align-items: flex-start">
+  <div class="u-field" style="width: 260px">
+    <label class="u-label" for="sel-model" id="sel-model-l">Model</label>
+    <div class="u-select">
+      <button type="button" class="u-input u-select-trigger" id="sel-model" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="sel-model-list" aria-labelledby="sel-model-l" aria-describedby="sel-model-desc"><span class="u-select-value"></span><span class="u-select-caret"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="u-select-drop">
+        <div class="u-select-options" role="listbox" id="sel-model-list" aria-labelledby="sel-model-l">
+          <div class="u-opt" role="option"><span class="u-opt-label">Auto</span><span class="u-opt-sub">route by task</span></div>
+          <div class="u-opt" role="option" aria-selected="true"><span class="u-opt-label">gpt-5.2</span><span class="u-opt-sub">OpenAI</span></div>
+          <div class="u-opt" role="option"><span class="u-opt-label">claude-opus-5-5</span><span class="u-opt-sub">Anthropic</span></div>
+          <div class="u-opt" role="option"><span class="u-opt-label">glm-4.7</span><span class="u-opt-sub">Z.ai</span></div>
+          <div class="u-opt" role="option"><span class="u-opt-label">qwen3:4b</span><span class="u-opt-sub">Ollama, this machine</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="u-desc" id="sel-model-desc">Auto picks the cheapest model that passes the task's checks.</div>
+  </div>
+  <div class="u-field" style="width: 260px">
+    <label class="u-label" for="sel-h" id="sel-h-l">Engine</label>
+    <div class="u-select" id="sel-h-root">
+      <button type="button" class="u-input u-select-trigger" id="sel-h" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="sel-h-list" aria-labelledby="sel-h-l" aria-invalid="true" aria-describedby="sel-h-msg"><span class="u-select-value" data-placeholder="Choose an engine"></span><span class="u-select-caret"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="u-select-drop">
+        <div class="u-select-options" role="listbox" id="sel-h-list" aria-labelledby="sel-h-l">
+          <div class="u-opt" role="option"><span class="u-opt-label">Upmo</span></div>
+          <div class="u-opt" role="option"><span class="u-opt-label">Claude Code</span></div>
+          <div class="u-opt" role="option"><span class="u-opt-label">Codex</span></div>
+          <div class="u-opt" role="option"><span class="u-opt-label">OpenCode</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="u-msg u-msg--error" id="sel-h-msg"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>Pick an engine to run the task.</div>
+  </div>
+  <div class="u-field" style="width: 260px">
+    <label class="u-label" for="sel-tz" id="sel-tz-l">Time zone</label>
+    <div class="u-select">
+      <button type="button" class="u-input u-input--with-left u-select-trigger" id="sel-tz" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="sel-tz-list" aria-labelledby="sel-tz-l"><span class="u-input-left"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0M3.6 9h16.8M3.6 15h16.8M11.5 3a17 17 0 0 0 0 18M12.5 3a17 17 0 0 1 0 18"/></svg></span><span class="u-select-value"></span><span class="u-select-caret"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="u-select-drop">
+        <div class="u-select-search"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M21 21l-6 -6"/></svg><input type="text" placeholder="Search time zones" aria-label="Search time zones" aria-controls="sel-tz-list" aria-autocomplete="list" autocomplete="off" spellcheck="false"></div>
+        <div class="u-select-options" role="listbox" id="sel-tz-list" aria-labelledby="sel-tz-l">
+          <div role="group" aria-labelledby="sel-tz-eu">
+            <div class="u-opt-group" id="sel-tz-eu">Europe</div>
+            <div class="u-opt" role="option" aria-selected="true"><span class="u-opt-label">Amsterdam</span><span class="u-opt-sub">Europe/Amsterdam</span></div>
+            <div class="u-opt" role="option"><span class="u-opt-label">Berlin</span><span class="u-opt-sub">Europe/Berlin</span></div>
+            <div class="u-opt" role="option"><span class="u-opt-label">Dublin</span><span class="u-opt-sub">Europe/Dublin</span></div>
+            <div class="u-opt" role="option"><span class="u-opt-label">Lisbon</span><span class="u-opt-sub">Europe/Lisbon</span></div>
+            <div class="u-opt" role="option"><span class="u-opt-label">London</span><span class="u-opt-sub">Europe/London</span></div>
+          </div>
+          <div role="group" aria-labelledby="sel-tz-am">
+            <div class="u-opt-group" id="sel-tz-am">Americas</div>
+            <div class="u-opt" role="option"><span class="u-opt-label">Los Angeles</span><span class="u-opt-sub">America/Los_Angeles</span></div>
+            <div class="u-opt" role="option"><span class="u-opt-label">New York</span><span class="u-opt-sub">America/New_York</span></div>
+            <div class="u-opt" role="option"><span class="u-opt-label">São Paulo</span><span class="u-opt-sub">America/Sao_Paulo</span></div>
+            <div class="u-opt" role="option"><span class="u-opt-label">Toronto</span><span class="u-opt-sub">America/Toronto</span></div>
+          </div>
+          <div role="group" aria-labelledby="sel-tz-ap">
+            <div class="u-opt-group" id="sel-tz-ap">Asia and Pacific</div>
+            <div class="u-opt" role="option"><span class="u-opt-label">Dhaka</span><span class="u-opt-sub">Asia/Dhaka</span></div>
+            <div class="u-opt" role="option"><span class="u-opt-label">Singapore</span><span class="u-opt-sub">Asia/Singapore</span></div>
+            <div class="u-opt" role="option"><span class="u-opt-label">Sydney</span><span class="u-opt-sub">Australia/Sydney</span></div>
+            <div class="u-opt" role="option"><span class="u-opt-label">Tokyo</span><span class="u-opt-sub">Asia/Tokyo</span></div>
+          </div>
+        </div>
+        <div class="u-select-empty" role="status"></div>
+      </div>
+    </div>
+    <div class="u-desc">Schedules and reports use this zone.</div>
+  </div>
+</div>
+<script>
+  // Custom select: a combobox trigger and a listbox panel. One function for Select and MultiSelect; each preview carries the same copy.
+  function uSelect(root) {
+    var cb = root.querySelector('[role="combobox"]'), list = root.querySelector('[role="listbox"]'), field = root.querySelector('.u-select-trigger');
+    var value = root.querySelector('.u-select-value'), empty = root.querySelector('.u-select-empty');
+    var search = root.querySelector('.u-select-search input') || (cb.tagName === 'INPUT' ? cb : null), host = search || cb;
+    var multi = list.getAttribute('aria-multiselectable') === 'true', opts = [].slice.call(list.querySelectorAll('[role="option"]'));
+    var active = null, typed = '', typedAt = 0;
+    var check = '<svg class="u-opt-check" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var x = '<svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+    opts.forEach(function (o, i) { o.id = o.id || list.id + '-' + i; o.setAttribute('aria-selected', String(o.getAttribute('aria-selected') === 'true')); o.insertAdjacentHTML('beforeend', check); });
+    function label(o) { return (o.querySelector('.u-opt-label') || o).textContent.trim(); }
+    function isOpen() { return root.getAttribute('data-open') === 'true'; }
+    function chosen() { return opts.filter(function (o) { return o.getAttribute('aria-selected') === 'true'; }); }
+    function usable() { return opts.filter(function (o) { return !o.hidden && o.getAttribute('aria-disabled') !== 'true'; }); }
+    function setActive(o) {
+      if (active) active.removeAttribute('data-active');
+      active = o || null;
+      if (!active) return host.removeAttribute('aria-activedescendant');
+      active.setAttribute('data-active', 'true');
+      host.setAttribute('aria-activedescendant', active.id);
+      if (active.offsetTop < list.scrollTop) list.scrollTop = active.offsetTop;
+      else if (active.offsetTop + active.offsetHeight > list.scrollTop + list.clientHeight) list.scrollTop = active.offsetTop + active.offsetHeight - list.clientHeight;
+    }
+    function open() {
+      if (isOpen() || cb.disabled) return;
+      root.setAttribute('data-open', 'true');
+      cb.setAttribute('aria-expanded', 'true');
+      if (search && search !== cb) search.focus();
+      setActive(chosen().filter(function (o) { return usable().indexOf(o) > -1; })[0] || usable()[0]);
+    }
+    function close(refocus) {
+      if (!isOpen()) return;
+      root.setAttribute('data-open', 'false');
+      cb.setAttribute('aria-expanded', 'false');
+      setActive(null);
+      if (search) { search.value = ''; filter(); }
+      if (refocus) cb.focus();
+    }
+    function changed() { paint(); root.dispatchEvent(new Event('change')); }
+    function paint() {
+      if (!multi) { value.textContent = chosen()[0] ? label(chosen()[0]) : ''; return; }
+      field.querySelectorAll('.u-pill').forEach(function (p) { p.remove(); });
+      chosen().forEach(function (o) {
+        var pill = document.createElement('span'), remove = document.createElement('button');
+        pill.className = 'u-pill';
+        pill.textContent = label(o);
+        remove.type = 'button';
+        remove.tabIndex = -1;
+        remove.setAttribute('aria-label', 'Remove ' + label(o));
+        remove.innerHTML = x;
+        remove.addEventListener('mousedown', function (e) { e.preventDefault(); });
+        remove.addEventListener('click', function (e) { e.stopPropagation(); o.setAttribute('aria-selected', 'false'); changed(); });
+        pill.appendChild(remove);
+        field.insertBefore(pill, cb);
+      });
+    }
+    function pick(o) {
+      if (!o || o.getAttribute('aria-disabled') === 'true') return;
+      if (multi) {
+        o.setAttribute('aria-selected', String(o.getAttribute('aria-selected') !== 'true'));
+        changed();
+        if (search.value) { search.value = ''; filter(); }
+        return setActive(o);
+      }
+      opts.forEach(function (other) { other.setAttribute('aria-selected', String(other === o)); });
+      changed();
+      close(true);
+    }
+    function filter() {
+      var q = search ? search.value.trim().toLowerCase() : '';
+      opts.forEach(function (o) { o.hidden = q !== '' && o.textContent.toLowerCase().indexOf(q) < 0; });
+      list.querySelectorAll('[role="group"]').forEach(function (g) { g.hidden = !g.querySelector('[role="option"]:not([hidden])'); });
+      if (empty) empty.textContent = opts.some(function (o) { return !o.hidden; }) ? '' : 'No matches';
+      if (isOpen()) setActive(usable()[0]);
+    }
+    function typeahead(ch) {
+      var now = Date.now(), u = usable();
+      typed = now - typedAt > 500 ? ch : typed + ch;
+      typedAt = now;
+      var from = u.indexOf(active) + (typed.length === 1 ? 1 : 0), order = u.slice(from).concat(u.slice(0, from));
+      var hit = order.filter(function (o) { return label(o).toLowerCase().indexOf(typed) === 0; })[0];
+      if (hit) setActive(hit);
+    }
+    function onKey(e) {
+      var k = e.key, inText = e.target === search, u = usable(), i = u.indexOf(active);
+      var printable = k.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
+      if (multi && k === 'Backspace' && !search.value && chosen().length) { chosen().pop().setAttribute('aria-selected', 'false'); return changed(); }
+      if (!isOpen()) {
+        if (k === 'ArrowDown' || k === 'ArrowUp' || k === 'Enter' || (k === ' ' && !inText)) { e.preventDefault(); open(); }
+        else if (printable && !inText) { e.preventDefault(); open(); if (search) { search.value = k; filter(); } else typeahead(k.toLowerCase()); }
+        return;
+      }
+      if (k === 'ArrowDown') { e.preventDefault(); setActive(u[Math.min(i + 1, u.length - 1)]); }
+      else if (k === 'ArrowUp') { e.preventDefault(); setActive(u[Math.max(i - 1, 0)]); }
+      else if ((k === 'Home' || k === 'End') && !(search && search.value)) { e.preventDefault(); setActive(k === 'Home' ? u[0] : u[u.length - 1]); }
+      else if (k === 'Enter' || (k === ' ' && !inText)) { e.preventDefault(); pick(active); }
+      else if (k === 'Escape') { e.preventDefault(); close(true); }
+      else if (k === 'Tab') close(false);
+      else if (printable && !inText) typeahead(k.toLowerCase());
+    }
+    cb.addEventListener('keydown', onKey);
+    if (search && search !== cb) search.addEventListener('keydown', onKey);
+    if (search) search.addEventListener('input', function () { open(); filter(); });
+    field.addEventListener('click', function () {
+      if (multi) { cb.focus(); open(); } else if (isOpen()) close(true); else open();
+    });
+    list.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    list.addEventListener('click', function (e) { pick(e.target.closest('[role="option"]')); });
+    list.addEventListener('mousemove', function (e) {
+      var o = e.target.closest('[role="option"]');
+      if (o && o !== active && o.getAttribute('aria-disabled') !== 'true') setActive(o);
+    });
+    document.addEventListener('pointerdown', function (e) { if (!root.contains(e.target)) close(false); });
+    root.addEventListener('focusout', function (e) { if (e.relatedTarget && !root.contains(e.relatedTarget)) close(false); });
+    filter();
+    paint();
+  }
+  document.querySelectorAll('.u-select').forEach(uSelect);
+  document.getElementById('sel-h-root').addEventListener('change', function () {
+    var msg = document.getElementById('sel-h-msg');
+    document.getElementById('sel-h').removeAttribute('aria-invalid');
+    msg.className = 'u-msg';
+    msg.innerHTML = '';
+  });
+</script>

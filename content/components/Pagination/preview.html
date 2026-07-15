@@ -1,0 +1,13 @@
+<!-- @dsCard group="Navigation" height=90 subtitle="Click a page. The first and last pages are always there." -->
+<div class="u-preview">
+  <nav class="u-pager" aria-label="Pagination" data-pager>
+    <button type="button" aria-label="Previous page"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
+    <button type="button">1</button><button type="button">2</button><button type="button" aria-current="page">3</button><button type="button">4</button><button type="button">5</button><span class="u-pager-dots" aria-hidden="true">…</span><button type="button">12</button>
+    <button type="button" aria-label="Next page"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+  </nav>
+  <span class="u-note">Showing 41 to 60 of 232</span>
+</div>
+<script>
+  var p = document.querySelector('[data-pager]');
+  p.querySelectorAll('button:not([aria-label])').forEach(function (b) { b.addEventListener('click', function () { p.querySelectorAll('button').forEach(function (x) { x.removeAttribute('aria-current'); }); b.setAttribute('aria-current', 'page'); }); });
+</script>

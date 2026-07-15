@@ -1,0 +1,26 @@
+---
+title: Upmo Design System
+description: The tokens, components and rules behind every Upmo screen, built on Mantine 9.
+template: splash
+hero:
+  title: Upmo Design System
+  tagline: The tokens, components and rules behind every Upmo screen, built on Mantine 9.
+  actions:
+    - text: Components
+      link: /components/
+      variant: primary
+    - text: Install
+      link: /getting-started/install/
+      variant: secondary
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid>
+  <LinkCard title="Getting started" description="What the system is, its principles, and how it maps onto Mantine." href="/getting-started/overview/" />
+  <LinkCard title="Foundations" description="Colour and tokens, contrast, type and layout, icons, motion, accessibility, charts." href="/foundations/tokens/" />
+  <LinkCard title="Content" description="The glossary of product words, every string a person reads in Upmo, and the marketing register." href="/content/glossary/" />
+  <LinkCard title="Patterns" description="How components combine into pages, and how forms behave." href="/patterns/" />
+  <LinkCard title="Components" description="Each component with a live preview in light, dark and high contrast." href="/components/" />
+  <LinkCard title="Brand" description="The wordmark, the caret, the marks of the services Upmo connects to, and raster exports." href="/brand/logos/" />
+</CardGrid>

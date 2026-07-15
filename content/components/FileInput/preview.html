@@ -1,0 +1,18 @@
+<!-- @dsCard group="Inputs" height=400 subtitle="Drop zone with an uploading file and a rejected one" -->
+<div class="u-preview u-preview--col" style="max-width: 480px">
+  <label class="u-drop" tabindex="0" id="fi-drop" aria-describedby="fi-desc">
+    <input type="file" multiple hidden>
+    <svg class="u-icon u-icon--lg" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="u-drop-title">Drop files here, or click to choose</span>
+    <span id="fi-desc" style="font-size: 13px">PDF, text, images, audio. Up to 8 files, 25 MB each.</span>
+  </label>
+  <div class="u-file"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg><div style="flex: 1; min-width: 0"><div class="u-row" style="justify-content: space-between"><span class="u-file-name">invoices-oct.pdf</span><span class="u-file-meta" id="fi-pct">64%</span></div><div class="u-progress" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100" aria-label="Uploading invoices-oct.pdf"><div id="fi-bar" style="width: 64%"></div></div></div><button class="u-aicon u-aicon--sm" aria-label="Cancel upload"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+  <div class="u-file" style="border-color: var(--danger)"><svg class="u-icon" style="color: var(--danger)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg><div style="flex: 1; min-width: 0"><span class="u-file-name">backup.zip</span><div class="u-file-meta" style="color: var(--danger)">Archives are not supported. Unzip and add the files inside.</div></div><button class="u-btn u-btn--subtle u-btn--sm">Remove</button></div>
+</div>
+<script>
+  var d = document.getElementById('fi-drop');
+  ['dragenter', 'dragover'].forEach(function (ev) { d.addEventListener(ev, function (e) { e.preventDefault(); d.dataset.over = 'true'; }); });
+  ['dragleave', 'drop'].forEach(function (ev) { d.addEventListener(ev, function (e) { e.preventDefault(); d.dataset.over = 'false'; }); });
+  d.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); d.querySelector('input').click(); } });
+  var p = 64; var t = setInterval(function () { p = Math.min(100, p + 3); document.getElementById('fi-bar').style.width = p + '%'; document.getElementById('fi-pct').textContent = p === 100 ? 'Done' : p + '%'; if (p === 100) { clearInterval(t); document.getElementById('fi-pct').style.color = 'var(--success)'; } }, 400);
+</script>

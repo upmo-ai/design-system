@@ -1,0 +1,23 @@
+{
+  "name": "@upmo-ai/docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "gen": "node scripts/gen.ts",
+    "dev": "node scripts/gen.ts && astro dev --host 0.0.0.0",
+    "build": "node scripts/gen.ts && astro build",
+    "lint": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "0.41.3",
+    "@upmo-ai/tokens": "workspace:*",
+    "astro": "7.0.9"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.9",
+    "@tabler/icons": "3.44.0",
+    "@upmo-ai/brands": "workspace:*",
+    "@upmo-ai/icons": "workspace:*",
+    "typescript": "6.0.3"
+  }
+}

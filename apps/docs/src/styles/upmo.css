@@ -1,0 +1,44 @@
+/* Starlight colour and font variables mapped to Upmo tokens. Both themes share one block:
+   Starlight and tokens.css switch on the same data-theme attribute on <html>. */
+:root,
+:root[data-theme='light'],
+:root[data-theme='dark'] {
+  --sl-font: var(--font-ui);
+  --sl-font-mono: var(--font-mono);
+
+  --sl-color-accent-low: var(--emerald-soft);
+  --sl-color-accent: var(--emerald-deep);
+  --sl-color-accent-high: var(--emerald-active);
+
+  --sl-color-white: var(--ink);
+  --sl-color-gray-1: var(--ink);
+  --sl-color-gray-2: var(--ink-secondary);
+  --sl-color-gray-3: var(--ink-muted);
+  --sl-color-gray-4: var(--border-strong);
+  --sl-color-gray-5: var(--border);
+  --sl-color-gray-6: var(--surface-200);
+  --sl-color-gray-7: var(--surface-100);
+  --sl-color-black: var(--surface-000);
+
+  --sl-color-text: var(--ink-secondary);
+  --sl-color-text-accent: var(--emerald-deep);
+  --sl-color-text-invert: var(--ink-on-brand);
+  --sl-color-bg: var(--surface-000);
+  --sl-color-bg-nav: var(--surface-000);
+  --sl-color-bg-sidebar: var(--surface-200);
+  --sl-color-bg-inline-code: var(--surface-200);
+  --sl-color-hairline-light: var(--border);
+  --sl-color-hairline: var(--border);
+  --sl-color-hairline-shade: var(--border);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* tokens.css has a .hero type style; Starlight's splash hero uses the same class name. */
+.sl-container > .hero {
+  font: inherit;
+  letter-spacing: normal;
+}

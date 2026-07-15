@@ -1,0 +1,21 @@
+<!-- @dsCard group="Inputs" height=110 subtitle="Click a segment. The pill slides under it" -->
+<div class="u-preview">
+  <div class="u-seg" role="group" aria-label="Status" data-seg>
+    <button type="button" aria-pressed="true">All</button>
+    <button type="button" aria-pressed="false">Working</button>
+    <button type="button" aria-pressed="false">Done</button>
+    <button type="button" aria-pressed="false">Failed</button>
+  </div>
+  <div class="u-seg" role="group" aria-label="Theme" data-seg>
+    <button type="button" aria-pressed="false">Light</button>
+    <button type="button" aria-pressed="false">Dark</button>
+    <button type="button" aria-pressed="true">System</button>
+  </div>
+</div>
+<script>
+  document.querySelectorAll('[data-seg]').forEach(function (g) {
+    g.querySelectorAll('button').forEach(function (b) {
+      b.addEventListener('click', function () { g.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); });
+    });
+  });
+</script>
