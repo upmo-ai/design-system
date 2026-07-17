@@ -1,0 +1,71 @@
+<!-- @dsCard group="Data" height=420 subtitle="Sandbox log with ANSI colours mapped to tokens. Scroll up and the follow pill pauses" -->
+<style>
+  .ts-wrap { padding: 16px; max-width: 720px; }
+  .ts { position: relative; background: var(--surface-200); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+  .ts-head { display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 8px 0 14px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--ink-muted); font-family: var(--font-mono); }
+  .ts-head .u-badge { font-family: var(--font-ui); margin-left: 4px; }
+  .ts-head .ts-tools { margin-left: auto; display: flex; gap: 2px; }
+  .ts-body { height: 300px; overflow: auto; padding: 10px 0; font-family: var(--font-mono); font-size: 13px; line-height: 20px; color: var(--ink); overscroll-behavior: contain; }
+  .ts-line { display: grid; grid-template-columns: 7ch 1fr; padding: 0 16px; white-space: pre-wrap; word-break: break-word; }
+  .ts-line time { color: var(--ink-disabled); user-select: none; font-variant-numeric: tabular-nums; }
+  .ts-ok { color: var(--emerald-deep); } .ts-warn { color: var(--warning); } .ts-err { color: var(--danger); } .ts-info { color: var(--info); } .ts-dim { color: var(--ink-muted); }
+  .ts-cmd { color: var(--ink); font-weight: 600; }
+  .ts-follow { position: absolute; right: 16px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px 0 8px; border: 1px solid var(--border-strong); border-radius: var(--radius-full); background: var(--surface-100); color: var(--ink); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: var(--shadow-sm); transition: background-color 120ms, color 120ms, border-color 120ms; }
+  .ts-follow[aria-pressed="true"] { background: var(--surface-selected); color: var(--emerald-deep); border-color: var(--emerald-deep); }
+  .ts-follow svg { width: 14px; height: 14px; }
+  .ts-follow .ts-live { display: none; } .ts-follow[aria-pressed="true"] .ts-live { display: block; } .ts-follow[aria-pressed="true"] .ts-down { display: none; }
+</style>
+<div class="ts-wrap">
+  <div class="ts">
+    <div class="ts-head"><span>sandbox · task 7f3a · run 14</span><span class="u-badge"><svg class="u-icon u-lift" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="var(--emerald)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Working · 1 m 42 s</span>
+      <span class="ts-tools"><button class="u-aicon u-aicon--sm" aria-label="Copy output"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button><button class="u-aicon u-aicon--sm" aria-label="Open in full"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h4v4M14 10l6-6M8 20H4v-4M10 14l-6 6"/></svg></button></span>
+    </div>
+    <div class="ts-body" id="ts-body" role="log" aria-live="polite" aria-label="Sandbox output" tabindex="0">
+      <div class="ts-line"><time>00:00</time><span class="ts-cmd">$ go build ./...</span></div>
+      <div class="ts-line"><time>00:14</time><span class="ts-ok">ok</span></div>
+      <div class="ts-line"><time>00:14</time><span class="ts-cmd">$ go test -race ./internal/tasks/</span></div>
+      <div class="ts-line"><time>00:31</time><span><span class="ts-dim">=== RUN</span>   TestBudget_Charge</span></div>
+      <div class="ts-line"><time>00:31</time><span><span class="ts-ok">--- PASS:</span> TestBudget_Charge (0.00s)</span></div>
+      <div class="ts-line"><time>00:31</time><span><span class="ts-dim">=== RUN</span>   TestBudget_Ceiling</span></div>
+      <div class="ts-line"><time>00:32</time><span><span class="ts-err">--- FAIL:</span> TestBudget_Ceiling (0.01s)</span></div>
+      <div class="ts-line"><time>00:32</time><span>    budget_test.go:48: <span class="ts-err">charge 500: budget reached</span>, want nil</span></div>
+      <div class="ts-line"><time>00:32</time><span class="ts-err">FAIL	upmo/internal/tasks	0.412s</span></div>
+      <div class="ts-line"><time>00:33</time><span class="ts-warn">warning: 1 test failed, fixing the ceiling check</span></div>
+      <div class="ts-line"><time>00:40</time><span class="ts-cmd">$ go test -race ./internal/tasks/</span></div>
+      <div class="ts-line"><time>00:58</time><span><span class="ts-info">info:</span> cached build, 12 packages</span></div>
+    </div>
+    <button class="ts-follow" id="ts-follow" aria-pressed="true">
+      <svg class="ts-live" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg class="ts-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      <span id="ts-follow-text">Following</span>
+    </button>
+  </div>
+</div>
+<script>
+(function () {
+  var body = document.getElementById('ts-body'), pill = document.getElementById('ts-follow'), txt = document.getElementById('ts-follow-text');
+  var following = true, t = 58, n = 0;
+  var feed = [
+    ['ts-ok', '--- PASS: TestBudget_Charge (0.00s)'], ['ts-ok', '--- PASS: TestBudget_Ceiling (0.01s)'], ['ts-ok', 'ok  \tupmo/internal/tasks\t0.388s'],
+    ['ts-cmd', '$ go vet ./...'], ['ts-ok', 'ok'], ['ts-dim', 'uploading artifact budget.go (1.2 kB)'], ['ts-info', 'info: build done, 38k tok, €0.42']
+  ];
+  function setFollow(on) { following = on; pill.setAttribute('aria-pressed', String(on)); txt.textContent = on ? 'Following' : 'Follow output'; if (on) body.scrollTop = body.scrollHeight; }
+  pill.addEventListener('click', function () { setFollow(!following); });
+  body.addEventListener('scroll', function () {
+    var atEnd = body.scrollHeight - body.scrollTop - body.clientHeight < 8;
+    if (!atEnd && following) setFollow(false); else if (atEnd && !following) setFollow(true);
+  });
+  function add() {
+    if (n >= feed.length) return;
+    var f = feed[n++]; t += 3 + Math.round(Math.random() * 9);
+    var line = document.createElement('div'); line.className = 'ts-line';
+    var tm = document.createElement('time'); tm.textContent = '0' + Math.floor(t / 60) + ':' + ('0' + (t % 60)).slice(-2);
+    var sp = document.createElement('span'); sp.className = f[0]; sp.textContent = f[1];
+    line.appendChild(tm); line.appendChild(sp); body.appendChild(line);
+    if (following) body.scrollTop = body.scrollHeight;
+    setTimeout(add, 900);
+  }
+  body.scrollTop = body.scrollHeight;
+  setTimeout(add, 900);
+})();
+</script>

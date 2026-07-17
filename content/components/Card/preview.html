@@ -1,0 +1,25 @@
+<!-- @dsCard group="Data" height=400 subtitle="Task tile, a clickable tile, and selectable tiles for options without a logo (brands use BrandTile)" -->
+<div class="u-preview u-preview--col">
+  <div class="u-grid">
+    <article class="u-card">
+      <div class="u-card-head"><h4 class="u-card-title">Daily finance digest</h4><span class="u-badge u-badge--warning"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Needs approval</span></div>
+      <div class="u-card-meta">Upmo · gpt-5.2 · run 14 · 38k tok · €0.42</div>
+      <div class="u-status"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--ink)"/><path d="M32 22l22 22" stroke="var(--ink)"/></svg>Working</div>
+      <div class="u-card-foot"><button class="u-btn u-btn--subtle u-btn--sm">Deny</button><button class="u-btn u-btn--filled u-btn--sm">Review</button></div>
+    </article>
+    <a class="u-card u-card--click" href="#">
+      <div class="u-card-head"><h4 class="u-card-title">Vendor contract review</h4><span class="u-badge u-badge--success"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Done</span></div>
+      <div class="u-card-meta">Claude Code · claude-opus-5-5 · finished 2 h ago</div>
+      <div class="u-card-meta">3 artifacts · digest sent to legal@</div>
+    </a>
+  </div>
+  <div class="u-row" style="gap: 12px" data-select>
+    <button class="u-card u-card--select" aria-pressed="true" style="width: 200px; padding: 16px; gap: 4px; align-items: flex-start; font: inherit; text-align: left"><span class="u-card-check"><svg viewBox="0 0 64 64" width="18" height="18" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="u-card-title" style="font-size: 15px">Upmo</span><span class="u-card-meta">The built-in engine</span></button>
+    <button class="u-card u-card--select" aria-pressed="false" style="width: 200px; padding: 16px; gap: 4px; align-items: flex-start; font: inherit; text-align: left"><span class="u-card-check"><svg viewBox="0 0 64 64" width="18" height="18" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="u-card-title" style="font-size: 15px">This server</span><span class="u-card-meta">Docker Compose sandbox</span></button>
+    <button class="u-card u-card--select" aria-pressed="false" style="width: 200px; padding: 16px; gap: 4px; align-items: flex-start; font: inherit; text-align: left"><span class="u-card-check"><svg viewBox="0 0 64 64" width="18" height="18" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="u-card-title" style="font-size: 15px">Upmo Cloud</span><span class="u-card-meta">Managed, nothing to install</span></button>
+  </div>
+</div>
+<script>
+  var g = document.querySelector('[data-select]');
+  g.querySelectorAll('.u-card--select').forEach(function (c) { c.addEventListener('click', function () { g.querySelectorAll('.u-card--select').forEach(function (x) { x.setAttribute('aria-pressed', x === c); }); }); });
+</script>

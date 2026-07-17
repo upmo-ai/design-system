@@ -1,0 +1,38 @@
+<!-- @dsCard group="Data" height=520 subtitle="Approval diff: sign gutter, soft grounds, counts in the header, folded unchanged lines" -->
+<style>
+  .df-wrap { padding: 16px; display: flex; flex-direction: column; gap: 12px; max-width: 720px; }
+  .df-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .df-bar .df-what { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-muted); }
+  .df-bar .df-what b { color: var(--ink); font-weight: 600; }
+  .df-count { font-family: var(--font-mono); font-size: 12px; font-variant-numeric: tabular-nums; display: inline-flex; gap: 8px; }
+  .df-count .df-add { color: var(--emerald-deep); } .df-count .df-del { color: var(--danger); }
+  .u-diff pre { padding: 8px 0; }
+  .df-line { display: grid; grid-template-columns: 3ch 3ch 2ch 1fr; align-items: baseline; padding: 0 16px 0 10px; min-height: 20px; }
+  .df-line .u-ln { width: auto; margin: 0; padding-right: 6px; }
+  .df-sign { color: var(--ink-disabled); user-select: none; text-align: center; font-weight: 600; }
+  .df-line--add { background: var(--emerald-soft); } .df-line--add .df-sign { color: var(--emerald-deep); } .df-line--add .u-ln { color: var(--emerald-deep); }
+  .df-line--del { background: var(--danger-soft); } .df-line--del .df-sign { color: var(--danger); } .df-line--del .u-ln { color: var(--danger); }
+  .df-line--del code { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--danger) 45%, transparent); }
+  .df-line code { font: inherit; white-space: pre; }
+  .df-hunk { display: flex; align-items: center; gap: 8px; padding: 4px 10px 4px 16px; color: var(--ink-muted); font-size: 12px; background: var(--surface-100); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .df-hunk button { margin-left: auto; height: 24px; padding: 0 8px; font-size: 12px; }
+  .df-foot { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+  .df-foot .df-note { margin-right: auto; font-size: 13px; color: var(--ink-muted); }
+</style>
+<div class="df-wrap">
+  <div class="df-bar">
+    <span class="df-what"><span class="u-badge u-badge--warning"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Needs approval</span><b>write_file</b> · Daily finance digest · step 3</span>
+  </div>
+  <div class="u-codeblock u-diff" role="region" aria-label="Changes to internal/tasks/budget.go">
+    <div class="u-codeblock-head"><span>internal/tasks/budget.go</span><span class="df-count" aria-label="4 lines added, 2 removed"><b class="df-add">+4</b><b class="df-del">-2</b></span></div>
+    <pre><div class="df-hunk"><span>@@ -40,7 +40,9 @@ func (b *Budget) Charge(tokens int)</span><button class="u-btn u-btn--subtle" id="df-fold">Show 24 unchanged lines</button></div><div class="df-line"><span class="u-ln">40</span><span class="u-ln">40</span><span class="df-sign" aria-hidden="true"> </span><code>	if tokens < 0 {</code></div><div class="df-line"><span class="u-ln">41</span><span class="u-ln">41</span><span class="df-sign" aria-hidden="true"> </span><code>		return ErrNegativeCharge</code></div><div class="df-line"><span class="u-ln">42</span><span class="u-ln">42</span><span class="df-sign" aria-hidden="true"> </span><code>	}</code></div><div class="df-line df-line--del"><span class="u-ln">43</span><span class="u-ln"></span><span class="df-sign"><span class="u-sr">removed</span><span aria-hidden="true">-</span></span><code>	b.used += tokens</code></div><div class="df-line df-line--del"><span class="u-ln">44</span><span class="u-ln"></span><span class="df-sign"><span class="u-sr">removed</span><span aria-hidden="true">-</span></span><code>	return nil</code></div><div class="df-line df-line--add"><span class="u-ln"></span><span class="u-ln">43</span><span class="df-sign"><span class="u-sr">added</span><span aria-hidden="true">+</span></span><code>	if b.used+tokens > b.ceiling {</code></div><div class="df-line df-line--add"><span class="u-ln"></span><span class="u-ln">44</span><span class="df-sign"><span class="u-sr">added</span><span aria-hidden="true">+</span></span><code>		return fmt.Errorf("charge %d: %w", tokens, ErrBudgetReached)</code></div><div class="df-line df-line--add"><span class="u-ln"></span><span class="u-ln">45</span><span class="df-sign"><span class="u-sr">added</span><span aria-hidden="true">+</span></span><code>	}</code></div><div class="df-line df-line--add"><span class="u-ln"></span><span class="u-ln">46</span><span class="df-sign"><span class="u-sr">added</span><span aria-hidden="true">+</span></span><code>	b.used += tokens</code></div><div class="df-line"><span class="u-ln">45</span><span class="u-ln">47</span><span class="df-sign" aria-hidden="true"> </span><code>	return nil</code></div><div class="df-line"><span class="u-ln">46</span><span class="u-ln">48</span><span class="df-sign" aria-hidden="true"> </span><code>}</code></div></pre>
+  </div>
+  <div class="df-foot"><span class="df-note">1 file · the agent waits until you decide</span><button class="u-btn u-btn--outline u-btn--sm">Deny</button><button class="u-btn u-btn--filled u-btn--sm">Approve change</button></div>
+</div>
+<script>
+  document.getElementById('df-fold').addEventListener('click', function () {
+    var on = this.getAttribute('aria-expanded') === 'true';
+    this.setAttribute('aria-expanded', String(!on));
+    this.textContent = on ? 'Show 24 unchanged lines' : 'Hide unchanged lines';
+  });
+</script>

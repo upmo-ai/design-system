@@ -1,0 +1,68 @@
+<!-- @dsCard group="Data" height=330 width=960 subtitle="Pick an engine: runtime, caps in tabular figures, and Allow, Ask first or Block per group" -->
+<style>
+  .ec-wrap { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .ec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .ec { padding: 16px; gap: 10px; align-items: stretch; text-align: left; font: inherit; cursor: pointer; }
+  .ec .u-card-title { font-size: 15px; line-height: 22px; padding-right: 24px; }
+  .ec-caps { font-size: 13px; line-height: 18px; color: var(--ink-muted); font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; }
+  .ec-caps .u-badge { height: 20px; font-size: 12px; padding: 0 8px; }
+  .ec-policy { list-style: none; margin: 2px 0 0; padding: 8px 0 0; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; }
+  .ec-policy li { display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 18px; color: var(--ink); }
+  .ec-policy li .ec-i { width: 16px; height: 16px; flex: none; }
+  .ec-policy li span:last-child { margin-left: auto; color: var(--ink-muted); font-size: 12px; }
+  .ec-policy li[data-policy="allow"] .ec-i { color: var(--emerald-deep); }
+  .ec-policy li[data-policy="ask"] .ec-i { color: var(--warning); }
+  .ec-policy li[data-policy="block"] { color: var(--ink-muted); } .ec-policy li[data-policy="block"] .ec-i { color: var(--ink-muted); }
+  .ec-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-secondary); }
+  .ec-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .ec-legend svg { width: 16px; height: 16px; }
+</style>
+<div class="ec-wrap">
+  <div class="ec-grid" role="radiogroup" aria-label="Engine" id="ec-group">
+    <button class="u-card u-card--select ec" role="radio" aria-checked="true" aria-pressed="true">
+      <span class="u-card-check"><svg viewBox="0 0 64 64" width="18" height="18" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="u-card-title">Upmo</span>
+      <span class="u-card-meta">Built in. Plans the work, does it and checks the result with your models.</span>
+      <span class="ec-caps"><span class="u-badge">Docker</span><span>2 vCPU · 4 GB · 20 min</span></span>
+      <ul class="ec-policy">
+        <li data-policy="allow"><svg class="ec-i" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Change files<span>Allow</span></li>
+        <li data-policy="ask"><svg class="ec-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Run commands<span>Ask first</span></li>
+        <li data-policy="ask"><svg class="ec-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Use the internet<span>Ask first</span></li>
+        <li data-policy="connector"><svg class="ec-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 0 1-10 0zM12 16v5"/></svg>Use connectors<span>Per connector</span></li>
+      </ul>
+    </button>
+    <button class="u-card u-card--select ec" role="radio" aria-checked="false" aria-pressed="false">
+      <span class="u-card-check"><svg viewBox="0 0 64 64" width="18" height="18" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="u-card-title">Claude Code</span>
+      <span class="u-card-meta">Claude Code does the work inside the sandbox. Uses your subscription.</span>
+      <span class="ec-caps"><span class="u-badge">Docker</span><span>2 vCPU · 4 GB · 30 min</span></span>
+      <ul class="ec-policy">
+        <li data-policy="allow"><svg class="ec-i" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Change files<span>Allow</span></li>
+        <li data-policy="ask"><svg class="ec-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Run commands<span>Ask first</span></li>
+        <li data-policy="block"><svg class="ec-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>Use the internet<span>Block</span></li>
+        <li data-policy="connector"><svg class="ec-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 0 1-10 0zM12 16v5"/></svg>Use connectors<span>Per connector</span></li>
+      </ul>
+    </button>
+    <button class="u-card u-card--select ec" role="radio" aria-checked="false" aria-pressed="false">
+      <span class="u-card-check"><svg viewBox="0 0 64 64" width="18" height="18" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="u-card-title">Codex</span>
+      <span class="u-card-meta">Codex does the work in its own pod on your cluster. Uses your subscription.</span>
+      <span class="ec-caps"><span class="u-badge">Kubernetes</span><span>1 vCPU · 2 GB · 20 min</span></span>
+      <ul class="ec-policy">
+        <li data-policy="ask"><svg class="ec-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Change files<span>Ask first</span></li>
+        <li data-policy="allow"><svg class="ec-i" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Run commands<span>Allow</span></li>
+        <li data-policy="block"><svg class="ec-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>Use the internet<span>Block</span></li>
+        <li data-policy="connector"><svg class="ec-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 0 1-10 0zM12 16v5"/></svg>Use connectors<span>Per connector</span></li>
+      </ul>
+    </button>
+  </div>
+  <div class="ec-legend" aria-hidden="true">
+    <span><svg viewBox="0 0 64 64" fill="none" style="color: var(--emerald-deep)"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Allow: runs without asking</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--warning)"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Ask first: the task waits for you</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--ink-muted)"><path d="M18 6 6 18M6 6l12 12"/></svg>Block: the engine cannot use it</span>
+  </div>
+</div>
+<script>
+  var eg = document.getElementById('ec-group');
+  eg.querySelectorAll('[role="radio"]').forEach(function (c) { c.addEventListener('click', function () { eg.querySelectorAll('[role="radio"]').forEach(function (x) { var on = x === c; x.setAttribute('aria-checked', on); x.setAttribute('aria-pressed', on); }); }); });
+</script>

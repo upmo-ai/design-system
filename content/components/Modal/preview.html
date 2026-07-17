@@ -1,0 +1,21 @@
+<!-- @dsCard group="Overlays" height=400 subtitle="A destructive confirmation: Cancel takes focus, the primary names the action" -->
+<div class="u-preview" style="padding: 0">
+  <div class="u-scrim">
+    <div class="u-modal" role="dialog" aria-modal="true" aria-labelledby="md-title" aria-describedby="md-desc">
+      <div class="u-modal-head"><h2 id="md-title">Delete this task?</h2><button class="u-aicon u-aicon--sm" aria-label="Close"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+      <p id="md-desc">Daily finance digest and its 14 runs, artifacts and events will be removed. Automations that use it will stop. This cannot be undone.</p>
+      <label class="u-check"><input type="checkbox" id="md-confirm"><span class="u-box"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="u-check-text">Also delete the exported PDFs</span></label>
+      <div class="u-modal-actions">
+        <button class="u-btn u-btn--subtle" autofocus>Cancel</button>
+        <button class="u-btn u-btn--danger" id="md-del">Delete task</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.getElementById('md-del').addEventListener('click', function () {
+    var b = this; b.setAttribute('aria-busy', 'true'); var w = b.offsetWidth; b.style.minWidth = w + 'px';
+    b.innerHTML = '<svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="u-draw" pathLength="100" d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Deleting…';
+    setTimeout(function () { b.removeAttribute('aria-busy'); b.textContent = 'Delete task'; b.style.minWidth = ''; }, 1400);
+  });
+</script>

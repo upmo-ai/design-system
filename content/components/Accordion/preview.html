@@ -1,0 +1,18 @@
+<!-- @dsCard group="Data" height=300 subtitle="Click a header. One section is open at a time" -->
+<div class="u-preview" style="max-width: 560px">
+  <div class="u-acc" data-acc>
+    <div class="u-acc-item"><h3 style="margin: 0"><button class="u-acc-btn" aria-expanded="true" aria-controls="ac-0" id="ab-0">What runs on my server?<svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></h3><div class="u-acc-panel" id="ac-0" role="region" aria-labelledby="ab-0">Everything: the API, the gateway, memory, sandboxes and the web UI, as Docker Compose services or Kubernetes pods. Model calls go to the providers you configure, and nowhere else.</div></div>
+    <div class="u-acc-item"><h3 style="margin: 0"><button class="u-acc-btn" aria-expanded="false" aria-controls="ac-1" id="ab-1">Can I use my Claude or ChatGPT subscription?<svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></h3><div class="u-acc-panel" id="ac-1" role="region" aria-labelledby="ab-1" hidden>Yes. The cliproxy service wraps a signed-in subscription as an OpenAI-compatible endpoint. Costs are recorded as unknown, never guessed.</div></div>
+    <div class="u-acc-item"><h3 style="margin: 0"><button class="u-acc-btn" aria-expanded="false" aria-controls="ac-2" id="ab-2">What happens when a task fails?<svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></h3><div class="u-acc-panel" id="ac-2" role="region" aria-labelledby="ab-2" hidden>It stops, keeps every artifact and event, and you get a notification with the reason. Start a follow-up task from it and the context carries over.</div></div>
+  </div>
+</div>
+<script>
+  var acc = document.querySelector('[data-acc]');
+  acc.querySelectorAll('.u-acc-btn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var open = b.getAttribute('aria-expanded') === 'true';
+      acc.querySelectorAll('.u-acc-btn').forEach(function (x) { x.setAttribute('aria-expanded', 'false'); document.getElementById(x.getAttribute('aria-controls')).hidden = true; });
+      if (!open) { b.setAttribute('aria-expanded', 'true'); document.getElementById(b.getAttribute('aria-controls')).hidden = false; }
+    });
+  });
+</script>

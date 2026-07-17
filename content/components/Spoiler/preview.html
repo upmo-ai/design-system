@@ -1,0 +1,11 @@
+<!-- @dsCard group="Data" height=200 subtitle="Long text cut to three lines. Show more opens the rest" -->
+<div class="u-preview">
+  <div class="u-spoiler" id="sp" data-open="false">
+    <div class="u-spoiler-body" id="sp-body">The task read 31 invoices from the finance mailbox between 1 and 31 October. Twenty-nine matched a vendor in the contracts folder by name or VAT number. Two did not match any contract: one from a new vendor (Framer) and one from a vendor whose contract expired in September (Linear). Both are listed in the digest with a note. Amounts were extracted from the PDF text layer; three invoices were scanned images and went through OCR, with confidence above 0.95 on each. Totals match the mailbox count. No invoice was paid or moved; this run only reports.</div>
+    <button class="u-spoiler-btn" id="sp-btn" aria-expanded="false" aria-controls="sp-body">Show more</button>
+  </div>
+</div>
+<script>
+  var sp = document.getElementById('sp'), b = document.getElementById('sp-btn');
+  b.addEventListener('click', function () { var open = sp.dataset.open === 'true'; sp.dataset.open = !open; b.setAttribute('aria-expanded', !open); b.textContent = open ? 'Show more' : 'Show less'; });
+</script>

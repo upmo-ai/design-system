@@ -1,0 +1,19 @@
+<!-- @dsCard group="Feedback" height=340 subtitle="Toasts stack bottom right. Press the button to show one." -->
+<div class="u-preview" style="align-items: flex-start; gap: 24px">
+  <div class="u-stack" style="gap: 10px">
+    <div class="u-toast u-toast--success" role="status"><span class="u-toast-icon"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="u-toast-body"><div class="u-toast-title">Task started</div><div class="u-toast-text">Daily finance digest is preparing.</div></div><button class="u-aicon u-aicon--sm" aria-label="Dismiss"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="u-toast u-toast--danger" role="alert"><span class="u-toast-icon"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></span><div class="u-toast-body"><div class="u-toast-title">Could not archive chat</div><div class="u-toast-text">The server did not respond. Try again.</div><div class="u-row" style="margin-top: 6px"><button class="u-btn u-btn--light u-btn--sm">Try again</button></div></div><button class="u-aicon u-aicon--sm" aria-label="Dismiss"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="u-toast u-toast--info" role="status"><span class="u-toast-icon"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2M4 8h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8"/></svg></span><div class="u-toast-body"><div class="u-toast-title">Chat archived</div></div><button class="u-btn u-btn--subtle u-btn--sm">Undo</button></div>
+  </div>
+  <div class="u-stack" style="gap: 10px">
+    <button class="u-btn u-btn--outline" id="nt-fire">Fire a toast</button>
+    <div id="nt-live" aria-live="polite" class="u-stack" style="gap: 10px"></div>
+  </div>
+</div>
+<script>
+  document.getElementById('nt-fire').addEventListener('click', function () {
+    var t = document.createElement('div'); t.className = 'u-toast u-toast--success'; t.setAttribute('role', 'status');
+    t.innerHTML = '<svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="u-toast-body"><div class="u-toast-title">Saved</div><div class="u-toast-text">Closes in 5 s.</div></div>';
+    document.getElementById('nt-live').appendChild(t); setTimeout(function () { t.remove(); }, 5000);
+  });
+</script>

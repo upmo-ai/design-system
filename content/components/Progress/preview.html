@@ -1,0 +1,15 @@
+<!-- @dsCard group="Feedback" height=170 subtitle="Known fractions: budget, upload, steps. Press to advance" -->
+<div class="u-preview u-preview--col" style="max-width: 480px; gap: 20px">
+  <div class="u-progress-row"><span style="font-size: 13px; color: var(--ink-muted); min-width: 110px">Budget used</span><div class="u-progress" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Budget used"><div id="pg-bar" style="width: 62%"></div></div><span class="u-progress-label" id="pg-label">62%</span></div>
+  <div class="u-progress-row"><span style="font-size: 13px; color: var(--ink-muted); min-width: 110px">Tokens</span><div class="u-progress u-progress--warning" role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" aria-label="Tokens used"><div style="width: 88%"></div></div><span class="u-progress-label">88%</span></div>
+  <div class="u-progress-row"><span style="font-size: 13px; color: var(--ink-muted); min-width: 110px">Upload</span><div class="u-progress" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Upload"><div style="width: 100%"></div></div><span class="u-progress-label" style="color: var(--success)">Done</span></div>
+  <button class="u-btn u-btn--outline u-btn--sm" id="pg-btn" style="align-self: flex-start">Spend 10%</button>
+</div>
+<script>
+  var v = 62;
+  document.getElementById('pg-btn').addEventListener('click', function () {
+    v = Math.min(100, v + 10); var bar = document.getElementById('pg-bar'); bar.style.width = v + '%';
+    bar.parentElement.setAttribute('aria-valuenow', v); bar.parentElement.className = 'u-progress' + (v >= 90 ? ' u-progress--danger' : v >= 75 ? ' u-progress--warning' : '');
+    document.getElementById('pg-label').textContent = v + '%';
+  });
+</script>

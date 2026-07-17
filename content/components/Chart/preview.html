@@ -1,0 +1,48 @@
+<!-- @dsCard group="Data" height=560 subtitle="Stat tiles, a two-series line and nominal bars. Hover the line" -->
+<div class="u-preview u-preview--col" style="gap: 16px">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; width: 100%">
+    <div class="u-stat"><span class="u-stat-label">Spend this month</span><span class="u-stat-value">€36.21</span><span class="u-stat-delta"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>12% under budget</span></div>
+    <div class="u-stat"><span class="u-stat-label">Task runs</span><span class="u-stat-value">148</span><span class="u-stat-delta"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>+21 vs last month</span></div>
+    <div class="u-stat"><span class="u-stat-label">Failure rate</span><span class="u-stat-value">3.4%</span><span class="u-stat-delta u-stat-delta--down"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>+0.8 pt</span></div>
+    <div class="u-stat"><span class="u-stat-label">Tokens</span><span class="u-stat-value">2.1M</span><span class="u-stat-label">cost unknown for 4%</span></div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; width: 100%">
+    <div class="u-chart">
+      <div class="u-chart-head"><span class="u-chart-title">Daily cost</span><span class="u-chart-sub">€ · last 14 days</span></div>
+      <svg viewBox="0 0 400 180" id="ch-line" aria-label="Daily cost, OpenAI and Anthropic, last 14 days" role="img">
+        <g class="lbl"><text x="0" y="14">€4</text><text x="0" y="74">€2</text><text x="0" y="134">€0</text></g>
+        <line class="ax" x1="28" x2="400" y1="10" y2="10"/><line class="ax" x1="28" x2="400" y1="70" y2="70"/><line class="base" x1="28" x2="400" y1="130" y2="130"/>
+        <path class="s1 area" id="ch-a1"/><path class="s1 line" id="ch-l1"/><path class="s2 line" id="ch-l2"/>
+        <g id="ch-ends"></g>
+        <g class="lbl" id="ch-x"></g>
+        <g id="ch-hover" style="display:none"><line id="ch-cross" y1="10" y2="130" stroke="var(--border-strong)" stroke-dasharray="3 3"/><circle id="ch-d1" r="4" class="s1 dot"/><circle id="ch-d2" r="4" class="s2 dot"/></g>
+        <rect id="ch-hit" x="28" y="0" width="372" height="150" fill="transparent"/>
+      </svg>
+      <div class="u-row" style="justify-content: space-between"><div class="u-legend"><span><i style="background: var(--chart-1)"></i>OpenAI</span><span><i style="background: var(--chart-2)"></i>Anthropic</span></div><button class="u-btn u-btn--subtle u-btn--sm">Table</button></div>
+      <div class="u-tip" id="ch-tip" style="position: absolute; transform: none; left: 0; bottom: auto; top: 0"></div>
+    </div>
+    <div class="u-chart">
+      <div class="u-chart-head"><span class="u-chart-title">Tokens by model</span><span class="u-chart-sub">this month, thousands</span></div>
+      <svg viewBox="0 0 400 180" role="img" aria-label="Tokens by model this month">
+        <g id="ch-bars"></g>
+      </svg>
+      <div class="u-row" style="justify-content: flex-end"><button class="u-btn u-btn--subtle u-btn--sm">Table</button></div>
+    </div>
+  </div>
+</div>
+<script>
+  var a = [1.2, 1.8, 1.1, 2.6, 2.2, 3.1, 2.8, 2.4, 3.4, 2.9, 3.8, 3.2, 2.7, 3.5], b = [0.6, 0.9, 1.4, 1.0, 1.7, 1.2, 2.0, 1.6, 1.9, 2.3, 1.8, 2.1, 2.6, 2.2];
+  var X0 = 28, X1 = 400, Y0 = 130, Y1 = 10, MAX = 4, n = a.length;
+  function px(i) { return X0 + (X1 - X0) * i / (n - 1); } function py(v) { return Y0 - (Y0 - Y1) * v / MAX; }
+  function path(d) { return d.map(function (v, i) { return (i ? 'L' : 'M') + px(i).toFixed(1) + ' ' + py(v).toFixed(1); }).join(' '); }
+  document.getElementById('ch-l1').setAttribute('d', path(a)); document.getElementById('ch-l2').setAttribute('d', path(b));
+  document.getElementById('ch-a1').setAttribute('d', path(a) + ' L' + X1 + ' ' + Y0 + ' L' + X0 + ' ' + Y0 + ' Z');
+  var ends = document.getElementById('ch-ends'), ns = 'http://www.w3.org/2000/svg';
+  [[a, 's1', 'OpenAI'], [b, 's2', 'Anthropic']].forEach(function (s) { var c = document.createElementNS(ns, 'circle'); c.setAttribute('cx', px(n - 1)); c.setAttribute('cy', py(s[0][n - 1])); c.setAttribute('r', 4); c.setAttribute('class', s[1] + ' dot'); ends.appendChild(c); var t = document.createElementNS(ns, 'text'); t.setAttribute('x', px(n - 1) - 8); t.setAttribute('y', py(s[0][n - 1]) - 8); t.setAttribute('class', 'val'); t.setAttribute('text-anchor', 'end'); t.textContent = '€' + s[0][n - 1].toFixed(2); ends.appendChild(t); });
+  var xs = document.getElementById('ch-x'); [0, 7, 13].forEach(function (i) { var t = document.createElementNS(ns, 'text'); t.setAttribute('x', px(i)); t.setAttribute('y', 148); t.setAttribute('text-anchor', i === 0 ? 'start' : i === 13 ? 'end' : 'middle'); t.textContent = ['7 Oct', '14 Oct', '20 Oct'][[0, 7, 13].indexOf(i)]; xs.appendChild(t); });
+  var hit = document.getElementById('ch-hit'), hov = document.getElementById('ch-hover'), tip = document.getElementById('ch-tip'), svg = document.getElementById('ch-line');
+  hit.addEventListener('mousemove', function (e) { var r = svg.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * 400, i = Math.round((x - X0) / (X1 - X0) * (n - 1)); i = Math.max(0, Math.min(n - 1, i)); hov.style.display = ''; document.getElementById('ch-cross').setAttribute('x1', px(i)); document.getElementById('ch-cross').setAttribute('x2', px(i)); document.getElementById('ch-d1').setAttribute('cx', px(i)); document.getElementById('ch-d1').setAttribute('cy', py(a[i])); document.getElementById('ch-d2').setAttribute('cx', px(i)); document.getElementById('ch-d2').setAttribute('cy', py(b[i])); tip.innerHTML = (7 + i) + ' Oct · OpenAI €' + a[i].toFixed(2) + ' · Anthropic €' + b[i].toFixed(2); tip.classList.add('u-tip--show'); tip.style.left = Math.min(e.clientX - r.left + 12, r.width - 200) + 'px'; tip.style.top = (e.clientY - r.top - 36) + 'px'; });
+  hit.addEventListener('mouseleave', function () { hov.style.display = 'none'; tip.classList.remove('u-tip--show'); });
+  var bars = [['gpt-5.2', 1204], ['claude-opus-5-5', 389], ['glm-4.7', 210], ['qwen3:4b', 96], ['gpt-5.2-mini', 64]], g = document.getElementById('ch-bars'), bw = 22, max = 1204;
+  bars.forEach(function (d, i) { var y = 8 + i * 34, w = (400 - 130) * d[1] / max; var t = document.createElementNS(ns, 'text'); t.setAttribute('x', 118); t.setAttribute('y', y + 15); t.setAttribute('text-anchor', 'end'); t.setAttribute('class', 'lbl'); t.setAttribute('style', 'font-family: var(--font-mono)'); t.textContent = d[0]; g.appendChild(t); var r = document.createElementNS(ns, 'rect'); r.setAttribute('x', 126); r.setAttribute('y', y); r.setAttribute('width', w); r.setAttribute('height', bw); r.setAttribute('rx', 4); r.setAttribute('class', 's1'); g.appendChild(r); var v = document.createElementNS(ns, 'text'); v.setAttribute('x', 126 + w + 6); v.setAttribute('y', y + 15); v.setAttribute('class', 'val'); v.textContent = d[1]; g.appendChild(v); });
+</script>

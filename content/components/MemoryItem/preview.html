@@ -1,0 +1,58 @@
+<!-- @dsCard group="Data" height=720 subtitle="A remembered fact: text, where it was learned, scope, actions. Retrieval views add a score." -->
+<style>
+  .mi-wrap { padding: 16px; display: flex; flex-direction: column; gap: 20px; max-width: 720px; }
+  .mi-list { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-100); overflow: hidden; }
+  .mi { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 12px 12px 12px 16px; }
+  .mi + .mi { border-top: 1px solid var(--border); }
+  .mi:hover, .mi:focus-within { background: var(--surface-hover); }
+  .mi-text { font-size: 15px; line-height: 22px; color: var(--ink); grid-column: 1; }
+  .mi-text mark { background: transparent; color: var(--emerald-deep); font-weight: 600; }
+  .mi-meta { grid-column: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+  .mi-meta a { color: var(--ink-muted); text-decoration: underline; text-underline-offset: 2px; }
+  .mi-meta a:hover { color: var(--ink); }
+  .mi-meta .u-badge { height: 20px; font-size: 12px; padding: 0 8px; }
+  .mi-score { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
+  .mi-actions { grid-column: 2; grid-row: 1 / span 2; display: flex; gap: 2px; align-self: start; opacity: 0; transition: opacity 120ms; }
+  .mi:hover .mi-actions, .mi:focus-within .mi-actions, .mi-actions:focus-within { opacity: 1; }
+  @media (hover: none) { .mi-actions { opacity: 1; } }
+  .mi--stale .mi-text { color: var(--ink-muted); }
+  .mi-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--ink-muted); }
+  .mi-head b { color: var(--ink); font-weight: 600; font-size: 15px; }
+</style>
+<div class="mi-wrap">
+  <div>
+    <div class="mi-head" style="margin-bottom: 8px"><b>Memory</b><span>3 facts · User scope</span></div>
+    <div class="mi-list" role="list">
+      <div class="mi" role="listitem">
+        <p class="mi-text">Prefers the weekly spend report in euros, two decimals, sent on Monday mornings.</p>
+        <div class="mi-meta"><span class="u-badge">User</span><span>Learned in <a href="#">chat · 3 Oct</a></span><span>Used 14 times</span></div>
+        <div class="mi-actions"><button class="u-aicon u-aicon--sm" aria-label="Edit fact"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2 2 0 0 0-4-4L4 16v4M13.5 6.5l4 4"/></svg></button><button class="u-aicon u-aicon--sm" aria-label="Delete fact"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>
+      </div>
+      <div class="mi" role="listitem">
+        <p class="mi-text">The finance digest should skip vendors under €50 a month.</p>
+        <div class="mi-meta"><span class="u-badge">Workspace</span><span>Learned in <a href="#">Daily finance digest · run 9</a></span><span>Used 3 times</span></div>
+        <div class="mi-actions"><button class="u-aicon u-aicon--sm" aria-label="Edit fact"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2 2 0 0 0-4-4L4 16v4M13.5 6.5l4 4"/></svg></button><button class="u-aicon u-aicon--sm" aria-label="Delete fact"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>
+      </div>
+      <div class="mi mi--stale" role="listitem">
+        <p class="mi-text">Repository for the shortener is molla-go on GitHub. <span class="u-badge u-badge--outline">Replaced 12 Oct</span></p>
+        <div class="mi-meta"><span class="u-badge">Agent · Coder</span><span>Learned in <a href="#">chat · 28 Sep</a></span><span>Superseded by a newer fact</span></div>
+        <div class="mi-actions"><button class="u-aicon u-aicon--sm" aria-label="Show history"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8v4l2 2M3.05 11a9 9 0 1 0 .5-4.5M3 4v4h4"/></svg></button></div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="mi-head" style="margin-bottom: 8px"><b>Recalled for this reply</b><span>2 chunks · knowledge and memory</span></div>
+    <div class="mi-list" role="list">
+      <div class="mi" role="listitem">
+        <p class="mi-text">Vendor contracts renew automatically unless cancelled <mark>30 days</mark> before the term ends.</p>
+        <div class="mi-meta"><span class="u-badge u-badge--info">Knowledge</span><span><a href="#">contracts/acme-msa.pdf</a> · p. 4</span><span>Score <span class="mi-score">0.91</span></span></div>
+        <div class="mi-actions"><button class="u-aicon u-aicon--sm" aria-label="Remove from context"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+      </div>
+      <div class="mi" role="listitem">
+        <p class="mi-text">The finance digest should skip vendors under €50 a month.</p>
+        <div class="mi-meta"><span class="u-badge">Workspace</span><span>Memory · <a href="#">Daily finance digest · run 9</a></span><span>Score <span class="mi-score">0.74</span></span></div>
+        <div class="mi-actions"><button class="u-aicon u-aicon--sm" aria-label="Remove from context"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+      </div>
+    </div>
+  </div>
+</div>
