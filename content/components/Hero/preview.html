@@ -1,0 +1,46 @@
+<!-- @dsCard group="Marketing" height=560 width=1280 page subtitle="Landing hero: eyebrow, headline with one green word, lead, two calls to action, the caret large. It stacks on phones." -->
+<style>
+  .mk-hero { min-height: 100%; background: var(--surface-000); color: var(--ink); display: flex; flex-direction: column; }
+  .hero-nav { height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
+  .hero-nav .links { display: flex; gap: 24px; font-size: 15px; font-weight: 500; }
+  .hero-nav .links a { color: var(--ink-secondary); text-decoration: none; }
+  .hero-body { flex: 1; display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: 48px; padding: 24px 32px 48px; max-width: 1280px; width: 100%; margin: 0 auto; box-sizing: border-box; }
+  .hero-eyebrow { font-size: 11px; line-height: 16px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); margin: 0 0 16px; }
+  .mk-hero h1 { font-family: var(--font-display); font-weight: 700; font-size: 56px; line-height: 60px; letter-spacing: -0.02em; margin: 0 0 20px; max-width: 22ch; }
+  .mk-hero h1 em { font-style: normal; color: var(--emerald-deep); }
+  .hero-lead { font-size: 17px; line-height: 26px; color: var(--ink-secondary); margin: 0 0 28px; max-width: 48ch; }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-cta .u-btn { height: 48px; padding: 0 22px; font-size: 16px; }
+  .hero-art { display: flex; align-items: center; justify-content: center; }
+  .hero-art svg { width: min(100%, 360px); height: auto; }
+  .hero-foot { display: flex; gap: 24px; padding: 0 32px 24px; font-size: 13px; color: var(--ink-muted); }
+  .hero-foot span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-left: 2.5px solid var(--emerald-deep); border-bottom: 2.5px solid var(--emerald-deep); transform: rotate(135deg) translate(-1px, 1px); vertical-align: 1px; }
+  @media (max-width: 767px) {
+    .hero-nav .links { display: none; }
+    .hero-body { grid-template-columns: 1fr; gap: 24px; padding: 8px 16px 32px; }
+    .mk-hero h1 { font-size: 40px; line-height: 44px; }
+    .hero-art { order: -1; }
+    .hero-art svg { width: 120px; }
+    .hero-cta .u-btn { width: 100%; }
+    .hero-foot { flex-direction: column; gap: 8px; padding: 0 16px 16px; }
+  }
+</style>
+<div class="mk-hero">
+  <nav class="hero-nav" aria-label="Site">
+    <svg viewBox="-6 -108.5 257.17 137" width="96" height="51" role="img" aria-label="Upmo"><path fill="var(--emerald)" d="M22.33 1.25Q14 1.25 9.75 -4Q5.5 -9.25 5.5 -18.25V-50H19V-20.5Q19 -15.42 20.83 -12.58Q22.67 -9.75 26.75 -9.75Q31.67 -9.75 34.33 -13.58Q37 -17.42 37 -23V-50H50.5V0H38.33V-7.5H36.33Q35.08 -3.75 31.75 -1.25Q28.42 1.25 22.33 1.25ZM60.21 20V-50H72.38V-42.5H74.38Q76.13 -46.08 79.5 -48.54Q82.88 -51 88.46 -51Q94.46 -51 99.17 -47.92Q103.88 -44.83 106.55 -39.29Q109.21 -33.75 109.21 -26.25V-23.75Q109.21 -16.25 106.55 -10.71Q103.88 -5.17 99.17 -2.08Q94.46 1 88.46 1Q82.88 1 79.5 -1.46Q76.13 -3.92 74.38 -7.5H73.71V20ZM84.38 -10.75Q89.38 -10.75 92.42 -14.17Q95.46 -17.58 95.46 -24V-26Q95.46 -32.42 92.42 -35.83Q89.38 -39.25 84.38 -39.25Q79.38 -39.25 76.33 -35.83Q73.29 -32.42 73.29 -26V-24Q73.29 -17.58 76.33 -14.17Q79.38 -10.75 84.38 -10.75Z"/><path fill="var(--ink)" d="M116.46 0V-50H128.63V-42.5H130.63Q131.88 -46.17 135.21 -48.58Q138.54 -51 144.54 -51Q149.88 -51 153.38 -48.42Q156.88 -45.83 158.54 -42.08H159.21Q160.79 -45.83 164.42 -48.42Q168.04 -51 174.04 -51Q182.29 -51 186.88 -45.79Q191.46 -40.58 191.46 -31.75V0H177.96V-30.75Q177.96 -35.17 175.96 -37.29Q173.96 -39.42 170.21 -39.42Q165.79 -39.42 163.13 -36.54Q160.46 -33.67 160.46 -28.5V0H146.96V-30.75Q146.96 -35.17 144.96 -37.29Q142.96 -39.42 139.21 -39.42Q134.79 -39.42 132.13 -36.54Q129.46 -33.67 129.46 -28.5V0ZM223.5 1Q216.17 1 210.42 -2Q204.67 -5 201.33 -10.63Q198 -16.25 198 -24V-26Q198 -33.75 201.33 -39.38Q204.67 -45 210.42 -48Q216.17 -51 223.5 -51Q230.83 -51 236.58 -48Q242.33 -45 245.67 -39.38Q249 -33.75 249 -26V-24Q249 -16.25 245.67 -10.63Q242.33 -5 236.58 -2Q230.83 1 223.5 1ZM223.5 -10.75Q228.75 -10.75 231.96 -14.17Q235.17 -17.58 235.17 -24V-26Q235.17 -32.42 231.96 -35.83Q228.75 -39.25 223.5 -39.25Q218.25 -39.25 215.04 -35.83Q211.83 -32.42 211.83 -26V-24Q211.83 -17.58 215.04 -14.17Q218.25 -10.75 223.5 -10.75Z"/><path d="M205.81 -80.04 223.5 -95.08 241.19 -80.04" fill="none" stroke="var(--emerald)" stroke-width="8.85" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="links"><a href="#">Docs</a><a href="#">Tasks</a><a href="#">Pricing</a><a href="#">Self-host it</a></div>
+    <button class="u-btn u-btn--outline u-btn--sm">Sign in</button>
+  </nav>
+  <div class="hero-body">
+    <div>
+      <p class="hero-eyebrow">Open source · managed or self-hosted</p>
+      <h1>Always-on agents, on our cloud or <em>yours</em></h1>
+      <p class="hero-lead">Give Upmo a goal. It plans the work, does it and checks the result. It shows every cost and asks before it does anything you would want to approve. Run it on Upmo Cloud or on a machine you own.</p>
+      <div class="hero-cta"><button class="u-btn u-btn--filled">Start on Upmo Cloud</button><button class="u-btn u-btn--outline">Install Upmo</button></div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 12 64 42" fill="none"><path d="M10 44 32 22l22 22" stroke="var(--emerald)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+  <div class="hero-foot"><span>Open source, AGPL</span><span>Your keys stay yours</span><span>Costs shown, never guessed</span></div>
+</div>
