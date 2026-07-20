@@ -14,7 +14,7 @@ docker compose run --rm dev pnpm test
 docker compose run --rm dev pnpm lint
 ```
 
-Run `build`, `test` and `lint` before you open a pull request.
+Run `build`, `test` and `lint` before you open a pull request; CI runs the same three.
 
 ## How content and previews work
 
@@ -27,6 +27,8 @@ Run `build`, `test` and `lint` before you open a pull request.
 - `packages/tokens/tokens.json` and `packages/icons/icons.json`: the token and icon sources.
 
 `pnpm gen` (part of `pnpm dev` and `pnpm build`) runs `apps/docs/scripts/gen.ts`. It writes the Starlight pages into `apps/docs/src/content/docs/` and one standalone preview page per component into `apps/docs/public/previews/`. Both folders are generated and ignored by git. Hand-written pages (the landing page and Install) live in `apps/docs/src/handwritten/` and are copied in.
+
+Colours come from tokens only. `pnpm lint` fails on a raw hex colour in `content/components/bundle.css` or `apps/docs/src`.
 
 ## Commits
 
