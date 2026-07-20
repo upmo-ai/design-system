@@ -1,3 +1,10 @@
 packages:
   - packages/*
   - apps/*
+
+# esbuild (via tsup) ships a prebuilt binary per platform and does not need its
+# postinstall. Recording the decision here keeps `pnpm install` non-interactive.
+ignoredBuiltDependencies:
+  - esbuild
+onlyBuiltDependencies: []
+strictDepBuilds: false

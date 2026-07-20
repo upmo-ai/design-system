@@ -10,6 +10,7 @@ for (const root of roots) {
   if (!existsSync(root)) continue;
   for (const file of listFiles(root)) {
     // Only lint hand-written component/doc source, never generated dist or tokens source.
+    if (file.includes('/node_modules/')) continue;
     if (file.includes('/dist/')) continue;
     if (file.endsWith('tokens.json')) continue;
     if (file.endsWith('/src') ) continue;
