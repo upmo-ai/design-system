@@ -1,0 +1,20 @@
+# Internal design/architecture/decision notes. Never publish.
+design-notes/
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Logs and OS cruft
+*.log
+.DS_Store
+
+# Temp review artifacts (swatch previews etc). Never committed.
+swatches.html
+status-preview.html
+caret-motion.html
+tokens-review.html
+*.tmp.html
