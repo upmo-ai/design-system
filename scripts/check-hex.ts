@@ -12,6 +12,7 @@ for (const root of roots) {
     // Only lint hand-written component/doc source, never generated dist or tokens source.
     if (file.includes('/node_modules/')) continue;
     if (file.includes('/dist/')) continue;
+    if (file.includes('/.astro/')) continue;
     if (file.endsWith('tokens.json')) continue;
     if (file.endsWith('/src') ) continue;
     if (/\/(src|styles)\//.test(file) && /\.(css|module\.css|tsx|ts)$/.test(file)) srcDirs.push(file);

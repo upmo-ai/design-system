@@ -1,0 +1,34 @@
+.wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin: var(--space-4) 0;
+  background: var(--surface-000);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-200);
+  border-bottom: 1px solid var(--border);
+}
+
+/* The surface carries data-theme, so the token variables inside resolve to the
+   chosen theme. Mantine's own variables are scoped here too (see the provider's
+   cssVariablesSelector), so switching theme restyles the real components. */
+.surface {
+  padding: var(--space-6);
+  background: var(--surface-000);
+  color: var(--ink);
+  font-family: var(--font-ui);
+}
+
+.caption {
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--border);
+  background: var(--surface-200);
+  color: var(--ink-muted);
+  font-family: var(--font-ui);
+  font-size: 12px;
+}

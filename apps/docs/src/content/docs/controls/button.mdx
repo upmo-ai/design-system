@@ -1,0 +1,21 @@
+---
+title: Button
+description: The primary control, themed by Upmo tokens.
+---
+
+import { ButtonSmoke } from '../../../preview/ButtonSmoke.tsx';
+
+The Button is a Mantine `Button` themed by `@upmo-ai/theme`: sharp 2px action
+radius, emerald primary, familiar icon-and-text. This preview renders the real
+component. Switch themes to confirm it holds in light, dark and high contrast,
+and watch the dark primary fill stay vivid with a soft hover glow.
+
+<ButtonSmoke client:only="react" />
+
+## Variants
+
+- **Filled** (default): the one primary action per region. Emerald fill.
+- **Light**: a secondary action on an emerald-soft ground.
+- **Default**: a bordered, neutral action.
+- **Subtle**: the quietest action, no border or fill at rest.
+- Destructive actions use `color="red"`, always with a word, never colour alone.

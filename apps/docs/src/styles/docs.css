@@ -1,0 +1,14 @@
+/* Docs-site chrome tweaks. Component styling comes from the theme + tokens;
+   this file only styles the documentation surface itself. No raw colours. */
+
+:root {
+  --sl-font: var(--font-ui);
+  --sl-font-mono: var(--font-mono);
+}
+
+/* The hover glow on the dark primary button is a token-driven box-shadow that
+   Mantine does not emit itself. Apply it to the filled primary inside a preview
+   wrap; in light and high contrast the token is `none`, so the rule is inert. */
+[data-mantine-color-scheme] .mantine-Button-root[data-variant='filled']:hover {
+  box-shadow: var(--glow-primary);
+}

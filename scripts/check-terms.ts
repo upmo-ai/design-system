@@ -11,6 +11,7 @@ for (const root of roots) {
   if (!existsSync(root)) continue;
   for (const file of listFiles(root)) {
     if (file.includes('/dist/') || file.includes('/node_modules/')) continue;
+    if (file.includes('/.astro/')) continue;
     files.push(file);
   }
 }
