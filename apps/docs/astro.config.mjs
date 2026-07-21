@@ -13,8 +13,9 @@ export default defineConfig({
       title: 'Upmo Design System',
       favicon: '/favicon.svg',
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/upmo-ai/upmo-design-system' }],
-      // Tokens first so component styles and islands read the variables.
-      customCss: ['@upmo-ai/tokens/tokens.css', './src/styles/docs.css'],
+      // Tokens first so component styles and islands read the variables, then
+      // the component library's own module styles, then docs chrome.
+      customCss: ['@upmo-ai/tokens/tokens.css', '@upmo-ai/components/styles.css', './src/styles/docs.css'],
       head: [
         { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
         { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true } },

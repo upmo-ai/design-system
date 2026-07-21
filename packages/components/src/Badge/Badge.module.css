@@ -1,0 +1,16 @@
+/* Badge: compact, sentence-case, tabular where it carries digits. Pill by
+   default (radius-full) to read as a status chip; colours from the variant.
+   Mantine uppercases the label by default, so the label override below wins on
+   specificity to keep sentence case (a hard rule in the philosophy). */
+
+.root {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.label {
+  text-transform: none;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}

@@ -16,6 +16,6 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["packages/*/src", "packages/*/scripts", "packages/*/test", "scripts"],
-  "exclude": ["**/dist", "**/node_modules"]
+  "include": ["packages/tokens/src", "packages/tokens/scripts", "packages/tokens/test", "packages/theme/src", "packages/theme/test", "scripts"],
+  "exclude": ["**/dist", "**/node_modules", "packages/components"]
 }

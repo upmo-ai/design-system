@@ -1,21 +1,48 @@
 ---
 title: Button
-description: The primary control, themed by Upmo tokens.
+description: The primary control, from @upmo-ai/components.
 ---
 
-import { ButtonSmoke } from '../../../preview/ButtonSmoke.tsx';
+import { ControlsSmoke } from '../../../preview/ControlsSmoke.tsx';
 
-The Button is a Mantine `Button` themed by `@upmo-ai/theme`: sharp 2px action
-radius, emerald primary, familiar icon-and-text. This preview renders the real
-component. Switch themes to confirm it holds in light, dark and high contrast,
-and watch the dark primary fill stay vivid with a soft hover glow.
+`Button`, `IconButton`, `Badge` and `Spinner` from `@upmo-ai/components`, themed
+by `@upmo-ai/theme`: sharp 2px action radius, emerald primary, familiar
+icon-and-text. These previews render the real components. Switch themes to
+confirm they hold in light, dark and high contrast, and watch the dark primary
+fill stay vivid with a soft hover glow.
 
-<ButtonSmoke client:only="react" />
+<ControlsSmoke client:only="react" />
 
-## Variants
+## Button
+
+Mirrors Mantine's API: `variant` (filled, light, outline, default, subtle),
+`size` (xs, sm, md, lg), `color` (for example `red` for destructive actions),
+and the polymorphic `component` prop. Variant colours come from the theme.
 
 - **Filled** (default): the one primary action per region. Emerald fill.
 - **Light**: a secondary action on an emerald-soft ground.
 - **Default**: a bordered, neutral action.
 - **Subtle**: the quietest action, no border or fill at rest.
 - Destructive actions use `color="red"`, always with a word, never colour alone.
+
+## IconButton
+
+An icon-only button. It requires an `aria-label`, which by default also becomes
+its tooltip, so every icon control is both accessible and self-describing.
+
+```tsx
+<IconButton aria-label="Copy">
+  <IconCopy size={18} />
+</IconButton>
+```
+
+## Badge
+
+Sentence-case text, tabular numerals, light variant by default. Use `color` for
+the tone and `leftSection` for an optional icon.
+
+## Spinner
+
+A conventional loading spinner, themed to the emerald primary. Deliberately not
+the caret: the caret is reserved for agent-liveness surfaces, so a generic
+waiting state uses a familiar spinner.
