@@ -8,8 +8,10 @@ export default defineConfig({
   clean: true,
   treeshake: true,
   sourcemap: true,
-  // CSS modules are resolved by esbuild; the collected CSS is emitted next to
-  // the JS as index.css, exported via the "./styles.css" subpath.
+  // The library ships a single plain stylesheet (src/styles.css), bundled to
+  // dist/index.css and exported at the "./styles.css" subpath. No CSS-module
+  // name hashing (it does not survive the bundler reliably); class names are
+  // stable, prefixed `upmo-*` globals instead.
   injectStyle: false,
   external: [
     '@mantine/core',
@@ -20,8 +22,4 @@ export default defineConfig({
     'react/jsx-runtime',
     '@upmo-ai/tokens',
   ],
-  esbuildOptions(options) {
-    // Deterministic, readable CSS-module class names: upmo-<name>-<hash>.
-    options.loader = { ...options.loader };
-  },
 });

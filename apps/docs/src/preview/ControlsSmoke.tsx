@@ -36,10 +36,10 @@ export function ControlsSmoke() {
         </Group>
 
         <Group>
-          <Badge color="teal">Connected</Badge>
-          <Badge color="yellow">Rate limited</Badge>
-          <Badge color="red">Key rejected</Badge>
-          <Badge color="gray">Offline</Badge>
+          <Badge>Working</Badge>
+          <Badge variant="outline">Preparing</Badge>
+          <Badge variant="default">Queued</Badge>
+          <Badge leftSection={<IconCheck size={12} />}>Done</Badge>
           <Spinner size="sm" />
         </Group>
       </Stack>

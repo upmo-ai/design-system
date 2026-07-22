@@ -1,0 +1,78 @@
+/* @upmo-ai/components global styles. Plain, stable, prefixed class names (no
+   CSS-module hashing, which does not survive the library bundler). Loaded once
+   via the "@upmo-ai/components/styles.css" export. Token variables only. */
+
+/* Buttons: crisp sharp spec. Fixed heights per size, 2px radius, Manrope 600,
+   press feedback, and the dark-primary hover glow. Applied via the `upmo-button`
+   class the Button component adds to the Mantine root. */
+.upmo-button {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  border-radius: var(--radius-xs);
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+.upmo-button:active:not([data-disabled]) {
+  transform: scale(var(--press-scale));
+}
+.upmo-button[data-size='xs'] {
+  height: 26px;
+  padding: 0 var(--space-2);
+  font-size: 12px;
+}
+.upmo-button[data-size='sm'] {
+  height: 30px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+.upmo-button[data-size='md'] {
+  height: var(--control-md);
+  padding: 0 14px;
+  font-size: 14px;
+}
+.upmo-button[data-size='lg'] {
+  height: 42px;
+  padding: 0 var(--space-4);
+  font-size: 15px;
+}
+.upmo-button[data-variant='filled']:hover:not([data-disabled]) {
+  box-shadow: var(--glow-primary);
+}
+
+/* In dark, low-fill variants (light, default) can sit too close to the ground.
+   A hairline border gives their shape structure, matching the philosophy that
+   borders carry structure. Inert in light/hc where fills already separate. */
+[data-mantine-color-scheme='dark'] .upmo-button[data-variant='light'],
+[data-mantine-color-scheme='dark'] .upmo-button[data-variant='default'] {
+  border: 1px solid var(--border);
+}
+
+/* Icon buttons: sharp radius, press feedback. */
+.upmo-icon-button {
+  border-radius: var(--radius-xs);
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+.upmo-icon-button:active:not([data-disabled]) {
+  transform: scale(var(--press-scale));
+}
+
+/* Badge: sentence case, tabular numerals. The label override is scoped under
+   the badge root so it beats Mantine's default uppercase without !important. */
+.upmo-badge {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.upmo-badge .mantine-Badge-label {
+  text-transform: none;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}

@@ -1,7 +1,6 @@
 import { ActionIcon, type ActionIconProps, Tooltip, type TooltipProps } from '@mantine/core';
 import clsx from 'clsx';
 import type { MouseEventHandler, ReactNode } from 'react';
-import classes from './IconButton.module.css';
 
 export interface IconButtonProps extends ActionIconProps {
   /** The icon to render. Decorative; the accessible name is the aria-label. */
@@ -39,7 +38,10 @@ export function IconButton({
   const control = (
     <ActionIcon
       {...rest}
-      classNames={{ ...classNames, root: clsx(classes.root, (classNames as Record<string, string>)?.root) }}
+      classNames={{
+        ...classNames,
+        root: clsx('upmo-icon-button', (classNames as Record<string, string>)?.root),
+      }}
     >
       {children}
     </ActionIcon>

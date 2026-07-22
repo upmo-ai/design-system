@@ -72,13 +72,13 @@ describe('Badge', () => {
 
   it('keeps sentence case, never uppercasing the label', () => {
     const { container } = renderThemed(<Badge>Rate limited</Badge>);
-    const label = container.querySelector('.mantine-Badge-label') as HTMLElement;
-    expect(label).toBeTruthy();
-    // The Upmo label class carries text-transform: none, overriding Mantine's
-    // default uppercase. jsdom does not apply stylesheet rules, so assert the
-    // class is present (the visual rule is checked in the docs preview).
-    expect(label.className).toContain('label');
-    expect(label.textContent).toBe('Rate limited');
+    const root = container.querySelector('.mantine-Badge-root') as HTMLElement;
+    expect(root).toBeTruthy();
+    // The Upmo badge carries the upmo-badge class and sets tt="none", which
+    // Mantine renders as an inline text-transform, beating its default uppercase.
+    expect(root.className).toContain('upmo-badge');
+    expect(root.style.textTransform).toBe('none');
+    expect(root.textContent).toBe('Rate limited');
   });
 });
 
