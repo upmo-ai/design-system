@@ -12,9 +12,11 @@
     "dev": "pnpm -r --filter \"./packages/*\" build && pnpm --filter @upmo-ai/docs dev",
     "gen": "pnpm --filter @upmo-ai/docs gen",
     "test": "vitest run",
-    "lint": "node scripts/check-hex.ts && node scripts/check-terms.ts && tsc -p tsconfig.json && pnpm --filter @upmo-ai/docs lint"
+    "lint": "node scripts/check-hex.ts && node scripts/check-terms.ts && tsc -p tsconfig.json && pnpm --filter @upmo-ai/docs lint",
+    "changeset": "changeset"
   },
   "devDependencies": {
+    "@changesets/cli": "2.31.1",
     "@types/node": "24.13.2",
     "typescript": "6.0.3",
     "vitest": "4.1.10"

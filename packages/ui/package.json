@@ -20,14 +20,13 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json"
-  },
-  "dependencies": {
-    "@upmo-ai/tokens": "workspace:*"
+    "build": "tsc -p tsconfig.build.json",
+    "prepare": "tsc -p tsconfig.build.json"
   },
   "peerDependencies": {
     "@mantine/core": "^9.4.0",
     "@mantine/hooks": "^9.4.0",
+    "@upmo-ai/tokens": "0.x",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
@@ -35,6 +34,7 @@
     "@mantine/core": "9.4.1",
     "@mantine/hooks": "9.4.1",
     "@types/react": "19.2.17",
+    "@upmo-ai/tokens": "workspace:*",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "typescript": "6.0.3"

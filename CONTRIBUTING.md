@@ -2,6 +2,10 @@
 
 Thanks for helping. This file covers how to work on the repository and what a pull request needs.
 
+## Before you start
+
+- Sign the [Contributor License Agreement](CLA.md). CLA Assistant asks you once, on your first pull request. You keep the copyright in your work; the agreement lets the maintainer ship it under the AGPL and in the hosted Upmo service.
+
 ## Development runs in Docker
 
 Do not install Node or pnpm on your machine for this repository. `compose.yml` has a `dev` service with Node 24 and pnpm (through corepack), the repository mounted at `/app` and port 4321 published.
@@ -33,6 +37,17 @@ Colours come from tokens only. `pnpm lint` fails on a raw hex colour in `content
 ## Commits
 
 - Use [Conventional Commits](https://www.conventionalcommits.org): `<type>[optional scope]: <description>`, with types `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `build`, `ci`, `revert`. Subject in lower case, 72 characters at most, no trailing period. The body says why.
+- The CLA covers your rights in the contribution, so a `Signed-off-by` line is not needed.
+
+## Changesets
+
+A change to a published package (`packages/*`) needs a changeset:
+
+```sh
+docker compose run --rm dev pnpm changeset
+```
+
+Pick the packages, the bump (patch, minor, major) and write one line for the changelog. Commit the generated file in `.changeset/` with your change. Changes to `content/` or the docs site alone do not need one.
 
 ## Writing style
 

@@ -25,7 +25,8 @@
     "./tokens.json": "./dist/tokens.json"
   },
   "scripts": {
-    "build": "node scripts/build.ts"
+    "build": "node scripts/build.ts",
+    "prepare": "node scripts/build.ts"
   },
   "publishConfig": {
     "access": "public"

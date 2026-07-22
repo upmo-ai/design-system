@@ -3,7 +3,7 @@ title: Install
 description: Use the Upmo packages in a React app built on Mantine 9.
 ---
 
-The system ships as four packages under the `@upmo-ai` scope. They are not on npm yet. Until the first release, use them from this repository through a pnpm workspace.
+The system ships as four packages under the `@upmo-ai` scope. They are not on npm yet. Install them from a release tag of this repository.
 
 | Package | What it holds |
 | --- | --- |
@@ -14,8 +14,29 @@ The system ships as four packages under the `@upmo-ai` scope. They are not on np
 
 ## Add the packages
 
-```sh
-pnpm add @upmo-ai/tokens @upmo-ai/ui @mantine/core @mantine/hooks react react-dom
+Point each package at a release tag and its folder in the repository:
+
+```json
+{
+  "dependencies": {
+    "@upmo-ai/tokens": "git+https://github.com/upmo-ai/design-system.git#v0.1.0&path:/packages/tokens",
+    "@upmo-ai/ui": "git+https://github.com/upmo-ai/design-system.git#v0.1.0&path:/packages/ui",
+    "@mantine/core": "^9.4.0",
+    "@mantine/hooks": "^9.4.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}
+```
+
+Use the same tag for every `@upmo-ai` package. The releases are in the [changelog](/getting-started/changelog/). `@upmo-ai/icons` and `@upmo-ai/brands` install the same way, with their own `path:`.
+
+Each package builds its `dist` folder when pnpm installs it from git. pnpm 11 runs build scripts of git dependencies only when you allow them, so add the packages to `pnpm-workspace.yaml`:
+
+```yaml
+allowBuilds:
+  '@upmo-ai/tokens@git+https://github.com/upmo-ai/design-system.git': true
+  '@upmo-ai/ui@git+https://github.com/upmo-ai/design-system.git': true
 ```
 
 `@upmo-ai/ui` needs `@mantine/core` and `@mantine/hooks` 9.4 or later, and `react` and `react-dom` 19.2 or later.

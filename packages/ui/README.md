@@ -17,4 +17,4 @@ export function App({ children }: { children: React.ReactNode }) {
 
 The theme holds no colour literal beyond the emerald scale. Mantine's surface and text variables point at the tokens through the CSS block in Mantine mapping; keep `data-theme` and Mantine's colour scheme in sync. See [Install](https://design.upmo.dev/getting-started/install/).
 
-Peer dependencies: `@mantine/core` and `@mantine/hooks` 9.4 or later, `react` and `react-dom` 19.2 or later.
+Peer dependencies: `@upmo-ai/tokens` 0.x, `@mantine/core` and `@mantine/hooks` 9.4 or later, `react` and `react-dom` 19.2 or later.
