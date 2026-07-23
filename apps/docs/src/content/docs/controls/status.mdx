@@ -1,0 +1,43 @@
+---
+title: Status and liveness
+description: The StatusBadge, StatusDot and the live caret.
+---
+
+import { StatusSmoke } from '../../../preview/StatusSmoke.tsx';
+
+The status surface expresses the Upmo status model: two enums sharing one tone
+layer. **Phase** is the low-level task progress (Preparing, Planning, Working,
+Checking, Done, Failed). **Attention** is the high-level hint to the user
+(Queued, Needs approval, Paused, Stopped). A run can hold both at once.
+
+The live caret is the signature of liveness: it sweeps for Working and Checking,
+and collapses to a static drawn caret under reduced motion. Everything else uses
+a familiar icon. Colour is never the sole signal: every state carries a word and
+a mark.
+
+<StatusSmoke client:only="react" />
+
+## StatusBadge
+
+```tsx
+<StatusBadge status="Working" />
+<StatusBadge status="Needs approval" />
+```
+
+The tone (neutral, active, positive, attention, critical) comes from Upmo
+tokens, so the colours match the palette in every theme.
+
+## StatusDot
+
+A compact indicator for dense rows. It always carries an accessible label, since
+a dot or caret alone would carry meaning by colour only.
+
+```tsx
+<StatusDot status="Working" label="Invoice sync: Working" />
+```
+
+## Reduced motion
+
+The live caret respects `prefers-reduced-motion`: the sweep stops and the caret
+shows its final drawn state, so "Working" is still legible from the word, the
+drawn shape and the tone.

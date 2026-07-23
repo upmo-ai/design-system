@@ -76,3 +76,109 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Status / liveness surface: StatusBadge, StatusDot, and the live caret.
+   Tones map to Upmo tokens (never Mantine's palette). Colour is never the sole
+   signal: the word and the mark always accompany it.
+--------------------------------------------------------------------------- */
+
+/* Tone colour pairs: --tone-fg (text + mark) on --tone-bg (soft ground). */
+.upmo-tone-neutral {
+  --tone-fg: var(--ink-muted);
+  --tone-bg: var(--surface-200);
+}
+.upmo-tone-active {
+  --tone-fg: var(--emerald-deep);
+  --tone-bg: var(--emerald-soft);
+}
+.upmo-tone-positive {
+  --tone-fg: var(--emerald-deep);
+  --tone-bg: var(--emerald-soft);
+}
+.upmo-tone-attention {
+  --tone-fg: var(--warning);
+  --tone-bg: var(--warning-soft);
+}
+.upmo-tone-critical {
+  --tone-fg: var(--danger);
+  --tone-bg: var(--danger-soft);
+}
+
+/* StatusBadge: tone ground + tone text, sentence case, the mark inherits the
+   tone colour. A hairline border in dark gives the shape structure. */
+.upmo-status-badge {
+  background-color: var(--tone-bg);
+  color: var(--tone-fg);
+  font-family: var(--font-ui);
+  font-weight: 600;
+}
+.upmo-status-badge .mantine-Badge-label {
+  text-transform: none;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+.upmo-status-badge .mantine-Badge-section {
+  color: var(--tone-fg);
+}
+[data-mantine-color-scheme='dark'] .upmo-status-badge {
+  border: 1px solid color-mix(in srgb, var(--tone-fg) 22%, transparent);
+}
+
+/* StatusDot: a filled dot, or the live caret, in the tone colour. */
+.upmo-status-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tone-fg);
+  vertical-align: middle;
+}
+.upmo-status-dot--filled {
+  border-radius: var(--radius-full);
+  background-color: var(--tone-fg);
+}
+
+/* The caret: brand mark + liveness signature. A draw-ramp conveys "filling up"
+   toward the live state: Preparing = faint outline, Planning = half-drawn,
+   Working/Checking = fully drawn and sweeping. The distinction is draw-state,
+   not hue, so the live states read as alive without the pre-live ones competing. */
+.upmo-caret {
+  display: inline-block;
+  vertical-align: middle;
+}
+/* Undrawn strokes sit faint, so a half-drawn (Planning) or outline-only
+   (Preparing) caret reads clearly as "not live yet" next to a solid one. */
+.upmo-caret__stroke--idle {
+  stroke: var(--caret-idle);
+  opacity: 0.4;
+}
+/* Live draw-sweep: the up-stroke repeatedly draws itself on a steady loop,
+   quick start and long settle so it reads as drawn, not slid. */
+.upmo-caret__sweep {
+  stroke-dasharray: 12 12;
+  stroke-dashoffset: 12;
+  animation: upmo-caret-sweep var(--duration-sweep) var(--ease-caret) infinite;
+}
+@keyframes upmo-caret-sweep {
+  0% {
+    stroke-dashoffset: 12;
+    opacity: 0.45;
+  }
+  40% {
+    opacity: 1;
+  }
+  60%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+/* Reduced motion: no sweep; the caret shows its final drawn state statically,
+   so "Working" is carried by the word + the drawn shape + the tone, not motion. */
+@media (prefers-reduced-motion: reduce) {
+  .upmo-caret__sweep {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
