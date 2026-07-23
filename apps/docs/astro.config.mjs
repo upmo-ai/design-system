@@ -32,7 +32,7 @@ export default defineConfig({
         },
         {
           label: 'Controls',
-          items: ['controls/button', 'controls/status'],
+          items: ['controls/button', 'controls/status', 'controls/forms'],
         },
       ],
     }),

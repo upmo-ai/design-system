@@ -1,0 +1,42 @@
+---
+title: Form controls
+description: Field, Input, Textarea, Select, Checkbox, Radio and Switch.
+---
+
+import { FormsSmoke } from '../../../preview/FormsSmoke.tsx';
+
+The form controls follow the Upmo forms spec: the label always sits above the
+control, required is the default (append "(optional)" for optional fields), the
+description sits under the control, and the error message carries the danger
+tone with an icon, wired to the control for assistive tech.
+
+<FormsSmoke client:only="react" />
+
+## Field
+
+`Field` is the field anatomy for native or custom controls: label, description
+and error, associated via `htmlFor`, `aria-describedby` and `aria-invalid`. Pass
+the control as a render function so the wiring lands on it.
+
+```tsx
+<Field label="Reach" description="What agents can access." error={err}>
+  {(props) => <input type="text" {...props} />}
+</Field>
+```
+
+Mantine inputs (`Input`, `Textarea`, `Select`) already implement the full
+anatomy through their own `label`, `description` and `error` props, so prefer
+those directly rather than wrapping them in a `Field`.
+
+## Inputs
+
+- **Input**: single-line text. `Input type="password"` for secrets.
+- **Textarea**: long text; autosizes to 8 rows, then scrolls.
+- **Select**: one of several; `data` is `{ value, label }[]`, searchable above
+  about ten options.
+
+## Choices
+
+- **Radio** (in `Radio.Group`): one of up to about five options.
+- **Checkbox**: on/off that takes effect on submit, or several of a few.
+- **Switch**: on/off that takes effect at once.

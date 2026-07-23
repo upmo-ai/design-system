@@ -98,9 +98,15 @@ export const upmoTheme = createTheme({
   components: {
     Button: { defaultProps: { size: 'sm', radius: 'xs' } },
     ActionIcon: { defaultProps: { radius: 'xs', variant: 'subtle' } },
-    TextInput: { defaultProps: { size: 'sm', radius: 'xs' } },
+    // Inputs use radius-md and the sharp-but-soft control feel per the forms spec.
+    TextInput: { defaultProps: { size: 'sm', radius: 'md' } },
+    PasswordInput: { defaultProps: { size: 'sm', radius: 'md' } },
     Textarea: { defaultProps: { size: 'sm', radius: 'md' } },
-    Select: { defaultProps: { size: 'sm', radius: 'xs', checkIconPosition: 'right' } },
+    Select: { defaultProps: { size: 'sm', radius: 'md', checkIconPosition: 'right' } },
+    NativeSelect: { defaultProps: { size: 'sm', radius: 'md' } },
+    Checkbox: { defaultProps: { radius: 'xs', size: 'sm' } },
+    Radio: { defaultProps: { size: 'sm' } },
+    Switch: { defaultProps: { size: 'sm' } },
     Card: { defaultProps: { radius: 'sm', withBorder: true, padding: 'sm', shadow: undefined } },
     Modal: { defaultProps: { radius: 'lg', centered: true, overlayProps: { backgroundOpacity: 0.48 } } },
     Badge: { defaultProps: { radius: 'xs', variant: 'light', size: 'sm' } },

@@ -182,3 +182,54 @@
     opacity: 1;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Form fields: the Field anatomy (label above, description, error) and the
+   shared input feel. Label always above the control; error carries an icon and
+   the danger tone, wired to the control via aria-describedby.
+--------------------------------------------------------------------------- */
+
+.upmo-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.upmo-field__label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--ink);
+  margin-bottom: var(--space-1);
+}
+
+.upmo-field__hint {
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.upmo-field__description {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink-muted);
+}
+
+.upmo-field__error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--danger);
+}
+
+/* Shared input feel: the emerald focus edge, applied to text inputs, textareas
+   and selects. Mantine already wires the border/ground to our tokens via the
+   theme resolver; this reinforces the focus treatment from the forms spec. */
+.upmo-input:focus,
+.upmo-input:focus-within {
+  border-color: var(--emerald-deep);
+}
