@@ -261,3 +261,73 @@
   align-items: center;
   gap: var(--space-1);
 }
+
+/* ---------------------------------------------------------------------------
+   Compositions: EmptyState, CodeBlock, Table conventions.
+--------------------------------------------------------------------------- */
+
+.upmo-empty-state {
+  box-sizing: border-box;
+}
+.upmo-empty-state--first-run {
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+}
+
+/* CodeBlock: sunken mono surface with a hairline border and a bar for the
+   language label and copy button. No syntax highlighting. */
+.upmo-codeblock {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-200);
+  overflow: hidden;
+}
+.upmo-codeblock__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-200);
+}
+.upmo-codeblock__lang {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+  text-transform: lowercase;
+}
+.upmo-codeblock__pre {
+  margin: 0;
+  padding: var(--space-3);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--ink);
+  background: var(--surface-100);
+}
+.upmo-codeblock__pre code {
+  font-family: inherit;
+}
+
+/* Table: sticky header on the sunken ground, tabular-num and mono cells. */
+.upmo-table thead th {
+  background: var(--surface-200);
+  color: var(--ink-muted);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.upmo-table__num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.upmo-table__mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* PageShell: the inner page frame. Narrow constrains prose to the measure. */
+.upmo-page-shell--narrow {
+  max-width: var(--measure);
+}

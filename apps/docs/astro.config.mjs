@@ -34,6 +34,10 @@ export default defineConfig({
           label: 'Controls',
           items: ['controls/button', 'controls/status', 'controls/forms', 'controls/navigation'],
         },
+        {
+          label: 'Compositions',
+          items: ['compositions/overview'],
+        },
       ],
     }),
   ],
