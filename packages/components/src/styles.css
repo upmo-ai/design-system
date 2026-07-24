@@ -233,3 +233,31 @@
 .upmo-input:focus-within {
   border-color: var(--emerald-deep);
 }
+
+/* ---------------------------------------------------------------------------
+   Kbd: a keyboard key cap. Mono, surface-100 ground, border-strong edge with a
+   2px bottom edge for the key-cap look, radius-xs. Never clickable.
+--------------------------------------------------------------------------- */
+
+.upmo-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  min-width: 20px;
+  padding: 0 5px;
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-xs);
+  background: var(--surface-100);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.upmo-kbd-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}

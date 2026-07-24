@@ -1,0 +1,38 @@
+---
+title: Tabs, segmented control, tooltip, kbd
+description: The remaining primitive controls.
+---
+
+import { MiscSmoke } from '../../../preview/MiscSmoke.tsx';
+
+The rest of the controls tier: Tabs and SegmentedControl for switching views,
+Tooltip for supplementary text, and Kbd for keyboard shortcuts.
+
+<MiscSmoke client:only="react" />
+
+## Tabs
+
+Switch between views within a page. Compose with `Tabs.List`, `Tabs.Tab` and
+`Tabs.Panel`. The active tab carries the emerald indicator.
+
+## SegmentedControl
+
+One of a few short options, when the choices are short words (an alternative to
+a Radio group for things like a view switcher).
+
+## Tooltip
+
+Short, supplementary text on hover or focus, after a 400ms delay. An icon-only
+control's tooltip should match its `aria-label` (see IconButton).
+
+## Kbd
+
+A keyboard key cap for shortcuts. Group keys with `KbdGroup`, as separate keys
+with no "+" sign.
+
+```tsx
+<KbdGroup>
+  <Kbd>⌘</Kbd>
+  <Kbd>K</Kbd>
+</KbdGroup>
+```

@@ -28,3 +28,8 @@ export { Select, type SelectProps } from './Select/Select.tsx';
 export { Checkbox, type CheckboxProps } from './Checkbox/Checkbox.tsx';
 export { Radio, type RadioProps, type RadioGroupProps } from './Radio/Radio.tsx';
 export { Switch, type SwitchProps } from './Switch/Switch.tsx';
+
+export { Tabs, type TabsProps } from './Tabs/Tabs.tsx';
+export { SegmentedControl, type SegmentedControlProps } from './SegmentedControl/SegmentedControl.tsx';
+export { Tooltip, type TooltipProps } from './Tooltip/Tooltip.tsx';
+export { Kbd, type KbdProps, KbdGroup, type KbdGroupProps } from './Kbd/Kbd.tsx';
