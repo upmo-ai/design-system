@@ -1,14 +1,68 @@
-/* Docs-site chrome tweaks. Component styling comes from the theme + tokens;
-   this file only styles the documentation surface itself. No raw colours. */
+/* Docs-site chrome theming. The component PREVIEWS are themed by @upmo-ai/theme
+   inside the Mantine islands; this file themes the STARLIGHT SITE itself (hero,
+   buttons, links, accent, headings) so the docs look like Upmo, not default
+   Starlight. Values reference the Upmo tokens from @upmo-ai/tokens, which are
+   scoped by [data-theme]; Starlight toggles data-theme light/dark.
 
-:root {
-  --sl-font: var(--font-ui);
-  --sl-font-mono: var(--font-mono);
+   Starlight hard-codes its --sl-color-* variables in :root[data-theme=...]
+   blocks of equal specificity, so these overrides use !important to win
+   regardless of stylesheet order. Variable overrides only; no !important leaks
+   onto real properties. */
+
+:root[data-theme='light'],
+:root[data-theme='dark'] {
+  --sl-font: var(--font-ui) !important;
+  --sl-font-mono: var(--font-mono) !important;
+
+  /* Accent -> emerald (links, hero CTA, active nav, focus). */
+  --sl-color-accent-low: var(--emerald-soft) !important;
+  --sl-color-accent: var(--emerald-deep) !important;
+  --sl-color-accent-high: var(--emerald-hover) !important;
+  --sl-color-text-accent: var(--emerald-deep) !important;
+  --sl-color-bg-accent: var(--emerald-deep) !important;
+
+  /* Headings and body text. --sl-color-white is Starlight's heading colour. */
+  --sl-color-white: var(--ink) !important;
+  --sl-color-text: var(--ink-secondary) !important;
+
+  /* Grounds and hairlines. */
+  --sl-color-bg: var(--surface-000) !important;
+  --sl-color-bg-nav: var(--surface-200) !important;
+  --sl-color-bg-sidebar: var(--surface-200) !important;
+  --sl-color-hairline: var(--border) !important;
+  --sl-color-hairline-light: var(--border) !important;
+  --sl-color-hairline-shade: var(--border) !important;
+
+  /* Gray scale -> Upmo ink/neutral ramp (used for muted text, borders, grounds).
+     Mapped so lower numbers are stronger text, higher are grounds. */
+  --sl-color-gray-1: var(--ink) !important;
+  --sl-color-gray-2: var(--ink-secondary) !important;
+  --sl-color-gray-3: var(--ink-muted) !important;
+  --sl-color-gray-4: var(--ink-muted) !important;
+  --sl-color-gray-5: var(--border) !important;
+  --sl-color-gray-6: var(--surface-200) !important;
+  --sl-color-gray-7: var(--surface-100) !important;
 }
 
-/* The hover glow on the dark primary button is a token-driven box-shadow that
-   Mantine does not emit itself. Apply it to the filled primary inside a preview
-   wrap; in light and high contrast the token is `none`, so the rule is inert. */
+/* The hero tagline: a crisp display-weight line, not the faint grey default. */
+.hero .tagline {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* The hero CTA ("Get started") -> the Upmo filled-primary look. */
+.hero .sl-link-button.primary {
+  background: var(--primary-fill);
+  color: var(--ink-on-brand);
+  border-color: transparent;
+  border-radius: var(--radius-xs);
+}
+.hero .sl-link-button.primary:hover {
+  background: var(--primary-fill-hover);
+  box-shadow: var(--glow-primary);
+}
+
+/* The hover glow on a filled primary inside a component preview. */
 [data-mantine-color-scheme] .mantine-Button-root[data-variant='filled']:hover {
   box-shadow: var(--glow-primary);
 }

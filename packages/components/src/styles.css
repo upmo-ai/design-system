@@ -234,6 +234,38 @@
   border-color: var(--emerald-deep);
 }
 
+/* Breathing space under the label (and description) before the control, so the
+   field reads as label-then-control rather than cramped together. Mantine's
+   default label margin is minimal; the forms spec wants a clear step down. */
+.mantine-InputWrapper-label {
+  margin-bottom: var(--space-2);
+  font-weight: 600;
+}
+.mantine-InputWrapper-description {
+  margin-top: calc(-1 * var(--space-1));
+  margin-bottom: var(--space-2);
+}
+
+/* Control-to-label spacing for Radio, Checkbox and Switch. Mantine's own body
+   gap can be dropped depending on stylesheet layer order when the library CSS
+   is bundled separately, which leaves the label detached from the control. Set
+   the gap explicitly so the label always sits snug beside its control. */
+.mantine-Radio-body,
+.mantine-Checkbox-body,
+.mantine-Switch-body {
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+.mantine-Switch-body {
+  align-items: center;
+}
+/* The label wrapper should not stretch away from the control. */
+.mantine-Radio-labelWrapper,
+.mantine-Checkbox-labelWrapper,
+.mantine-Switch-labelWrapper {
+  flex: 0 1 auto;
+}
+
 /* ---------------------------------------------------------------------------
    Kbd: a keyboard key cap. Mono, surface-100 ground, border-strong edge with a
    2px bottom edge for the key-cap look, radius-xs. Never clickable.

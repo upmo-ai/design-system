@@ -1,5 +1,5 @@
 import { Group, Stack } from '@mantine/core';
-import { Button, Checkbox, Field, Input, Radio, Select, Switch, Textarea } from '@upmo-ai/components';
+import { Button, Checkbox, Input, Radio, Select, Switch, Textarea } from '@upmo-ai/components';
 import { Preview } from './Preview.tsx';
 
 /**
@@ -41,16 +41,16 @@ export function FormsSmoke() {
           placeholder="Optional notes"
         />
 
-        <Field label="Reach" description="What agents can access through this connector.">
-          {() => (
-            <Radio.Group defaultValue="all">
-              <Stack gap="xs" mt={4}>
-                <Radio value="all" label="All resources" description="Agents can read and act on everything." />
-                <Radio value="these" label="Only these resources" description="Restrict access to a named set." />
-              </Stack>
-            </Radio.Group>
-          )}
-        </Field>
+        <Radio.Group
+          label="Reach"
+          description="What agents can access through this connector."
+          defaultValue="all"
+        >
+          <Stack gap="xs" mt={6}>
+            <Radio value="all" label="All resources" description="Agents can read and act on everything." />
+            <Radio value="these" label="Only these resources" description="Restrict access to a named set." />
+          </Stack>
+        </Radio.Group>
 
         <Checkbox label="Allow background runs when I am away" defaultChecked />
         <Switch label="Follow this provider live" defaultChecked />
