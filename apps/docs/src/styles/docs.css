@@ -44,6 +44,18 @@
   --sl-color-gray-7: var(--surface-100) !important;
 }
 
+/* Paint the page ground explicitly. Starlight sets --sl-color-bg but, with our
+   token overrides in play, the background was not reliably painted onto a
+   full-height element (html/body read transparent, showing the browser's white
+   canvas through in dark mode). Paint it here so the ground always follows the
+   theme. */
+html[data-theme='light'],
+html[data-theme='dark'],
+html[data-theme='light'] body,
+html[data-theme='dark'] body {
+  background-color: var(--surface-000);
+}
+
 /* The hero tagline: a crisp display-weight line, not the faint grey default. */
 .hero .tagline {
   color: var(--ink);
