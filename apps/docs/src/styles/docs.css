@@ -78,3 +78,86 @@ html[data-theme='dark'] body {
 [data-mantine-color-scheme] .mantine-Button-root[data-variant='filled']:hover {
   box-shadow: var(--glow-primary);
 }
+
+/* ---------------------------------------------------------------------------
+   Polish: make the docs feel like a crafted Upmo surface, not stock Starlight.
+--------------------------------------------------------------------------- */
+
+/* Home hero. */
+.upmo-hero {
+  padding: var(--space-6) 0 var(--space-4);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--space-8);
+}
+.upmo-hero__eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--emerald-deep);
+  margin: 0 0 var(--space-3);
+}
+.upmo-hero__title {
+  font-family: var(--font-display, var(--font-ui));
+  font-size: clamp(28px, 1rem + 3vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 var(--space-4);
+  max-width: 20ch;
+}
+.upmo-hero__lede {
+  font-size: 17px;
+  line-height: 26px;
+  color: var(--ink-secondary);
+  margin: 0;
+  max-width: 60ch;
+}
+
+/* Starlight cards: sharp Upmo radius, flat bordered surface, emerald on hover. */
+.sl-markdown-content .card,
+.sl-markdown-content :is(a.card, .sl-link-card) {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  background: var(--surface-100) !important;
+  box-shadow: none !important;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+.sl-markdown-content :is(a.card, .sl-link-card):hover {
+  border-color: var(--emerald-deep) !important;
+  background: var(--surface-hover) !important;
+}
+
+/* Links in content: emerald, underline only on hover (less noisy than default). */
+.sl-markdown-content a:not(.card):not(.sl-link-card) {
+  color: var(--emerald-deep);
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+/* Inline code and code blocks: sunken ground, mono, sharp. */
+.sl-markdown-content :not(pre) > code {
+  background: var(--surface-200);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  color: var(--ink);
+  font-size: 0.85em;
+}
+
+/* Sidebar: tighten, mark the active item with the emerald selected ground. */
+nav.sidebar a[aria-current='page'] {
+  background: var(--surface-selected);
+  color: var(--emerald-deep);
+  font-weight: 600;
+  border-radius: var(--radius-xs);
+}
+
+/* Focus ring everywhere: the one emerald ring. */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}

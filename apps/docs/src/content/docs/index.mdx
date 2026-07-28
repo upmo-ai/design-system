@@ -1,22 +1,26 @@
 ---
 title: Upmo Design System
 description: Tokens, theme, and the real React component library for Upmo.
+tableOfContents: false
 ---
 
-**Always working. Always yours.**
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-The design system for Upmo: a control room for an always-on AI workforce you own.
-Tokens, a Mantine 9 theme, and a real React component library, with every
-preview rendered from the real components.
+<div class="upmo-hero">
+  <p class="upmo-hero__eyebrow">Always working. Always yours.</p>
+  <h1 class="upmo-hero__title">A control room for an always-on AI workforce you own.</h1>
+  <p class="upmo-hero__lede">
+    The single source of truth for Upmo's interface: design tokens, a Mantine 9 theme, and a real,
+    tested React component library. Every preview on this site renders the real component, in light,
+    dark and high contrast.
+  </p>
+</div>
 
-## Start here
-
-- [Overview](/getting-started/overview/) - what the system is and how previews work.
-- [Principles](/getting-started/principles/) - the three principles behind every decision.
-- [Install and link](/getting-started/install/) - how the product consumes the packages.
-
-## Explore
-
-- [Tokens](/foundations/tokens/) - colour, type, spacing, motion, the status model.
-- [Controls](/controls/button/) - buttons, status, forms, and the rest of the primitives.
-- [Compositions](/compositions/overview/) - page patterns assembled from the primitives.
+<CardGrid>
+  <LinkCard title="Overview" description="What the system is and how previews work." href="/getting-started/overview/" />
+  <LinkCard title="Principles" description="Alive not noisy. Autonomy with a hand on the wheel. Yours, visibly." href="/getting-started/principles/" />
+  <LinkCard title="Install and link" description="How the product consumes the packages." href="/getting-started/install/" />
+  <LinkCard title="Tokens" description="Colour, type, spacing, motion, and the status model." href="/foundations/tokens/" />
+  <LinkCard title="Controls" description="Buttons, status, forms, and the rest of the primitives." href="/controls/button/" />
+  <LinkCard title="Compositions" description="Page patterns assembled from the primitives." href="/compositions/overview/" />
+</CardGrid>

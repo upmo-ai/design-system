@@ -11,6 +11,11 @@ export default defineConfig({
     react(),
     starlight({
       title: 'Upmo Design System',
+      logo: {
+        light: './src/assets/upmo-wordmark-light.svg',
+        dark: './src/assets/upmo-wordmark-dark.svg',
+        replacesTitle: true,
+      },
       favicon: '/favicon.svg',
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/upmo-ai/upmo-design-system' }],
       // Tokens first so component styles and islands read the variables, then
