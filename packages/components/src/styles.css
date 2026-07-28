@@ -246,24 +246,13 @@
   margin-bottom: var(--space-2);
 }
 
-/* Control-to-label spacing for Radio, Checkbox and Switch. Mantine's own body
-   gap can be dropped depending on stylesheet layer order when the library CSS
-   is bundled separately, which leaves the label detached from the control. Set
-   the gap explicitly so the label always sits snug beside its control. */
+/* Control-to-label alignment for Radio, Checkbox and Switch. Keep Mantine's own
+   spacing; only center the control with the first line of the label (Mantine can
+   top-align when a description is present, which drops the label below the dot). */
 .mantine-Radio-body,
 .mantine-Checkbox-body,
 .mantine-Switch-body {
-  gap: var(--space-2);
-  align-items: flex-start;
-}
-.mantine-Switch-body {
   align-items: center;
-}
-/* The label wrapper should not stretch away from the control. */
-.mantine-Radio-labelWrapper,
-.mantine-Checkbox-labelWrapper,
-.mantine-Switch-labelWrapper {
-  flex: 0 1 auto;
 }
 
 /* ---------------------------------------------------------------------------
