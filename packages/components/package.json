@@ -41,6 +41,7 @@
   "devDependencies": {
     "@mantine/core": "^9.7.4",
     "@mantine/hooks": "^9.7.4",
+    "@storybook/react-vite": "^10.6.5",
     "@tabler/icons-react": "^3.50.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
