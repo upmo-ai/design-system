@@ -74,11 +74,6 @@ html[data-theme='dark'] body {
   box-shadow: var(--glow-primary);
 }
 
-/* The hover glow on a filled primary inside a component preview. */
-[data-mantine-color-scheme] .mantine-Button-root[data-variant='filled']:hover {
-  box-shadow: var(--glow-primary);
-}
-
 /* ---------------------------------------------------------------------------
    Polish: make the docs feel like a crafted Upmo surface, not stock Starlight.
 --------------------------------------------------------------------------- */

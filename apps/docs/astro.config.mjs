@@ -1,4 +1,3 @@
-import react from '@astrojs/react';
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
 
@@ -8,7 +7,6 @@ const fonts =
 export default defineConfig({
   site: 'https://design.upmo.dev',
   integrations: [
-    react(),
     starlight({
       title: 'Upmo Design System',
       logo: {
@@ -18,9 +16,10 @@ export default defineConfig({
       },
       favicon: '/favicon.svg',
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/upmo-ai/upmo-design-system' }],
-      // Tokens first so component styles and islands read the variables, then
-      // the component library's own module styles, then docs chrome.
-      customCss: ['@upmo-ai/tokens/tokens.css', '@upmo-ai/components/styles.css', './src/styles/docs.css'],
+      // Tokens theme the docs chrome (Starlight variables map to Upmo tokens in
+      // docs.css). Live component previews live in Storybook, not here, so the
+      // components stylesheet and the React runtime are no longer loaded.
+      customCss: ['@upmo-ai/tokens/tokens.css', './src/styles/docs.css'],
       head: [
         { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
         { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true } },

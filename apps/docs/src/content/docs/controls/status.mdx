@@ -3,8 +3,6 @@ title: Status and liveness
 description: The StatusBadge, StatusDot and the live caret.
 ---
 
-import { StatusSmoke } from '../../../preview/StatusSmoke.tsx';
-
 The status surface expresses the Upmo status model: two enums sharing one tone
 layer. **Phase** is the low-level task progress (Preparing, Planning, Working,
 Checking, Done, Failed). **Attention** is the high-level hint to the user
@@ -15,7 +13,11 @@ and collapses to a static drawn caret under reduced motion. Everything else uses
 a familiar icon. Colour is never the sole signal: every state carries a word and
 a mark.
 
-<StatusSmoke client:only="react" />
+:::tip[Live previews are in Storybook]
+Every component renders live, in light, dark and high contrast, in the
+[Storybook gallery](https://design.upmo.dev/storybook/). Run it locally with
+`pnpm --filter @upmo-ai/storybook dev`.
+:::
 
 ## StatusBadge
 

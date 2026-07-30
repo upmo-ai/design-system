@@ -3,14 +3,16 @@ title: Compositions
 description: Primitives assembled into page patterns.
 ---
 
-import { CompositionsSmoke } from '../../../preview/CompositionsSmoke.tsx';
-
 The compositions tier assembles the primitives into the patterns pages are built
 from: the page frame, panels, tables, empty states, code blocks, breadcrumbs,
 menus, and dialogs. They follow the patterns rules: one primary action per
 region, actions right-aligned, and a clear confirm for destructive actions.
 
-<CompositionsSmoke client:only="react" />
+:::tip[Live previews are in Storybook]
+Every component renders live, in light, dark and high contrast, in the
+[Storybook gallery](https://design.upmo.dev/storybook/). Run it locally with
+`pnpm --filter @upmo-ai/storybook dev`.
+:::
 
 ## PageHeader and PageShell
 
