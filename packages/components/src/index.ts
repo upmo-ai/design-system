@@ -53,3 +53,16 @@ export {
   LivenessIndicator,
   type LivenessIndicatorProps,
 } from './LivenessIndicator/LivenessIndicator.tsx';
+
+export {
+  Composer,
+  type ComposerProps,
+  type ComposerOption,
+  type ComposerConfigMenu,
+} from './chat/Composer.tsx';
+export { ChatMessage, type ChatMessageProps, type ChatRole } from './chat/ChatMessage.tsx';
+export {
+  ToolCallTrace,
+  type ToolCallTraceProps,
+  type ToolCallStatus,
+} from './chat/ToolCallTrace.tsx';

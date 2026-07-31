@@ -31,3 +31,22 @@ if (!('ResizeObserver' in globalThis)) {
 if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = function scrollIntoView() {};
 }
+
+// jsdom lacks window.visualViewport and document.fonts, which Mantine's
+// autosizing Textarea (used by the chat Composer) subscribes to. Minimal
+// event-target stubs let autosize mount in tests.
+if (!window.visualViewport) {
+  (window as unknown as { visualViewport: unknown }).visualViewport = {
+    width: 1024,
+    height: 768,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+  };
+}
+if (!('fonts' in document)) {
+  (document as unknown as { fonts: unknown }).fonts = {
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    ready: Promise.resolve(),
+  };
+}

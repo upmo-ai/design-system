@@ -494,3 +494,238 @@ button.upmo-liveness:hover {
 .upmo-liveness__count {
   font-variant-numeric: tabular-nums;
 }
+
+
+/* ---------------------------------------------------------------------------
+   Agent surfaces (Batch B): chat Composer, ChatMessage, ToolCallTrace.
+--------------------------------------------------------------------------- */
+
+/* Composer: a bordered surface with one emerald focus ring. The textarea is
+   borderless; the pill toolbar sits under it. */
+.upmo-composer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.upmo-composer__form {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-100);
+  padding: var(--space-2) var(--space-2) var(--space-1);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.upmo-composer__form:focus-within {
+  border-color: var(--emerald-deep);
+  box-shadow: 0 0 0 1px var(--emerald-deep);
+}
+.upmo-composer__input {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink);
+}
+.upmo-composer__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+.upmo-composer__pill {
+  border-radius: var(--radius-full);
+  background: var(--surface-200);
+  color: var(--ink-secondary);
+  font-weight: 600;
+}
+.upmo-composer__pill:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+.upmo-composer__icon {
+  color: var(--ink-muted);
+}
+.upmo-composer__spacer {
+  flex: 1;
+}
+.upmo-composer__send {
+  border-radius: var(--radius-full);
+}
+.upmo-composer__hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding-left: var(--space-1);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.upmo-composer__hint-sep {
+  margin: 0 var(--space-1);
+}
+
+/* Chat messages: user bubble (right), assistant reply with caret avatar (left),
+   system note (centered, quiet). */
+.upmo-chat-msg {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-3);
+}
+.upmo-chat-msg--user {
+  align-items: flex-end;
+}
+.upmo-chat-msg__bubble {
+  max-width: 75%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-xs) var(--radius-lg);
+  background: var(--surface-100);
+}
+.upmo-chat-msg__text {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--ink);
+  white-space: pre-wrap;
+}
+/* Streaming reply: a trailing cursor blinks after the text. */
+.upmo-chat-msg__text--streaming::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--emerald-deep);
+  animation: upmo-caret-blink 1s steps(2, start) infinite;
+}
+@keyframes upmo-caret-blink {
+  to {
+    visibility: hidden;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .upmo-chat-msg__text--streaming::after {
+    animation: none;
+  }
+}
+.upmo-chat-msg--assistant {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: var(--space-2);
+}
+.upmo-chat-msg__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  background: var(--tone-bg);
+  color: var(--tone-fg);
+}
+.upmo-chat-msg__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.upmo-chat-msg__meta--user {
+  justify-content: flex-end;
+}
+.upmo-chat-msg--system {
+  align-items: center;
+}
+.upmo-chat-msg__system {
+  max-width: 80%;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--surface-200);
+  color: var(--ink-muted);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ToolCallTrace: a collapsible one-line summary over a JSON body. */
+.upmo-toolcall {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-100);
+  overflow: hidden;
+}
+.upmo-toolcall__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.upmo-toolcall__summary:hover {
+  background: var(--surface-hover);
+}
+.upmo-toolcall__chevron {
+  color: var(--ink-muted);
+  transition: transform var(--duration-fast) var(--ease-standard);
+  flex: none;
+}
+.upmo-toolcall__chevron--open {
+  transform: rotate(90deg);
+}
+.upmo-toolcall__glyph {
+  color: var(--ink-muted);
+  flex: none;
+}
+.upmo-toolcall__name {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink);
+}
+.upmo-toolcall__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+.upmo-toolcall__word {
+  color: var(--tone-fg);
+  font-size: 12px;
+  font-weight: 600;
+}
+.upmo-toolcall__duration {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.upmo-toolcall__body {
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.upmo-toolcall__label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  margin-bottom: var(--space-1);
+}
+.upmo-toolcall__error {
+  padding: var(--space-2);
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-xs);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
