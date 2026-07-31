@@ -47,3 +47,9 @@ export { PageHeader, type PageHeaderProps } from './PageHeader/PageHeader.tsx';
 export { PageShell, type PageShellProps } from './PageShell/PageShell.tsx';
 export { Dialog, type DialogProps } from './Dialog/Dialog.tsx';
 export { ConfirmDialog, type ConfirmDialogProps } from './Dialog/ConfirmDialog.tsx';
+
+export { EventStream, type EventStreamProps, type EventItem } from './EventStream/EventStream.tsx';
+export {
+  LivenessIndicator,
+  type LivenessIndicatorProps,
+} from './LivenessIndicator/LivenessIndicator.tsx';

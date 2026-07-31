@@ -352,3 +352,145 @@
 .upmo-page-shell--narrow {
   max-width: var(--measure);
 }
+
+
+/* ---------------------------------------------------------------------------
+   Agent surfaces (Batch A): EventStream and the global LivenessIndicator.
+--------------------------------------------------------------------------- */
+
+/* EventStream: the "alive" activity log. A bordered panel with a header strip
+   and a scrolling list of flat, timestamped rows. */
+.upmo-eventstream {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-100);
+  overflow: hidden;
+}
+.upmo-eventstream__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-200);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+}
+.upmo-eventstream__count {
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.upmo-eventstream__follow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--emerald-deep);
+  font-weight: 600;
+}
+/* Jump-to-live: a quiet text button shown when following is paused. */
+.upmo-eventstream__jump {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xs);
+  background: var(--surface-100);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
+}
+.upmo-eventstream__jump:hover {
+  border-color: var(--emerald-deep);
+  color: var(--emerald-deep);
+}
+
+.upmo-eventstream__list {
+  margin: 0;
+  padding: var(--space-2);
+  list-style: none;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.upmo-eventstream__item {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+/* The live row gets a soft emerald ground and a left accent, so the in-flight
+   event stands out from settled history without shouting. */
+.upmo-eventstream__item--live {
+  background: var(--emerald-soft);
+  box-shadow: inset 2px 0 0 var(--emerald-deep);
+}
+.upmo-eventstream__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.upmo-eventstream__time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+.upmo-eventstream__phase {
+  flex: none;
+}
+.upmo-eventstream__msg {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink);
+}
+.upmo-eventstream__detail {
+  margin-top: var(--space-1);
+  padding-left: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--ink-secondary);
+}
+.upmo-eventstream__end {
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* LivenessIndicator: ambient caret + active-run count. Inherits a tone (active
+   when live, neutral at rest) so the caret and count read in the tone colour. */
+.upmo-liveness {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px var(--space-2);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--tone-fg);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: default;
+}
+button.upmo-liveness {
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+button.upmo-liveness:hover {
+  background: var(--tone-bg);
+}
+.upmo-liveness__count {
+  font-variant-numeric: tabular-nums;
+}

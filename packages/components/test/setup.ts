@@ -25,3 +25,9 @@ if (!('ResizeObserver' in globalThis)) {
   }
   (globalThis as unknown as { ResizeObserver: unknown }).ResizeObserver = ResizeObserver;
 }
+
+// jsdom lacks Element.scrollIntoView, which EventStream calls to follow the live
+// edge. A no-op stub lets the follow effect run in tests.
+if (!Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = function scrollIntoView() {};
+}
