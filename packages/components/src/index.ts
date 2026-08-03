@@ -72,3 +72,37 @@ export { PhaseRail, type PhaseRailProps } from './task/PhaseRail.tsx';
 export { BudgetCard, type BudgetCardProps } from './task/BudgetCard.tsx';
 export { DeliveryCard, type DeliveryCardProps } from './task/DeliveryCard.tsx';
 export { TaskHeader, type TaskHeaderProps, type TaskHeaderMeta } from './task/TaskHeader.tsx';
+
+export { BrandMark, type BrandMarkProps, type BrandKind } from './brand/BrandMark.tsx';
+export {
+  BrandTileGrid,
+  type BrandTileGridProps,
+  type BrandTileItem,
+} from './connect/BrandTileGrid.tsx';
+export {
+  ConnectWizard,
+  type ConnectWizardProps,
+  type ConnectWizardStep,
+} from './connect/ConnectWizard.tsx';
+export {
+  TestConnectionPanel,
+  type TestConnectionPanelProps,
+  type TestConnectionState,
+} from './connect/TestConnectionPanel.tsx';
+export {
+  ConnectorCard,
+  type ConnectorCardProps,
+  type ChangesPolicy,
+} from './connect/ConnectorCard.tsx';
+export {
+  ProviderCard,
+  type ProviderCardProps,
+  type ProviderStatus,
+  type ProviderPlan,
+} from './connect/ProviderCard.tsx';
+export {
+  ArtifactViewer,
+  type ArtifactViewerProps,
+  type Artifact,
+  type ArtifactKind,
+} from './artifact/ArtifactViewer.tsx';
