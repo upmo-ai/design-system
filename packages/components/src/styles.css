@@ -729,3 +729,223 @@ button.upmo-liveness:hover {
   font-family: var(--font-mono);
   font-size: 12px;
 }
+
+
+/* ---------------------------------------------------------------------------
+   Agent surfaces (Batch C): ApprovalCard, PhaseRail, BudgetCard, DeliveryCard,
+   TaskHeader. The side cards share a small card shell.
+--------------------------------------------------------------------------- */
+
+/* Shared side-card shell used by Budget and Delivery. */
+.upmo-budget,
+.upmo-delivery {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-100);
+  padding: var(--space-3);
+}
+.upmo-budget__head,
+.upmo-delivery__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+.upmo-budget__title,
+.upmo-delivery__title {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ApprovalCard: a toned alert (attention by default, critical when destructive)
+   with a filled icon tile, the prompt, and the two actions. */
+.upmo-approval {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: 12px 14px;
+  border: 1px solid var(--tone-fg);
+  border-radius: var(--radius-sm);
+  background: var(--tone-bg);
+}
+.upmo-approval__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: var(--radius-xs);
+  background: var(--tone-fg);
+  color: var(--surface-000);
+}
+.upmo-approval__body {
+  min-width: 0;
+}
+.upmo-approval__title {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--ink);
+}
+.upmo-approval__extra {
+  margin-top: var(--space-2);
+}
+
+/* PhaseRail: a vertical node-rail. Done = filled emerald node + emerald rail
+   segment; current = emerald ring; future = quiet outline. */
+.upmo-phaserail {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.upmo-phaserail__item {
+  position: relative;
+  padding-left: 32px;
+  padding-bottom: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.upmo-phaserail__item:last-child {
+  padding-bottom: 0;
+}
+/* The rail segment: a vertical line below each node, hidden on the last. */
+.upmo-phaserail__item::before {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 18px;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.upmo-phaserail__item:last-child::before {
+  display: none;
+}
+.upmo-phaserail__item[data-done='true']::before {
+  background: var(--emerald-deep);
+}
+/* The node: a circle at the left. */
+.upmo-phaserail__item::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-100);
+  box-sizing: border-box;
+}
+.upmo-phaserail__item[data-done='true']::after {
+  border-color: var(--emerald-deep);
+  background: var(--emerald-deep);
+}
+.upmo-phaserail__item[data-current='true']::after {
+  border: 3px solid var(--emerald-deep);
+  background: var(--surface-000);
+}
+.upmo-phaserail__item--current {
+  color: var(--emerald-deep);
+  font-weight: 600;
+}
+.upmo-phaserail__item--failed {
+  color: var(--danger);
+}
+.upmo-phaserail__item--failed[data-current='true']::after {
+  border-color: var(--danger);
+}
+
+/* BudgetCard: a progress bar + percent, and a meta line. */
+.upmo-budget__progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.upmo-budget__bar {
+  flex: 1;
+}
+.upmo-budget__pct {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.upmo-budget__meta,
+.upmo-delivery__when {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.upmo-budget__meta {
+  margin-top: var(--space-2);
+}
+.upmo-budget__link {
+  display: inline-block;
+  margin-top: var(--space-2);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--emerald-deep);
+}
+
+/* DeliveryCard: an icon + channel/timing. */
+.upmo-delivery__body {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.upmo-delivery__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: var(--radius-xs);
+  background: var(--surface-200);
+  color: var(--ink-secondary);
+}
+.upmo-delivery__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.upmo-delivery__channel {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* TaskHeader: title + status, a meta row, actions. */
+.upmo-task-header__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.upmo-task-header__cost {
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.upmo-task-header__indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 4px;
+  font-weight: 500;
+  color: var(--ink-secondary);
+}

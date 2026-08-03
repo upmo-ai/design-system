@@ -66,3 +66,9 @@ export {
   type ToolCallTraceProps,
   type ToolCallStatus,
 } from './chat/ToolCallTrace.tsx';
+
+export { ApprovalCard, type ApprovalCardProps } from './task/ApprovalCard.tsx';
+export { PhaseRail, type PhaseRailProps } from './task/PhaseRail.tsx';
+export { BudgetCard, type BudgetCardProps } from './task/BudgetCard.tsx';
+export { DeliveryCard, type DeliveryCardProps } from './task/DeliveryCard.tsx';
+export { TaskHeader, type TaskHeaderProps, type TaskHeaderMeta } from './task/TaskHeader.tsx';
