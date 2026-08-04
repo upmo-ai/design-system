@@ -123,3 +123,5 @@ export {
   type OnboardingStep,
 } from './onboarding/OnboardingWizard.tsx';
 export { Tour, type TourProps, type Coachmark } from './onboarding/Tour.tsx';
+
+export { Icon, type IconProps, type IconConcept } from './icon/Icon.tsx';
