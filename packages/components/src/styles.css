@@ -1159,3 +1159,330 @@ button.upmo-liveness:hover {
 .upmo-artifact__markdown ul {
   padding-left: var(--space-4);
 }
+
+
+/* ---------------------------------------------------------------------------
+   Step 6: charts/usage (StatTile, BarChart, LineChart, UsageMeter) and
+   onboarding (SetupChecklist, OnboardingWizard, Tour).
+--------------------------------------------------------------------------- */
+
+/* StatTile. */
+.upmo-stat-tile {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-100);
+  padding: var(--space-3);
+}
+.upmo-stat-tile__label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.upmo-stat-tile__value {
+  font-family: var(--font-display, var(--font-ui));
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--ink);
+  margin: var(--space-1) 0;
+  font-variant-numeric: tabular-nums;
+}
+.upmo-stat-tile__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.upmo-stat-tile__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--tone-fg);
+  font-size: 12px;
+  font-weight: 600;
+}
+.upmo-stat-tile__hint {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+/* BarChart: CSS columns. */
+.upmo-barchart {
+  margin: 0;
+}
+.upmo-barchart__plot {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+.upmo-barchart__col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  height: 100%;
+}
+.upmo-barchart__bar-wrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.upmo-barchart__bar {
+  width: 70%;
+  min-height: 2px;
+  border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+  position: relative;
+  transition: height var(--duration-base) var(--ease-standard);
+}
+.upmo-barchart__value {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.upmo-barchart__label {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* LineChart. */
+.upmo-linechart {
+  margin: 0;
+}
+.upmo-linechart__svg {
+  display: block;
+}
+
+/* UsageMeter. */
+.upmo-usage-meter__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-1);
+}
+.upmo-usage-meter__label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.upmo-usage-meter__figures {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.upmo-usage-meter__limit {
+  color: var(--ink-muted);
+}
+
+/* SetupChecklist. */
+.upmo-checklist {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-100);
+  padding: var(--space-4);
+}
+.upmo-checklist__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+.upmo-checklist__title {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.upmo-checklist__progress-label {
+  font-size: 12px;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.upmo-checklist__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.upmo-checklist__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+}
+.upmo-checklist__item--done {
+  opacity: 0.7;
+}
+.upmo-checklist__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  color: var(--surface-000);
+}
+.upmo-checklist__mark--done {
+  background: var(--emerald-deep);
+  border-color: var(--emerald-deep);
+}
+.upmo-checklist__body {
+  flex: 1;
+  min-width: 0;
+}
+.upmo-checklist__item-title {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.upmo-checklist__item--done .upmo-checklist__item-title {
+  text-decoration: line-through;
+  text-decoration-color: var(--ink-muted);
+}
+.upmo-checklist__item-desc {
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+/* OnboardingWizard. */
+.upmo-onboarding {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-100);
+  padding: var(--space-5);
+  max-width: 480px;
+}
+.upmo-onboarding__dots {
+  display: flex;
+  gap: var(--space-1);
+  margin-bottom: var(--space-4);
+}
+.upmo-onboarding__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--border-strong);
+}
+.upmo-onboarding__dot--active {
+  background: var(--emerald-deep);
+}
+.upmo-onboarding__title {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display, var(--font-ui));
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.upmo-onboarding__desc {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--ink-secondary);
+}
+.upmo-onboarding__content {
+  margin-top: var(--space-3);
+}
+
+/* Tour coachmark. */
+.upmo-tour {
+  position: relative;
+  max-width: 300px;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-100);
+  box-shadow: var(--shadow-lg);
+}
+.upmo-tour__close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  display: inline-flex;
+  padding: 2px;
+  border: 0;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+  border-radius: var(--radius-xs);
+}
+.upmo-tour__close:hover {
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+.upmo-tour__title {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  padding-right: var(--space-4);
+}
+.upmo-tour__body {
+  margin-top: var(--space-1);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 19px;
+  color: var(--ink-secondary);
+}
+.upmo-tour__counter {
+  font-size: 12px;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+/* The pointer: a small rotated square on the named side. */
+.upmo-tour::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--surface-100);
+  border: 1px solid var(--border);
+  transform: rotate(45deg);
+}
+.upmo-tour--top::after {
+  top: -6px;
+  left: 24px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.upmo-tour--bottom::after {
+  bottom: -6px;
+  left: 24px;
+  border-left: 0;
+  border-top: 0;
+}
+.upmo-tour--left::after {
+  left: -6px;
+  top: 24px;
+  border-top: 0;
+  border-right: 0;
+}
+.upmo-tour--right::after {
+  right: -6px;
+  top: 24px;
+  border-bottom: 0;
+  border-left: 0;
+}

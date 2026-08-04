@@ -1,0 +1,132 @@
+import { fireEvent, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import {
+  BarChart,
+  LineChart,
+  OnboardingWizard,
+  SetupChecklist,
+  StatTile,
+  Tour,
+  UsageMeter,
+} from '../src/index.ts';
+import { renderThemed, themes } from './render.tsx';
+
+describe('StatTile', () => {
+  it('renders label, value and trend', () => {
+    renderThemed(<StatTile label="Runs" value="1,284" trend={{ direction: 'up', label: '+12%' }} />);
+    expect(screen.getByText('Runs')).toBeInTheDocument();
+    expect(screen.getByText('1,284')).toBeInTheDocument();
+    expect(screen.getByText('+12%')).toBeInTheDocument();
+  });
+
+  it('treats up as critical when goodWhenUp is false', () => {
+    const { container } = renderThemed(
+      <StatTile label="Spend" value="€1" trend={{ direction: 'up', label: '+8%', goodWhenUp: false }} />,
+    );
+    expect(container.querySelector('.upmo-tone-critical')).toBeTruthy();
+  });
+});
+
+describe('BarChart', () => {
+  it('renders a labelled group with each bar', () => {
+    renderThemed(
+      <BarChart title="Runs" data={[{ label: 'Mon', value: 3 }, { label: 'Tue', value: 6 }]} />,
+    );
+    expect(screen.getByRole('group', { name: 'Runs' })).toBeInTheDocument();
+    expect(screen.getByText('Mon')).toBeInTheDocument();
+    expect(screen.getByText('Tue')).toBeInTheDocument();
+  });
+});
+
+describe('LineChart', () => {
+  it('renders a labelled group with a polyline', () => {
+    const { container } = renderThemed(
+      <LineChart title="Spend" data={[{ label: 'a', value: 1 }, { label: 'b', value: 4 }]} />,
+    );
+    expect(screen.getByRole('group', { name: 'Spend' })).toBeInTheDocument();
+    expect(container.querySelector('polyline')).toBeTruthy();
+  });
+});
+
+describe('UsageMeter', () => {
+  it('renders the label and figures', () => {
+    renderThemed(<UsageMeter label="Spend" percent={38} used="€38" limit="€100" />);
+    expect(screen.getByText('Spend')).toBeInTheDocument();
+    expect(screen.getByText('€38')).toBeInTheDocument();
+    expect(screen.getByText(/€100/)).toBeInTheDocument();
+  });
+});
+
+describe('SetupChecklist', () => {
+  it('shows progress and fires a step action', () => {
+    const onAction = vi.fn();
+    renderThemed(
+      <SetupChecklist
+        steps={[
+          { id: '1', title: 'Done step', done: true },
+          { id: '2', title: 'Todo step', actionLabel: 'Start', onAction },
+        ]}
+      />,
+    );
+    expect(screen.getByText('1 of 2 done')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Start' }));
+    expect(onAction).toHaveBeenCalledOnce();
+  });
+});
+
+describe('OnboardingWizard', () => {
+  it('advances and finishes', () => {
+    const onFinish = vi.fn();
+    const onActiveChange = vi.fn();
+    const { rerender } = renderThemed(
+      <OnboardingWizard
+        active={0}
+        onActiveChange={onActiveChange}
+        onFinish={onFinish}
+        steps={[{ title: 'One' }, { title: 'Two' }]}
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(onActiveChange).toHaveBeenCalledWith(1);
+    rerender(
+      <OnboardingWizard
+        active={1}
+        onActiveChange={onActiveChange}
+        onFinish={onFinish}
+        steps={[{ title: 'One' }, { title: 'Two' }]}
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Finish' }));
+    expect(onFinish).toHaveBeenCalledOnce();
+  });
+});
+
+describe('Tour', () => {
+  it('shows the counter and advances; dismiss closes', () => {
+    const onClose = vi.fn();
+    const onActiveChange = vi.fn();
+    renderThemed(
+      <Tour
+        active={0}
+        onActiveChange={onActiveChange}
+        onClose={onClose}
+        steps={[{ title: 'A', body: 'a' }, { title: 'B', body: 'b' }]}
+      />,
+    );
+    expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(onActiveChange).toHaveBeenCalledWith(1);
+    fireEvent.click(screen.getByRole('button', { name: 'Dismiss tour' }));
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  it('mounts in every theme', () => {
+    for (const theme of themes) {
+      const { unmount } = renderThemed(
+        <Tour active={0} onActiveChange={() => {}} onClose={() => {}} steps={[{ title: 'A', body: 'a' }]} />,
+        theme,
+      );
+      unmount();
+    }
+  });
+});

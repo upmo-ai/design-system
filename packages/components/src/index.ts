@@ -106,3 +106,20 @@ export {
   type Artifact,
   type ArtifactKind,
 } from './artifact/ArtifactViewer.tsx';
+
+export { StatTile, type StatTileProps, type TrendDirection } from './charts/StatTile.tsx';
+export { BarChart, type BarChartProps, type BarDatum } from './charts/BarChart.tsx';
+export { LineChart, type LineChartProps, type LinePoint } from './charts/LineChart.tsx';
+export { UsageMeter, type UsageMeterProps } from './charts/UsageMeter.tsx';
+
+export {
+  SetupChecklist,
+  type SetupChecklistProps,
+  type ChecklistStep,
+} from './onboarding/SetupChecklist.tsx';
+export {
+  OnboardingWizard,
+  type OnboardingWizardProps,
+  type OnboardingStep,
+} from './onboarding/OnboardingWizard.tsx';
+export { Tour, type TourProps, type Coachmark } from './onboarding/Tour.tsx';
