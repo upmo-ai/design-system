@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Group, Stack, Text } from '@mantine/core';
+import { brands } from '@upmo-ai/brands';
 import { BrandMark } from './BrandMark.tsx';
 
 const meta: Meta<typeof BrandMark> = {
   title: 'Agent surfaces/BrandMark',
   component: BrandMark,
-  args: { brand: 'github', size: 32 },
-  parameters: { layout: 'centered' },
+  args: { brand: 'anthropic', size: 36 },
+  parameters: { layout: 'padded' },
 };
 
 export default meta;
@@ -14,16 +15,26 @@ type Story = StoryObj<typeof BrandMark>;
 
 export const Playground: Story = {};
 
-export const Known: Story = {
+export const AllColorful: Story = {
   render: () => (
     <Group gap="lg">
-      {['github', 'slack', 'stripe', 'notion', 'anthropic', 'openai'].map((b) => (
-        <Stack key={b} align="center" gap={4}>
-          <BrandMark brand={b} size={32} />
-          <Text size="xs" c="dimmed">
-            {b}
+      {brands.map((b) => (
+        <Stack key={b.id} align="center" gap={4} w={92}>
+          <BrandMark brand={b.id} size={36} />
+          <Text size="xs" c="dimmed" ta="center" style={{ wordBreak: 'break-word' }}>
+            {b.id}
           </Text>
         </Stack>
+      ))}
+    </Group>
+  ),
+};
+
+export const Monochrome: Story = {
+  render: () => (
+    <Group gap="lg" c="var(--ink)">
+      {['github', 'slack', 'notion', 'linear', 'stripe', 'figma'].map((id) => (
+        <BrandMark key={id} brand={id} size={32} monochrome />
       ))}
     </Group>
   ),

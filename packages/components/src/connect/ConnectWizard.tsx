@@ -40,7 +40,9 @@ export function ConnectWizard({ steps, active, onStepChange, className }: Connec
     >
       {steps.map((step) => (
         <Stepper.Step key={step.label} label={step.label} description={step.description}>
-          <div className="upmo-connect-wizard__content">{step.content}</div>
+          <div key={active} className="upmo-connect-wizard__content upmo-step-enter">
+            {step.content}
+          </div>
         </Stepper.Step>
       ))}
     </Stepper>

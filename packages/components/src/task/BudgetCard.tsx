@@ -54,7 +54,7 @@ export function BudgetCard({
       <div className="upmo-budget__head">
         <h4 className="upmo-budget__title">Budget</h4>
         {onEdit ? (
-          <Tooltip label="Edit budget" position="bottom" openDelay={400} withinPortal>
+          <Tooltip label="Edit" position="bottom" openDelay={400} withinPortal>
             <ActionIcon
               variant="subtle"
               aria-label="Edit budget"

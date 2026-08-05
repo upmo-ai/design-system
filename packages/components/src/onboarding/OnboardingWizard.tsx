@@ -51,7 +51,7 @@ export function OnboardingWizard({
         ))}
       </div>
 
-      <div className="upmo-onboarding__step">
+      <div key={active} className="upmo-onboarding__step upmo-step-enter">
         <h3 className="upmo-onboarding__title">{step.title}</h3>
         {step.description ? <p className="upmo-onboarding__desc">{step.description}</p> : null}
         {step.content ? <div className="upmo-onboarding__content">{step.content}</div> : null}

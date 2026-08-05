@@ -404,6 +404,28 @@
   font-size: 12px;
   font-weight: 500;
 }
+.upmo-eventstream__head-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.upmo-eventstream__actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+/* Fullscreen: the stream fills the viewport as an overlay. */
+.upmo-eventstream--fullscreen {
+  position: fixed;
+  inset: var(--space-4);
+  z-index: 400;
+  max-width: none;
+  box-shadow: var(--shadow-lg);
+}
+.upmo-eventstream--fullscreen .upmo-eventstream__list {
+  flex: 1;
+  max-height: none;
+}
 .upmo-eventstream__count {
   color: var(--ink-muted);
   font-variant-numeric: tabular-nums;
@@ -985,6 +1007,11 @@ button.upmo-liveness:hover {
   display: inline-block;
   vertical-align: middle;
 }
+/* Monochrome: force the mark to the current text colour (override fills). */
+.upmo-brandmark--mono,
+.upmo-brandmark--mono * {
+  fill: currentColor !important;
+}
 .upmo-connector-card__mark,
 .upmo-provider-card__mark {
   display: inline-flex;
@@ -1048,6 +1075,27 @@ button.upmo-liveness:hover {
   padding-top: var(--space-4);
 }
 
+/* Step transition: content fades and slides in when the active step changes
+   (the key change remounts it). Honours reduced motion. */
+.upmo-step-enter {
+  animation: upmo-step-in var(--duration-base) var(--ease-standard);
+}
+@keyframes upmo-step-in {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .upmo-step-enter {
+    animation: none;
+  }
+}
+
 /* TestConnectionPanel: the Test button + a toned status panel. */
 .upmo-testconn {
   display: flex;
@@ -1093,6 +1141,13 @@ button.upmo-liveness:hover {
   border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--surface-100);
+}
+/* Empty: a single centered region (no master/detail split). */
+.upmo-artifact--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
 }
 @media (max-width: 640px) {
   .upmo-artifact {
@@ -1675,4 +1730,40 @@ button.upmo-liveness:hover {
 .mantine-Combobox-search {
   margin: var(--space-1);
   width: calc(100% - var(--space-2));
+}
+
+
+/* DataTable: Table with a search/filter toolbar and a pagination footer. */
+.upmo-datatable {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface-100);
+}
+.upmo-datatable__toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-200);
+}
+.upmo-datatable__search {
+  flex: 1;
+  max-width: 320px;
+}
+.upmo-datatable__filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+.upmo-datatable__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--border);
+  background: var(--surface-200);
 }

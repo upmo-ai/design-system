@@ -32,6 +32,7 @@
     "@mantine/core": "^9.7.4",
     "@mantine/hooks": "^9.7.4",
     "@tabler/icons-react": "^3.0.0",
+    "@upmo-ai/brands": "workspace:*",
     "@upmo-ai/icons": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -48,6 +49,7 @@
     "@testing-library/react": "^16.3.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@upmo-ai/brands": "workspace:*",
     "@upmo-ai/icons": "workspace:*",
     "@upmo-ai/theme": "workspace:*",
     "@upmo-ai/tokens": "workspace:*",

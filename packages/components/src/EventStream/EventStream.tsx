@@ -1,6 +1,13 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import clsx from 'clsx';
-import { IconArrowDown } from '@tabler/icons-react';
+import {
+  IconArrowBarToDown,
+  IconArrowBarToUp,
+  IconArrowDown,
+  IconMaximize,
+  IconMinimize,
+} from '@tabler/icons-react';
+import { ActionIcon, Tooltip } from '@mantine/core';
 import { StatusBadge } from '../status/StatusBadge.tsx';
 import { StatusDot } from '../status/StatusDot.tsx';
 import type { Status } from '../status/status.ts';
@@ -67,6 +74,7 @@ export function EventStream({
 }: EventStreamProps) {
   const listRef = useRef<HTMLOListElement>(null);
   const endRef = useRef<HTMLLIElement>(null);
+  const [fullscreen, setFullscreen] = useState(false);
   // Guard against the follow-driven scroll re-triggering the scroll handler.
   const programmaticScroll = useRef(false);
 
@@ -88,6 +96,16 @@ export function EventStream({
     return () => cancelAnimationFrame(id);
   }, [events, following]);
 
+  // Close fullscreen on Escape.
+  useEffect(() => {
+    if (!fullscreen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setFullscreen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [fullscreen]);
+
   // Scrolling up pauses following; scrolling back to the bottom resumes it.
   function handleScroll() {
     if (programmaticScroll.current) return;
@@ -98,35 +116,91 @@ export function EventStream({
     else if (!atBottom && following) onFollowChange?.(false);
   }
 
+  function scrollTop() {
+    const el = listRef.current;
+    if (el?.scrollTo) el.scrollTo({ top: 0, behavior: 'smooth' });
+    else if (el) el.scrollTop = 0;
+    onFollowChange?.(false);
+  }
+
+  function scrollBottom() {
+    const el = listRef.current;
+    if (el?.scrollTo) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    else if (el) el.scrollTop = el.scrollHeight;
+    onFollowChange?.(true);
+  }
+
   const liveCount = events.filter((e) => e.live).length;
 
   return (
-    <section className={clsx('upmo-eventstream', className)} aria-label={label}>
+    <section
+      className={clsx('upmo-eventstream', fullscreen && 'upmo-eventstream--fullscreen', className)}
+      aria-label={label}
+    >
       <div className="upmo-eventstream__head">
         <span className="upmo-eventstream__count">
           {events.length} {events.length === 1 ? 'event' : 'events'}
         </span>
-        {following ? (
-          <span className="upmo-eventstream__follow" aria-live="off">
-            {liveCount > 0 ? <StatusDot status="Working" label="Live" /> : null}
-            Following live
-          </span>
-        ) : (
-          <button
-            type="button"
-            className="upmo-eventstream__jump"
-            onClick={() => onFollowChange?.(true)}
-          >
-            <IconArrowDown size={13} stroke={2.2} aria-hidden="true" />
-            Jump to live
-          </button>
-        )}
+        <div className="upmo-eventstream__head-right">
+          {following ? (
+            <span className="upmo-eventstream__follow" aria-live="off">
+              {liveCount > 0 ? <StatusDot status="Working" label="Live" /> : null}
+              Following live
+            </span>
+          ) : (
+            <button
+              type="button"
+              className="upmo-eventstream__jump"
+              onClick={() => onFollowChange?.(true)}
+            >
+              <IconArrowDown size={13} stroke={2.2} aria-hidden="true" />
+              Jump to live
+            </button>
+          )}
+          <div className="upmo-eventstream__actions">
+            <Tooltip label="Top" position="bottom" openDelay={400} withinPortal>
+              <ActionIcon
+                variant="subtle"
+                aria-label="Scroll to top"
+                className="upmo-icon-button"
+                onClick={scrollTop}
+              >
+                <IconArrowBarToUp size={15} stroke={1.75} />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Bottom" position="bottom" openDelay={400} withinPortal>
+              <ActionIcon
+                variant="subtle"
+                aria-label="Scroll to bottom"
+                className="upmo-icon-button"
+                onClick={scrollBottom}
+              >
+                <IconArrowBarToDown size={15} stroke={1.75} />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip
+              label={fullscreen ? 'Exit' : 'Expand'}
+              position="bottom"
+              openDelay={400}
+              withinPortal
+            >
+              <ActionIcon
+                variant="subtle"
+                aria-label={fullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+                className="upmo-icon-button"
+                onClick={() => setFullscreen((f) => !f)}
+              >
+                {fullscreen ? <IconMinimize size={15} stroke={1.75} /> : <IconMaximize size={15} stroke={1.75} />}
+              </ActionIcon>
+            </Tooltip>
+          </div>
+        </div>
       </div>
 
       <ol
         ref={listRef}
         className="upmo-eventstream__list"
-        style={{ maxHeight }}
+        style={{ maxHeight: fullscreen ? undefined : maxHeight }}
         onScroll={handleScroll}
       >
         {events.map((ev) => (

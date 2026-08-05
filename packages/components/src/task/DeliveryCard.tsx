@@ -27,7 +27,7 @@ export function DeliveryCard({ channel, when, icon, onEdit, className }: Deliver
       <div className="upmo-delivery__head">
         <h4 className="upmo-delivery__title">Delivery</h4>
         {onEdit ? (
-          <Tooltip label="Change delivery channel" position="bottom" openDelay={400} withinPortal>
+          <Tooltip label="Edit" position="bottom" openDelay={400} withinPortal>
             <ActionIcon
               variant="subtle"
               aria-label="Change delivery channel"

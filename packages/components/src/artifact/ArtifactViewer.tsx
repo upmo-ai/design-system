@@ -127,7 +127,7 @@ export function ArtifactViewer({
 
   if (artifacts.length === 0) {
     return (
-      <div className={clsx('upmo-artifact', className)}>
+      <div className={clsx('upmo-artifact', 'upmo-artifact--empty', className)}>
         <EmptyState title="No artifacts yet" description="Results produced by the task will appear here." />
       </div>
     );

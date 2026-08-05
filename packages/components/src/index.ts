@@ -53,6 +53,11 @@ export { JsonBlock, type JsonBlockProps } from './CodeBlock/JsonBlock.tsx';
 export { Breadcrumbs, type BreadcrumbsProps, type BreadcrumbItem } from './Breadcrumbs/Breadcrumbs.tsx';
 export { Menu, type MenuProps } from './Menu/Menu.tsx';
 export { Table, type TableProps } from './Table/Table.tsx';
+export {
+  DataTable,
+  type DataTableProps,
+  type DataTableColumn,
+} from './Table/DataTable.tsx';
 
 export { PageHeader, type PageHeaderProps } from './PageHeader/PageHeader.tsx';
 export { PageShell, type PageShellProps } from './PageShell/PageShell.tsx';
