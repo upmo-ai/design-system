@@ -25,9 +25,20 @@ export { Field, type FieldProps, type FieldControlProps } from './Field/Field.ts
 export { Input, type InputProps } from './Input/Input.tsx';
 export { Textarea, type TextareaProps } from './Textarea/Textarea.tsx';
 export { Select, type SelectProps } from './Select/Select.tsx';
+export {
+  SearchSelect,
+  type SearchSelectProps,
+  type SearchSelectOption,
+} from './Select/SearchSelect.tsx';
 export { Checkbox, type CheckboxProps } from './Checkbox/Checkbox.tsx';
 export { Radio, type RadioProps, type RadioGroupProps } from './Radio/Radio.tsx';
+export {
+  RadioCardGroup,
+  type RadioCardGroupProps,
+  type RadioCardOption,
+} from './Radio/RadioCard.tsx';
 export { Switch, type SwitchProps } from './Switch/Switch.tsx';
+export { TagInput, type TagInputProps } from './TagInput/TagInput.tsx';
 
 export { Tabs, type TabsProps } from './Tabs/Tabs.tsx';
 export { SegmentedControl, type SegmentedControlProps } from './SegmentedControl/SegmentedControl.tsx';

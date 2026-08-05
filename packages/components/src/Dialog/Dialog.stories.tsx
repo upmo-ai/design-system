@@ -34,3 +34,19 @@ export const Default: Story = {
     );
   },
 };
+
+// A pre-opened variant so the modal is visible without interaction (useful for
+// review and visual checks).
+export const Opened: Story = {
+  render: () => (
+    <Dialog opened onClose={() => {}} title="Rename agent">
+      <Stack gap="md">
+        <Text size="sm">A focused task in a modal. Use ConfirmDialog for a yes/no.</Text>
+        <Group justify="flex-end">
+          <Button variant="default">Cancel</Button>
+          <Button>Save</Button>
+        </Group>
+      </Stack>
+    </Dialog>
+  ),
+};

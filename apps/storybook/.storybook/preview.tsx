@@ -19,17 +19,19 @@ const mantineScheme: Record<UpmoTheme, 'light' | 'dark'> = {
   hc: 'light',
 };
 
-// Each story runs in Storybook's own preview iframe, a dedicated document. So
-// Mantine can own the document root with data-mantine-color-scheme and we set
-// data-theme on the same root for the Upmo token scope, with nothing to collide
-// with. This is the whole reason dark mode is trouble-free here: full isolation.
+// Each story runs in Storybook's own preview iframe, a dedicated document, so
+// Mantine owns the document root. We let MantineProvider write the colour scheme
+// and its CSS variables onto :root (getRootElement -> documentElement,
+// cssVariablesSelector ':root'), and we only add the Upmo data-theme token scope
+// onto the same root. Because the variables live on :root, portaled content
+// (Modal, Tooltip, Menu dropdowns) is styled correctly even though it renders at
+// document.body, outside the story subtree.
 const withUpmoTheme: Decorator = (Story, context) => {
   const theme = (context.globals.theme ?? 'light') as UpmoTheme;
 
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute('data-theme', theme);
-    root.setAttribute('data-mantine-color-scheme', mantineScheme[theme]);
     document.body.style.background = 'var(--surface-000)';
     document.body.style.color = 'var(--ink)';
   }, [theme]);
@@ -39,6 +41,8 @@ const withUpmoTheme: Decorator = (Story, context) => {
       theme={upmoTheme}
       cssVariablesResolver={cssVariablesResolver}
       forceColorScheme={mantineScheme[theme]}
+      getRootElement={() => document.documentElement}
+      cssVariablesSelector=":root"
     >
       <Story />
     </MantineProvider>

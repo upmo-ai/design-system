@@ -39,3 +39,11 @@ export const Errored: Story = {
     </Field>
   ),
 };
+
+export const WithInfo: Story = {
+  render: () => (
+    <Field label="Webhook URL" info="We will send a test ping after you save.">
+      {(props) => <input {...props} className="upmo-input" placeholder="https://..." />}
+    </Field>
+  ),
+};

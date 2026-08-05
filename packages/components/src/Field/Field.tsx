@@ -1,4 +1,4 @@
-import { IconExclamationCircle } from '@tabler/icons-react';
+import { IconExclamationCircle, IconInfoCircle } from '@tabler/icons-react';
 import clsx from 'clsx';
 import { useId, type ReactNode } from 'react';
 
@@ -24,6 +24,12 @@ export interface FieldProps {
   description?: ReactNode;
   /** Error message. When set, the field reads as invalid and shows the message. */
   error?: ReactNode;
+  /**
+   * An informational note shown below the control, icon-led in the info-blue
+   * tone. Use for hints and confirmations that are not errors. Hidden while an
+   * error is shown (the error takes priority).
+   */
+  info?: ReactNode;
   /**
    * Required is the DEFAULT (forms.md). Set optional to append "(optional)" to
    * the label. If a form mixes both, the caller can also force required marks.
@@ -53,6 +59,7 @@ export function Field({
   children,
   description,
   error,
+  info,
   optional,
   requiredMark,
   className,
@@ -61,9 +68,12 @@ export function Field({
   const controlId = `${id}-control`;
   const descId = `${id}-desc`;
   const errId = `${id}-err`;
+  const infoId = `${id}-info`;
 
   const describedBy =
-    [description ? descId : null, error ? errId : null].filter(Boolean).join(' ') || undefined;
+    [description ? descId : null, info && !error ? infoId : null, error ? errId : null]
+      .filter(Boolean)
+      .join(' ') || undefined;
 
   const controlProps: FieldControlProps = {
     id: controlId,
@@ -84,6 +94,13 @@ export function Field({
       {description ? (
         <div className="upmo-field__description" id={descId}>
           {description}
+        </div>
+      ) : null}
+
+      {info && !error ? (
+        <div className="upmo-field__info" id={infoId}>
+          <IconInfoCircle size={14} stroke={2.2} aria-hidden="true" />
+          <span>{info}</span>
         </div>
       ) : null}
 

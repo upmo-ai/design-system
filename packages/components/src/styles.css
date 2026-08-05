@@ -83,10 +83,12 @@
    signal: the word and the mark always accompany it.
 --------------------------------------------------------------------------- */
 
-/* Tone colour pairs: --tone-fg (text + mark) on --tone-bg (soft ground). */
+/* Tone colour pairs: --tone-fg (text + mark) on --tone-bg (soft ground). The
+   neutral tone uses info-blue (not grey): a calm, readable "informational"
+   state, per the decision that neutral/attention-neutral read as info. */
 .upmo-tone-neutral {
-  --tone-fg: var(--ink-muted);
-  --tone-bg: var(--surface-200);
+  --tone-fg: var(--info);
+  --tone-bg: var(--info-soft);
 }
 .upmo-tone-active {
   --tone-fg: var(--emerald-deep);
@@ -125,7 +127,9 @@
   border: 1px solid color-mix(in srgb, var(--tone-fg) 22%, transparent);
 }
 
-/* StatusDot: a filled dot, or the live caret, in the tone colour. */
+/* StatusDot: a filled dot, or the live caret, in the tone colour. In dark mode
+   the dot gets a touch more saturation and a soft glow, so the status reads as
+   crisp and alive rather than flat (the "more refreshing" dark treatment). */
 .upmo-status-dot {
   display: inline-flex;
   align-items: center;
@@ -136,6 +140,9 @@
 .upmo-status-dot--filled {
   border-radius: var(--radius-full);
   background-color: var(--tone-fg);
+}
+[data-mantine-color-scheme='dark'] .upmo-status-dot--filled {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tone-fg) 18%, transparent);
 }
 
 /* The caret: brand mark + liveness signature. A draw-ramp conveys "filling up"
@@ -226,12 +233,29 @@
   color: var(--danger);
 }
 
+/* Info message: icon-led, info-blue. For hints and confirmations, not errors. */
+.upmo-field__info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--info);
+}
+
 /* Shared input feel: the emerald focus edge, applied to text inputs, textareas
-   and selects. Mantine already wires the border/ground to our tokens via the
-   theme resolver; this reinforces the focus treatment from the forms spec. */
+   and selects. The border animates to emerald on focus with a soft ring, so
+   focus reads as a deliberate, calm transition rather than a hard default. */
+.upmo-input {
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
 .upmo-input:focus,
 .upmo-input:focus-within {
   border-color: var(--emerald-deep);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--emerald-deep) 22%, transparent);
 }
 
 /* Breathing space under the label (and description) before the control, so the
@@ -1485,4 +1509,170 @@ button.upmo-liveness:hover {
   top: 24px;
   border-bottom: 0;
   border-left: 0;
+}
+
+
+/* ---------------------------------------------------------------------------
+   Overlays sit ABOVE the page, so they use the raised surface-100 ground (not
+   surface-000, which equals the page and would vanish in dark mode) and carry a
+   shadow. Covers Modal/Dialog, Menu and Select/Combobox dropdowns, Popover and
+   HoverCard. This is a real elevation fix, not only a Storybook concern.
+--------------------------------------------------------------------------- */
+.mantine-Modal-content,
+.mantine-Modal-header {
+  background-color: var(--surface-100);
+}
+.mantine-Modal-content {
+  box-shadow: var(--shadow-lg);
+}
+.mantine-Menu-dropdown,
+.mantine-Popover-dropdown,
+.mantine-HoverCard-dropdown,
+.mantine-Combobox-dropdown,
+.mantine-Select-dropdown {
+  background-color: var(--surface-100);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+.mantine-Tooltip-tooltip {
+  background-color: var(--surface-inverse, var(--ink));
+  color: var(--surface-000);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Tabs: a smoothly sliding active indicator, like the SegmentedControl. The
+   underline transitions its colour, and each tab's label eases to the active
+   ink, so switching tabs feels animated rather than instant.
+--------------------------------------------------------------------------- */
+.mantine-Tabs-tab {
+  transition:
+    color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    background-color var(--duration-base) var(--ease-standard);
+}
+.mantine-Tabs-list {
+  position: relative;
+}
+/* The default (line) variant underline follows the active tab; animate its
+   colour and the tab border so the indicator glides. */
+.mantine-Tabs-tab[data-active] {
+  border-color: var(--emerald-deep);
+  color: var(--emerald-deep);
+}
+.mantine-Tabs-tab:not([data-active]):hover {
+  color: var(--ink);
+  background-color: var(--surface-hover);
+}
+/* SegmentedControl: ensure the sliding indicator uses the standard ease and a
+   calm duration (Mantine animates position; we align the timing to our motion
+   tokens for a consistent feel across tabs and segmented control). */
+.mantine-SegmentedControl-indicator {
+  transition:
+    transform var(--duration-base) var(--ease-standard),
+    width var(--duration-base) var(--ease-standard);
+}
+
+
+/* Mantine input error/description: align with the Field anatomy. The error is
+   danger-toned and icon-led (a circle-alert glyph), matching the icon-led
+   messages in Field so standalone Mantine inputs read the same. */
+.mantine-InputWrapper-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--danger);
+}
+.mantine-InputWrapper-error::before {
+  content: '';
+  flex: none;
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  /* A circle with an exclamation (Tabler alert-circle), masked so it inherits
+     the danger colour. */
+  -webkit-mask: var(--upmo-alert-circle) center / contain no-repeat;
+  mask: var(--upmo-alert-circle) center / contain no-repeat;
+}
+:root {
+  --upmo-alert-circle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 8v4'/%3E%3Cpath d='M12 16h.01'/%3E%3C/svg%3E");
+}
+
+
+/* ---------------------------------------------------------------------------
+   Form additions: RadioCardGroup, TagInput chips, SearchSelect.
+--------------------------------------------------------------------------- */
+
+/* Radio cards: selectable bordered tiles. */
+.upmo-radio-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.upmo-radio-cards--row {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.upmo-radio-cards--row .upmo-radio-card {
+  flex: 1 1 220px;
+}
+.upmo-radio-card {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-100);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+.upmo-radio-card:hover {
+  border-color: var(--border-strong);
+}
+.upmo-radio-card[data-checked] {
+  border-color: var(--emerald-deep);
+  background: var(--surface-selected);
+  box-shadow: 0 0 0 1px var(--emerald-deep);
+}
+.upmo-radio-card__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+.upmo-radio-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.upmo-radio-card__label {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.upmo-radio-card__desc {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink-muted);
+}
+
+/* TagInput chips: bordered emerald pills with a remove affordance. */
+.upmo-tag-pill {
+  border: 1px solid var(--emerald-deep);
+  background: var(--surface-selected);
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+/* SearchSelect: the trigger uses the input look; the in-dropdown search row is
+   styled by the shared dropdown surface rules above. */
+.upmo-searchselect {
+  width: 100%;
+}
+.mantine-Combobox-search {
+  margin: var(--space-1);
+  width: calc(100% - var(--space-2));
 }
