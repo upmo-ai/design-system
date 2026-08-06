@@ -1767,3 +1767,36 @@ button.upmo-liveness:hover {
   border-top: 1px solid var(--border);
   background: var(--surface-200);
 }
+
+
+/* ---------------------------------------------------------------------------
+   Dark-mode elevation: flat Slate surfaces read as painted rectangles without a
+   lift cue. In dark only, bordered content surfaces (Panel/Card and the side
+   cards) get a 1px inset top highlight and a hair of shadow, so they sit ABOVE
+   the page. Light and high-contrast keep the flat, shadowless panel per spec.
+--------------------------------------------------------------------------- */
+[data-mantine-color-scheme='dark'] .mantine-Card-root,
+[data-mantine-color-scheme='dark'] .upmo-budget,
+[data-mantine-color-scheme='dark'] .upmo-delivery,
+[data-mantine-color-scheme='dark'] .upmo-checklist,
+[data-mantine-color-scheme='dark'] .upmo-stat-tile,
+[data-mantine-color-scheme='dark'] .upmo-eventstream,
+[data-mantine-color-scheme='dark'] .upmo-datatable,
+[data-mantine-color-scheme='dark'] .upmo-connector-card,
+[data-mantine-color-scheme='dark'] .upmo-provider-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Status badges a touch more vivid in dark: a slightly stronger tone-tinted
+   border so the pill edge reads against the richer soft ground. */
+[data-mantine-color-scheme='dark'] .upmo-status-badge {
+  border-color: color-mix(in srgb, var(--tone-fg) 32%, transparent);
+}
+
+/* The primary button keeps its glow; nudge it a touch stronger in dark so the
+   main action feels energetic on the livelier ground. */
+[data-mantine-color-scheme='dark'] .upmo-button[data-variant='filled'] {
+  box-shadow: 0 1px 10px color-mix(in srgb, var(--primary-fill) 30%, transparent);
+}
