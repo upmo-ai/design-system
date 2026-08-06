@@ -1800,3 +1800,36 @@ button.upmo-liveness:hover {
 [data-mantine-color-scheme='dark'] .upmo-button[data-variant='filled'] {
   box-shadow: 0 1px 10px color-mix(in srgb, var(--primary-fill) 30%, transparent);
 }
+
+
+/* ---------------------------------------------------------------------------
+   Light-variant surfaces in dark mode. Mantine's dark "light" variant paints a
+   dark, dense fill with light text, which reads heavy on badges. We lighten the
+   per-colour "-light" ground and brighten its text so light-variant badges (and
+   any light-variant element) stay airy in dark, matching StatusBadge. The marks
+   are our token tones mixed onto the card surface. Light/hc are unchanged.
+--------------------------------------------------------------------------- */
+:root[data-mantine-color-scheme='dark'] {
+  --mantine-color-emerald-light: color-mix(in srgb, var(--emerald-deep) 14%, var(--surface-100));
+  --mantine-color-emerald-light-color: var(--emerald-hover);
+  --mantine-color-emerald-light-hover: color-mix(in srgb, var(--emerald-deep) 22%, var(--surface-100));
+
+  --mantine-color-blue-light: color-mix(in srgb, var(--info) 14%, var(--surface-100));
+  --mantine-color-blue-light-color: var(--info);
+  --mantine-color-blue-light-hover: color-mix(in srgb, var(--info) 22%, var(--surface-100));
+
+  --mantine-color-yellow-light: color-mix(in srgb, var(--warning) 14%, var(--surface-100));
+  --mantine-color-yellow-light-color: var(--warning);
+  --mantine-color-yellow-light-hover: color-mix(in srgb, var(--warning) 22%, var(--surface-100));
+
+  --mantine-color-red-light: color-mix(in srgb, var(--danger) 14%, var(--surface-100));
+  --mantine-color-red-light-color: var(--danger);
+  --mantine-color-red-light-hover: color-mix(in srgb, var(--danger) 22%, var(--surface-100));
+
+  --mantine-color-gray-light: var(--surface-hover);
+  --mantine-color-gray-light-color: var(--ink-secondary);
+  --mantine-color-gray-light-hover: var(--surface-selected);
+}
+[data-mantine-color-scheme='dark'] .upmo-badge[data-variant='light'] {
+  --badge-bd: 1px solid color-mix(in srgb, var(--badge-color) 30%, transparent);
+}
