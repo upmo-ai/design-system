@@ -21,8 +21,6 @@ const shared: Record<string, string> = {
   '--mantine-color-placeholder': 'var(--ink-muted)',
   '--mantine-color-anchor': 'var(--emerald-deep)',
   '--mantine-color-error': 'var(--danger)',
-  '--mantine-primary-color-light': 'var(--emerald-soft)',
-  '--mantine-primary-color-light-color': 'var(--emerald-deep)',
   '--mantine-primary-color-contrast': 'var(--ink-on-brand)',
 };
 
@@ -33,12 +31,38 @@ const primaryFill: Record<string, string> = {
   '--mantine-primary-color-filled-hover': 'var(--primary-fill-hover)',
 };
 
+// The light (soft) primary/emerald ground. Mantine injects emerald's variants
+// inline (it is our custom colour), so a stylesheet cannot override them; they
+// must be set here. In light, emerald-soft is already a pale mint. In dark,
+// emerald-soft is a RICH green (right for status grounds) but too dark for a
+// light-variant badge, which should read airy like the other soft badges, so
+// dark uses a lighter emerald tint on the card surface to match them.
+const emeraldSoftLight: Record<string, string> = {
+  '--mantine-primary-color-light': 'var(--emerald-soft)',
+  '--mantine-primary-color-light-color': 'var(--emerald-deep)',
+  '--mantine-primary-color-light-hover': 'var(--surface-selected)',
+  '--mantine-color-emerald-light': 'var(--emerald-soft)',
+  '--mantine-color-emerald-light-color': 'var(--emerald-deep)',
+};
+
+const emeraldSoftDark: Record<string, string> = {
+  '--mantine-primary-color-light': 'color-mix(in srgb, var(--emerald-deep) 14%, var(--surface-100))',
+  '--mantine-primary-color-light-color': 'var(--emerald-hover)',
+  '--mantine-primary-color-light-hover': 'color-mix(in srgb, var(--emerald-deep) 22%, var(--surface-100))',
+  '--mantine-color-emerald-light': 'color-mix(in srgb, var(--emerald-deep) 14%, var(--surface-100))',
+  '--mantine-color-emerald-light-color': 'var(--emerald-hover)',
+};
+
 // The token variables map, exported for tests and for the docs preview pipeline
 // that needs the same names without pulling the resolver function.
-export const tokenVariables: Record<string, string> = { ...shared, ...primaryFill };
+export const tokenVariables: Record<string, string> = {
+  ...shared,
+  ...primaryFill,
+  ...emeraldSoftLight,
+};
 
 export const cssVariablesResolver: CSSVariablesResolver = () => ({
   variables: {},
-  light: tokenVariables,
-  dark: tokenVariables,
+  light: { ...shared, ...primaryFill, ...emeraldSoftLight },
+  dark: { ...shared, ...primaryFill, ...emeraldSoftDark },
 });

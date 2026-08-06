@@ -32,11 +32,24 @@ describe('upmoTheme', () => {
 });
 
 describe('cssVariablesResolver', () => {
-  it('maps Mantine internals onto Upmo tokens, the same in light and dark', () => {
+  it('maps Mantine internals onto Upmo tokens; light matches tokenVariables', () => {
     const resolved = cssVariablesResolver({} as MantineTheme);
     expect(resolved.light).toEqual(tokenVariables);
-    expect(resolved.dark).toEqual(tokenVariables);
     expect(resolved.variables).toEqual({});
+    // Shared mappings are identical across schemes.
+    expect(resolved.dark['--mantine-color-body']).toBe('var(--surface-000)');
+    expect(resolved.dark['--mantine-color-text']).toBe('var(--ink)');
+  });
+
+  it('lightens the emerald light-variant in dark so soft badges stay airy', () => {
+    const resolved = cssVariablesResolver({} as MantineTheme);
+    // Light uses the pale emerald-soft ground directly.
+    expect(resolved.light['--mantine-color-emerald-light']).toBe('var(--emerald-soft)');
+    // Dark uses a lighter tint on the card surface, not the rich emerald-soft,
+    // so a light-variant badge matches the other soft badges.
+    expect(resolved.dark['--mantine-color-emerald-light']).toContain('surface-100');
+    expect(resolved.dark['--mantine-color-emerald-light']).not.toBe('var(--emerald-soft)');
+    expect(resolved.dark['--mantine-primary-color-light']).toContain('surface-100');
   });
 
   it('points the primary fill at the scheme-aware primary-fill token (bright in dark)', () => {
