@@ -29,6 +29,91 @@ describe('Composer', () => {
     expect(screen.getByLabelText('Attach file')).toBeInTheDocument();
     expect(screen.getByLabelText('Dictate')).toBeInTheDocument();
   });
+
+  it('does not send on Enter while an input method is composing', () => {
+    const onSend = vi.fn();
+    renderThemed(<Composer value="にほん" onChange={() => {}} onSend={onSend} />);
+    const input = screen.getByLabelText('Message');
+    fireEvent.keyDown(input, { key: 'Enter', isComposing: true });
+    fireEvent.keyDown(input, { key: 'Enter', keyCode: 229 });
+    expect(onSend).not.toHaveBeenCalled();
+  });
+
+  it('turns send into an enabled Stop while streaming, with Escape to stop', () => {
+    const onSend = vi.fn();
+    const onStop = vi.fn();
+    renderThemed(
+      <Composer value="" onChange={() => {}} onSend={onSend} streaming onStop={onStop} disabled />,
+    );
+    expect(screen.queryByRole('button', { name: 'Send' })).not.toBeInTheDocument();
+    const stop = screen.getByRole('button', { name: 'Stop' });
+    expect(stop).toBeEnabled();
+    expect(stop).toHaveAttribute('type', 'button');
+    fireEvent.click(stop);
+    fireEvent.keyDown(screen.getByLabelText('Message'), { key: 'Escape' });
+    expect(onStop).toHaveBeenCalledTimes(2);
+    expect(onSend).not.toHaveBeenCalled();
+  });
+
+  it('blocks sending while streaming without onStop', () => {
+    const onSend = vi.fn();
+    renderThemed(<Composer value="hello" onChange={() => {}} onSend={onSend} streaming />);
+    expect(screen.getByRole('button', { name: 'Send' })).toBeDisabled();
+    fireEvent.keyDown(screen.getByLabelText('Message'), { key: 'Enter' });
+    expect(onSend).not.toHaveBeenCalled();
+  });
+
+  it('includes the visible pill text in each pill accessible name', () => {
+    renderThemed(
+      <Composer
+        value=""
+        onChange={() => {}}
+        onSend={() => {}}
+        config={{
+          label: 'Agent and model',
+          groups: [
+            { label: 'Agent', value: 'auto', onChange: () => {}, options: [{ value: 'auto', label: 'Auto' }] },
+            { label: 'Model', value: 'fast', onChange: () => {}, options: [{ value: 'fast', label: 'Fast' }] },
+          ],
+        }}
+        toolsMode={{ value: 'auto', onChange: () => {}, options: [{ value: 'auto', label: 'Auto' }] }}
+      />,
+    );
+    expect(screen.getByRole('button', { name: 'Agent and model: Auto · Fast' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Tools mode: Auto' })).toBeInTheDocument();
+  });
+
+  it('exposes the selected tools mode as a checked menu radio item', async () => {
+    const onChange = vi.fn();
+    renderThemed(
+      <Composer
+        value=""
+        onChange={() => {}}
+        onSend={() => {}}
+        toolsMode={{
+          value: 'auto',
+          onChange,
+          options: [
+            { value: 'auto', label: 'Auto' },
+            { value: 'all', label: 'All tools' },
+          ],
+        }}
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Tools mode: Auto' }));
+    const auto = await screen.findByRole('menuitemradio', { name: 'Auto' });
+    const all = screen.getByRole('menuitemradio', { name: 'All tools' });
+    expect(auto).toHaveAttribute('aria-checked', 'true');
+    expect(auto.querySelector('svg')).not.toBeNull();
+    expect(all).toHaveAttribute('aria-checked', 'false');
+    fireEvent.click(all);
+    expect(onChange).toHaveBeenCalledWith('all');
+  });
+
+  it('spells out Shift in the hint', () => {
+    renderThemed(<Composer value="" onChange={() => {}} onSend={() => {}} />);
+    expect(screen.getByText('Shift')).toBeInTheDocument();
+  });
 });
 
 describe('ChatMessage', () => {

@@ -1,13 +1,16 @@
-import { ActionIcon, Button, Menu, Textarea } from '@mantine/core';
+import { Button, Menu, Textarea } from '@mantine/core';
 import {
   IconArrowUp,
+  IconCheck,
   IconChevronDown,
   IconCpu,
   IconMicrophone,
   IconPaperclip,
+  IconPlayerStopFilled,
 } from '@tabler/icons-react';
 import clsx from 'clsx';
 import type { KeyboardEvent, ReactNode } from 'react';
+import { IconButton } from '../IconButton/IconButton.tsx';
 import { Kbd, KbdGroup } from '../Kbd/Kbd.tsx';
 
 export interface ComposerOption {
@@ -35,8 +38,15 @@ export interface ComposerProps {
   /** Send the current draft. Called on Enter (not Shift+Enter) and the send button. */
   onSend: () => void;
   placeholder?: string;
-  /** Disable sending regardless of content (e.g. while a reply streams). */
+  /** Disable sending regardless of content. */
   disabled?: boolean;
+  /** A reply is streaming. Sending is blocked; with `onStop`, send becomes Stop. */
+  streaming?: boolean;
+  /**
+   * Stop the streaming reply. When set and `streaming` is true, the send button
+   * becomes an always-enabled Stop button and Escape in the textarea stops too.
+   */
+  onStop?: () => void;
   /**
    * The model/agent/route configuration pill: one pill that fans out to nested
    * option groups. Its label summarises the current selection.
@@ -69,8 +79,9 @@ function summarise(config?: ComposerConfigMenu): string {
  * config pill fans out to nested Agent / Route / Model menus; the tools pill
  * picks the tools mode; attach and dictate are icon affordances; the round
  * emerald send sits at the right. Enter sends, Shift+Enter inserts a newline,
- * and send is disabled while the draft is empty. The whole composer carries one
- * emerald focus ring.
+ * and send is disabled while the draft is empty. While a reply streams, send
+ * turns into Stop (when `onStop` is given) so the user never digs to stop an
+ * agent. The whole composer carries one emerald focus ring.
  */
 export function Composer({
   value,
@@ -78,6 +89,8 @@ export function Composer({
   onSend,
   placeholder = 'Message Upmo',
   disabled,
+  streaming,
+  onStop,
   config,
   toolsMode,
   onAttach,
@@ -86,9 +99,21 @@ export function Composer({
   className,
 }: ComposerProps) {
   const empty = value.trim() === '';
-  const canSend = !empty && !disabled;
+  const canSend = !empty && !disabled && !streaming;
+  const canStop = Boolean(streaming && onStop);
+  const summary = summarise(config);
+  const toolsLabel = toolsMode
+    ? (toolsMode.options.find((o) => o.value === toolsMode.value)?.label ?? toolsMode.value)
+    : '';
 
   function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === 'Escape' && canStop) {
+      event.preventDefault();
+      onStop?.();
+      return;
+    }
+    // Enter that confirms an IME candidate (keyCode 229 in Safari) is not a send.
+    if (event.nativeEvent.isComposing || event.keyCode === 229) return;
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       if (canSend) onSend();
@@ -128,11 +153,11 @@ export function Composer({
                   variant="subtle"
                   size="xs"
                   className="upmo-composer__pill"
-                  aria-label={config.label}
+                  aria-label={`${config.label}: ${summary}`}
                   leftSection={<IconCpu size={14} />}
                   rightSection={<IconChevronDown size={13} />}
                 >
-                  {summarise(config)}
+                  {summary}
                 </Button>
               </Menu.Target>
               <Menu.Dropdown>
@@ -143,13 +168,16 @@ export function Composer({
                     </Menu.Sub.Target>
                     <Menu.Sub.Dropdown>
                       {group.options.map((opt) => (
-                        <Menu.Item
+                        <Menu.RadioItem
                           key={opt.value}
-                          onClick={() => group.onChange(opt.value)}
-                          data-selected={opt.value === group.value ? 'true' : undefined}
+                          value={opt.value}
+                          checked={opt.value === group.value}
+                          onChange={group.onChange}
+                          checkIcon={<IconCheck size={14} />}
+                          closeMenuOnClick
                         >
                           {opt.label}
-                        </Menu.Item>
+                        </Menu.RadioItem>
                       ))}
                     </Menu.Sub.Dropdown>
                   </Menu.Sub>
@@ -159,27 +187,29 @@ export function Composer({
           ) : null}
 
           {onAttach ? (
-            <ActionIcon
+            <IconButton
               type="button"
               variant="subtle"
               aria-label="Attach file"
+              tooltipPosition="top"
               className="upmo-composer__icon"
               onClick={onAttach}
             >
               <IconPaperclip size={18} />
-            </ActionIcon>
+            </IconButton>
           ) : null}
 
           {onDictate ? (
-            <ActionIcon
+            <IconButton
               type="button"
               variant="subtle"
               aria-label="Dictate"
+              tooltipPosition="top"
               className="upmo-composer__icon"
               onClick={onDictate}
             >
               <IconMicrophone size={18} />
-            </ActionIcon>
+            </IconButton>
           ) : null}
 
           {toolsMode ? (
@@ -190,23 +220,25 @@ export function Composer({
                   variant="subtle"
                   size="xs"
                   className="upmo-composer__pill"
-                  aria-label="Tools mode"
+                  aria-label={`Tools mode: ${toolsLabel}`}
                   rightSection={<IconChevronDown size={13} />}
                 >
-                  {toolsMode.options.find((o) => o.value === toolsMode.value)?.label ??
-                    toolsMode.value}
+                  {toolsLabel}
                 </Button>
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Label>Tools and context</Menu.Label>
                 {toolsMode.options.map((opt) => (
-                  <Menu.Item
+                  <Menu.RadioItem
                     key={opt.value}
-                    onClick={() => toolsMode.onChange(opt.value)}
-                    data-selected={opt.value === toolsMode.value ? 'true' : undefined}
+                    value={opt.value}
+                    checked={opt.value === toolsMode.value}
+                    onChange={toolsMode.onChange}
+                    checkIcon={<IconCheck size={14} />}
+                    closeMenuOnClick
                   >
                     {opt.label}
-                  </Menu.Item>
+                  </Menu.RadioItem>
                 ))}
               </Menu.Dropdown>
             </Menu>
@@ -214,16 +246,31 @@ export function Composer({
 
           <span className="upmo-composer__spacer" />
 
-          <ActionIcon
-            type="submit"
-            variant="filled"
-            size={30}
-            aria-label="Send"
-            className="upmo-composer__send"
-            disabled={!canSend}
-          >
-            <IconArrowUp size={18} />
-          </ActionIcon>
+          {canStop ? (
+            <IconButton
+              type="button"
+              variant="filled"
+              size="var(--control-sm)"
+              aria-label="Stop"
+              tooltipPosition="top"
+              className="upmo-composer__send"
+              onClick={onStop}
+            >
+              <IconPlayerStopFilled size={14} />
+            </IconButton>
+          ) : (
+            <IconButton
+              type="submit"
+              variant="filled"
+              size="var(--control-sm)"
+              aria-label="Send"
+              tooltipPosition="top"
+              className="upmo-composer__send"
+              disabled={!canSend}
+            >
+              <IconArrowUp size={18} />
+            </IconButton>
+          )}
         </div>
       </form>
 
@@ -236,7 +283,7 @@ export function Composer({
             to send
             <span className="upmo-composer__hint-sep">·</span>
             <KbdGroup>
-              <Kbd>⇧</Kbd>
+              <Kbd>Shift</Kbd>
               <Kbd>Enter</Kbd>
             </KbdGroup>
             for a new line

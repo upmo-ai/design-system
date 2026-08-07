@@ -84,3 +84,24 @@ export const Minimal: Story = {
     );
   },
 };
+
+export const Streaming: Story = {
+  render: () => {
+    const [value, setValue] = useState('');
+    const [streaming, setStreaming] = useState(true);
+    return (
+      <div style={{ maxWidth: 640 }}>
+        <Composer
+          value={value}
+          onChange={setValue}
+          onSend={() => {
+            setValue('');
+            setStreaming(true);
+          }}
+          streaming={streaming}
+          onStop={() => setStreaming(false)}
+        />
+      </div>
+    );
+  },
+};
