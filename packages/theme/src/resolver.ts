@@ -43,6 +43,9 @@ const emeraldSoftLight: Record<string, string> = {
   '--mantine-primary-color-light-hover': 'var(--surface-selected)',
   '--mantine-color-emerald-light': 'var(--emerald-soft)',
   '--mantine-color-emerald-light-color': 'var(--emerald-deep)',
+  // Filled emerald badge = the button's lively fill, with dark on-brand text.
+  '--mantine-color-emerald-filled': 'var(--primary-fill)',
+  '--mantine-color-emerald-filled-hover': 'var(--primary-fill-hover)',
 };
 
 const emeraldSoftDark: Record<string, string> = {
@@ -51,6 +54,8 @@ const emeraldSoftDark: Record<string, string> = {
   '--mantine-primary-color-light-hover': 'color-mix(in srgb, var(--emerald-deep) 22%, var(--surface-100))',
   '--mantine-color-emerald-light': 'color-mix(in srgb, var(--emerald-deep) 14%, var(--surface-100))',
   '--mantine-color-emerald-light-color': 'var(--emerald-hover)',
+  '--mantine-color-emerald-filled': 'var(--primary-fill)',
+  '--mantine-color-emerald-filled-hover': 'var(--primary-fill-hover)',
 };
 
 // The token variables map, exported for tests and for the docs preview pipeline

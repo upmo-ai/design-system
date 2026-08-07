@@ -1833,3 +1833,22 @@ button.upmo-liveness:hover {
 [data-mantine-color-scheme='dark'] .upmo-badge[data-variant='light'] {
   --badge-bd: 1px solid color-mix(in srgb, var(--badge-color) 30%, transparent);
 }
+
+/* Filled badges: lively solid tones like the primary button. Text colour tracks
+   the fill so light grounds (emerald, amber, grey) use dark on-brand ink and
+   dark grounds (blue, red) keep light text. Applies in every theme. */
+.upmo-badge[data-variant='filled'][data-tone='emerald'],
+.upmo-badge[data-variant='filled'][data-tone='yellow'],
+.upmo-badge[data-variant='filled'][data-tone='gray'] {
+  --badge-color: var(--ink-on-brand);
+  color: var(--ink-on-brand);
+}
+.upmo-badge[data-variant='filled'][data-tone='emerald'] {
+  --badge-bg: var(--primary-fill);
+  background: var(--primary-fill);
+}
+.upmo-badge[data-variant='filled'][data-tone='emerald'] .mantine-Badge-label,
+.upmo-badge[data-variant='filled'][data-tone='yellow'] .mantine-Badge-label,
+.upmo-badge[data-variant='filled'][data-tone='gray'] .mantine-Badge-label {
+  color: var(--ink-on-brand);
+}

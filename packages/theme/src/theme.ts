@@ -94,6 +94,11 @@ export const upmoTheme = createTheme({
   },
   focusRing: 'auto',
   cursorType: 'pointer',
+  // Filled surfaces (badges, buttons) pick dark or light text automatically from
+  // the fill's luminance, so a bright emerald or amber badge gets dark text (like
+  // the primary button) while a dark blue or red badge keeps light text.
+  autoContrast: true,
+  luminanceThreshold: 0.55,
   respectReducedMotion: true,
   components: {
     Button: { defaultProps: { size: 'sm', radius: 'xs' } },
@@ -109,7 +114,7 @@ export const upmoTheme = createTheme({
     Switch: { defaultProps: { size: 'sm' } },
     Card: { defaultProps: { radius: 'sm', withBorder: true, padding: 'sm', shadow: undefined } },
     Modal: { defaultProps: { radius: 'lg', centered: true, overlayProps: { backgroundOpacity: 0.48 } } },
-    Badge: { defaultProps: { radius: 'xs', variant: 'light', size: 'sm' } },
+    Badge: { defaultProps: { radius: 'xs', variant: 'light', size: 'sm', autoContrast: true } },
     Tooltip: { defaultProps: { openDelay: 400, radius: 'xs' } },
   },
 });
