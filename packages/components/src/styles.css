@@ -349,10 +349,29 @@
   font-size: 13px;
   line-height: 20px;
   color: var(--ink);
-  background: var(--surface-100);
+  background: var(--surface-100) !important;
 }
-.upmo-codeblock__pre code {
+.upmo-codeblock__code {
+  display: block;
   font-family: inherit;
+}
+.upmo-codeblock__line {
+  display: block;
+}
+/* Line numbers: a quiet gutter, non-selectable so copy stays clean. */
+.upmo-codeblock__code--numbered .upmo-codeblock__line {
+  display: grid;
+  grid-template-columns: 2.5em 1fr;
+  gap: var(--space-3);
+}
+.upmo-codeblock__ln {
+  color: var(--ink-disabled);
+  text-align: right;
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
+.upmo-codeblock__line-content {
+  white-space: pre;
 }
 
 /* Table: sticky header on the sunken ground, tabular-num and mono cells. */

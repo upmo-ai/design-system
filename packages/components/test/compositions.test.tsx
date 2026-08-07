@@ -63,10 +63,26 @@ describe('CopyButton', () => {
 });
 
 describe('CodeBlock and JsonBlock', () => {
-  it('CodeBlock shows the code and a language label', () => {
-    renderThemed(<CodeBlock code="docker compose up -d" language="bash" />);
-    expect(screen.getByText('docker compose up -d')).toBeInTheDocument();
+  it('CodeBlock shows the code (highlighted) and a language label', () => {
+    const { container } = renderThemed(<CodeBlock code="docker compose up -d" language="bash" />);
+    // Highlighting splits the code into token spans, so assert on the combined
+    // textContent of the <code> element rather than a single text node.
+    expect(container.querySelector('.upmo-codeblock__code')?.textContent).toContain(
+      'docker compose up -d',
+    );
     expect(screen.getByText('bash')).toBeInTheDocument();
+    // Tokens are rendered as spans with inline colour styles.
+    expect(container.querySelectorAll('.upmo-codeblock__line').length).toBeGreaterThan(0);
+  });
+
+  it('CodeBlock renders a line-number gutter when asked', () => {
+    const { container } = renderThemed(
+      <CodeBlock code={'const a = 1;\nconst b = 2;'} language="tsx" lineNumbers />,
+    );
+    const nums = container.querySelectorAll('.upmo-codeblock__ln');
+    expect(nums.length).toBe(2);
+    expect(nums[0].textContent).toBe('1');
+    expect(nums[1].textContent).toBe('2');
   });
 
   it('JsonBlock pretty-prints a value', () => {
