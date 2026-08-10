@@ -44,6 +44,17 @@ describe('upmoTheme', () => {
     expect(z('z-dropdown')).toBeLessThan(z('z-toast'));
   });
 
+  it('defaults Button to md so it matches the default input height', () => {
+    expect(upmoTheme.components?.Button?.defaultProps).toMatchObject({ size: 'md' });
+  });
+
+  it('opens tooltips on keyboard focus as well as hover', () => {
+    expect(upmoTheme.components?.Tooltip?.defaultProps).toMatchObject({
+      openDelay: 400,
+      events: { hover: true, focus: true, touch: false },
+    });
+  });
+
   it('respects reduced motion', () => {
     expect(upmoTheme.respectReducedMotion).toBe(true);
   });

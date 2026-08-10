@@ -101,7 +101,9 @@ export const upmoTheme = createTheme({
   luminanceThreshold: 0.55,
   respectReducedMotion: true,
   components: {
-    Button: { defaultProps: { size: 'sm', radius: 'xs' } },
+    // md is the control-md height (36px), equal to the default input, so a button
+    // beside an input lines up. styles.css pins each size to a control token.
+    Button: { defaultProps: { size: 'md', radius: 'xs' } },
     ActionIcon: { defaultProps: { radius: 'xs', variant: 'subtle' } },
     // Inputs use radius-md and the sharp-but-soft control feel per the forms spec.
     TextInput: { defaultProps: { size: 'sm', radius: 'md' } },
@@ -129,6 +131,14 @@ export const upmoTheme = createTheme({
     Popover: { defaultProps: { zIndex: Number(zIndex['z-dropdown']) } },
     // Badges are sharp (radius-xs), like the other crisp action surfaces; not pills.
     Badge: { defaultProps: { radius: 'xs', variant: 'light', size: 'sm', autoContrast: true } },
-    Tooltip: { defaultProps: { openDelay: 400, radius: 'xs', zIndex: Number(zIndex['z-dropdown']) } },
+    // Tooltips open on keyboard focus too, so icon labels reach keyboard users.
+    Tooltip: {
+      defaultProps: {
+        openDelay: 400,
+        radius: 'xs',
+        events: { hover: true, focus: true, touch: false },
+        zIndex: Number(zIndex['z-dropdown']),
+      },
+    },
   },
 });

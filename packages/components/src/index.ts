@@ -42,7 +42,7 @@ export { TagInput, type TagInputProps } from './TagInput/TagInput.tsx';
 
 export { Tabs, type TabsProps } from './Tabs/Tabs.tsx';
 export { SegmentedControl, type SegmentedControlProps } from './SegmentedControl/SegmentedControl.tsx';
-export { Tooltip, type TooltipProps } from './Tooltip/Tooltip.tsx';
+export { Tooltip, type TooltipProps, TooltipGroup, type TooltipGroupProps } from './Tooltip/Tooltip.tsx';
 export { Kbd, type KbdProps, KbdGroup, type KbdGroupProps } from './Kbd/Kbd.tsx';
 
 export { Panel, type PanelProps } from './Panel/Panel.tsx';

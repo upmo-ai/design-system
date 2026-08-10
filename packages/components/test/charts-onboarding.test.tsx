@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import {
   BarChart,
@@ -29,12 +29,32 @@ describe('StatTile', () => {
 
 describe('BarChart', () => {
   it('renders a labelled group with each bar', () => {
-    renderThemed(
+    const { container } = renderThemed(
       <BarChart title="Runs" data={[{ label: 'Mon', value: 3 }, { label: 'Tue', value: 6 }]} />,
     );
     expect(screen.getByRole('group', { name: 'Runs' })).toBeInTheDocument();
-    expect(screen.getByText('Mon')).toBeInTheDocument();
-    expect(screen.getByText('Tue')).toBeInTheDocument();
+    const plot = container.querySelector('.upmo-barchart__plot') as HTMLElement;
+    expect(plot).toHaveAttribute('aria-hidden', 'true');
+    expect(within(plot).getByText('Mon')).toBeInTheDocument();
+    expect(within(plot).getByText('Tue')).toBeInTheDocument();
+  });
+
+  it('exposes its data as a table captioned with the title', () => {
+    renderThemed(
+      <BarChart
+        title="Runs"
+        data={[
+          { label: 'Mon', value: 3, display: '3 runs' },
+          { label: 'Tue', value: 6 },
+        ]}
+      />,
+    );
+    const table = screen.getByRole('table', { name: 'Runs' });
+    const rows = within(table).getAllByRole('row');
+    expect(rows).toHaveLength(3);
+    expect(within(rows[1]).getByRole('rowheader')).toHaveTextContent('Mon');
+    expect(within(rows[1]).getByRole('cell')).toHaveTextContent('3 runs');
+    expect(within(rows[2]).getByRole('cell')).toHaveTextContent('6');
   });
 });
 
@@ -45,6 +65,25 @@ describe('LineChart', () => {
     );
     expect(screen.getByRole('group', { name: 'Spend' })).toBeInTheDocument();
     expect(container.querySelector('polyline')).toBeTruthy();
+  });
+
+  it('keeps the SVG hidden and exposes the points as a table', () => {
+    const { container } = renderThemed(
+      <LineChart
+        title="Spend"
+        data={[
+          { label: 'Jan', value: 1, display: '€1' },
+          { label: 'Feb', value: 4 },
+        ]}
+      />,
+    );
+    expect(container.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+    const table = screen.getByRole('table', { name: 'Spend' });
+    const rows = within(table).getAllByRole('row');
+    expect(rows).toHaveLength(3);
+    expect(within(rows[1]).getByRole('rowheader')).toHaveTextContent('Jan');
+    expect(within(rows[1]).getByRole('cell')).toHaveTextContent('€1');
+    expect(within(rows[2]).getByRole('cell')).toHaveTextContent('4');
   });
 });
 

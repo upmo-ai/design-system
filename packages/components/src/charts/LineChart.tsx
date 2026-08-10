@@ -1,8 +1,11 @@
 import clsx from 'clsx';
+import { ChartTable } from './BarChart.tsx';
 
 export interface LinePoint {
   label: string;
   value: number;
+  /** Optional pre-formatted value for the data table. Defaults to value. */
+  display?: string;
 }
 
 export interface LineChartProps {
@@ -22,8 +25,9 @@ export interface LineChartProps {
 /**
  * A minimal, dependency-free line chart drawn as an SVG polyline, for trends
  * (cost over time, runs per hour). The stroke uses a chart colour token and the
- * area under it a soft wash. It carries an accessible title; pair it with a
- * nearby StatTile or caption so the trend is legible without reading the curve.
+ * area under it a soft wash. The SVG is hidden from assistive tech; a visually
+ * hidden table (caption = title) carries the data points. Pair it with a nearby
+ * StatTile or caption so the trend is legible without reading the curve.
  */
 export function LineChart({
   data,
@@ -69,6 +73,7 @@ export function LineChart({
         ) : null}
         <polyline points={line} fill="none" stroke={stroke} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
       </svg>
+      <ChartTable title={title ?? 'Line chart'} rows={data} />
     </figure>
   );
 }

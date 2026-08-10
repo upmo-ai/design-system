@@ -17,7 +17,7 @@ describe('Composer', () => {
   it('disables send and suppresses Enter when the draft is empty', () => {
     const onSend = vi.fn();
     renderThemed(<Composer value="   " onChange={() => {}} onSend={onSend} />);
-    expect(screen.getByRole('button', { name: 'Send' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Send' })).toHaveAttribute('aria-disabled', 'true');
     fireEvent.keyDown(screen.getByLabelText('Message'), { key: 'Enter' });
     expect(onSend).not.toHaveBeenCalled();
   });
@@ -58,7 +58,7 @@ describe('Composer', () => {
   it('blocks sending while streaming without onStop', () => {
     const onSend = vi.fn();
     renderThemed(<Composer value="hello" onChange={() => {}} onSend={onSend} streaming />);
-    expect(screen.getByRole('button', { name: 'Send' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Send' })).toHaveAttribute('aria-disabled', 'true');
     fireEvent.keyDown(screen.getByLabelText('Message'), { key: 'Enter' });
     expect(onSend).not.toHaveBeenCalled();
   });

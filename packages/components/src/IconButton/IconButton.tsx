@@ -17,6 +17,10 @@ export interface IconButtonProps extends ActionIconProps {
   tooltipPosition?: TooltipProps['position'];
   onClick?: MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
+  /**
+   * Disables the action but keeps the button focusable (aria-disabled), so its
+   * tooltip still shows on hover and focus and keyboard users can find it.
+   */
   disabled?: boolean;
 }
 
@@ -30,14 +34,27 @@ export function IconButton({
   tooltip,
   tooltipPosition = 'bottom',
   classNames,
+  disabled,
+  onClick,
   ...rest
 }: IconButtonProps) {
   const label = rest['aria-label'];
   const tip = tooltip === undefined ? label : tooltip;
 
+  // A natively disabled button fires no pointer or focus events, so its tooltip
+  // could never open. Mark it disabled (styles + aria) and swallow the click.
   const control = (
     <ActionIcon
       {...rest}
+      data-disabled={disabled || undefined}
+      aria-disabled={disabled || undefined}
+      onClick={(event) => {
+        if (disabled) {
+          event.preventDefault();
+          return;
+        }
+        onClick?.(event);
+      }}
       classNames={{
         ...classNames,
         root: clsx('upmo-icon-button', (classNames as Record<string, string>)?.root),
@@ -49,7 +66,7 @@ export function IconButton({
 
   if (tip === null) return control;
   return (
-    <Tooltip label={tip} position={tooltipPosition} openDelay={400}>
+    <Tooltip label={tip} position={tooltipPosition}>
       {control}
     </Tooltip>
   );

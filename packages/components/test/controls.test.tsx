@@ -1,7 +1,7 @@
 import { IconCheck } from '@tabler/icons-react';
 import { fireEvent, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { Badge, Button, IconButton, Spinner } from '../src/index.ts';
+import { Badge, Button, IconButton, Spinner, TooltipGroup } from '../src/index.ts';
 import { renderThemed, themes } from './render.tsx';
 
 describe('Button', () => {
@@ -30,6 +30,11 @@ describe('Button', () => {
     const link = screen.getByRole('link', { name: 'Tasks' });
     expect(link).toHaveAttribute('href', '/tasks');
   });
+
+  it('defaults to the md size, the control-md height shared with inputs', () => {
+    renderThemed(<Button>Save</Button>);
+    expect(screen.getByRole('button', { name: 'Save' })).toHaveAttribute('data-size', 'md');
+  });
 });
 
 describe('IconButton', () => {
@@ -53,6 +58,61 @@ describe('IconButton', () => {
       expect(screen.getByRole('button', { name: 'Copy' })).toBeInTheDocument();
       unmount();
     }
+  });
+
+  it('shows its tooltip on keyboard focus', async () => {
+    renderThemed(
+      <IconButton aria-label="Refresh">
+        <IconCheck />
+      </IconButton>,
+    );
+    fireEvent.focus(screen.getByRole('button', { name: 'Refresh' }));
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Refresh');
+  });
+
+  it('stays focusable when disabled so its tooltip still shows, and ignores clicks', async () => {
+    const onClick = vi.fn();
+    renderThemed(
+      <IconButton aria-label="Delete" disabled onClick={onClick}>
+        <IconCheck />
+      </IconButton>,
+    );
+    const btn = screen.getByRole('button', { name: 'Delete' });
+    expect(btn).not.toBeDisabled();
+    expect(btn).toHaveAttribute('aria-disabled', 'true');
+    expect(btn).toHaveAttribute('data-disabled');
+    fireEvent.click(btn);
+    expect(onClick).not.toHaveBeenCalled();
+    fireEvent.focus(btn);
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Delete');
+  });
+
+  it('fires onClick when enabled', () => {
+    const onClick = vi.fn();
+    renderThemed(
+      <IconButton aria-label="Run" onClick={onClick}>
+        <IconCheck />
+      </IconButton>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Run' }));
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+});
+
+describe('TooltipGroup', () => {
+  it('wraps a row of icon buttons', async () => {
+    renderThemed(
+      <TooltipGroup>
+        <IconButton aria-label="Run">
+          <IconCheck />
+        </IconButton>
+        <IconButton aria-label="Stop">
+          <IconCheck />
+        </IconButton>
+      </TooltipGroup>,
+    );
+    fireEvent.focus(screen.getByRole('button', { name: 'Stop' }));
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Stop');
   });
 });
 

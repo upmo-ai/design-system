@@ -4,7 +4,10 @@
 
 /* Buttons: crisp sharp spec. Fixed heights per size, 2px radius, Manrope 600,
    press feedback, and the dark-primary hover glow. Applied via the `upmo-button`
-   class the Button component adds to the Mantine root. */
+   class the Button component adds to the Mantine root. Heights come from the
+   control tokens: sm = control-sm, md = control-md (the default, equal to the
+   default input height so form rows align), lg = control-lg. xs is a compact
+   sm: the same control-sm height with tighter padding and smaller type. */
 .upmo-button {
   font-family: var(--font-ui);
   font-weight: 600;
@@ -20,12 +23,12 @@
   transform: scale(var(--press-scale));
 }
 .upmo-button[data-size='xs'] {
-  height: 26px;
+  height: var(--control-sm);
   padding: 0 var(--space-2);
   font-size: 12px;
 }
 .upmo-button[data-size='sm'] {
-  height: 30px;
+  height: var(--control-sm);
   padding: 0 10px;
   font-size: 13px;
 }
@@ -35,7 +38,7 @@
   font-size: 14px;
 }
 .upmo-button[data-size='lg'] {
-  height: 42px;
+  height: var(--control-lg);
   padding: 0 var(--space-4);
   font-size: 15px;
 }
@@ -51,8 +54,14 @@
   border: 1px solid var(--border);
 }
 
-/* Icon buttons: sharp radius, press feedback. */
+/* Icon buttons: sharp radius, press feedback. Mantine's ActionIcon sizes are
+   pinned to the control tokens: md (the default) = control-sm, lg = control-md,
+   xl = control-lg, so an lg icon button sits level with a default Button or
+   input. */
 .upmo-icon-button {
+  --ai-size-md: var(--control-sm);
+  --ai-size-lg: var(--control-md);
+  --ai-size-xl: var(--control-lg);
   border-radius: var(--radius-xs);
   transition:
     background-color var(--duration-fast) var(--ease-standard),
@@ -245,17 +254,22 @@
 }
 
 /* Shared input feel: the emerald focus edge, applied to text inputs, textareas
-   and selects. The border animates to emerald on focus with a soft ring, so
-   focus reads as a deliberate, calm transition rather than a hard default. */
+   and selects. Focus shows the one focus ring (2px solid --focus, 2px offset),
+   the same ring every other control gets; the border also tints emerald as a
+   secondary cue. Mantine's own focus ring (focusRing: 'auto') is pointed at the
+   --focus token below so buttons and inputs draw an identical ring. */
 .upmo-input {
-  transition:
-    border-color var(--duration-fast) var(--ease-standard),
-    box-shadow var(--duration-fast) var(--ease-standard);
+  transition: border-color var(--duration-fast) var(--ease-standard);
 }
-.upmo-input:focus,
+.upmo-input:focus-visible,
 .upmo-input:focus-within {
   border-color: var(--emerald-deep);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--emerald-deep) 22%, transparent);
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.mantine-focus-auto:focus-visible,
+.mantine-focus-always:focus {
+  outline-color: var(--focus);
 }
 
 /* Breathing space under the label (and description) before the control, so the
