@@ -34,6 +34,7 @@
     "@tabler/icons-react": "^3.0.0",
     "@upmo-ai/brands": "workspace:*",
     "@upmo-ai/icons": "workspace:*",
+    "@upmo-ai/theme": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

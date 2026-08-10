@@ -1,5 +1,12 @@
 import './styles.css';
 
+export {
+  UpmoProvider,
+  useUpmoTheme,
+  type UpmoProviderProps,
+  type UpmoThemeName,
+} from './UpmoProvider/UpmoProvider.tsx';
+
 export { Button, type ButtonProps } from './Button/Button.tsx';
 export { IconButton, type IconButtonProps } from './IconButton/IconButton.tsx';
 export { Badge, type BadgeProps } from './Badge/Badge.tsx';

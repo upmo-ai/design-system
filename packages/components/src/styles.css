@@ -1925,3 +1925,66 @@ button.upmo-liveness:hover {
 .upmo-badge[data-variant='filled'][data-tone='red'] .mantine-Badge-label {
   color: var(--ink-on-brand);
 }
+
+/* ---------------------------------------------------------------------------
+   In-app reduced motion: UpmoProvider reducedMotion="reduce" sets
+   [data-reduced-motion='reduce'] on the root. Mirrors the
+   prefers-reduced-motion rules above so the app setting stops the same motion.
+--------------------------------------------------------------------------- */
+:root[data-reduced-motion='reduce'] .upmo-caret__sweep {
+  animation: none;
+  stroke-dashoffset: 0;
+  opacity: 1;
+}
+:root[data-reduced-motion='reduce'] .upmo-chat-msg__text--streaming::after,
+:root[data-reduced-motion='reduce'] .upmo-step-enter {
+  animation: none;
+}
+/* Mantine's JS transitions (Modal, Popover, Menu) read only the OS query and
+   write their duration inline, so only !important can zero them here. */
+:root[data-reduced-motion='reduce'] [class*='mantine-'] {
+  transition-duration: 0ms !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Forced colours (Windows High Contrast): the OS drops background fills, so any
+   affordance that is only a fill gets a system-colour border or paints with
+   system colours, and focus uses Highlight.
+--------------------------------------------------------------------------- */
+@media (forced-colors: active) {
+  .upmo-badge,
+  .upmo-status-badge,
+  .upmo-composer__pill,
+  .upmo-tag-pill,
+  .upmo-barchart__bar,
+  .mantine-Switch-track,
+  .mantine-Switch-thumb,
+  .mantine-Progress-root,
+  .mantine-SegmentedControl-root {
+    border: 1px solid CanvasText;
+  }
+  .upmo-caret,
+  .upmo-status-dot {
+    color: CanvasText;
+  }
+  /* Marks that are only a fill keep their paint as a system colour. */
+  .upmo-status-dot--filled,
+  .upmo-onboarding__dot {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+  .upmo-onboarding__dot--active,
+  .upmo-checklist__mark--done,
+  .mantine-Progress-section,
+  .mantine-SegmentedControl-indicator,
+  .mantine-Switch-input:checked + .mantine-Switch-track {
+    forced-color-adjust: none;
+    background: Highlight;
+    border-color: Highlight;
+    color: HighlightText;
+  }
+  :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
