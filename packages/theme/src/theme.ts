@@ -1,5 +1,5 @@
 import { createTheme, rem, type MantineColorsTuple } from '@mantine/core';
-import { breakpoint, color, font, radius, spacing, typography as type } from '@upmo-ai/tokens';
+import { breakpoint, color, font, radius, spacing, typography as type, zIndex } from '@upmo-ai/tokens';
 
 interface Style {
   fontSize: string;
@@ -113,8 +113,22 @@ export const upmoTheme = createTheme({
     Radio: { defaultProps: { size: 'sm' } },
     Switch: { defaultProps: { size: 'sm' } },
     Card: { defaultProps: { radius: 'sm', withBorder: true, padding: 'sm', shadow: undefined } },
-    Modal: { defaultProps: { radius: 'lg', centered: true, overlayProps: { backgroundOpacity: 0.48 } } },
+    Modal: {
+      defaultProps: {
+        radius: 'lg',
+        centered: true,
+        zIndex: Number(zIndex['z-modal']),
+        overlayProps: { backgroundOpacity: 0.48, zIndex: Number(zIndex['z-overlay']) },
+      },
+    },
+    Drawer: {
+      defaultProps: { zIndex: Number(zIndex['z-modal']), overlayProps: { zIndex: Number(zIndex['z-overlay']) } },
+    },
+    // Menu, Combobox (Select and friends) and HoverCard render a Popover, so this
+    // one default puts every dropdown on the z-dropdown layer.
+    Popover: { defaultProps: { zIndex: Number(zIndex['z-dropdown']) } },
+    // Badges are sharp (radius-xs), like the other crisp action surfaces; not pills.
     Badge: { defaultProps: { radius: 'xs', variant: 'light', size: 'sm', autoContrast: true } },
-    Tooltip: { defaultProps: { openDelay: 400, radius: 'xs' } },
+    Tooltip: { defaultProps: { openDelay: 400, radius: 'xs', zIndex: Number(zIndex['z-dropdown']) } },
   },
 });

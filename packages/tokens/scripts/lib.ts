@@ -67,6 +67,16 @@ export function toCss(t: TokenFile): string {
     for (const tok of t[fam]?.tokens ?? []) lines.push(`  --${tok.name}: ${tok.value};`);
   }
   for (const [k, v] of Object.entries(t.type.families)) lines.push(`  --font-${k}: ${v};`);
+  for (const g of t.type.groups) {
+    for (const s of g.styles) {
+      lines.push(
+        `  --text-${s.name}-size: ${s.fontSize};`,
+        `  --text-${s.name}-line: ${s.lineHeight};`,
+        `  --text-${s.name}-weight: ${s.fontWeight};`,
+      );
+      if (s.letterSpacing !== undefined) lines.push(`  --text-${s.name}-tracking: ${s.letterSpacing};`);
+    }
+  }
   lines.push('}');
   for (const g of t.type.groups) {
     for (const s of g.styles) {

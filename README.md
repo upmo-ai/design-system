@@ -12,10 +12,17 @@ Tagline: Always working. Always yours.
 | Package | What it is |
 | --- | --- |
 | `@upmo-ai/tokens` | Design tokens: CSS variables (light / dark / high-contrast) + a typed JS object. No React. |
-| `@upmo-ai/theme` | The Mantine 9 theme built from tokens. _(coming next)_ |
-| `@upmo-ai/components` | The real React component library. _(coming)_ |
-| `@upmo-ai/icons` | Icon concept map + the custom caret and status marks. _(coming)_ |
-| `@upmo-ai/brands` | Provider / connector brand marks + manifest. _(coming)_ |
+| `@upmo-ai/theme` | The Mantine 9 theme built from tokens, the CSS-variables resolver that maps Mantine onto Upmo tokens, and the color-scheme wiring. |
+| `@upmo-ai/components` | The React component library: themed, accessible Mantine 9 components built on Upmo tokens. |
+| `@upmo-ai/icons` | Icon concept map (concept to Tabler Icons name) and the caret mark as SVG. |
+| `@upmo-ai/brands` | Marks of the services Upmo connects to, as `currentColor` SVG, with a typed manifest. |
+
+## Apps
+
+| App | What it is |
+| --- | --- |
+| `apps/storybook` | The component gallery: every component in light, dark and high contrast (`pnpm --filter @upmo-ai/storybook dev`). |
+| `apps/docs` | The documentation site, built with Astro Starlight (`pnpm --filter @upmo-ai/docs dev`). |
 
 ## Design direction
 

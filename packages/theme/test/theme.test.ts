@@ -1,5 +1,5 @@
 import type { MantineTheme } from '@mantine/core';
-import { color } from '@upmo-ai/tokens';
+import { color, zIndex } from '@upmo-ai/tokens';
 import { describe, expect, it } from 'vitest';
 import { cssVariablesResolver, tokenVariables, upmoTheme } from '../src/index.ts';
 
@@ -24,6 +24,24 @@ describe('upmoTheme', () => {
     expect(upmoTheme.components?.Button?.defaultProps).toMatchObject({ radius: 'xs' });
     expect(upmoTheme.components?.Card?.defaultProps).toMatchObject({ withBorder: true });
     expect((upmoTheme.components?.Card?.defaultProps as Record<string, unknown>).shadow).toBeUndefined();
+  });
+
+  it('keeps badges sharp, matching the radius-xs token rather than a pill', () => {
+    expect(upmoTheme.components?.Badge?.defaultProps).toMatchObject({ radius: 'xs' });
+  });
+
+  it('stacks overlays on the z-index tokens, with dropdowns above modals', () => {
+    const props = (name: string) => upmoTheme.components?.[name]?.defaultProps as Record<string, unknown>;
+    const z = (name: keyof typeof zIndex) => Number(zIndex[name]);
+    expect(props('Popover').zIndex).toBe(z('z-dropdown'));
+    expect(props('Tooltip').zIndex).toBe(z('z-dropdown'));
+    for (const name of ['Modal', 'Drawer']) {
+      expect(props(name).zIndex, name).toBe(z('z-modal'));
+      expect(props(name).overlayProps, name).toMatchObject({ zIndex: z('z-overlay') });
+    }
+    expect(z('z-overlay')).toBeLessThan(z('z-modal'));
+    expect(z('z-modal')).toBeLessThan(z('z-dropdown'));
+    expect(z('z-dropdown')).toBeLessThan(z('z-toast'));
   });
 
   it('respects reduced motion', () => {

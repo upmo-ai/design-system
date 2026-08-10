@@ -6,7 +6,10 @@ into three artifacts:
 
 - `dist/tokens.css` - CSS custom properties for the `light`, `dark` and `hc`
   (high-contrast) themes, scoped by `:root` and `[data-theme="..."]`, plus
-  typography utility classes (`.body`, `.h1`, `.code`, etc.).
+  typography utility classes (`.body`, `.h1`, `.code`, etc.). Each type style
+  is also a set of `:root` variables: `--text-<style>-size`, `-line`,
+  `-weight` and, where the style sets letter-spacing, `-tracking` (for example
+  `--text-body-size: 15px`, `--text-overline-tracking: 0.06em`).
 - `dist/tokens.js` + `dist/tokens.d.ts` - a typed JS object of every value,
   per theme, for when CSS variables are not enough (charts, canvas, JS logic).
 - `dist/tokens.json` - the raw source, copied for tooling.
