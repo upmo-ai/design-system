@@ -820,8 +820,9 @@ button.upmo-liveness:hover {
   color: var(--ink);
 }
 
-/* ApprovalCard: a toned alert (attention by default, critical when destructive)
-   with a filled icon tile, the prompt, and the two actions. */
+/* ApprovalCard: a toned card (attention by default, critical when destructive)
+   with a filled icon tile, the action, and the two actions. Once decided it
+   turns positive (approved) or neutral (denied, expired) and shows the outcome. */
 .upmo-approval {
   display: flex;
   align-items: flex-start;
@@ -852,8 +853,34 @@ button.upmo-liveness:hover {
   line-height: 20px;
   color: var(--ink);
 }
+.upmo-approval__description {
+  margin-top: 2px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 19px;
+  color: var(--ink-secondary);
+}
 .upmo-approval__extra {
   margin-top: var(--space-2);
+}
+.upmo-approval__cost {
+  margin-top: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.upmo-approval__outcome {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 19px;
+  color: var(--tone-fg);
 }
 
 /* PhaseRail: a vertical node-rail. Done = filled emerald node + emerald rail
@@ -1510,6 +1537,11 @@ button.upmo-liveness:hover {
   background: var(--surface-100);
   box-shadow: var(--shadow-lg);
 }
+/* Focus lands on the bubble itself (not a control) so it reads from the title;
+   it is not interactive, so it takes no ring. */
+.upmo-tour:focus {
+  outline: none;
+}
 .upmo-tour__close {
   position: absolute;
   top: var(--space-2);
@@ -1844,16 +1876,28 @@ button.upmo-liveness:hover {
   --mantine-color-gray-light-color: var(--ink-secondary);
   --mantine-color-gray-light-hover: var(--surface-selected);
 }
+
+/* Filled red (destructive) buttons: the fill is the danger token (mapped in the
+   theme resolver). Mantine writes the filled text as white inline, which is only
+   2.0:1 on the coral dark danger, so the text follows ink-on-brand instead:
+   white on danger in light (7.0:1) and hc (10.2:1), near-black in dark (9.7:1).
+   The inline variable can only be beaten with !important. */
+.upmo-button[style*='var(--mantine-color-red-filled)'] {
+  --button-color: var(--ink-on-brand) !important;
+}
 [data-mantine-color-scheme='dark'] .upmo-badge[data-variant='light'] {
   --badge-bd: 1px solid color-mix(in srgb, var(--badge-color) 30%, transparent);
 }
 
 /* Filled badges: lively solid tones like the primary button. Text colour tracks
    the fill so light grounds (emerald, amber, grey) use dark on-brand ink and
-   dark grounds (blue, red) keep light text. Applies in every theme. */
+   dark grounds (blue) keep light text. Red fills with the danger token, so its
+   text is ink-on-brand too (white in light and hc, near-black on the dark coral).
+   Applies in every theme. */
 .upmo-badge[data-variant='filled'][data-tone='emerald'],
 .upmo-badge[data-variant='filled'][data-tone='yellow'],
-.upmo-badge[data-variant='filled'][data-tone='gray'] {
+.upmo-badge[data-variant='filled'][data-tone='gray'],
+.upmo-badge[data-variant='filled'][data-tone='red'] {
   --badge-color: var(--ink-on-brand);
   color: var(--ink-on-brand);
 }
@@ -1863,6 +1907,7 @@ button.upmo-liveness:hover {
 }
 .upmo-badge[data-variant='filled'][data-tone='emerald'] .mantine-Badge-label,
 .upmo-badge[data-variant='filled'][data-tone='yellow'] .mantine-Badge-label,
-.upmo-badge[data-variant='filled'][data-tone='gray'] .mantine-Badge-label {
+.upmo-badge[data-variant='filled'][data-tone='gray'] .mantine-Badge-label,
+.upmo-badge[data-variant='filled'][data-tone='red'] .mantine-Badge-label {
   color: var(--ink-on-brand);
 }

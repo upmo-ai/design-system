@@ -1,7 +1,7 @@
 import { Button, Group } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import clsx from 'clsx';
-import type { ReactNode } from 'react';
+import { useEffect, useId, useRef, type ReactNode } from 'react';
 
 export interface Coachmark {
   title: ReactNode;
@@ -14,7 +14,7 @@ export interface TourProps {
   /** The active step index (controlled). */
   active: number;
   onActiveChange: (index: number) => void;
-  /** Dismiss the tour (the X and the final Done both call this). */
+  /** Dismiss the tour (the X, the final Done and Escape all call this). */
   onClose: () => void;
   /** Where the bubble's pointer sits relative to the target. Default "top". */
   arrow?: 'top' | 'bottom' | 'left' | 'right';
@@ -27,19 +27,44 @@ export interface TourProps {
  * the user is never trapped. It is the presentation only; the consumer anchors
  * it to a target (e.g. inside a Mantine Popover) and owns the highlight. The
  * arrow prop places the pointer toward the target.
+ *
+ * It is a non-modal dialog named by its step title and described by its body.
+ * Focus moves into it when it opens and on each step, but is not trapped;
+ * Escape dismisses it.
  */
 export function Tour({ steps, active, onActiveChange, onClose, arrow = 'top', className }: TourProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const id = useId();
+  useEffect(() => {
+    ref.current?.focus();
+  }, [active]);
+
   const step = steps[active];
   if (!step) return null;
   const isLast = active === steps.length - 1;
 
   return (
-    <div className={clsx('upmo-tour', `upmo-tour--${arrow}`, className)} role="dialog" aria-label="Tour">
+    <div
+      ref={ref}
+      className={clsx('upmo-tour', `upmo-tour--${arrow}`, className)}
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby={`${id}-title`}
+      aria-describedby={`${id}-body`}
+      tabIndex={-1}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape') onClose();
+      }}
+    >
       <button type="button" className="upmo-tour__close" aria-label="Dismiss tour" onClick={onClose}>
         <IconX size={14} stroke={2} />
       </button>
-      <div className="upmo-tour__title">{step.title}</div>
-      <div className="upmo-tour__body">{step.body}</div>
+      <div className="upmo-tour__title" id={`${id}-title`}>
+        {step.title}
+      </div>
+      <div className="upmo-tour__body" id={`${id}-body`}>
+        {step.body}
+      </div>
       <Group justify="space-between" mt="sm">
         <span className="upmo-tour__counter">
           {active + 1} of {steps.length}

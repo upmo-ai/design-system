@@ -44,3 +44,55 @@ export const WithPreview: Story = {
     </div>
   ),
 };
+
+export const WithCost: Story = {
+  render: () => (
+    <div style={{ maxWidth: 520 }}>
+      <ApprovalCard
+        action="Re-run the quarterly forecast on the full dataset"
+        cost="Estimated cost $0.40"
+        onApprove={() => {}}
+        onDeny={() => {}}
+      />
+    </div>
+  ),
+};
+
+export const Busy: Story = {
+  render: () => (
+    <div style={{ maxWidth: 520 }}>
+      <ApprovalCard action="Send the daily finance digest" busy onApprove={() => {}} onDeny={() => {}} />
+    </div>
+  ),
+};
+
+export const Lifecycle: Story = {
+  render: () => (
+    <Stack gap="sm" style={{ maxWidth: 520 }}>
+      <ApprovalCard
+        action="Send the daily finance digest"
+        state="approved"
+        decidedBy="Sam"
+        decidedAt="10:42"
+        onApprove={() => {}}
+        onDeny={() => {}}
+      />
+      <ApprovalCard
+        action="Delete 1,204 archived records"
+        destructive
+        state="denied"
+        decidedBy="Priya"
+        decidedAt="09:15"
+        onApprove={() => {}}
+        onDeny={() => {}}
+      />
+      <ApprovalCard
+        action="Post the release notes to #announcements"
+        state="expired"
+        decidedAt="18:00"
+        onApprove={() => {}}
+        onDeny={() => {}}
+      />
+    </Stack>
+  ),
+};

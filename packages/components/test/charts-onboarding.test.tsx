@@ -120,6 +120,30 @@ describe('Tour', () => {
     expect(onClose).toHaveBeenCalledOnce();
   });
 
+  it('is a non-modal dialog named by its title and described by its body', () => {
+    renderThemed(
+      <Tour active={0} onActiveChange={() => {}} onClose={() => {}} steps={[{ title: 'Approvals', body: 'Agents ask here.' }]} />,
+    );
+    const dialog = screen.getByRole('dialog', { name: 'Approvals' });
+    expect(dialog).toHaveAccessibleDescription('Agents ask here.');
+    expect(dialog).toHaveAttribute('aria-modal', 'false');
+  });
+
+  it('takes focus on open and on each step, and Escape dismisses', () => {
+    const onClose = vi.fn();
+    const steps = [{ title: 'A', body: 'a' }, { title: 'B', body: 'b' }];
+    const { rerender } = renderThemed(
+      <Tour active={0} onActiveChange={() => {}} onClose={onClose} steps={steps} />,
+    );
+    expect(screen.getByRole('dialog', { name: 'A' })).toHaveFocus();
+    screen.getByRole('button', { name: 'Next' }).focus();
+    rerender(<Tour active={1} onActiveChange={() => {}} onClose={onClose} steps={steps} />);
+    const dialog = screen.getByRole('dialog', { name: 'B' });
+    expect(dialog).toHaveFocus();
+    fireEvent.keyDown(dialog, { key: 'Escape' });
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
   it('mounts in every theme', () => {
     for (const theme of themes) {
       const { unmount } = renderThemed(

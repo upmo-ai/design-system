@@ -1,5 +1,6 @@
-import { Button, Group, Modal, Stack, Text } from '@mantine/core';
+import { Group, Modal, Stack, Text } from '@mantine/core';
 import type { ReactNode } from 'react';
+import { Button } from '../Button/Button.tsx';
 
 export interface ConfirmDialogProps {
   /** Whether the dialog is open. */
@@ -20,7 +21,7 @@ export interface ConfirmDialogProps {
    * signal. Prefer undo over confirm where the action is safely reversible.
    */
   destructive?: boolean;
-  /** Disable the confirm button while a request runs. */
+  /** Show progress on the confirm button and disable Cancel while a request runs. */
   busy?: boolean;
   /** Disable the confirm button for another reason (e.g. a required input). */
   confirmDisabled?: boolean;
@@ -33,7 +34,9 @@ export interface ConfirmDialogProps {
  * out in the body and the outcome named on the confirm button. Destructive
  * confirms turn the confirm button red and still name the consequence in copy.
  * Cancel is the safe default (a plain button); there is no close X, so the only
- * dismissals are Cancel, the scrim, and Escape.
+ * dismissals are Cancel, the scrim, and Escape. A destructive confirm opens with
+ * focus on Cancel, so a stray Enter never confirms. The Modal stays mounted so
+ * its leave transition runs and focus returns to the trigger.
  */
 export function ConfirmDialog({
   opened,
@@ -47,20 +50,26 @@ export function ConfirmDialog({
   confirmDisabled,
   children,
 }: ConfirmDialogProps) {
-  if (!opened) return null;
   return (
-    <Modal opened onClose={onClose} title={title} withCloseButton={false}>
+    <Modal opened={opened} onClose={onClose} title={title} withCloseButton={false}>
       <Stack gap="md">
         <Text>{body}</Text>
         {children}
         <Group gap="xs" justify="flex-end">
-          <Button type="button" variant="default" onClick={onClose}>
+          <Button
+            type="button"
+            variant="default"
+            onClick={onClose}
+            disabled={busy}
+            data-autofocus={destructive || undefined}
+          >
             Cancel
           </Button>
           <Button
             type="button"
             color={destructive ? 'red' : undefined}
-            disabled={busy || confirmDisabled}
+            loading={busy}
+            disabled={confirmDisabled}
             onClick={onConfirm}
           >
             {action}

@@ -63,4 +63,14 @@ describe('cssVariablesResolver', () => {
     expect(tokenVariables['--mantine-color-default-border']).toBe('var(--border-strong)');
     expect(tokenVariables['--mantine-color-error']).toBe('var(--danger)');
   });
+
+  it('points the red (destructive) fill at the danger token in every scheme', () => {
+    const resolved = cssVariablesResolver({} as MantineTheme);
+    for (const scheme of [resolved.light, resolved.dark]) {
+      expect(scheme['--mantine-color-red-filled']).toBe('var(--danger)');
+      expect(scheme['--mantine-color-red-filled-hover']).toContain('var(--danger)');
+      expect(scheme['--mantine-color-red-outline']).toBe('var(--danger)');
+      expect(scheme['--mantine-color-red-text']).toBe('var(--danger)');
+    }
+  });
 });

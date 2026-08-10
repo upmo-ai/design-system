@@ -58,16 +58,33 @@ const emeraldSoftDark: Record<string, string> = {
   '--mantine-color-emerald-filled-hover': 'var(--primary-fill-hover)',
 };
 
+// Destructive actions (color="red") follow the danger token, not Mantine's
+// default red. Set here so the scheme-scoped resolver output wins over
+// Mantine's own red. danger is theme-scoped, so one mapping serves every
+// scheme. Hover mixes toward ink, which darkens the fill in light and hc and
+// lightens it in dark, so the hover keeps (and raises) the text contrast. Text on the filled fill is ink-on-brand, set in styles.css because
+// Mantine resolves the filled text to white: white on danger is 7.0:1 light and
+// 10.2:1 hc; dark ink-on-brand on the coral dark danger is 9.7:1 (white there
+// would be 2.0:1). Hover: 8.2:1 light, 10.5:1 dark, 12.0:1 hc.
+const danger: Record<string, string> = {
+  '--mantine-color-red-filled': 'var(--danger)',
+  '--mantine-color-red-filled-hover': 'color-mix(in srgb, var(--danger) 85%, var(--ink))',
+  '--mantine-color-red-outline': 'var(--danger)',
+  '--mantine-color-red-outline-hover': 'color-mix(in srgb, var(--danger) 8%, transparent)',
+  '--mantine-color-red-text': 'var(--danger)',
+};
+
 // The token variables map, exported for tests and for the docs preview pipeline
 // that needs the same names without pulling the resolver function.
 export const tokenVariables: Record<string, string> = {
   ...shared,
   ...primaryFill,
+  ...danger,
   ...emeraldSoftLight,
 };
 
 export const cssVariablesResolver: CSSVariablesResolver = () => ({
   variables: {},
-  light: { ...shared, ...primaryFill, ...emeraldSoftLight },
-  dark: { ...shared, ...primaryFill, ...emeraldSoftDark },
+  light: { ...shared, ...primaryFill, ...danger, ...emeraldSoftLight },
+  dark: { ...shared, ...primaryFill, ...danger, ...emeraldSoftDark },
 });

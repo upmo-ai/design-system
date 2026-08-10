@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ConfirmDialog, Dialog, PageHeader, PageShell } from '../src/index.ts';
 import { renderThemed, themes } from './render.tsx';
@@ -72,11 +72,47 @@ describe('ConfirmDialog', () => {
     expect(onClose).toHaveBeenCalledOnce();
   });
 
-  it('disables confirm while busy', () => {
+  it('shows progress on confirm and disables cancel while busy', () => {
     renderThemed(
       <ConfirmDialog opened title="Remove?" body="Gone." action="Remove" busy onClose={() => {}} onConfirm={() => {}} />,
     );
-    expect(screen.getByRole('button', { name: 'Remove' })).toBeDisabled();
+    const confirm = screen.getByRole('button', { name: 'Remove' });
+    expect(confirm).toBeDisabled();
+    expect(confirm).toHaveAttribute('data-loading');
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeDisabled();
+  });
+
+  it('uses the library Button for both actions', () => {
+    renderThemed(
+      <ConfirmDialog opened title="Remove?" body="Gone." action="Remove" onClose={() => {}} onConfirm={() => {}} />,
+    );
+    expect(screen.getByRole('button', { name: 'Remove' })).toHaveClass('upmo-button');
+    expect(screen.getByRole('button', { name: 'Cancel' })).toHaveClass('upmo-button');
+  });
+
+  it('lands initial focus on Cancel for a destructive confirm', async () => {
+    renderThemed(
+      <ConfirmDialog
+        opened
+        destructive
+        title="Delete workspace?"
+        body="This cannot be undone."
+        action="Delete workspace"
+        onClose={() => {}}
+        onConfirm={() => {}}
+      >
+        <input aria-label="Workspace name" />
+      </ConfirmDialog>,
+    );
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Cancel' })).toHaveFocus());
+  });
+
+  it('closes through the Modal rather than unmounting it', async () => {
+    const props = { title: 'Remove?', body: 'Gone.', action: 'Remove', onClose: () => {}, onConfirm: () => {} };
+    const { rerender } = renderThemed(<ConfirmDialog opened {...props} />);
+    expect(screen.getByText('Gone.')).toBeInTheDocument();
+    rerender(<ConfirmDialog opened={false} {...props} />);
+    await waitFor(() => expect(screen.queryByText('Gone.')).not.toBeInTheDocument());
   });
 });
 
