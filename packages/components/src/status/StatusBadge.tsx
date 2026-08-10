@@ -32,6 +32,12 @@ const icons = {
 export interface StatusBadgeProps extends Omit<BadgeProps, 'color' | 'leftSection' | 'variant'> {
   /** A Phase or Attention status word. Drives the tone, the mark, and the label. */
   status: Status;
+  /**
+   * Whether the live caret (Working, Checking) sweeps. Default true. Pass false
+   * when the badge labels a settled event, so only the in-flight one animates;
+   * the caret then shows its final drawn state.
+   */
+  live?: boolean;
 }
 
 /**
@@ -40,7 +46,7 @@ export interface StatusBadgeProps extends Omit<BadgeProps, 'color' | 'leftSectio
  * Working/Checking, a familiar icon otherwise), and the status word. Colour is
  * never alone: the word and the mark always accompany it.
  */
-export function StatusBadge({ status, className, ...rest }: StatusBadgeProps) {
+export function StatusBadge({ status, live = true, className, ...rest }: StatusBadgeProps) {
   const meta = statusMeta(status);
   const iconSize = 13;
 
@@ -49,7 +55,7 @@ export function StatusBadge({ status, className, ...rest }: StatusBadgeProps) {
     const Icon = icons[meta.icon];
     mark = <Icon size={iconSize} stroke={2.2} aria-hidden="true" />;
   } else if (meta.mark !== 'icon') {
-    mark = <Caret mark={meta.mark} size={iconSize} />;
+    mark = <Caret mark={meta.mark} size={iconSize} animated={live} />;
   }
 
   return (

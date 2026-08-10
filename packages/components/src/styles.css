@@ -526,11 +526,6 @@
   line-height: 18px;
   color: var(--ink-secondary);
 }
-.upmo-eventstream__end {
-  height: 0;
-  margin: 0;
-  padding: 0;
-}
 
 /* LivenessIndicator: ambient caret + active-run count. Inherits a tone (active
    when live, neutral at rest) so the caret and count read in the tone colour. */

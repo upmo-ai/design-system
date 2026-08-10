@@ -1,3 +1,4 @@
+import { VisuallyHidden } from '@mantine/core';
 import clsx from 'clsx';
 import { Caret } from '../status/Caret.tsx';
 
@@ -18,6 +19,13 @@ export interface LivenessIndicatorProps {
   label?: string;
   /** Called when the indicator is activated (e.g. to open the activity view). */
   onClick?: () => void;
+  /**
+   * Button only: whether the "what's running now" popover it opens is open.
+   * When set, the button announces that it opens a dialog and its state.
+   */
+  expanded?: boolean;
+  /** Button only: the id of the popover it opens. */
+  controls?: string;
   size?: number;
   className?: string;
 }
@@ -31,12 +39,16 @@ export interface LivenessIndicatorProps {
  * count and the drawn caret still carry the state.
  *
  * Renders as a button when onClick is given (a target to open the activity
- * view), otherwise as a plain status element with role="status".
+ * view), otherwise as a plain status element with role="status". Either way the
+ * label is real, visually hidden text inside the element, so screen readers
+ * announce it reliably when it changes.
  */
 export function LivenessIndicator({
   count,
   label,
   onClick,
+  expanded,
+  controls,
   size = 16,
   className,
 }: LivenessIndicatorProps) {
@@ -47,7 +59,12 @@ export function LivenessIndicator({
   const inner = (
     <>
       <Caret mark={live ? 'caret-live' : 'caret-undrawn'} size={size} />
-      {live ? <span className="upmo-liveness__count">{count}</span> : null}
+      {live ? (
+        <span className="upmo-liveness__count" aria-hidden="true">
+          {count}
+        </span>
+      ) : null}
+      <VisuallyHidden>{accessibleLabel}</VisuallyHidden>
     </>
   );
 
@@ -60,14 +77,21 @@ export function LivenessIndicator({
 
   if (onClick) {
     return (
-      <button type="button" className={classes} onClick={onClick} aria-label={accessibleLabel}>
+      <button
+        type="button"
+        className={classes}
+        onClick={onClick}
+        aria-haspopup={expanded === undefined ? undefined : 'dialog'}
+        aria-expanded={expanded}
+        aria-controls={controls}
+      >
         {inner}
       </button>
     );
   }
 
   return (
-    <span className={classes} role="status" aria-label={accessibleLabel}>
+    <span className={classes} role="status">
       {inner}
     </span>
   );

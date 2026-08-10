@@ -6,6 +6,12 @@ export interface CaretProps {
   mark: Extract<Mark, 'caret-live' | 'caret-partial' | 'caret-undrawn'>;
   /** Pixel size of the caret box. */
   size?: number;
+  /**
+   * Whether a live caret sweeps. Default true. Pass false for a live state that
+   * is no longer in flight (e.g. a settled history row): the caret is drawn in
+   * its final, fully drawn state, as under reduced motion.
+   */
+  animated?: boolean;
   className?: string;
 }
 
@@ -20,7 +26,7 @@ export interface CaretProps {
  * motion it collapses to a static, fully drawn caret (see styles.css), so the
  * meaning never depends on motion.
  */
-export function Caret({ mark, size = 14, className }: CaretProps) {
+export function Caret({ mark, size = 14, animated = true, className }: CaretProps) {
   const live = mark === 'caret-live';
   const leftDrawn = mark !== 'caret-undrawn';
   const rightDrawn = mark === 'caret-live';
@@ -40,7 +46,7 @@ export function Caret({ mark, size = 14, className }: CaretProps) {
     >
       <path className={clsx('upmo-caret__stroke', !leftDrawn && 'upmo-caret__stroke--idle')} d="M4 15L12 7" />
       <path
-        className={clsx('upmo-caret__stroke', live && 'upmo-caret__sweep', !rightDrawn && 'upmo-caret__stroke--idle')}
+        className={clsx('upmo-caret__stroke', live && animated && 'upmo-caret__sweep', !rightDrawn && 'upmo-caret__stroke--idle')}
         d="M12 7l8 8"
       />
     </svg>

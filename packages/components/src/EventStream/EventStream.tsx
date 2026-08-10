@@ -8,6 +8,7 @@ import {
   IconMinimize,
 } from '@tabler/icons-react';
 import { ActionIcon, Tooltip } from '@mantine/core';
+import { useReducedMotion } from '@mantine/hooks';
 import { StatusBadge } from '../status/StatusBadge.tsx';
 import { StatusDot } from '../status/StatusDot.tsx';
 import type { Status } from '../status/status.ts';
@@ -17,10 +18,13 @@ export interface EventItem {
   id: string;
   /** Pre-formatted clock string, e.g. "08:01:02". Rendered in a monospace <time>. */
   time: string;
+  /** Optional machine-readable timestamp (ISO 8601) for the <time> dateTime. */
+  dateTime?: string;
   /**
    * The status this event belongs to (a Phase or an Attention word). Drives the
-   * tone and the mark: active phases (Working, Checking) carry the live caret,
-   * so a running event reads as alive. Matches the Upmo status model.
+   * tone and the mark: active phases (Working, Checking) carry the caret, which
+   * sweeps only on the live row, so settled history stays still. Matches the
+   * Upmo status model.
    */
   status: Status;
   /** One-line human description of the event. */
@@ -29,7 +33,7 @@ export interface EventItem {
   detail?: ReactNode[];
   /**
    * Mark this event as the live, in-progress one. The row gets the live accent
-   * and, when following, is the scroll target. Usually the last item.
+   * and its caret sweeps. Usually the last item.
    */
   live?: boolean;
 }
@@ -61,8 +65,10 @@ export interface EventStreamProps {
  * Unlike a static log, it follows the live edge: new events auto-scroll into
  * view while `following` is true, and scrolling up pauses following (surfacing a
  * "jump to live" control) so the user can read history without being yanked
- * down. Under reduced motion the caret stops sweeping but the stream still
- * follows; liveness never depends on motion alone.
+ * down. Only the list scrolls; the page around it never moves. The list is a
+ * polite live log, so screen readers hear new events as they arrive. Under
+ * reduced motion the caret stops sweeping and the scroll controls jump instead
+ * of gliding; liveness never depends on motion alone.
  */
 export function EventStream({
   events,
@@ -73,34 +79,38 @@ export function EventStream({
   className,
 }: EventStreamProps) {
   const listRef = useRef<HTMLOListElement>(null);
-  const endRef = useRef<HTMLLIElement>(null);
+  const fullscreenRef = useRef<HTMLButtonElement>(null);
   const [fullscreen, setFullscreen] = useState(false);
-  // Guard against the follow-driven scroll re-triggering the scroll handler.
-  const programmaticScroll = useRef(false);
+  const reduceMotion = useReducedMotion();
+  // While a smooth button scroll is in flight, its intermediate scroll events
+  // must not flip following. Holds the target edge until it is reached, the
+  // user takes over (wheel/touch), or a safety timeout passes.
+  const scrollTarget = useRef<'top' | 'bottom' | null>(null);
+  const releaseTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  // Follow the live edge: scroll to the newest event when following and the set
-  // of events changes.
+  function releaseScrollGuard() {
+    scrollTarget.current = null;
+    clearTimeout(releaseTimer.current);
+  }
+
+  useEffect(() => () => clearTimeout(releaseTimer.current), []);
+
+  // Follow the live edge: when following and the set of events changes, scroll
+  // the list (only the list, never its ancestors) to the newest event. The jump
+  // lands at the bottom, so its scroll event leaves following on.
   useEffect(() => {
     if (!following) return;
-    const end = endRef.current;
-    if (!end) return;
-    // scrollIntoView is absent in some environments (jsdom); guard it so the
-    // component mounts and follows wherever the DOM is partial.
-    if (typeof end.scrollIntoView !== 'function') return;
-    programmaticScroll.current = true;
-    end.scrollIntoView({ block: 'end' });
-    // Release the guard on the next frame, after the scroll event has fired.
-    const id = requestAnimationFrame(() => {
-      programmaticScroll.current = false;
-    });
-    return () => cancelAnimationFrame(id);
+    const el = listRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
   }, [events, following]);
 
-  // Close fullscreen on Escape.
+  // Close fullscreen on Escape, returning focus to the fullscreen toggle.
   useEffect(() => {
     if (!fullscreen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setFullscreen(false);
+      if (e.key !== 'Escape') return;
+      setFullscreen(false);
+      fullscreenRef.current?.focus();
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
@@ -108,27 +118,34 @@ export function EventStream({
 
   // Scrolling up pauses following; scrolling back to the bottom resumes it.
   function handleScroll() {
-    if (programmaticScroll.current) return;
     const el = listRef.current;
     if (!el) return;
     const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 8;
+    if (scrollTarget.current) {
+      const reached = scrollTarget.current === 'top' ? el.scrollTop <= 0 : atBottom;
+      if (reached) releaseScrollGuard();
+      return;
+    }
     if (atBottom && !following) onFollowChange?.(true);
     else if (!atBottom && following) onFollowChange?.(false);
   }
 
-  function scrollTop() {
+  function scrollToEdge(edge: 'top' | 'bottom') {
     const el = listRef.current;
-    if (el?.scrollTo) el.scrollTo({ top: 0, behavior: 'smooth' });
-    else if (el) el.scrollTop = 0;
-    onFollowChange?.(false);
+    if (!el) return;
+    const top = edge === 'top' ? 0 : el.scrollHeight;
+    if (el.scrollTo && !reduceMotion) {
+      scrollTarget.current = edge;
+      clearTimeout(releaseTimer.current);
+      releaseTimer.current = setTimeout(releaseScrollGuard, 1000);
+      el.scrollTo({ top, behavior: 'smooth' });
+    } else {
+      el.scrollTop = top;
+    }
+    onFollowChange?.(edge === 'bottom');
   }
 
-  function scrollBottom() {
-    const el = listRef.current;
-    if (el?.scrollTo) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
-    else if (el) el.scrollTop = el.scrollHeight;
-    onFollowChange?.(true);
-  }
+  const fullscreenLabel = fullscreen ? 'Exit fullscreen' : 'Fullscreen';
 
   const liveCount = events.filter((e) => e.live).length;
 
@@ -143,7 +160,7 @@ export function EventStream({
         </span>
         <div className="upmo-eventstream__head-right">
           {following ? (
-            <span className="upmo-eventstream__follow" aria-live="off">
+            <span className="upmo-eventstream__follow">
               {liveCount > 0 ? <StatusDot status="Working" label="Live" /> : null}
               Following live
             </span>
@@ -158,35 +175,31 @@ export function EventStream({
             </button>
           )}
           <div className="upmo-eventstream__actions">
-            <Tooltip label="Top" position="bottom" openDelay={400} withinPortal>
+            <Tooltip label="Scroll to top" position="bottom" openDelay={400} withinPortal>
               <ActionIcon
                 variant="subtle"
                 aria-label="Scroll to top"
                 className="upmo-icon-button"
-                onClick={scrollTop}
+                onClick={() => scrollToEdge('top')}
               >
                 <IconArrowBarToUp size={15} stroke={1.75} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip label="Bottom" position="bottom" openDelay={400} withinPortal>
+            <Tooltip label="Scroll to bottom" position="bottom" openDelay={400} withinPortal>
               <ActionIcon
                 variant="subtle"
                 aria-label="Scroll to bottom"
                 className="upmo-icon-button"
-                onClick={scrollBottom}
+                onClick={() => scrollToEdge('bottom')}
               >
                 <IconArrowBarToDown size={15} stroke={1.75} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip
-              label={fullscreen ? 'Exit' : 'Expand'}
-              position="bottom"
-              openDelay={400}
-              withinPortal
-            >
+            <Tooltip label={fullscreenLabel} position="bottom" openDelay={400} withinPortal>
               <ActionIcon
+                ref={fullscreenRef}
                 variant="subtle"
-                aria-label={fullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+                aria-label={fullscreenLabel}
                 className="upmo-icon-button"
                 onClick={() => setFullscreen((f) => !f)}
               >
@@ -201,7 +214,12 @@ export function EventStream({
         ref={listRef}
         className="upmo-eventstream__list"
         style={{ maxHeight: fullscreen ? undefined : maxHeight }}
+        role="log"
+        aria-live="polite"
+        aria-relevant="additions"
         onScroll={handleScroll}
+        onWheel={releaseScrollGuard}
+        onTouchStart={releaseScrollGuard}
       >
         {events.map((ev) => (
           <li
@@ -209,8 +227,10 @@ export function EventStream({
             className={clsx('upmo-eventstream__item', ev.live && 'upmo-eventstream__item--live')}
           >
             <div className="upmo-eventstream__row">
-              <time className="upmo-eventstream__time">{ev.time}</time>
-              <StatusBadge status={ev.status} className="upmo-eventstream__phase" />
+              <time className="upmo-eventstream__time" dateTime={ev.dateTime}>
+                {ev.time}
+              </time>
+              <StatusBadge status={ev.status} live={ev.live === true} className="upmo-eventstream__phase" />
               <span className="upmo-eventstream__msg">{ev.message}</span>
             </div>
             {ev.detail && ev.detail.length > 0 ? (
@@ -222,7 +242,6 @@ export function EventStream({
             ) : null}
           </li>
         ))}
-        <li ref={endRef} className="upmo-eventstream__end" aria-hidden="true" />
       </ol>
     </section>
   );

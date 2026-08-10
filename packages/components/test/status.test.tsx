@@ -67,6 +67,13 @@ describe('StatusBadge', () => {
   it('draws the live caret for Working', () => {
     const { container } = renderThemed(<StatusBadge status="Working" />);
     expect(container.querySelector('.upmo-caret--live')).toBeTruthy();
+    expect(container.querySelector('.upmo-caret__sweep')).toBeTruthy();
+  });
+
+  it('draws the live caret static when live is false', () => {
+    const { container } = renderThemed(<StatusBadge status="Working" live={false} />);
+    expect(container.querySelector('.upmo-caret--live')).toBeTruthy();
+    expect(container.querySelector('.upmo-caret__sweep')).toBeFalsy();
   });
 
   it('uses an icon, not a caret, for Done', () => {
