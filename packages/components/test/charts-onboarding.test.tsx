@@ -153,6 +153,7 @@ describe('Tour', () => {
       />,
     );
     expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next' })).toHaveClass('upmo-button');
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
     expect(onActiveChange).toHaveBeenCalledWith(1);
     fireEvent.click(screen.getByRole('button', { name: 'Dismiss tour' }));

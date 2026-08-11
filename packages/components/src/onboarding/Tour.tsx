@@ -1,7 +1,8 @@
-import { Button, Group } from '@mantine/core';
+import { Group } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import clsx from 'clsx';
 import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { Button } from '../Button/Button.tsx';
 
 export interface Coachmark {
   title: ReactNode;
