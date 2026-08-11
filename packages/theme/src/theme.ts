@@ -1,4 +1,10 @@
-import { createTheme, rem, type MantineColorsTuple } from '@mantine/core';
+import {
+  createTheme,
+  defaultVariantColorsResolver,
+  rem,
+  type MantineColorsTuple,
+  type VariantColorsResolver,
+} from '@mantine/core';
 import { breakpoint, color, font, radius, spacing, typography as type, zIndex } from '@upmo-ai/tokens';
 
 interface Style {
@@ -31,10 +37,24 @@ const emerald: MantineColorsTuple = [
   color['emerald-9'].light,
 ];
 
+// A filled red (destructive) fill is the danger token (see resolver.ts), but
+// Mantine picks its text from the default red hex and writes white. White on the
+// dark coral danger is 2.0:1, so filled red text follows ink-on-brand: white in
+// light (7.0:1) and hc (10.2:1), near-black in dark (9.7:1). Covers every filled
+// component (Button, ActionIcon, Badge), not just one class.
+const variantColorResolver: VariantColorsResolver = (input) => {
+  const colors = defaultVariantColorsResolver(input);
+  if (input.color === 'red' && input.variant === 'filled') {
+    return { ...colors, color: 'var(--ink-on-brand)', hoverColor: 'var(--ink-on-brand)' };
+  }
+  return colors;
+};
+
 // Colours beyond the emerald scale come from tokens.css at runtime, mapped onto
 // Mantine's internal variables by cssVariablesResolver (see resolver.ts).
 export const upmoTheme = createTheme({
   primaryColor: 'emerald',
+  variantColorResolver,
   // Light fills with emerald[7] (emerald-deep), dark with the brighter emerald[5]
   // so the primary button stays vivid on the dark ground. The exact fill colour
   // is pinned by the resolver to the primary-fill token; this keeps Mantine's own

@@ -59,13 +59,14 @@ const emeraldSoftDark: Record<string, string> = {
 };
 
 // Destructive actions (color="red") follow the danger token, not Mantine's
-// default red. Set here so the scheme-scoped resolver output wins over
-// Mantine's own red. danger is theme-scoped, so one mapping serves every
-// scheme. Hover mixes toward ink, which darkens the fill in light and hc and
-// lightens it in dark, so the hover keeps (and raises) the text contrast. Text on the filled fill is ink-on-brand, set in styles.css because
-// Mantine resolves the filled text to white: white on danger is 7.0:1 light and
-// 10.2:1 hc; dark ink-on-brand on the coral dark danger is 9.7:1 (white there
-// would be 2.0:1). Hover: 8.2:1 light, 10.5:1 dark, 12.0:1 hc.
+// default red. Set here so the scheme-scoped resolver output wins over Mantine's
+// own red. danger is theme-scoped, so one mapping serves every scheme. Hover
+// mixes toward ink, which darkens the fill in light and hc and lightens it in
+// dark, so the hover keeps (and raises) the text contrast. Text on the filled
+// fill is ink-on-brand, set by the theme's variantColorResolver because Mantine
+// resolves the filled text to white: white on danger is 7.0:1 light and 10.2:1
+// hc; dark ink-on-brand on the coral dark danger is 9.7:1 (white there would be
+// 2.0:1). Hover: 8.2:1 light, 10.5:1 dark, 12.0:1 hc.
 const danger: Record<string, string> = {
   '--mantine-color-red-filled': 'var(--danger)',
   '--mantine-color-red-filled-hover': 'color-mix(in srgb, var(--danger) 85%, var(--ink))',

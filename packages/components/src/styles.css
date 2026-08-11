@@ -1894,14 +1894,6 @@ button.upmo-liveness:hover {
   --mantine-color-gray-light-hover: var(--surface-selected);
 }
 
-/* Filled red (destructive) buttons: the fill is the danger token (mapped in the
-   theme resolver). Mantine writes the filled text as white inline, which is only
-   2.0:1 on the coral dark danger, so the text follows ink-on-brand instead:
-   white on danger in light (7.0:1) and hc (10.2:1), near-black in dark (9.7:1).
-   The inline variable can only be beaten with !important. */
-.upmo-button[style*='var(--mantine-color-red-filled)'] {
-  --button-color: var(--ink-on-brand) !important;
-}
 [data-mantine-color-scheme='dark'] .upmo-badge[data-variant='light'] {
   --badge-bd: 1px solid color-mix(in srgb, var(--badge-color) 30%, transparent);
 }

@@ -1,4 +1,4 @@
-import type { MantineTheme } from '@mantine/core';
+import { DEFAULT_THEME, mergeThemeOverrides, type MantineTheme } from '@mantine/core';
 import { color, zIndex } from '@upmo-ai/tokens';
 import { describe, expect, it } from 'vitest';
 import { cssVariablesResolver, tokenVariables, upmoTheme } from '../src/index.ts';
@@ -53,6 +53,16 @@ describe('upmoTheme', () => {
       openDelay: 400,
       events: { hover: true, focus: true, touch: false },
     });
+  });
+
+  it('gives filled red text the on-brand ink, leaving other variants alone', () => {
+    const theme = mergeThemeOverrides(DEFAULT_THEME, upmoTheme) as MantineTheme;
+    const resolve = (variant: string, color = 'red') =>
+      theme.variantColorResolver({ color, variant, theme });
+    expect(resolve('filled').color).toBe('var(--ink-on-brand)');
+    expect(resolve('filled').hoverColor).toBe('var(--ink-on-brand)');
+    expect(resolve('light').color).not.toBe('var(--ink-on-brand)');
+    expect(resolve('filled', 'blue').color).not.toBe('var(--ink-on-brand)');
   });
 
   it('respects reduced motion', () => {
