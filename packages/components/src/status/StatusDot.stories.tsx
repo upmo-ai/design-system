@@ -29,7 +29,7 @@ export const AllStates: Story = {
         {phases.map((p) => (
           <Group key={p} gap={6}>
             <StatusDot status={p} />
-            <span style={{ fontSize: 13 }}>{p}</span>
+            <span style={{ fontSize: 'var(--text-body-sm-size)' }}>{p}</span>
           </Group>
         ))}
       </Group>
@@ -37,7 +37,7 @@ export const AllStates: Story = {
         {attentions.map((a) => (
           <Group key={a} gap={6}>
             <StatusDot status={a} />
-            <span style={{ fontSize: 13 }}>{a}</span>
+            <span style={{ fontSize: 'var(--text-body-sm-size)' }}>{a}</span>
           </Group>
         ))}
       </Group>

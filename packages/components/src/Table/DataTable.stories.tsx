@@ -42,7 +42,7 @@ const columns: DataTableColumn<Run>[] = [
     render: (r) => (
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
         <StatusDot status={r.status} label={`${r.agent}: ${r.status}`} />
-        <span style={{ fontSize: 13 }}>{r.status}</span>
+        <span style={{ fontSize: 'var(--text-body-sm-size)' }}>{r.status}</span>
       </span>
     ),
   },

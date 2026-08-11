@@ -36,7 +36,7 @@ export const Default: Story = {
             <Table.Td>{r.agent}</Table.Td>
             <Table.Td>
               <StatusDot status={r.status} label={`${r.agent}: ${r.status}`} />
-              <span style={{ marginInlineStart: 8, fontSize: 13 }}>{r.status}</span>
+              <span style={{ marginInlineStart: 8, fontSize: 'var(--text-body-sm-size)' }}>{r.status}</span>
             </Table.Td>
             <Table.Num>{r.items}</Table.Num>
           </Table.Tr>
