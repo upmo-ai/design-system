@@ -78,7 +78,7 @@ export function EventStream({
   label = 'Activity',
   className,
 }: EventStreamProps) {
-  const listRef = useRef<HTMLOListElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const fullscreenRef = useRef<HTMLButtonElement>(null);
   const [fullscreen, setFullscreen] = useState(false);
   const reduceMotion = useReducedMotion();
@@ -210,7 +210,9 @@ export function EventStream({
         </div>
       </div>
 
-      <ol
+      {/* The scroll container is the live log; the list inside keeps its list
+          semantics (a role on the <ol> itself would replace them). */}
+      <div
         ref={listRef}
         className="upmo-eventstream__list"
         style={{ maxHeight: fullscreen ? undefined : maxHeight }}
@@ -221,28 +223,30 @@ export function EventStream({
         onWheel={releaseScrollGuard}
         onTouchStart={releaseScrollGuard}
       >
-        {events.map((ev) => (
-          <li
-            key={ev.id}
-            className={clsx('upmo-eventstream__item', ev.live && 'upmo-eventstream__item--live')}
-          >
-            <div className="upmo-eventstream__row">
-              <time className="upmo-eventstream__time" dateTime={ev.dateTime}>
-                {ev.time}
-              </time>
-              <StatusBadge status={ev.status} live={ev.live === true} className="upmo-eventstream__phase" />
-              <span className="upmo-eventstream__msg">{ev.message}</span>
-            </div>
-            {ev.detail && ev.detail.length > 0 ? (
-              <div className="upmo-eventstream__detail">
-                {ev.detail.map((d, i) => (
-                  <div key={i}>{d}</div>
-                ))}
+        <ol className="upmo-eventstream__items">
+          {events.map((ev) => (
+            <li
+              key={ev.id}
+              className={clsx('upmo-eventstream__item', ev.live && 'upmo-eventstream__item--live')}
+            >
+              <div className="upmo-eventstream__row">
+                <time className="upmo-eventstream__time" dateTime={ev.dateTime}>
+                  {ev.time}
+                </time>
+                <StatusBadge status={ev.status} live={ev.live === true} className="upmo-eventstream__phase" />
+                <span className="upmo-eventstream__msg">{ev.message}</span>
               </div>
-            ) : null}
-          </li>
-        ))}
-      </ol>
+              {ev.detail && ev.detail.length > 0 ? (
+                <div className="upmo-eventstream__detail">
+                  {ev.detail.map((d, i) => (
+                    <div key={i}>{d}</div>
+                  ))}
+                </div>
+              ) : null}
+            </li>
+          ))}
+        </ol>
+      </div>
     </section>
   );
 }

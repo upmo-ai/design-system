@@ -55,6 +55,7 @@
     "@upmo-ai/icons": "workspace:*",
     "@upmo-ai/theme": "workspace:*",
     "@upmo-ai/tokens": "workspace:*",
+    "axe-core": "4.10.3",
     "jsdom": "^26.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

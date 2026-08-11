@@ -493,10 +493,13 @@
 }
 
 .upmo-eventstream__list {
-  margin: 0;
   padding: var(--space-2);
-  list-style: none;
   overflow-y: auto;
+}
+.upmo-eventstream__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
