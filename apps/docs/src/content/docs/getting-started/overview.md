@@ -13,9 +13,10 @@ real React component library, icons and brand assets.
   contrast) and a typed JS object. No React.
 - **`@upmo-ai/theme`** - the Mantine 9 theme built from tokens, plus the
   resolver that maps Mantine's internals onto the token variables.
-- **`@upmo-ai/components`** - the real React component library. _(coming)_
+- **`@upmo-ai/components`** - the real React component library.
 - **`@upmo-ai/icons`** and **`@upmo-ai/brands`** - the icon concept map and the
-  provider brand marks. _(coming)_
+  official, colourful marks of the providers and connectors Upmo works with,
+  each traced to the brand's own source.
 
 ## How previews work
 

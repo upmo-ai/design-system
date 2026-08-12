@@ -1,0 +1,81 @@
+{
+  "replicate": {
+    "name": "Replicate",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/replicate.svg",
+    "official": "https://replicate.com",
+    "variant": "mono",
+    "notes": "Replicate publishes a monochrome symbol only; no SVG symbol on replicate.com, so the lobe-icons mirror is used."
+  },
+  "huggingface": {
+    "name": "Hugging Face",
+    "kind": "provider",
+    "source": "https://huggingface.co/front/assets/huggingface_logo.svg",
+    "official": "https://huggingface.co/brand",
+    "variant": "color",
+    "notes": "Official full-colour face from Hugging Face's own site CDN."
+  },
+  "nvidia": {
+    "name": "NVIDIA",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/nvidia-color.svg",
+    "official": "https://www.nvidia.com/en-us/about-nvidia/legal-info/logo-brand-usage/",
+    "variant": "color",
+    "notes": "Green eye symbol without wordmark."
+  },
+  "meta": {
+    "name": "Meta",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/meta-color.svg",
+    "official": "https://about.meta.com/brand/resources/",
+    "variant": "color",
+    "notes": "Blue gradient infinity symbol (Llama)."
+  },
+  "fireworks": {
+    "name": "Fireworks AI",
+    "kind": "provider",
+    "source": "https://fireworks.ai/icon.svg?26fd47f5c5eddcac",
+    "official": "https://fireworks.ai",
+    "variant": "mono",
+    "notes": "Current official site icon. The background tile <rect> was dropped and the viewBox cropped to the tile's inner area; path data untouched. Its colour is near-black #280016, so it ships as currentColor for dark themes (the older purple #5019C5 mark is superseded)."
+  },
+  "together": {
+    "name": "Together AI",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/together-color.svg",
+    "official": "https://www.together.ai",
+    "variant": "color",
+    "notes": "Matches the three-circle favicon served on together.ai."
+  },
+  "openrouter": {
+    "name": "OpenRouter",
+    "kind": "provider",
+    "source": "https://openrouter.ai/brand/v2/openrouter-light.svg",
+    "official": "https://openrouter.ai",
+    "variant": "color",
+    "notes": "Official v2 lockup; only the glyph path (fill #7624F4) is kept and the viewBox is set to a square around it. Wordmark paths removed, glyph path data untouched."
+  },
+  "lmstudio": {
+    "name": "LM Studio",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/lmstudio.svg",
+    "official": "https://lmstudio.ai",
+    "variant": "mono"
+  },
+  "cerebras": {
+    "name": "Cerebras",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/cerebras-color.svg",
+    "official": "https://www.cerebras.ai",
+    "variant": "color",
+    "notes": "Orange arcs at #F15A29; the inner C uses currentColor so it adapts to light and dark themes."
+  },
+  "qwen": {
+    "name": "Qwen",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/qwen-color.svg",
+    "official": "https://qwen.ai",
+    "variant": "color",
+    "notes": "Checked against the qwen.ai favicon (blue #082dff mark)."
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "openai": {
+    "name": "OpenAI",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/openai.svg",
+    "official": "https://openai.com/brand/",
+    "variant": "mono",
+    "notes": "Blossom mark. openai.com/brand returns 403 to scripted downloads, so the lobe-icons mirror was used."
+  },
+  "anthropic": {
+    "name": "Anthropic",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/anthropic.svg",
+    "official": "https://www.anthropic.com/",
+    "variant": "mono",
+    "notes": "Anthropic 'A' symbol. The site's own safari-pinned-tab.svg is a 7KB potrace bitmap trace, so the clean lobe-icons vector was used instead."
+  },
+  "claude": {
+    "name": "Claude",
+    "kind": "provider",
+    "source": "https://claude.ai/favicon.svg",
+    "official": "https://claude.ai/",
+    "variant": "color",
+    "notes": "Terracotta spark (#D97757) served by claude.ai as its favicon."
+  },
+  "mistral": {
+    "name": "Mistral AI",
+    "kind": "provider",
+    "source": "https://mistral.ai/cms-media/api/documents/file/Mistral_Logos_2026.zip",
+    "official": "https://mistral.ai/brand",
+    "variant": "color",
+    "notes": "From the official logo zip, file Mistral_Logos_2026/Icon/Gradient/RGB/SVG/Mistral-Icon-Gradient-RGB.svg. The brand page links cms.globalaegis.net, which returned 403; the same file was fetched through mistral.ai/cms-media."
+  },
+  "cohere": {
+    "name": "Cohere",
+    "kind": "provider",
+    "source": "https://cdn.sanity.io/files/rjtqmwfu/web3-prod/0671b7ad97014967e69e3f7be10acc9a8b0a577b.zip",
+    "official": "https://cohere.com/news",
+    "variant": "color",
+    "notes": "From the press kit zip linked on cohere.com/news, file Cohere Logos/Symbol/Digital (RGB)/Color/cohere_symbol_colour_rgb.svg."
+  },
+  "groq": {
+    "name": "Groq",
+    "kind": "provider",
+    "source": "https://groq.com/favicon.svg",
+    "official": "https://groq.com/brand-guidelines",
+    "variant": "color",
+    "notes": "The current site icon is a white bolt on an orange tile, the same as groq.com/apple-touch-icon.png. Groq publishes no standalone symbol SVG, because the brand-guidelines downloads are 404."
+  },
+  "deepseek": {
+    "name": "DeepSeek",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/deepseek-color.svg",
+    "official": "https://www.deepseek.com/",
+    "variant": "color",
+    "notes": "Blue whale (#4D6BFE). deepseek.com only serves a raster favicon, so the lobe-icons colour mirror was used."
+  },
+  "xai": {
+    "name": "xAI",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/xai.svg",
+    "official": "https://x.ai/",
+    "variant": "mono",
+    "notes": "xAI symbol. x.ai returns 403 to scripted downloads, so the lobe-icons mirror was used."
+  },
+  "perplexity": {
+    "name": "Perplexity",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/perplexity-color.svg",
+    "official": "https://www.perplexity.ai/",
+    "variant": "color",
+    "notes": "Teal colour variant from lobe-icons. Perplexity's own favicon and app icon are a monochrome potrace trace on a black tile, and there is no public press kit."
+  },
+  "ollama": {
+    "name": "Ollama",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/ollama.svg",
+    "official": "https://ollama.com/",
+    "variant": "mono",
+    "notes": "Llama head. ollama.com serves only PNG icons, so the lobe-icons mirror was used."
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "azure": {
+    "name": "Microsoft Azure",
+    "kind": "provider",
+    "source": "https://arch-center.azureedge.net/icons/Azure_Public_Service_Icons_V24.zip",
+    "official": "https://learn.microsoft.com/en-us/azure/architecture/icons/",
+    "variant": "color",
+    "notes": "Azure_Public_Service_Icons/Icons/other/10018-icon-service-Azure-A.svg (gradient Azure 'A')"
+  },
+  "aws": {
+    "name": "Amazon Web Services",
+    "kind": "provider",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg",
+    "official": "https://aws.amazon.com/",
+    "variant": "color",
+    "notes": "Wikimedia Commons File:Amazon_Web_Services_Logo.svg, source cited as Amazon (author Amazon.com Inc.). 'aws' text fill changed from #252F3E to currentColor for dark mode; orange #FF9900 smile kept. AWS does not publish a standalone logo SVG on its own domain."
+  },
+  "amazon": {
+    "name": "Amazon",
+    "kind": "connector",
+    "source": "unchanged (existing file kept)",
+    "official": "https://press.aboutamazon.com/logos",
+    "variant": "color",
+    "notes": "Amazon publishes its smile logo only as PNG (amazon-logo-squid-ink-smile-orange.png) and no official vector of the 'a' + smile logomark was found; existing file retained pending an official SVG."
+  },
+  "bedrock": {
+    "name": "Amazon Bedrock",
+    "kind": "provider",
+    "source": "https://d1.awsstatic.com/onedam/marketing-channels/website/public/shared/architecture-icon-release/Icon-package_07312026.5846e92413caa21490223536cc97f1269e44fa92.zip",
+    "official": "https://aws.amazon.com/architecture/icons/",
+    "variant": "color",
+    "notes": "Architecture-Service-Icons_07312026/Arch_Artificial-Intelligence/64/Arch_Amazon-Bedrock_64.svg. The 07/2026 release uses a flat #01A88D tile rather than the earlier gradient."
+  },
+  "cloudflare": {
+    "name": "Cloudflare",
+    "kind": "connector",
+    "source": "https://raw.githubusercontent.com/pheralb/svgl/main/static/library/cloudflare.svg",
+    "official": "https://www.cloudflare.com/press-kit/",
+    "variant": "color",
+    "notes": "Cloudflare's press kit (Logos.zip) ships only PNG/JPG; the svgl cloud matches its two-orange cloud (#F4811F / #FAAD3F with white separator)."
+  },
+  "kubernetes": {
+    "name": "Kubernetes",
+    "kind": "connector",
+    "source": "https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.svg",
+    "official": "https://github.com/kubernetes/kubernetes/tree/master/logo",
+    "variant": "color",
+    "notes": "Removed one leftover Inkscape style attribute (text/font properties only)."
+  },
+  "docker": {
+    "name": "Docker",
+    "kind": "connector",
+    "source": "https://www.docker.com/static/Docker-Logos-1.zip",
+    "official": "https://www.docker.com/company/newsroom/media-resources/",
+    "variant": "color",
+    "notes": "docker-logos/SVG/docker-mark-ocean-blue.svg (whale mark)."
+  },
+  "microsoftteams": {
+    "name": "Microsoft Teams",
+    "kind": "connector",
+    "source": "https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/teams_48x1.svg",
+    "official": "https://developer.microsoft.com/en-us/fluentui#/styles/web/office-brand-icons",
+    "variant": "color",
+    "notes": "Microsoft Fluent product brand icon from Microsoft's Office CDN."
+  },
+  "outlook": {
+    "name": "Microsoft Outlook",
+    "kind": "connector",
+    "source": "https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/outlook_48x1.svg",
+    "official": "https://developer.microsoft.com/en-us/fluentui#/styles/web/office-brand-icons",
+    "variant": "color",
+    "notes": "Microsoft Fluent product brand icon from Microsoft's Office CDN."
+  },
+  "onedrive": {
+    "name": "Microsoft OneDrive",
+    "kind": "connector",
+    "source": "https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/onedrive_48x1.svg",
+    "official": "https://developer.microsoft.com/en-us/fluentui#/styles/web/office-brand-icons",
+    "variant": "color",
+    "notes": "Microsoft Fluent product brand icon from Microsoft's Office CDN."
+  },
+  "sharepoint": {
+    "name": "Microsoft SharePoint",
+    "kind": "connector",
+    "source": "https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/sharepoint_48x1.svg",
+    "official": "https://developer.microsoft.com/en-us/fluentui#/styles/web/office-brand-icons",
+    "variant": "color",
+    "notes": "Microsoft Fluent product brand icon from Microsoft's Office CDN."
+  }
+}

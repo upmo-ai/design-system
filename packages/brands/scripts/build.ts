@@ -1,13 +1,22 @@
 import { copyFileSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { describeBrand, type Brand, svgInner, toModule } from './lib.ts';
+import { checkMark, checkSource, describeBrand, type Brand, type Source, toMark, toModule } from './lib.ts';
 
 const assetsRoot = new URL('../assets/', import.meta.url);
 const dist = new URL('../dist/', import.meta.url);
 
 const marks: Record<string, string> = {};
+const errors: string[] = [];
 
-// Copies one asset folder into dist/svg/<dir> and describes each mark.
-function group(folder: string, dir: string): Brand[] {
+// Provenance for every brand mark, one file per brand family.
+const sourcesDir = new URL('../sources/', import.meta.url);
+const sources: Record<string, Source> = {};
+for (const file of readdirSync(sourcesDir).filter((f) => f.endsWith('.json')).sort()) {
+  Object.assign(sources, JSON.parse(readFileSync(new URL(file, sourcesDir), 'utf8')));
+}
+
+// Copies one asset folder into dist/svg/<dir> and describes each mark. Brand
+// marks must also name their source; language marks are our own.
+function group(folder: string, dir: string, sourced: boolean): Brand[] {
   const assets = new URL(`${folder}/`, assetsRoot);
   mkdirSync(new URL(`svg/${dir}`, dist), { recursive: true });
   return readdirSync(assets)
@@ -17,20 +26,24 @@ function group(folder: string, dir: string): Brand[] {
       const svg = readFileSync(new URL(file, assets), 'utf8');
       copyFileSync(new URL(file, assets), new URL(`svg/${dir}${file}`, dist));
       const brand = describeBrand(file, svg, dir);
-      const inner = svgInner(svg);
-      // The fill lives on the <svg> element in our source; it is lost when we
-      // inline only the inner markup. Re-apply it on a wrapping <g>: the brand's
-      // official colour normally, or currentColor for deep marks (near-black or
-      // near-white) and currentColor marks, so they adapt to the theme.
-      const fillMatch = /<svg\b[^>]*\sfill="([^"]+)"/.exec(svg);
-      const fill = brand.deep || brand.currentColor ? 'currentColor' : (fillMatch?.[1] ?? 'currentColor');
-      marks[brand.id] = `<g fill="${fill}">${inner}</g>`;
+      const problems = checkMark(brand.id, svg);
+      if (sourced) {
+        const source = sources[brand.id];
+        problems.push(...checkSource(source));
+        if (source) Object.assign(brand, { name: source.name, kind: source.kind });
+      }
+      errors.push(...problems.map((p) => `${folder}/${file}: ${p}`));
+      marks[brand.id] = toMark(svg, brand);
       return brand;
     });
 }
 
 mkdirSync(dist, { recursive: true });
-const manifest = { brands: group('brands', ''), languages: group('languages', 'languages/') };
+const manifest = { brands: group('brands', '', true), languages: group('languages', 'languages/', false) };
+if (errors.length) {
+  console.error(errors.join('\n'));
+  process.exit(1);
+}
 const { js, dts } = toModule(manifest, marks);
 writeFileSync(new URL('brands.json', dist), JSON.stringify(manifest, null, 2) + '\n');
 writeFileSync(new URL('index.js', dist), js);

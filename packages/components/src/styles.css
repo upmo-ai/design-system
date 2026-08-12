@@ -1065,10 +1065,14 @@ button.upmo-liveness:hover {
   display: inline-block;
   vertical-align: middle;
 }
-/* Monochrome: force the mark to the current text colour (override fills). */
+/* Monochrome: force the mark to the current text colour (override fills and
+   strokes). Mask contents keep their own fills, or the mask would hide the mark. */
 .upmo-brandmark--mono,
-.upmo-brandmark--mono * {
+.upmo-brandmark--mono *:not(mask, mask *) {
   fill: currentColor !important;
+}
+.upmo-brandmark--mono [stroke]:not([stroke='none'], mask *) {
+  stroke: currentColor !important;
 }
 .upmo-connector-card__mark,
 .upmo-provider-card__mark {

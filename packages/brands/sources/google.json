@@ -1,0 +1,82 @@
+{
+  "gmail": {
+    "name": "Gmail",
+    "kind": "connector",
+    "source": "https://www.gstatic.com/images/branding/productlogos/gmail_2020q4/v11/192px.svg",
+    "official": "https://workspace.google.com/products/gmail/",
+    "variant": "color",
+    "notes": "Google's own product-logo asset (2020 Workspace icon)"
+  },
+  "googlecalendar": {
+    "name": "Google Calendar",
+    "kind": "connector",
+    "source": "https://www.gstatic.com/images/branding/productlogos/calendar_2020q4/v13/192px.svg",
+    "official": "https://workspace.google.com/products/calendar/",
+    "variant": "color",
+    "notes": "Google's own product-logo asset (2020 Workspace icon)"
+  },
+  "googledrive": {
+    "name": "Google Drive",
+    "kind": "connector",
+    "source": "https://www.gstatic.com/images/branding/productlogos/drive_2020q4/v10/192px.svg",
+    "official": "https://workspace.google.com/products/drive/",
+    "variant": "color",
+    "notes": "Google's own product-logo asset (2020 Workspace icon)"
+  },
+  "googlecloud": {
+    "name": "Google Cloud",
+    "kind": "connector",
+    "source": "https://www.gstatic.com/images/branding/productlogos/google_cloud/v8/192px.svg",
+    "official": "https://cloud.google.com/icons",
+    "variant": "color",
+    "notes": "Google's own product-logo asset"
+  },
+  "googlesheets": {
+    "name": "Google Sheets",
+    "kind": "connector",
+    "source": "https://www.gstatic.com/images/branding/productlogos/sheets_2020q4/v11/192px.svg",
+    "official": "https://workspace.google.com/products/sheets/",
+    "variant": "color",
+    "notes": "Google's own product-logo asset (2020 Workspace icon)"
+  },
+  "googlegemini": {
+    "name": "Gemini",
+    "kind": "provider",
+    "source": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/gemini-color.svg",
+    "official": "https://gemini.google.com/",
+    "variant": "color",
+    "notes": "Google's own 2025 spark (https://www.gstatic.com/images/branding/productlogos/gemini_2025/v1/192px.svg) is 3.1MB because its colour blur is embedded raster images, so it is unusable as a vector mark; lobe-icons Gemini Color reproduces the 2025 multicolour spark with vector gradients"
+  },
+  "googledocs": {
+    "name": "Google Docs",
+    "kind": "connector",
+    "source": "https://www.gstatic.com/images/branding/productlogos/docs_2020q4/v12/192px.svg",
+    "official": "https://workspace.google.com/products/docs/",
+    "variant": "color",
+    "notes": "Google's own product-logo asset (2020 Workspace icon)"
+  },
+  "bigquery": {
+    "name": "Google BigQuery",
+    "kind": "connector",
+    "source": "https://services.google.com/fh/files/misc/core-products-icons.zip",
+    "official": "https://cloud.google.com/icons",
+    "variant": "color",
+    "notes": "Unique Icons/BigQuery/SVG/BigQuery-512-color.svg from the Google Cloud core products icon zip"
+  },
+  "vertexai": {
+    "name": "Vertex AI",
+    "kind": "provider",
+    "source": "https://services.google.com/fh/files/misc/core-products-icons.zip",
+    "official": "https://cloud.google.com/icons",
+    "variant": "color",
+    "notes": "Unique Icons/Vertex AI/SVG/VertexAI-512-color.svg from the Google Cloud core products icon zip"
+  },
+  "youtube": {
+    "name": "YouTube",
+    "kind": "connector",
+    "source": "https://www.gstatic.com/images/branding/productlogos/youtube/v9/192px.svg",
+    "official": "https://www.youtube.com/howyoutubeworks/resources/brand-resources/",
+    "variant": "color",
+    "notes": "Google's own product-logo asset; red play-button icon, not the wordmark"
+  }
+}
