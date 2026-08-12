@@ -309,7 +309,7 @@ importers:
   packages/theme:
     dependencies:
       '@upmo-ai/tokens':
-        specifier: workspace:*
+        specifier: workspace:1.0.0-rc.1
         version: link:../tokens
     devDependencies:
       '@mantine/core':
