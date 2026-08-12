@@ -3,9 +3,9 @@ title: Install and link
 description: How the product consumes the design system, published and in local development.
 ---
 
-The Upmo product (`~/Work/upmo/web`) consumes the design system as real npm
-packages. There are two paths: published versions for normal use, and a local
-link for developing the two repos together.
+The Upmo product consumes the design system as real npm packages. There are
+two paths: published versions for normal use, and a local link for developing
+the two repos together.
 
 ## Published versions (the real dependency)
 
@@ -40,12 +40,13 @@ import { upmoTheme, cssVariablesResolver } from '@upmo-ai/theme';
 ## Local development link
 
 To test an unreleased change in the product without publishing, link the local
-checkout. With pnpm, from the product's `web` directory:
+checkout. With pnpm, from the product's web app directory, point at your local
+clone of this repo:
 
 ```sh
-pnpm link ~/Work/upmo-design-system/packages/tokens
-pnpm link ~/Work/upmo-design-system/packages/theme
-pnpm link ~/Work/upmo-design-system/packages/components
+pnpm link <path-to>/upmo-design-system/packages/tokens
+pnpm link <path-to>/upmo-design-system/packages/theme
+pnpm link <path-to>/upmo-design-system/packages/components
 ```
 
 Rebuild the linked package after a change (`pnpm --filter @upmo-ai/theme build`)
