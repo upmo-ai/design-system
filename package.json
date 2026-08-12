@@ -10,7 +10,9 @@
   "scripts": {
     "build": "pnpm -r build",
     "lint": "node scripts/check-hex.ts && node scripts/check-type.ts && node scripts/check-terms.ts && tsc -p tsconfig.json && tsc -p packages/components/tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "release": "node scripts/release.ts",
+    "deploy:docs": "node scripts/deploy-docs.ts"
   },
   "devDependencies": {
     "@types/node": "24.13.2",

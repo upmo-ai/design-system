@@ -3,26 +3,45 @@ title: Install and link
 description: How the product consumes the design system, published and in local development.
 ---
 
+export const version = import.meta.env.UPMO_VERSION;
+export const isPrerelease = version.includes('-');
+// Stable releases use a caret range on the major; prereleases must be pinned
+// exactly, because caret ranges do not match prerelease versions.
+export const range = isPrerelease ? version : `^${version.split('.')[0]}.0.0`;
+export const installTag = isPrerelease ? '@next' : '';
+
 The Upmo product consumes the design system as real npm packages. There are
 two paths: published versions for normal use, and a local link for developing
 the two repos together.
 
+The current release is **v{version}**.
+
 ## Published versions (the real dependency)
+
+{isPrerelease && (
+  <p>
+    This is a <strong>prerelease</strong>. Install it with the <code>next</code> dist-tag
+    (for example <code>pnpm add @upmo-ai/components{'@next'}</code>) and pin the exact
+    version, since caret ranges do not resolve prereleases.
+  </p>
+)}
 
 The product depends on published, semver-ranged packages:
 
-```jsonc
-// web/package.json
+<pre><code class="language-jsonc">{`// web/package.json
 {
   "dependencies": {
-    "@upmo-ai/tokens": "^1.0.0",
-    "@upmo-ai/theme": "^1.0.0",
-    "@upmo-ai/components": "^1.0.0",
-    "@upmo-ai/icons": "^1.0.0",
-    "@upmo-ai/brands": "^1.0.0"
+    "@upmo-ai/tokens": "${range}",
+    "@upmo-ai/theme": "${range}",
+    "@upmo-ai/components": "${range}",
+    "@upmo-ai/icons": "${range}",
+    "@upmo-ai/brands": "${range}"
   }
-}
-```
+}`}</code></pre>
+
+Install from the command line:
+
+<pre><code class="language-sh">{`pnpm add @upmo-ai/tokens${installTag} @upmo-ai/theme${installTag} @upmo-ai/components${installTag} @upmo-ai/icons${installTag} @upmo-ai/brands${installTag}`}</code></pre>
 
 Set the provider up once:
 

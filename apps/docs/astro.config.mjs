@@ -1,14 +1,33 @@
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+// Single source of version truth: the repo-root version.json, written by the
+// release script. The header badge and the install page both read it so the
+// docs always show the released version.
+const version = JSON.parse(
+  readFileSync(fileURLToPath(new URL('../../version.json', import.meta.url)), 'utf8'),
+).version;
 
 const fonts =
   'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Familjen+Grotesk:wght@700&family=Fira+Code:wght@400&display=swap';
 
 export default defineConfig({
   site: 'https://design.upmo.dev',
+  vite: {
+    define: {
+      // Exposes the released version to docs pages and components at build time.
+      'import.meta.env.UPMO_VERSION': JSON.stringify(version),
+    },
+  },
   integrations: [
     starlight({
       title: 'Upmo Design System',
+      components: {
+        // Adds a version badge next to the wordmark in the header.
+        SiteTitle: './src/components/SiteTitle.astro',
+      },
       logo: {
         light: './src/assets/upmo-wordmark-light.svg',
         dark: './src/assets/upmo-wordmark-dark.svg',

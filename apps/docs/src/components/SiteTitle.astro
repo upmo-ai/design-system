@@ -1,0 +1,101 @@
+---
+// Overrides Starlight's SiteTitle: the Upmo wordmark, plus a version badge
+// reading the released version from version.json (exposed as UPMO_VERSION).
+import { logos } from 'virtual:starlight/user-images';
+import config from 'virtual:starlight/user-config';
+const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
+const version: string = import.meta.env.UPMO_VERSION;
+const npmHref = 'https://www.npmjs.com/package/@upmo-ai/components';
+---
+
+<div class="upmo-title sl-flex">
+  <a href={siteTitleHref} class="site-title sl-flex">
+    {
+      config.logo && logos.dark && (
+        <>
+          <img
+            class:list={{ 'light:sl-hidden print:hidden': !('src' in config.logo) }}
+            alt={config.logo.alt}
+            src={logos.dark.src}
+            width={logos.dark.width}
+            height={logos.dark.height}
+          />
+          {!('src' in config.logo) && (
+            <img
+              class="dark:sl-hidden print:block"
+              alt={config.logo.alt}
+              src={logos.light?.src}
+              width={logos.light?.width}
+              height={logos.light?.height}
+            />
+          )}
+        </>
+      )
+    }
+    <span class:list={{ 'sr-only': config.logo?.replacesTitle }} translate="no">
+      {siteTitle}
+    </span>
+  </a>
+  {
+    version && (
+      <a
+        class="upmo-version-badge"
+        href={npmHref}
+        target="_blank"
+        rel="noreferrer"
+        title={`@upmo-ai/* v${version} on npm`}
+      >
+        v{version}
+      </a>
+    )
+  }
+</div>
+
+<style>
+  @layer starlight.core {
+    .site-title {
+      align-items: center;
+      gap: var(--sl-nav-gap);
+      font-size: var(--sl-text-h4);
+      font-weight: 600;
+      color: var(--sl-color-text-accent);
+      text-decoration: none;
+      white-space: nowrap;
+      min-width: 0;
+    }
+    .site-title span {
+      overflow: hidden;
+    }
+    .site-title img {
+      height: calc(var(--sl-nav-height) - 2 * var(--sl-nav-pad-y));
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      object-position: 0 50%;
+    }
+  }
+
+  .upmo-title {
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .upmo-version-badge {
+    flex-shrink: 0;
+    font-family: var(--sl-font-mono);
+    font-size: var(--sl-text-xs);
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.2em 0.5em;
+    border-radius: 999px;
+    color: var(--sl-color-accent-high);
+    background: var(--sl-color-accent-low);
+    border: 1px solid var(--sl-color-hairline);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .upmo-version-badge:hover {
+    color: var(--sl-color-white);
+    background: var(--sl-color-accent);
+  }
+</style>
