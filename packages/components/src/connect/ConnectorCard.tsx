@@ -1,6 +1,7 @@
-import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
-import { IconSettings } from '@tabler/icons-react';
+import { Badge, Card, Group, Stack, Text } from '@mantine/core';
 import clsx from 'clsx';
+import { Button } from '../Button/Button.tsx';
+import { Icon } from '../icon/Icon.tsx';
 import { BrandMark } from '../brand/BrandMark.tsx';
 
 export type ChangesPolicy = 'allow' | 'ask' | 'block';
@@ -96,12 +97,12 @@ export function ConnectorCard({
 
         <Group justify="flex-end" gap="xs">
           {onEdit ? (
-            <Button variant="default" leftSection={<IconSettings size={16} />} onClick={onEdit}>
+            <Button variant="default" leftSection={<Icon concept="action.settings" size={16} />} onClick={onEdit}>
               Edit permissions
             </Button>
           ) : null}
           {onDisconnect ? (
-            <Button variant="subtle" color="red" onClick={onDisconnect}>
+            <Button variant="subtle" color="red" leftSection={<Icon concept="action.disconnect" size={16} />} onClick={onDisconnect}>
               Disconnect
             </Button>
           ) : null}

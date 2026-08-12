@@ -1,6 +1,8 @@
-import { Button, Group } from '@mantine/core';
+import { Group } from '@mantine/core';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
+import { Button } from '../Button/Button.tsx';
+import { Icon } from '../icon/Icon.tsx';
 
 export interface OnboardingStep {
   title: ReactNode;
@@ -67,14 +69,25 @@ export function OnboardingWizard({
         </div>
         <Group gap="xs">
           {!isFirst ? (
-            <Button variant="default" onClick={() => onActiveChange(active - 1)}>
+            <Button
+              variant="default"
+              onClick={() => onActiveChange(active - 1)}
+              leftSection={<Icon concept="action.previous" size={16} />}
+            >
               Back
             </Button>
           ) : null}
           {isLast ? (
-            <Button onClick={onFinish}>{finishLabel}</Button>
+            <Button onClick={onFinish} leftSection={<Icon concept="action.approve" size={16} />}>
+              {finishLabel}
+            </Button>
           ) : (
-            <Button onClick={() => onActiveChange(active + 1)}>Next</Button>
+            <Button
+              onClick={() => onActiveChange(active + 1)}
+              rightSection={<Icon concept="action.next" size={16} />}
+            >
+              Next
+            </Button>
           )}
         </Group>
       </Group>

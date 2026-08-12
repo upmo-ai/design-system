@@ -1,7 +1,9 @@
-import { Button, Progress } from '@mantine/core';
+import { Progress } from '@mantine/core';
 import { IconCheck } from '@tabler/icons-react';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
+import { Button } from '../Button/Button.tsx';
+import { Icon } from '../icon/Icon.tsx';
 
 export interface ChecklistStep {
   id: string;
@@ -65,7 +67,12 @@ export function SetupChecklist({ title = 'Finish setting up', steps, className }
               ) : null}
             </div>
             {!step.done && step.onAction ? (
-              <Button size="xs" variant="light" onClick={step.onAction}>
+              <Button
+                size="xs"
+                variant="light"
+                onClick={step.onAction}
+                rightSection={<Icon concept="action.next" size={14} />}
+              >
                 {step.actionLabel ?? 'Start'}
               </Button>
             ) : null}

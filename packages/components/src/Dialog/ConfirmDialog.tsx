@@ -1,6 +1,7 @@
 import { Group, Modal, Stack, Text } from '@mantine/core';
 import type { ReactNode } from 'react';
 import { Button } from '../Button/Button.tsx';
+import { Icon } from '../icon/Icon.tsx';
 
 export interface ConfirmDialogProps {
   /** Whether the dialog is open. */
@@ -71,6 +72,7 @@ export function ConfirmDialog({
             loading={busy}
             disabled={confirmDisabled}
             onClick={onConfirm}
+            leftSection={<Icon concept={destructive ? 'action.delete' : 'action.approve'} size={16} />}
           >
             {action}
           </Button>

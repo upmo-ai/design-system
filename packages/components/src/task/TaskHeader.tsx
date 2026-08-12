@@ -1,6 +1,8 @@
-import { Button, Group, Stack, Text, Title } from '@mantine/core';
+import { Group, Stack, Text, Title } from '@mantine/core';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
+import { Button } from '../Button/Button.tsx';
+import { Icon } from '../icon/Icon.tsx';
 import { StatusBadge } from '../status/StatusBadge.tsx';
 import { Caret } from '../status/Caret.tsx';
 import { statusMeta, type Status } from '../status/status.ts';
@@ -97,17 +99,32 @@ export function TaskHeader({
 
         <Group gap="sm" wrap="wrap">
           {onTogglePause ? (
-            <Button type="button" variant="default" onClick={onTogglePause}>
+            <Button
+              type="button"
+              variant="default"
+              onClick={onTogglePause}
+              leftSection={<Icon concept={paused ? 'action.resume' : 'action.pause'} size={16} />}
+            >
               {paused ? 'Resume' : 'Pause'}
             </Button>
           ) : null}
           {onNextPhase ? (
-            <Button type="button" onClick={onNextPhase} disabled={!canAdvance}>
+            <Button
+              type="button"
+              onClick={onNextPhase}
+              disabled={!canAdvance}
+              rightSection={<Icon concept="action.next" size={16} />}
+            >
               Next phase
             </Button>
           ) : null}
           {onShare ? (
-            <Button type="button" variant="default" onClick={onShare}>
+            <Button
+              type="button"
+              variant="default"
+              onClick={onShare}
+              leftSection={<Icon concept="action.share" size={16} />}
+            >
               Share
             </Button>
           ) : null}

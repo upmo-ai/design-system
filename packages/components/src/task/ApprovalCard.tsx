@@ -3,6 +3,7 @@ import { IconAlertTriangle, IconCheck, IconClock, IconShieldCheck, IconX } from 
 import clsx from 'clsx';
 import { useId, type ReactNode } from 'react';
 import { Button } from '../Button/Button.tsx';
+import { Icon as UpmoIcon } from '../icon/Icon.tsx';
 
 export type ApprovalState = 'pending' | 'approved' | 'denied' | 'expired';
 
@@ -119,10 +120,18 @@ export function ApprovalCard({
               color={destructive ? 'red' : undefined}
               onClick={onApprove}
               loading={busy}
+              leftSection={<UpmoIcon concept="action.approve" size={16} />}
             >
               {approveLabel}
             </Button>
-            <Button type="button" size="sm" variant="default" onClick={onDeny} disabled={busy}>
+            <Button
+              type="button"
+              size="sm"
+              variant="default"
+              onClick={onDeny}
+              disabled={busy}
+              leftSection={<UpmoIcon concept="action.deny" size={16} />}
+            >
               {denyLabel}
             </Button>
           </Group>

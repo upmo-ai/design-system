@@ -1,6 +1,8 @@
-import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
+import { Badge, Card, Group, Stack, Text } from '@mantine/core';
 import { IconCpu } from '@tabler/icons-react';
 import clsx from 'clsx';
+import { Button } from '../Button/Button.tsx';
+import { Icon } from '../icon/Icon.tsx';
 import { BrandMark } from '../brand/BrandMark.tsx';
 
 export type ProviderStatus =
@@ -113,12 +115,12 @@ export function ProviderCard({
 
         <Group justify="flex-end" gap="xs">
           {onEdit ? (
-            <Button variant="default" onClick={onEdit}>
+            <Button variant="default" onClick={onEdit} leftSection={<Icon concept="action.edit" size={16} />}>
               Edit
             </Button>
           ) : null}
           {onDisconnect ? (
-            <Button variant="subtle" color="red" onClick={onDisconnect}>
+            <Button variant="subtle" color="red" onClick={onDisconnect} leftSection={<Icon concept="action.disconnect" size={16} />}>
               Disconnect
             </Button>
           ) : null}

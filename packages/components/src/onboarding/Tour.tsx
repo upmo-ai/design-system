@@ -3,6 +3,7 @@ import { IconX } from '@tabler/icons-react';
 import clsx from 'clsx';
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { Button } from '../Button/Button.tsx';
+import { Icon } from '../icon/Icon.tsx';
 
 export interface Coachmark {
   title: ReactNode;
@@ -72,16 +73,25 @@ export function Tour({ steps, active, onActiveChange, onClose, arrow = 'top', cl
         </span>
         <Group gap="xs">
           {active > 0 ? (
-            <Button size="xs" variant="subtle" onClick={() => onActiveChange(active - 1)}>
+            <Button
+              size="xs"
+              variant="subtle"
+              onClick={() => onActiveChange(active - 1)}
+              leftSection={<Icon concept="action.previous" size={14} />}
+            >
               Back
             </Button>
           ) : null}
           {isLast ? (
-            <Button size="xs" onClick={onClose}>
+            <Button size="xs" onClick={onClose} leftSection={<Icon concept="action.approve" size={14} />}>
               Done
             </Button>
           ) : (
-            <Button size="xs" onClick={() => onActiveChange(active + 1)}>
+            <Button
+              size="xs"
+              onClick={() => onActiveChange(active + 1)}
+              rightSection={<Icon concept="action.next" size={14} />}
+            >
               Next
             </Button>
           )}
