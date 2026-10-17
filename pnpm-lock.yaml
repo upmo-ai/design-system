@@ -58,23 +58,23 @@ importers:
   packages/ui:
     devDependencies:
       '@mantine/core':
-        specifier: 9.4.1
-        version: 9.4.1(@mantine/hooks@9.4.1(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        specifier: 9.7.3
+        version: 9.7.3(@mantine/hooks@9.7.3(react@19.3.1))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@mantine/hooks':
-        specifier: 9.4.1
-        version: 9.4.1(react@19.2.7)
+        specifier: 9.7.3
+        version: 9.7.3(react@19.3.1)
       '@types/react':
-        specifier: 19.2.17
-        version: 19.2.17
+        specifier: 19.3.0
+        version: 19.3.0
       '@upmo-ai/tokens':
         specifier: workspace:*
         version: link:../tokens
       react:
-        specifier: 19.2.7
-        version: 19.2.7
+        specifier: 19.3.1
+        version: 19.3.1
       react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
+        specifier: 19.3.1
+        version: 19.3.1(react@19.3.1)
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -743,15 +743,15 @@ packages:
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
 
-  '@mantine/core@9.4.1':
-    resolution: {integrity: sha512-lZWEICrum4+vwKxzh/mk4RB1N6BqZ0Cshdl6lhm7OYLiQzmOaxKtOgyaWz+vr65G8mqTXjalZalB+wmMVBYK2Q==}
+  '@mantine/core@9.7.3':
+    resolution: {integrity: sha512-wYJ9Bd82a7HqwJ+hubFqUIocBGMuw6txzdPnnleHvv1h0NlnkESevK/WHTRh4FtOw33B5N2ADT34s3x1/8d8jg==}
     peerDependencies:
-      '@mantine/hooks': 9.4.1
+      '@mantine/hooks': 9.7.3
       react: ^19.2.0
       react-dom: ^19.2.0
 
-  '@mantine/hooks@9.4.1':
-    resolution: {integrity: sha512-eTI8wmzPx3r98zgKIEuvukmoGTHBhmtI6+9E6o2DbTmEU2eM1bCdjE2vFdf0op2AlRO0KEYEcZhNQi4T/SJk0A==}
+  '@mantine/hooks@9.7.3':
+    resolution: {integrity: sha512-GMHoMS1qul1dBLIHd/N9ef2Pr8UKYYHfuM+g2ej3gYqU0kH4sTiR9FNHksoTQi0PzATRoaNlUYjjMe9rbDRw5A==}
     peerDependencies:
       react: ^19.2.0
 
@@ -1012,8 +1012,8 @@ packages:
   '@types/node@24.13.2':
     resolution: {integrity: sha512-fRa09kZTgu8o71KFcDjUFuc7F+dEbZYZmkI0mg5YBTRs0yMKjYHsq/c0urDKeDb+D5qVgXOdFcuu+DZPKOITwA==}
 
-  '@types/react@19.2.17':
-    resolution: {integrity: sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw==}
+  '@types/react@19.3.0':
+    resolution: {integrity: sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==}
 
   '@types/sax@1.2.7':
     resolution: {integrity: sha512-rO73L89PJxeYM3s3pPPjiPgVVcymqU490g0YO5n5By0k2Erzj6tay/4lr1CHAAU4JyOWd1rpQ8bCf6cZfHU96A==}
@@ -2190,10 +2190,10 @@ packages:
   radix3@1.1.2:
     resolution: {integrity: sha512-b484I/7b8rDEdSDKckSSBA8knMpcdsXudlE/LNL639wFoHKwLbEkQFZHWEYwDC0wa0FKUcCY+GAF73Z7wxNVFA==}
 
-  react-dom@19.2.7:
-    resolution: {integrity: sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ==}
+  react-dom@19.3.1:
+    resolution: {integrity: sha512-Y0bARz53lhEC1NMCASs0/j+faB/zqt3R8hpvg1e8+61ZVJ4UL0UdC4cBbXfZMcIuhrfgeILTLe+ZeBCavQPtKQ==}
     peerDependencies:
-      react: ^19.2.7
+      react: ^19.3.1
 
   react-number-format@5.4.5:
     resolution: {integrity: sha512-y8O2yHHj3w0aE9XO8d2BCcUOOdQTRSVq+WIuMlLVucAm5XNjJAy+BoOJiuQMldVYVOKTMyvVNfnbl2Oqp+YxGw==}
@@ -2231,8 +2231,8 @@ packages:
       '@types/react':
         optional: true
 
-  react@19.2.7:
-    resolution: {integrity: sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==}
+  react@19.3.1:
+    resolution: {integrity: sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw==}
     engines: {node: '>=0.10.0'}
 
   read-yaml-file@1.1.0:
@@ -2368,8 +2368,8 @@ packages:
     resolution: {integrity: sha512-6R3J5M4AcbtLUdZmRv2SygeVaM7IhrLXu9BmnOGmmACak8fiUtOsYNWUS4uK7upbmHIBbLBeFeI//477BKLBzA==}
     engines: {node: '>=11.0.0'}
 
-  scheduler@0.27.0:
-    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
+  scheduler@0.28.0:
+    resolution: {integrity: sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==}
 
   semver@7.8.5:
     resolution: {integrity: sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==}
@@ -2518,8 +2518,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  type-fest@5.8.0:
-    resolution: {integrity: sha512-YGYEVz3Fm5iy/AybuA0oyNFq7H4CgQNfRp/qfe8nurE1kuCeNm3/vfm9X4Mtl+qLyaKJUh5xrFZwogr41SMjYA==}
+  type-fest@5.10.0:
+    resolution: {integrity: sha512-NoSdpq/WEiAg5sjmBkmV/hfxv6HJH4NqPNrqjtSO5CwRmpsDfaf4begxW34KdJykH/l1yHtwBWQkCRdoXO8mPA==}
     engines: {node: '>=20'}
 
   typesafe-path@0.2.2:
@@ -3511,18 +3511,18 @@ snapshots:
       '@floating-ui/core': 1.8.0
       '@floating-ui/utils': 0.2.12
 
-  '@floating-ui/react-dom@2.1.9(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+  '@floating-ui/react-dom@2.1.9(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
       '@floating-ui/dom': 1.8.0
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
 
-  '@floating-ui/react@0.27.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+  '@floating-ui/react@0.27.20(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      '@floating-ui/react-dom': 2.1.9(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@floating-ui/react-dom': 2.1.9(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@floating-ui/utils': 0.2.12
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
       tabbable: 6.5.0
 
   '@floating-ui/utils@0.2.12': {}
@@ -3643,22 +3643,22 @@ snapshots:
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
 
-  '@mantine/core@9.4.1(@mantine/hooks@9.4.1(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+  '@mantine/core@9.7.3(@mantine/hooks@9.7.3(react@19.3.1))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      '@floating-ui/react': 0.27.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@mantine/hooks': 9.4.1(react@19.2.7)
+      '@floating-ui/react': 0.27.20(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@mantine/hooks': 9.7.3(react@19.3.1)
       clsx: 2.1.1
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
-      react-number-format: 5.4.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      react-remove-scroll: 2.7.2(@types/react@19.2.17)(react@19.2.7)
-      type-fest: 5.8.0
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
+      react-number-format: 5.4.5(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      react-remove-scroll: 2.7.2(@types/react@19.3.0)(react@19.3.1)
+      type-fest: 5.10.0
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mantine/hooks@9.4.1(react@19.2.7)':
+  '@mantine/hooks@9.7.3(react@19.3.1)':
     dependencies:
-      react: 19.2.7
+      react: 19.3.1
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -3899,7 +3899,7 @@ snapshots:
     dependencies:
       undici-types: 7.18.2
 
-  '@types/react@19.2.17':
+  '@types/react@19.3.0':
     dependencies:
       csstype: 3.2.3
 
@@ -5519,44 +5519,44 @@ snapshots:
 
   radix3@1.1.2: {}
 
-  react-dom@19.2.7(react@19.2.7):
+  react-dom@19.3.1(react@19.3.1):
     dependencies:
-      react: 19.2.7
-      scheduler: 0.27.0
+      react: 19.3.1
+      scheduler: 0.28.0
 
-  react-number-format@5.4.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+  react-number-format@5.4.5(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
 
-  react-remove-scroll-bar@2.3.8(@types/react@19.2.17)(react@19.2.7):
+  react-remove-scroll-bar@2.3.8(@types/react@19.3.0)(react@19.3.1):
     dependencies:
-      react: 19.2.7
-      react-style-singleton: 2.2.3(@types/react@19.2.17)(react@19.2.7)
+      react: 19.3.1
+      react-style-singleton: 2.2.3(@types/react@19.3.0)(react@19.3.1)
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.2.17
+      '@types/react': 19.3.0
 
-  react-remove-scroll@2.7.2(@types/react@19.2.17)(react@19.2.7):
+  react-remove-scroll@2.7.2(@types/react@19.3.0)(react@19.3.1):
     dependencies:
-      react: 19.2.7
-      react-remove-scroll-bar: 2.3.8(@types/react@19.2.17)(react@19.2.7)
-      react-style-singleton: 2.2.3(@types/react@19.2.17)(react@19.2.7)
+      react: 19.3.1
+      react-remove-scroll-bar: 2.3.8(@types/react@19.3.0)(react@19.3.1)
+      react-style-singleton: 2.2.3(@types/react@19.3.0)(react@19.3.1)
       tslib: 2.8.1
-      use-callback-ref: 1.3.3(@types/react@19.2.17)(react@19.2.7)
-      use-sidecar: 1.1.3(@types/react@19.2.17)(react@19.2.7)
+      use-callback-ref: 1.3.3(@types/react@19.3.0)(react@19.3.1)
+      use-sidecar: 1.1.3(@types/react@19.3.0)(react@19.3.1)
     optionalDependencies:
-      '@types/react': 19.2.17
+      '@types/react': 19.3.0
 
-  react-style-singleton@2.2.3(@types/react@19.2.17)(react@19.2.7):
+  react-style-singleton@2.2.3(@types/react@19.3.0)(react@19.3.1):
     dependencies:
       get-nonce: 1.0.1
-      react: 19.2.7
+      react: 19.3.1
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.2.17
+      '@types/react': 19.3.0
 
-  react@19.2.7: {}
+  react@19.3.1: {}
 
   read-yaml-file@1.1.0:
     dependencies:
@@ -5792,7 +5792,7 @@ snapshots:
 
   sax@1.6.0: {}
 
-  scheduler@0.27.0: {}
+  scheduler@0.28.0: {}
 
   semver@7.8.5: {}
 
@@ -5949,7 +5949,7 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  type-fest@5.8.0:
+  type-fest@5.10.0:
     dependencies:
       tagged-tag: 1.0.0
 
@@ -6046,20 +6046,20 @@ snapshots:
 
   url-extras@0.1.0: {}
 
-  use-callback-ref@1.3.3(@types/react@19.2.17)(react@19.2.7):
+  use-callback-ref@1.3.3(@types/react@19.3.0)(react@19.3.1):
     dependencies:
-      react: 19.2.7
+      react: 19.3.1
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.2.17
+      '@types/react': 19.3.0
 
-  use-sidecar@1.1.3(@types/react@19.2.17)(react@19.2.7):
+  use-sidecar@1.1.3(@types/react@19.3.0)(react@19.3.1):
     dependencies:
       detect-node-es: 1.1.0
-      react: 19.2.7
+      react: 19.3.1
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.2.17
+      '@types/react': 19.3.0
 
   util-deprecate@1.0.2: {}
 
