@@ -381,6 +381,7 @@ html[data-theme="dark"] .u-pill button:hover { background: var(--emerald-9); }
 .u-opt[aria-selected="true"] { color: var(--emerald-deep); font-weight: 600; }
 .u-opt .u-opt-desc { font-size: 13px; color: var(--ink-muted); font-weight: 400; margin-left: auto; }
 .u-opt-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.u-opt-label:has(+ .u-opt-sub) { flex-shrink: 0; max-width: 60%; }
 .u-opt-sub { flex-shrink: 100; min-width: 0; margin-right: auto; overflow: hidden; text-overflow: ellipsis; font-size: 13px; font-weight: 400; color: var(--ink-muted); white-space: nowrap; }
 .u-opt-check { flex: none; width: var(--icon-sm); height: var(--icon-sm); color: var(--emerald-deep); visibility: hidden; }
 .u-opt[aria-selected="true"] .u-opt-check { visibility: visible; }
