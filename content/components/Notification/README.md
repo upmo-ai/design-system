@@ -16,7 +16,7 @@ A toast that confirms something happened, shown for a short time in the corner.
 ## Behaviour
 
 - It sits bottom right on desktop and top centre on phones. `surface-100`, `border`, `shadow-md`, `radius-lg`, max 380px wide. The status icon sits in a 32px circle on its `-soft` tint, as in `Alert`. The title stays `ink`.
-- It enters with a 240ms rise and fade and closes after 5s. Hover and focus pause it. The newest toast is at the bottom. At most three show, and older ones collapse.
+- It enters with a 240ms rise and fade and closes after 5s, or 10s when it has an action. Hover and focus pause it. The newest toast is at the bottom. At most three show, and older ones collapse.
 - Undo beats confirm: archive at once, then show a toast with Undo. People keep moving, and a mistake is still one click from fixed.
 
 ## Tokens
@@ -25,4 +25,4 @@ A toast that confirms something happened, shown for a short time in the corner.
 
 ## Mantine
 
-`notifications.show({ title, message, color: 'success', icon: <Caret/>, autoClose: 5000 })` from `@mantine/notifications`, with the provider positioned `bottom-right` and `pauseResetOnHover="notification"`, so hover pauses only that toast.
+`notifications.show({ title, message, color: 'success', icon: <Caret/>, autoClose: 5000 })` from `@mantine/notifications`, with the provider positioned `bottom-right` and `pauseResetOnHover="notification"`, so hover pauses only that toast. A toast with an action passes `autoClose: 10000`.

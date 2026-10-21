@@ -9,7 +9,7 @@ Live output from a task sandbox, as it happens: build logs, test runs, shell too
 
 ## What the consumer provides
 
-- `lines`: `{ at, text, level? }`, where `level` is `ok` | `warn` | `err` | `info` | `dim` | `cmd`. The component can also take raw ANSI, the escape codes terminals use for colour, and map it. Codes 30 to 37 and 90 to 97 collapse to the five levels. Bold is `cmd`. Everything else is ink. Never more than the five colours.
+- `lines`: `{ at, text, level? }`, where `level` is `ok` | `warn` | `err` | `info` | `dim` | `cmd`. The component can also take raw ANSI, the escape codes terminals use for colour, and map it. Codes 30 to 37 and 90 to 97 collapse to the five colour levels, `ok` to `dim`. Bold is `cmd`. Everything else is ink. Never more than the five colours.
 - `status` for the header badge: `Working` with the lift caret, `Done` with the done caret, `Failed` with the X. Each shows the elapsed time in tabular figures.
 - `title` for the header, in `code-sm`: sandbox, task id, run number.
 - Optional `maxLines` (default 5000). Older lines drop from the DOM, and a "Download full log" link appears in the header.

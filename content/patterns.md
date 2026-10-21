@@ -8,7 +8,7 @@ How components fit together into pages. Each pattern names its components and th
 - Top bar, `topbar` high: sidebar toggle, breadcrumb, the ⌘K launcher, the notifications bell and help. The launcher is a button shaped like a search field.
 - Notifications live behind the bell (Tabler `bell`), never in the sidebar. The bell carries a count `Badge` for unread items. It opens a list with approvals and questions first, each with Approve in its row, then finished and failed tasks. The empty list reads "You are up to date" with "Approvals and finished tasks show up here."
 - Content sits on `surface-000`, padded by the layout rule, with one `h1`.
-- Below `bp-sm` the sidebar becomes a 56px icon rail with tooltips. Below `bp-sm` it becomes a drawer opened from the top bar. The composer in Chat stays fixed to the bottom on phones.
+- Between `bp-sm` and `bp-md` the sidebar becomes a 56px icon rail with tooltips. Below `bp-sm` it becomes a drawer opened from the top bar. The composer in Chat stays fixed to the bottom on phones.
 
 ## Navigation
 
@@ -33,7 +33,7 @@ How components fit together into pages. Each pattern names its components and th
 
 ## Feedback
 
-- `Notification` (toast) appears bottom right, or top centre on phones. It uses `surface-100` and `shadow-md`, with a status icon and one line. It closes by itself after 5s unless it has an action. New toasts stack at the bottom. It has `role="status"`.
+- `Notification` (toast) appears bottom right, or top centre on phones. It uses `surface-100` and `shadow-md`, with a status icon and one line. It closes by itself after 5s, or 10s when it has an action. New toasts stack at the bottom. It has `role="status"`.
 - `Alert` sits inline, above the content it is about, for things that stay: "Task needs approval", "Provider key expired". It is a `surface-100` card with a 4px status edge down the left side. The icon sits in a 32px circle on the status `-soft` tint. It has a title, one line and an optional action.
 - Use a confirmation `Modal` only for destructive or expensive actions. The title is the question. The body names what is lost. The primary button names the action ("Delete task"). The secondary button is "Cancel", and it takes focus by default.
 - Prefer undo to a confirmation where you can. Archive the chat, then show a toast with "Undo".
@@ -46,7 +46,7 @@ How components fit together into pages. Each pattern names its components and th
 
 ## Overlays
 
-- `Modal`: centred, `radius-xl`, `shadow-lg`, over `overlay`. It is at most 560px wide, and full-screen below `bp-xs`. It holds an `h2` title, the content, and actions aligned right. Escape and the scrim (the dimmed layer behind it) close it, unless the form has unsaved changes.
+- `Modal`: centred, `radius-xl`, `shadow-lg`, over `overlay`. It is at most 560px wide (480px for confirmations), and full-screen below `bp-xs`. It holds an `h2` title, the content, and actions aligned right. Escape and the scrim (the dimmed layer behind it) close it, unless the form has unsaved changes.
 - A drawer slides in from the right for inspectors, such as task details or tool call output. It is 480px wide, and full width on phones. It uses the same tokens as the modal.
 - `Tooltip`: `surface-inverse` with `ink-inverse`, `radius-md` and `caption` text, after a 400ms delay. Use it for icon-only controls and cut-off text. Never put essential information in a tooltip.
 - Popovers and menus use `surface-100`, `border`, `shadow-sm` and `radius-lg`.
