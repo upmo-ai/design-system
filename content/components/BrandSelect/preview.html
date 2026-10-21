@@ -10,7 +10,7 @@
   .bs-list .u-opt { height: 40px; }
   .bs-opt-main { display: flex; align-items: center; gap: 8px; min-width: 0; }
   .bs-opt-main .u-brand { width: 20px; height: 20px; }
-  .bs-opt-main .bs-sub { font-size: 13px; color: var(--ink-muted); font-weight: 400; margin-left: 4px; }
+  .bs-opt-main .bs-sub { font-size: 13px; color: var(--ink-muted); font-weight: 400; margin-left: 4px; flex-shrink: 100; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .u-opt[aria-selected="true"] .bs-check { color: var(--emerald-deep); width: 16px; height: 16px; }
   .u-opt[aria-disabled="true"] { color: var(--ink-disabled); cursor: not-allowed; }
   .u-opt[aria-disabled="true"] .u-opt-desc, .u-opt[aria-disabled="true"] .bs-sub { color: var(--ink-disabled); }
