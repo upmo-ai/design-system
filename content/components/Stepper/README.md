@@ -17,7 +17,7 @@ A long form split into three to five named steps, each validated before the next
 
 - In the header, done steps show the caret on `emerald-deep`. The current step has a 2px `emerald-deep` ring. Upcoming steps are a `border-strong` circle in `ink-muted`. The connectors, the lines between steps, turn `emerald-deep` as steps complete.
 - Done steps are buttons, and clicking one goes back to it. Upcoming steps are not clickable.
-- "Continue" stays enabled. On an invalid step, pressing it shows the errors and moves focus to the first one. Each step change announces "Step 2 of 4, Credentials".
+- "Continue" stays enabled. On an invalid step, pressing it shows the errors and moves focus to the first one. Each step change announces `live.step` ("Step 2 of 4 · Credentials") in a polite status region. The step content itself is not a live region.
 - "Back" keeps every value. Closing the stepper asks first only when something was entered.
 - A step change moves the content. The old step fades out and moves 8px back. The new step fades in from 8px ahead: from the right going forward, from the left going back. The height follows, so the buttons do not jump. The ring, the connector fill and the compact bar animate too. Focus moves to the new step's heading. Under reduced motion, only a short fade is left.
 - Below `bp-xs`, the header collapses to "Step n of m · Label" with a 4px `Progress` bar.

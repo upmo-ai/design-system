@@ -3,7 +3,8 @@
   <div class="u-stepper">
     <div class="u-steps" id="st-head" aria-label="Progress"></div>
     <div class="u-step-compact" id="st-compact"><span id="st-compact-label"></span><div class="u-progress"><div id="st-compact-bar" style="width: 25%"></div></div></div>
-    <div id="st-body" class="u-step-body" aria-live="polite"></div>
+    <div id="st-body" class="u-step-body"></div>
+    <span class="u-sr" role="status" id="st-live"></span>
     <div class="u-row" style="justify-content: space-between">
       <button class="u-btn u-btn--subtle" id="st-back">Back</button>
       <button class="u-btn u-btn--filled" id="st-next">Continue</button>
@@ -169,7 +170,9 @@
       b.querySelector('.u-step-n').innerHTML = isDone ? caret() : i + 1;
     });
     head.querySelectorAll('.u-step-line').forEach(function (l, i) { l.classList.toggle('u-step-line--done', done.indexOf(i) > -1); });
-    document.getElementById('st-compact-label').textContent = 'Step ' + (cur + 1) + ' of ' + steps.length + ' · ' + steps[cur];
+    // live.step: "Step {n} of {total} · {title}"
+    var stepText = 'Step ' + (cur + 1) + ' of ' + steps.length + ' · ' + steps[cur];
+    document.getElementById('st-compact-label').textContent = stepText;
     document.getElementById('st-compact-bar').style.width = ((cur + 1) / steps.length * 100) + '%';
     back.style.visibility = cur === 0 ? 'hidden' : 'visible';
     next.textContent = cur === steps.length - 1 ? 'Connect provider' : 'Continue';
@@ -188,14 +191,16 @@
     panel.querySelectorAll('.u-brand-tile').forEach(function (c) { c.addEventListener('click', function () { panel.querySelectorAll('.u-brand-tile').forEach(function (x) { x.setAttribute('aria-pressed', x === c); x.setAttribute('aria-checked', x === c); }); }); });
     panel.querySelectorAll('.u-select').forEach(uSelect);
     swap(panel, dir);
+    if (dir) document.getElementById('st-live').textContent = html ? panel.querySelector('.u-alert-title').textContent : stepText;
   }
   next.addEventListener('click', function () {
     if (cur === 1) {
       var k = document.getElementById('st-key'), typed = k.value.trim();
       if (!/^sk-[A-Za-z0-9_-]{8,}$/.test(typed)) {
-        k.setAttribute('aria-invalid', 'true'); k.focus();
+        k.setAttribute('aria-invalid', 'true');
         document.getElementById('st-key-msg').className = 'u-msg u-msg--error';
         document.getElementById('st-key-msg').innerHTML = '<svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>Enter a key that starts with sk- followed by at least 8 characters.';
+        k.focus();
         return;
       }
       key = typed;
