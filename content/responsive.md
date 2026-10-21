@@ -8,9 +8,9 @@ A breakpoint is a width where the layout changes. These are Mantine's defaults. 
 
 | Token | From | What changes |
 | --- | --- | --- |
-| base | 0 | One column. Sidebar is a drawer behind the menu button. Tables become cards. Modals become bottom sheets. |
-| `bp-xs` | 576px | Two-column form rows. Chips and filters stay on one line. Chat composer gets the attach and dictate buttons inline. |
-| `bp-sm` | 768px | Sidebar becomes the 56px icon rail. Cards two across. Tables return with the first four columns. Modals centre. |
+| base | 0 | One column. Sidebar is a drawer behind the menu button. Tables become cards. Modals fill the screen. |
+| `bp-xs` | 576px | Two-column form rows. Chips and filters stay on one line. Chat composer gets the attach and dictate buttons inline. Modals centre. |
+| `bp-sm` | 768px | Sidebar becomes the 56px icon rail. Cards two across. Tables return with the first four columns. |
 | `bp-md` | 992px | Full 248px sidebar. Cards three across. Page header actions move to the right of the title. |
 | `bp-lg` | 1200px | Chat gets its side panel (task detail, sources). Tables show every column. Settings nav sits beside content. |
 | `bp-xl` | 1408px | Content stops growing at 1280px and centres. Margins absorb the rest. |
@@ -41,7 +41,7 @@ The content column has a `max-width` of 1280px plus padding. Prose and chat repl
 
 ## Overlays
 
-- **Modal** below `bp-sm`: a bottom sheet, which is a panel that slides up from the bottom edge. It has `radius-xl` top corners, a drag handle and a max height of 90%. Its content scrolls inside. Above `bp-sm`, it is a centred dialog at 480px or 640px.
+- **Modal** below `bp-xs`: full screen, with the actions stacked at full width and the primary on top. Its content scrolls inside. Above `bp-xs`, it is a centred dialog at most 560px wide, or 480px for confirmations.
 - **Drawer**: full width below `bp-xs`, and 360px to 480px above. It always comes from the right. The navigation drawer is the exception: it comes from the left.
 - **Menu and Popover**: anchored at every width. If the anchored position does not fit on a phone, the menu becomes a bottom sheet.
 - **Command palette**: full screen below `bp-sm`, and a 640px dialog above.

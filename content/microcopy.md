@@ -73,7 +73,7 @@ Buttons, menu items and links. Each row gives the key, the label and where it ap
 | `action.archive` / `action.unarchive` | Archive / Unarchive | |
 | `action.delete` | Delete | Danger. Confirmed with the item name. |
 | `action.remove` | Remove | Reversible |
-| `action.undo` | Undo | In toasts, 5 s |
+| `action.undo` | Undo | In toasts, 10 s |
 | `action.view_all` | View all | Links from summaries |
 | `action.show_more` / `action.show_less` | Show more / Show less | Spoiler |
 | `action.download` | Download | Artifacts |
@@ -182,7 +182,7 @@ A delete confirmation never has a "Don't ask again" checkbox. Ask people to type
 
 A toast is the short message that slides in after an action. It is not the same as the notifications list behind the bell (see Patterns).
 
-A toast stays for four seconds, or five with an action. The title is two to four words. The body is optional. A toast has one action at most.
+A toast stays for five seconds, or ten with an action. The title is two to four words. The body is optional. A toast has one action at most.
 
 | Key | Title | Body | Action |
 | --- | --- | --- | --- |

@@ -38,7 +38,7 @@ Forms are where Upmo asks people for things it cannot know: a provider key, a re
 
 - On phones, fields stack in one column with `space-4` gaps. From `bp-xs`, related short fields go two across, with `space-3` between them: first and last name, host and port.
 - Sections are `space-6` apart. Each starts with an `h3` and one line of `body-sm` text.
-- The actions row sits at the end. On desktop it is right-aligned. On phones the buttons stack at full width. The primary comes last. Destructive actions sit on the left, apart from the rest.
+- The actions row sits at the end. On desktop it is right-aligned. The primary comes last. On phones the buttons stack at full width, with the primary on top. Destructive actions sit on the left, apart from the rest.
 - Labels never sit beside the control. They always sit above it, so the eye moves in one direction.
 
 ## Long forms: steps
