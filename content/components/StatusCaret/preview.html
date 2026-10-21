@@ -1,21 +1,21 @@
 <!-- @dsCard group="Feedback" height=150 subtitle="Task progress in one mark. Press Advance to step through" -->
 <div class="u-preview u-preview--col">
   <div class="u-row" style="gap: 24px">
-    <span class="u-status"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--mist)"/><path d="M32 22l22 22" stroke="var(--mist)"/></svg>Queued</span>
-    <span class="u-status"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--ink)"/><path d="M32 22l22 22" stroke="var(--mist)"/></svg>Preparing</span>
-    <span class="u-status"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--ink)"/><path d="M32 22l22 22" stroke="var(--mist)"/></svg>Planning</span>
+    <span class="u-status"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--caret-idle)"/><path d="M32 22l22 22" stroke="var(--caret-idle)"/></svg>Queued</span>
+    <span class="u-status"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--ink)"/><path d="M32 22l22 22" stroke="var(--caret-idle)"/></svg>Preparing</span>
+    <span class="u-status"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--ink)"/><path d="M32 22l22 22" stroke="var(--caret-idle)"/></svg>Planning</span>
     <span class="u-status"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--ink)"/><path d="M32 22l22 22" stroke="var(--ink)"/></svg>Working</span>
     <span class="u-status"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--ink)"/><path d="M32 22l22 22" stroke="var(--ink)"/></svg>Checking</span>
     <span class="u-status" style="color: var(--success)"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--emerald)"/><path d="M32 22l22 22" stroke="var(--emerald)"/></svg>Done</span>
     <span class="u-status" style="color: var(--danger)"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 18l28 28" stroke="var(--danger)"/><path d="M46 18 18 46" stroke="var(--danger)"/></svg>Failed</span>
   </div>
   <div class="u-row" style="gap: 16px">
-    <span class="u-status" id="sc-live" style="font-size: 15px"><svg viewBox="0 0 64 64" width="24" height="24" aria-hidden="true"><path id="sc-l" d="M32 22 10 44" stroke="var(--mist)"/><path id="sc-r" d="M32 22l22 22" stroke="var(--mist)"/></svg><span id="sc-word">Queued</span></span>
+    <span class="u-status" id="sc-live" style="font-size: 15px"><svg viewBox="0 0 64 64" width="24" height="24" aria-hidden="true"><path id="sc-l" d="M32 22 10 44" stroke="var(--caret-idle)"/><path id="sc-r" d="M32 22l22 22" stroke="var(--caret-idle)"/></svg><span id="sc-word">Queued</span></span>
     <button class="u-btn u-btn--outline u-btn--sm" id="sc-btn">Advance</button>
   </div>
 </div>
 <script>
-  var phases = [['mist', 'mist', 'Queued'], ['ink', 'mist', 'Preparing'], ['ink', 'mist', 'Planning'], ['ink', 'ink', 'Working'], ['ink', 'ink', 'Checking'], ['emerald', 'emerald', 'Done']], i = 0;
+  var phases = [['caret-idle', 'caret-idle', 'Queued'], ['ink', 'caret-idle', 'Preparing'], ['ink', 'caret-idle', 'Planning'], ['ink', 'ink', 'Working'], ['ink', 'ink', 'Checking'], ['emerald', 'emerald', 'Done']], i = 0;
   document.getElementById('sc-btn').addEventListener('click', function () {
     i = (i + 1) % phases.length; var p = phases[i];
     document.getElementById('sc-l').style.stroke = 'var(--' + p[0] + ')'; document.getElementById('sc-r').style.stroke = 'var(--' + p[1] + ')';

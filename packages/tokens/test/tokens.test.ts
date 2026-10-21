@@ -36,6 +36,13 @@ describe('toData', () => {
     expect(data.color['chart-mid'].dark).toBe('#3a423d');
   });
 
+  it('keeps the undrawn caret stroke apart from ink in every theme', () => {
+    expect(data.color['caret-idle']).toEqual({ light: '#7c847e', dark: '#6f7873', hc: '#5e6662' });
+    for (const theme of ['light', 'dark', 'hc'] as const) {
+      expect(data.color['caret-idle'][theme]).not.toBe(data.color.ink[theme]);
+    }
+  });
+
   it('repeats single-value colours in every theme', () => {
     expect(data.color['emerald-7']).toEqual({ light: '#176b47', dark: '#176b47', hc: '#176b47' });
   });

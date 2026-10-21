@@ -17,13 +17,13 @@ Upmo adds this on purpose, because Mantine has no equivalent. People leave agent
 
 ## Behaviour
 
-- Queued (waiting for a free slot): both strokes `mist`. Preparing and Planning: left stroke `ink`. Working and Checking: both strokes `ink`. Done: both `emerald`. Failed: an X in `danger`.
+- Queued (waiting for a free slot): both strokes `caret-idle`. Preparing and Planning: left stroke `ink`, right stroke `caret-idle`. Working and Checking: both strokes `ink`. Done: both `emerald`. Failed: an X in `danger`.
 - Each stroke change is a 200ms stroke-colour transition. A working task lifts 2px every 4s. The lift is off under reduced motion.
 - Needs approval keeps the current caret and adds a `warning` `Badge` beside it.
 
 ## Tokens
 
-`mist`, `ink`, `emerald`, `danger`, `success`, `warning`.
+`caret-idle`, `ink`, `emerald`, `danger`, `success`, `warning`.
 
 ## Mantine
 

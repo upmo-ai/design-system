@@ -27,7 +27,7 @@ How components fit together into pages. Each pattern names its components and th
 
 ## Status and progress
 
-- `StatusCaret` is the one progress indicator for tasks and automations. Queued is `mist`. Preparing and Planning draw the left stroke. Working and Checking draw both. Done fills `emerald`. Failed swaps to the X in `danger`. The caret always sits beside its word in a `Badge`, so the state never depends on colour alone.
+- `StatusCaret` is the one progress indicator for tasks and automations. Queued is `caret-idle`. Preparing and Planning draw the left stroke in `ink`. Working and Checking draw both. Done fills `emerald`. Failed swaps to the X in `danger`. The caret always sits beside its word in a `Badge`, so the state never depends on colour alone.
 - Use the `Progress` bar for anything with a known fraction, such as budget used or an upload. The track is `mist` and the fill is `emerald-deep`, with `radius-full`, 4px high. A label with the number sits beside it.
 - Work that runs for seconds shows the lift caret with "Thinking" or "Working…" text (`Loader`). Nothing spins.
 
