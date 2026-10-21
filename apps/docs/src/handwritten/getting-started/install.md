@@ -31,13 +31,19 @@ Point each package at a release tag and its folder in the repository:
 
 Use the same tag for every `@upmo-ai` package. The releases are in the [changelog](/getting-started/changelog/). `@upmo-ai/icons` and `@upmo-ai/brands` install the same way, with their own `path:`.
 
-Each package builds its `dist` folder when pnpm installs it from git. pnpm 11 runs build scripts of git dependencies only when you allow them, so add the packages to `pnpm-workspace.yaml`:
+The shorthand `github:upmo-ai/design-system#v0.1.0&path:/packages/ui` works too.
+
+Each package builds its `dist` folder when pnpm installs it from git. pnpm 11 runs build scripts of git dependencies only when you allow them, so add every `@upmo-ai` package you install to `pnpm-workspace.yaml`:
 
 ```yaml
 allowBuilds:
   '@upmo-ai/tokens@git+https://github.com/upmo-ai/design-system.git': true
   '@upmo-ai/ui@git+https://github.com/upmo-ai/design-system.git': true
+  '@upmo-ai/icons@git+https://github.com/upmo-ai/design-system.git': true
+  '@upmo-ai/brands@git+https://github.com/upmo-ai/design-system.git': true
 ```
+
+Use pnpm 11.19 or later. Older versions of pnpm 11 do not match these keys for packages from GitHub and stop with `ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED`. The keys stay in the `git+https` form when you use the `github:` shorthand. A package name on its own never allows the build of a git dependency.
 
 `@upmo-ai/ui` needs `@mantine/core` and `@mantine/hooks` 9.4 or later, and `react` and `react-dom` 19.2 or later.
 
