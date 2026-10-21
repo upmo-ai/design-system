@@ -17,7 +17,7 @@ Every colour token has a third value for this theme. It is based on the light th
 | `emerald-hover`, `emerald-active` | `#083d27`, `#062d1d` | White text on them is 12.3:1 and 15:1 |
 | `border` / `border-strong` / `focus` | `#6e6e6e` / `#000000` / `#000000` | 5.1:1 decorative, 21:1 for control edges and the ring |
 | `warning`, `danger`, `info` | `#5c3a00`, `#7d1d0e`, `#173f6e` | 10.2:1, 10.2:1, 10.7:1 on white. 9.1, 8.4, 8.6 on their soft grounds |
-| `mist` | `#5e6662` | The idle caret at 5.9:1 |
+| `mist`, `caret-idle` | `#5e6662` | Tracks, and the undrawn caret stroke at 5.9:1 |
 | `chart-1..6` | `#0a4a30 #1a4fa8 #7a4d00 #a52a6b #4b2fa6 #8f3414` | All 6.7:1 or better on white |
 | `overlay` | `#000000cc` | |
 

@@ -18,6 +18,7 @@
   --emerald-active: #0d452d;
   --emerald-soft: #e4f1ea;
   --mist: #d4d8d2;
+  --caret-idle: #7c847e;
   --border: #dddbd3;
   --border-strong: #7c847e;
   --focus: #176b47;
@@ -75,6 +76,7 @@
   --emerald-active: #a8d5bc;
   --emerald-soft: #1c3328;
   --mist: #3a423d;
+  --caret-idle: #6f7873;
   --border: #2a322e;
   --border-strong: #6f7873;
   --focus: #4fae7f;
@@ -132,6 +134,7 @@
   --emerald-active: #062d1d;
   --emerald-soft: #d6efe2;
   --mist: #5e6662;
+  --caret-idle: #5e6662;
   --border: #6e6e6e;
   --border-strong: #000000;
   --focus: #000000;

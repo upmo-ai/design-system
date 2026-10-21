@@ -82,14 +82,14 @@ Every interactive element has all of these states. Each one looks different from
 
 - **Tabler Icons**, outline style, 1.75 stroke. Use `icon-md` (20px) in controls and nav, `icon-sm` (16px) inside badges and inputs, and `icon-lg` (24px) in empty states and tiles. Icons take `currentColor`. A decorative icon is `aria-hidden`. An icon-only control has an `aria-label`.
 - **The caret** (`assets/icons/caret.svg`) replaces every arrow-up, chevron-up, trending-up and check in the set. "Send" is the caret. So are "Done" and "Scroll to top". Downward chevrons for menus and selects are fine. They are not the mark.
-- **Status carets** (`assets/icons/status-*.svg`): idle is `mist` (Queued). The left stroke in `ink` (`status-plan`) is Preparing and Planning. Both strokes in `ink` (`status-build`) are Working and Checking. Done is `emerald`. Failed is an X in `danger`. Each sits next to its word.
+- **Status carets** (`assets/icons/status-*.svg`): idle is `caret-idle` (Queued). The left stroke in `ink` and the right in `caret-idle` (`status-plan`) is Preparing and Planning. Both strokes in `ink` (`status-build`) are Working and Checking. Done is `emerald`. Failed is an X in `danger`. Each sits next to its word.
 - **No emoji** in UI, no filled icons, no two-tone icons.
 
 ## Logo
 
 - **Wordmark**: use `assets/logos/upmo-wordmark-light.svg` on light grounds and `-dark.svg` on dark. Use `-ink.svg` and `-bone.svg` for single-ink print. The minimum width is 72px. Keep clear space on every side equal to the caret height.
 - **Mark**: `assets/icons/caret.svg` alone is the icon, the favicon and the app icon (`assets/logos/upmo-app-icon.svg`, an `emerald` tile with a Bone caret). The minimum size is 16px.
-- Never colour the caret anything but `emerald`, `ink`, `mist` or Bone. Never add a drop shadow, outline, gradient or rotation. Never set the wordmark in live text.
+- Never colour the caret anything but `emerald`, `ink`, `caret-idle` or Bone. Never add a drop shadow, outline, gradient or rotation. Never set the wordmark in live text.
 
 ## Other sections
 
