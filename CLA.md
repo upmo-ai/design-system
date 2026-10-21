@@ -1,6 +1,6 @@
 # Individual Contributor License Agreement
 
-Version 1.0, 2026-07-21
+Version 1.1, 2026-10-21
 
 Thank you for your interest in Upmo. To clarify the intellectual property license granted with Contributions from any person or entity, the Maintainer must have a signed Contributor License Agreement ("Agreement") from each Contributor, indicating agreement with the license terms below. This Agreement is for your protection as a Contributor as well as the protection of the Maintainer and the users of Upmo. It does not change your rights to use your own Contributions for any other purpose.
 
@@ -46,7 +46,7 @@ You agree to notify the Maintainer of any facts or circumstances of which you be
 
 ## 9. Outbound licensing and assignment
 
-The Maintainer distributes the Work under the GNU Affero General Public License, version 3 only. The license in section 2 also allows the Maintainer to distribute Your Contributions under other terms, including as part of a hosted service. The Maintainer may assign this Agreement, with all rights under it, to a legal entity that takes over the maintenance of Upmo. The assignment is announced in this repository.
+The Maintainer distributes the Work under the GNU Affero General Public License, version 3 only. The license in section 2 also allows the Maintainer to distribute Your Contributions under other terms, including as part of a hosted service. The Maintainer may assign this Agreement, with all rights under it, to a legal entity that takes over the maintenance of Upmo. The assignment is announced in the Upmo repositories.
 
 ## How to sign
 
