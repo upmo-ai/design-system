@@ -683,9 +683,10 @@ button.u-ev-row:focus-visible { outline-offset: -2px; }
 .u-section .u-section-desc { font-size: 13px; color: var(--ink-muted); margin-top: -12px; }
 .u-setting-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; }
 .u-setting-row .u-setting-text { display: flex; flex-direction: column; gap: 2px; }
+.u-setting-row > :last-child { flex: none; }
 .u-setting-row .u-setting-title { font-size: 15px; font-weight: 600; }
 .u-setting-row .u-desc { font-size: 13px; }
-@media (max-width: 767px) { .u-settings { grid-template-columns: minmax(0, 1fr); } .u-settings-nav { flex-direction: row; overflow-x: auto; } }
+@media (max-width: 767px) { .u-settings { grid-template-columns: minmax(0, 1fr); } .u-settings-nav { flex-direction: row; overflow-x: auto; } .u-setting-row { flex-direction: column; align-items: flex-start; gap: 12px; } }
 .u-onboard { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; padding: 48px 16px; width: 100%; }
 .u-onboard .u-wordmark { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -.03em; }
 
