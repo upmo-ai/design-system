@@ -70,7 +70,7 @@ html[data-theme="dark"] .u-btn--danger { color: var(--ink-inverse); }
 /* Inputs */
 .u-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .u-label { font-size: 13px; line-height: 16px; font-weight: 600; color: var(--ink); }
-.u-label .u-opt { font-weight: 400; color: var(--ink-muted); }
+.u-label-hint { font-weight: 400; color: var(--ink-muted); }
 .u-desc { font-size: 13px; line-height: 18px; color: var(--ink-muted); }
 .u-msg { display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 18px; min-height: 18px; }
 .u-msg--error { color: var(--danger); }
