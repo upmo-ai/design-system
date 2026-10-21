@@ -72,11 +72,12 @@ describe('componentGroups', () => {
   it('sorts groups alphabetically with Other last, and names within a group', () => {
     const groups = componentGroups([
       { name: 'Zed', group: 'Data' },
-      { name: 'Cover', group: 'Other' },
+      { name: 'Extra', group: 'Other' },
       { name: 'Alpha', group: 'Data' },
       { name: 'Button', group: 'Actions' },
+      { name: 'Toast', group: 'Status' },
     ]);
-    expect(groups.map((g) => g.label)).toEqual(['Actions', 'Data', 'Other']);
+    expect(groups.map((g) => g.label)).toEqual(['Actions', 'Data', 'Status', 'Other']);
     expect(groups[1].components.map((c) => c.name)).toEqual(['Alpha', 'Zed']);
   });
 });
