@@ -1,4 +1,7 @@
-import { readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
   brandGrid,
@@ -10,6 +13,7 @@ import {
   parseDsCard,
   previewDocument,
   readComponents,
+  releaseVersion,
   splitH1,
   splitLead,
   tokensPage,
@@ -65,6 +69,30 @@ describe('markdown helpers', () => {
     expect(section.startsWith('1. **Up is the only metaphor.**')).toBe(true);
     expect(rest).not.toContain('## Principles');
     expect(rest).toContain('## Content');
+  });
+});
+
+describe('releaseVersion', () => {
+  const fixture = (versions: Record<string, string>) => {
+    const dir = mkdtempSync(join(tmpdir(), 'upmo-packages-'));
+    for (const [name, version] of Object.entries(versions)) {
+      mkdirSync(join(dir, name));
+      writeFileSync(join(dir, name, 'package.json'), JSON.stringify({ name: `@upmo-ai/${name}`, version }));
+    }
+    return pathToFileURL(`${dir}/`);
+  };
+
+  it('returns the one version the packages share', () => {
+    expect(releaseVersion(fixture({ tokens: '0.4.0', ui: '0.4.0' }))).toBe('0.4.0');
+  });
+
+  it('throws when the packages disagree', () => {
+    expect(() => releaseVersion(fixture({ tokens: '0.4.0', ui: '0.3.0' }))).toThrow('Package versions differ: tokens 0.4.0, ui 0.3.0');
+  });
+
+  it('reads the version of the packages in this repository', () => {
+    const tokens = JSON.parse(readFileSync(new URL('../../../packages/tokens/package.json', import.meta.url), 'utf8'));
+    expect(releaseVersion(new URL('../../../packages/', import.meta.url))).toBe(tokens.version);
   });
 });
 

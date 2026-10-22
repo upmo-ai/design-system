@@ -1,0 +1,44 @@
+---
+// Starlight's site title with the released version beside it. The version comes from the packages at build time.
+import Default from '@astrojs/starlight/components/SiteTitle.astro';
+---
+
+<div class="upmo-site-title">
+  <Default />
+  <a class="upmo-version" href="/getting-started/changelog/">v{__UPMO_VERSION__}<span class="sr-only"> changelog</span></a>
+</div>
+
+<style>
+  .upmo-site-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+  .upmo-version {
+    flex: none;
+    padding: 2px 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  .upmo-version:hover {
+    color: var(--ink);
+    border-color: var(--border-strong);
+  }
+  /* The name no longer fits beside the logo, the version, search and the menu, so only screen readers keep it. */
+  @media (max-width: 32rem) {
+    .upmo-site-title :global(.site-title span) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+  }
+</style>

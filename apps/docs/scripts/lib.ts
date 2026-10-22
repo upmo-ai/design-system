@@ -97,6 +97,17 @@ export function readComponents(contentDir: URL): Component[] {
     });
 }
 
+// The released version shown in the site header. The packages release as one fixed group, so they must agree.
+export function releaseVersion(packagesDir: URL): string {
+  const versions = readdirSync(packagesDir)
+    .filter((name) => existsSync(new URL(`${name}/package.json`, packagesDir)))
+    .sort()
+    .map((name) => ({ name, version: JSON.parse(readFileSync(new URL(`${name}/package.json`, packagesDir), 'utf8')).version as string }));
+  const distinct = [...new Set(versions.map((v) => v.version))];
+  if (distinct.length !== 1) throw new Error(`Package versions differ: ${versions.map((v) => `${v.name} ${v.version}`).join(', ')}`);
+  return distinct[0];
+}
+
 // Sidebar groups: alphabetical, Other last; components alphabetical within a group.
 export function componentGroups<T extends { name: string; group: string }>(components: T[]) {
   const groups = new Map<string, T[]>();
