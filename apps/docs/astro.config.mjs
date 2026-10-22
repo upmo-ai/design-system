@@ -1,14 +1,16 @@
 import { readFileSync } from 'node:fs';
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
-import { componentGroups, readComponents } from './scripts/lib.ts';
+import { componentGroups, readComponents, releaseVersion } from './scripts/lib.ts';
 
 const fonts =
   'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Familjen+Grotesk:wght@700&family=Fira+Code:wght@400&display=swap';
 const groups = componentGroups(readComponents(new URL('../../content/', import.meta.url)));
+const version = releaseVersion(new URL('../../packages/', import.meta.url));
 
 export default defineConfig({
   site: 'https://design.upmo.dev',
+  vite: { define: { __UPMO_VERSION__: JSON.stringify(version) } },
   integrations: [
     starlight({
       title: 'Upmo Design System',
@@ -17,6 +19,7 @@ export default defineConfig({
         dark: '../../content/assets/logos/upmo-wordmark-dark.svg',
       },
       favicon: '/favicon.svg',
+      components: { SiteTitle: './src/components/SiteTitle.astro' },
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/upmo-ai/design-system' }],
       customCss: ['@upmo-ai/tokens/tokens.css', './src/styles/upmo.css', './src/styles/docs.css'],
       head: [

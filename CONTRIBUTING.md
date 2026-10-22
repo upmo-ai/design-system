@@ -49,6 +49,10 @@ docker compose run --rm dev pnpm changeset
 
 Pick the packages, the bump (patch, minor, major) and write one line for the changelog. Commit the generated file in `.changeset/` with your change. Changes to `content/` or the docs site alone do not need one.
 
+## Docs site
+
+[design.upmo.dev](https://design.upmo.dev) is deployed to Cloudflare Pages by `.github/workflows/deploy-docs.yml` when a `v*` release tag is pushed, so the site always matches the latest release. The header shows that release's version. Changes merged between releases go live with the next tag, or earlier when a maintainer runs the workflow by hand from `main`.
+
 ## Writing style
 
 Follow the rules in `content/README.md` and `content/microcopy.md`: plain, direct sentences, sentence case, no em dashes, no emoji.
