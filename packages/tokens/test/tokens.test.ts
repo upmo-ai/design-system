@@ -56,9 +56,9 @@ describe('toData', () => {
     expect(data.breakpoint['bp-md']).toBe('62em');
     expect(data.typography.h1).toEqual({
       family: 'ui',
-      fontSize: '28px',
-      lineHeight: '36px',
-      fontWeight: 700,
+      fontSize: '20px',
+      lineHeight: '28px',
+      fontWeight: 600,
       letterSpacing: '-0.01em',
     });
     expect(data.typography.body).not.toHaveProperty('letterSpacing');

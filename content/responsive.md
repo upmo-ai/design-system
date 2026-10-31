@@ -21,11 +21,11 @@ Write styles mobile first: base rules first, then `@media (min-width: 36em)` and
 
 | Width | Sidebar | Top bar | Content padding |
 | --- | --- | --- | --- |
-| base | Drawer, full height, 280px, opens from the menu button. Closes on route change and on scrim tap | 48px: menu, wordmark, search icon, avatar | `space-4` (16px) |
-| `bp-sm` | Icon rail 56px, labels in tooltips, expand on hover after 400ms | 48px: search field 240px, avatar | `space-6` (24px) |
-| `bp-md` | Full 248px with labels, collapsible to the rail with ⌘B, choice remembered | 48px | `space-8` (32px) |
+| base | Drawer, full height, `sidebar` (248px), opens from the menu button. Closes on route change and on scrim tap | 48px: menu, wordmark, search icon, avatar | `space-4` (16px) |
+| `bp-sm` | Icon rail 56px, labels in tooltips, expand on hover after 400ms | 48px: search field 240px, avatar | `space-4` (16px) |
+| `bp-md` | Full `sidebar` (248px) with labels, collapsible to the rail with ⌘B, choice remembered | 48px | `space-5` (20px) |
 
-The content column has a `max-width` of 1280px plus padding. Prose and chat replies stay at `measure` (68ch, about 68 characters per line) inside it.
+The sidebar pads `space-3`, with `space-1` between items. The content column has a `max-width` of 1280px plus padding. A page title has `space-4` below it, sections sit `space-6` apart, and cards use `space-4` for padding and gaps. Prose and chat replies stay at `measure` (68ch, about 68 characters per line) inside it.
 
 ## Layout rules
 
@@ -58,8 +58,8 @@ The content column has a `max-width` of 1280px plus padding. Prose and chat repl
 
 ## Type and density
 
-- Type does not shrink on phones. The only change is `h1`, which drops from 28px to 24px below `bp-xs`.
-- Density is one setting in Appearance: Comfortable or Compact. Compact makes table rows and list items 40px high in place of 48px. It also cuts card padding from `space-5` to `space-4`. It never changes font sizes.
+- Type does not shrink on phones. The same type tokens apply at every width.
+- Density is one setting in Appearance: Comfortable or Compact. Compact makes table rows and list items 40px high in place of 48px. It never changes font sizes or the `space-4` card padding.
 - At 200% zoom every feature must still work, and nothing may be cut off. At 400% the layout is the phone layout. Test with the browser zoom, not by resizing the window.
 
 ## Test matrix

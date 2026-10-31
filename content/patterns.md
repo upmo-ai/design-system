@@ -4,10 +4,10 @@ How components fit together into pages. Each pattern names its components and th
 
 ## App shell
 
-- `Sidebar` on `surface-200`, `sidebar` wide. It holds the wordmark, the primary nav (Home, Chat, Tasks, Automations, Agents, Knowledge, Usage, then a Workspace group with Settings) and a footer. The footer has setup progress, theme and sign out. The current item sits on `surface-selected`, with `emerald-deep` text and icon.
+- `Sidebar` on `surface-200`, `sidebar` wide, with `space-3` padding and `space-1` between items. Items are `control-sm` high with `body-sm` text, an `icon-sm`, `space-2` between icon and label, `space-2` horizontal padding and `radius-sm`. On a coarse pointer they grow to `control-md`. It holds the wordmark, the primary nav (Home, Chat, Tasks, Automations, Agents, Knowledge, Usage, then a Workspace group with Settings) and a footer. The footer has setup progress, theme and sign out. The current item sits on `surface-selected`, with `emerald-deep` text and icon at weight 600.
 - Top bar, `topbar` high: sidebar toggle, breadcrumb, the ⌘K launcher, the notifications bell and help. The launcher is a button shaped like a search field.
 - Notifications live behind the bell (Tabler `bell`), never in the sidebar. The bell carries a count `Badge` for unread items. It opens a list with approvals and questions first, each with Approve in its row, then finished and failed tasks. The empty list reads "You are up to date" with "Approvals and finished tasks show up here."
-- Content sits on `surface-000`, padded by the layout rule, with one `h1`.
+- Content sits on `surface-000`, padded by `space-4` below `bp-md` and `space-5` from `bp-md`, with one `h1`. The title has `space-4` below it, sections sit `space-6` apart, and cards pad and gap by `space-4`.
 - Between `bp-sm` and `bp-md` the sidebar becomes a 56px icon rail with tooltips. Below `bp-sm` it becomes a drawer opened from the top bar. The composer in Chat stays fixed to the bottom on phones.
 
 ## Navigation

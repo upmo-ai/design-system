@@ -25,8 +25,8 @@ describe('upmoTheme', () => {
   });
 
   it('turns px line heights into the ratios Mantine expects', () => {
-    expect(theme.headings.sizes.h1).toMatchObject({ lineHeight: '1.29', fontWeight: '700' });
-    expect(theme.headings.sizes.h3.lineHeight).toBe('1.4');
+    expect(theme.headings.sizes.h1).toMatchObject({ lineHeight: '1.4', fontWeight: '600' });
+    expect(theme.headings.sizes.h3.lineHeight).toBe('1.47');
     expect(theme.lineHeights.md).toBe('1.47');
   });
 
