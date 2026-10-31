@@ -1,5 +1,7 @@
 // Generates the docs pages (src/content/docs) and the preview and asset files (public) from content/ and the packages.
-import { copyFileSync, cpSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { color } from '@upmo-ai/tokens';
 import { icons } from '@upmo-ai/icons';
 import {
@@ -30,6 +32,11 @@ const docsOut = new URL('src/content/docs/', app);
 const publicOut = new URL('public/', app);
 
 const read = (url: URL) => readFileSync(url, 'utf8');
+// Node's cpSync returns EACCES on the Docker file mount. cp does not.
+const copyDir = (src: URL, dest: URL) => {
+  mkdirSync(dest, { recursive: true });
+  execFileSync('cp', ['-a', `${fileURLToPath(src)}/.`, fileURLToPath(dest)]);
+};
 const fromPackage = (spec: string) => new URL(import.meta.resolve(spec));
 const tryRead = (spec: string) => {
   try {
@@ -55,7 +62,7 @@ const contentPage = (file: string, title?: string) => {
 
 rmSync(docsOut, { recursive: true, force: true });
 rmSync(publicOut, { recursive: true, force: true });
-cpSync(new URL('src/handwritten/', app), docsOut, { recursive: true });
+copyDir(new URL('src/handwritten/', app), docsOut);
 
 // Getting started
 const { section: principles, rest: overview } = extractSection(read(new URL('README.md', content)), 'Principles');
@@ -107,7 +114,9 @@ for (const c of components) {
 write('components/index.md', componentIndex(componentGroups(components)));
 
 // Brand
-cpSync(assets, new URL('assets/', publicOut), { recursive: true, filter: (src) => !src.endsWith('.md') });
+const assetOut = new URL('assets/', publicOut);
+copyDir(assets, assetOut);
+execFileSync('find', [fileURLToPath(assetOut), '-name', '*.md', '-delete']);
 copyFileSync(new URL('icons/caret.svg', assets), new URL('favicon.svg', publicOut));
 const files = (dir: string) => readdirSync(new URL(`${dir}/`, assets)).filter((f) => !f.endsWith('.md')).sort();
 const brandPage = (dir: string, title: string, extra: string) => {
