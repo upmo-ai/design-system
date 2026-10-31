@@ -21,8 +21,8 @@ A dropdown of secondary actions for one object, opened from a "More" `ActionIcon
 
 ## Tokens
 
-`surface-100`, `border`, `shadow-sm`, `radius-lg` (panel), `radius-sm` (items), `surface-hover`, `danger`, `danger-soft`, `ink-muted` (labels), `z-dropdown`.
+`surface-100`, `border`, `shadow-sm`, `radius-md` (panel), `radius-sm` (items), `surface-hover`, `danger`, `danger-soft`, `ink-muted` (labels), `z-dropdown`.
 
 ## Mantine
 
-`<Menu shadow="sm" radius="lg" width={220} position="bottom-end">` with `Menu.Target`, `Menu.Dropdown`, `Menu.Label`, `Menu.Item leftSection rightSection`, `Menu.Divider`.
+`<Menu shadow="sm" radius="md" width={200} position="bottom-end">` with `Menu.Target`, `Menu.Dropdown`, `Menu.Label`, `Menu.Item leftSection rightSection`, `Menu.Divider`.

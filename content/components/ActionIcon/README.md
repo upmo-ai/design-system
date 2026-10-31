@@ -9,7 +9,8 @@ An icon-only button for a small action that everyone knows, such as send, copy, 
 
 ## What the consumer provides
 
-- `aria-label`: required. It is the verb, such as "Send message" or "Copy reply". Pair it with a `Tooltip` that shows the same text.
+- `aria-label`: required. It is the verb, such as "Send message" or "Copy reply". The stylesheet automatically renders this label as a high-contrast `Tooltip` on hover and on keyboard focus.
+- `data-tip-pos`: optional direction `top` (default) | `bottom` | `left` | `right`. Use to prevent tooltip clipping near window edges.
 - `icon`: a Tabler icon at `icon-md` (`icon-sm` in the `sm` size). Use the caret for send and done.
 - `variant`: `subtle` (default) | `light` | `outline` | `filled`. `size`: `sm` (32) | `md` (40).
 - A toggle sets `aria-pressed`. The pressed state uses `surface-selected` and `emerald-deep`.
