@@ -4,11 +4,13 @@ The base library is **Mantine 9**, an open-source React component library. Upmo 
 
 ## Principles
 
-1. **Up is the only metaphor.** The caret is the mark. It is also the loader, the progress indicator and the "done" sign. Nothing else points, spins, bounces or sparkles. No arrows, no suns, no leaves, no mascots. Never rotate the mark. Where the interface needs a plain "down" (menus, selects, the output token count), use a Tabler chevron, not the caret.
-2. **React at once.** Every click, tap, keypress and hover gets an answer within one frame. A control shows its new state before the server replies. Then it confirms or reverts. Nothing is ever silent. When an agent works out of sight, people need to see that their action landed.
-3. **Readable before pretty.** The smallest text is 12px. Body text is 15px. Text meets 4.5:1 contrast on the ground (the surface behind it) that its token note names, in both themes. Colour alone never carries meaning.
-4. **Minimal means fewer things, placed exactly.** Use one accent hue, one neutral family and one radius scale. Borders give structure. Shadows are only for floating layers.
-5. **Works on every width.** Design for the phone first. Use the same component and the same words at 360px and at 1440px.
+Accessibility and responsive behaviour govern the rest. A tighter layout never shrinks a touch target below its rule, removes a focus ring, or changes the words or the order of a phone layout.
+
+1. **Readable before pretty.** The smallest text is 12px. Body text is 15px, with a line height of at least 1.4. Text meets 4.5:1 contrast on the ground (the surface behind it) that its token note names, in both themes. Colour alone never carries meaning. Everything clickable is reachable from the keyboard, and a touch target is 40px. The page still works at 200% zoom.
+2. **Works on every width.** Design for the phone first. Use the same component and the same words at 360px and at 1440px. Only placement changes. The sidebar is a drawer, then a rail, then the full width. Content pads `space-4` below `bp-md` and `space-5` from `bp-md`.
+3. **Up is the only metaphor.** The caret is the mark. It is also the loader, the progress indicator and the "done" sign. Nothing else points, spins, bounces or sparkles. No arrows, no suns, no leaves, no mascots. Never rotate the mark. Where the interface needs a plain "down" (menus, selects, the output token count), use a Tabler chevron, not the caret.
+4. **React at once.** Every click, tap, keypress and hover gets an answer within one frame. A control shows its new state before the server replies. Then it confirms or reverts. Nothing is ever silent. When an agent works out of sight, people need to see that their action landed.
+5. **Minimal means fewer things, placed exactly.** Use one accent hue, one neutral family and one radius scale. Borders give structure. Shadows are only for floating layers.
 
 ## Content
 
