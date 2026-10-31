@@ -4,7 +4,7 @@ How components fit together into pages. Each pattern names its components and th
 
 ## App shell
 
-- `Sidebar` on `surface-200`, `sidebar` wide, with `space-3` padding. With a precise pointer, items are `control-sm` high and `space-1` apart. On a coarse pointer they are `control-md` and `space-2` apart. Text stays `body-sm`, with an `icon-sm`, `space-2` between icon and label, `space-2` horizontal padding and `radius-sm`. It holds the wordmark, the primary nav (Home, Chat, Tasks, Automations, Agents, Knowledge, Usage, then a Workspace group with Settings) and a footer. The footer has setup progress, theme and sign out. The current item sits on `surface-selected`, with `emerald-deep` text and icon at weight 600.
+- `Sidebar` on `surface-200`, `sidebar` wide, with compact padding. With a precise pointer, items are 30px high and 2px apart. On a coarse pointer they are `control-md` and `space-2` apart. Text is `body-sm`, with an `icon-sm`, `space-2` between icon and label, and `radius-sm`. It holds the workspace header with switcher, the "New task" action button, the primary nav (Home, Tasks, Chat, Automations, Agents, Knowledge, and Settings), recent work with inline action buttons on hover, and the user profile footer. The current item sits on `surface-selected`, with `emerald-deep` text and icon at weight 600.
 - Top bar, `topbar` high: sidebar toggle, breadcrumb, the ⌘K launcher, the notifications bell and help. The launcher is a button shaped like a search field.
 - Notifications live behind the bell (Tabler `bell`), never in the sidebar. The bell carries a count `Badge` for unread items. It opens a list with approvals and questions first, each with Approve in its row, then finished and failed tasks. The empty list reads "You are up to date" with "Approvals and finished tasks show up here."
 - Content sits on `surface-000`, padded by `space-4` below `bp-md` and `space-5` from `bp-md`, with one `h1`. The title has `space-4` below it, sections sit `space-6` apart, and cards pad and gap by `space-4`.
@@ -16,7 +16,13 @@ How components fit together into pages. Each pattern names its components and th
 - Inside one tab, a `SegmentedControl` switches between two ways to show the same content. A task's Activity tab has Summary (the `Timeline`) and All events (the `EventLog`).
 - `Breadcrumbs` show the path when a page is more than one level deep: "Tasks / Daily finance digest". The current page is text, not a link.
 - `Pagination` for lists over 50 rows. Infinite scroll appears only in chat history.
-- `Menu` holds secondary actions. It opens from an `ActionIcon` with the dots icon. Destructive items come last, in `danger`, after a divider.
+- `Menu` holds secondary actions. It opens from an `ActionIcon` with the dots icon. Items are compact (32px height) with subtle mono shortcut keys, and destructive items come last, in `danger`, after a divider.
+
+## Icon-first controls
+
+- Common secondary actions across toolbars, table rows, file viewers, chat messages, and card headers use `ActionIcon` rather than labeled text buttons. This reduces visual noise and elevates information density, matching modern workspaces (ChatGPT, Claude Code, Grok, Slack).
+- Every icon-first button requires an `aria-label` that automatically renders as a tooltip on hover and on keyboard focus (0ms delay).
+- On mobile touch screens, hover tooltips are suppressed to prevent sticky states, and transparent padding expands tap targets to 40px minimum.
 
 ## Lists and tiles
 
@@ -65,7 +71,7 @@ How components fit together into pages. Each pattern names its components and th
 - User messages sit on the right, in bubbles on `surface-100`. A bubble uses `radius-lg`, with a 4px bottom-right corner. Assistant replies sit on the left, next to the 20px caret avatar. They have no bubble, only `ink-secondary` prose at `measure` width.
 - Tool calls collapse into one group row ("3 tool calls · 2.8 s") with caret bullets. The row expands to show each call in `code`.
 - The composer is a `Textarea` in a `radius-xl` container on `surface-100`. It gets `shadow-md` when focused. It has a knowledge `Chip` row, a model picker, attach, mic, and the primary send `ActionIcon`, which carries the caret.
-- A metadata row sits under each reply in `body-sm` `ink-muted`: model, tokens, duration, cost. Copy and Activity appear in it as subtle buttons.
+- A metadata row sits under each reply in `body-sm` `ink-muted`: model, tokens, duration, cost. Copy and Activity appear in it as compact `ActionIcon` buttons with tooltips.
 
 ## Marketing
 
