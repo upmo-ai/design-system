@@ -2,6 +2,10 @@
 
 The four packages under `packages/` release together under one version, tagged `v<version>` in this repository. Each package also has its own `CHANGELOG.md`, written by Changesets.
 
+## v0.3.1 (2026-10-31)
+
+`@upmo-ai/tokens` and `@upmo-ai/ui` tighten app page titles, sidebar items, and content insets. `@upmo-ai/icons` and `@upmo-ai/brands` have no code changes in this release. The docs site puts accessibility and responsive behaviour ahead of density.
+
 ## v0.3.0 (2026-10-21)
 
 `@upmo-ai/tokens` adds `caret-idle`, the colour of the undrawn caret stroke (Queued, and the right stroke of Preparing and Planning), in the light, dark and high-contrast themes. The other packages have no changes in this release. Installing from GitHub needs pnpm 11.19 or later, as described on the [Install](https://design.upmo.dev/getting-started/install/) page.

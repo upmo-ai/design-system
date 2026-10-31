@@ -1,5 +1,11 @@
 # @upmo-ai/ui
 
+## 0.3.1
+
+### Patch Changes
+
+- Tighten app page titles, sidebar items, and content insets.
+
 ## 0.3.0
 
 ## 0.2.0

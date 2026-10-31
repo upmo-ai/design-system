@@ -1,6 +1,6 @@
 {
   "name": "@upmo-ai/brands",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Official marks of the services Upmo connects to, as SVG, with a manifest.",
   "license": "AGPL-3.0-only",
   "type": "module",
