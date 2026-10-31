@@ -1,5 +1,11 @@
 # @upmo-ai/tokens
 
+## 0.3.2
+
+### Patch Changes
+
+- Compact navigation, menus, and icon-first controls across design system surfaces.
+
 ## 0.3.1
 
 ### Patch Changes
