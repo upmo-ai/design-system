@@ -7,7 +7,7 @@ interface Style {
   fontWeight: number;
 }
 
-// Mantine wants unitless line heights; tokens hold px pairs (36px on 28px is 1.29).
+// Mantine wants unitless line heights; tokens hold px pairs (28px on 20px is 1.4).
 const ratio = (s: Style) => String(Number((parseFloat(s.lineHeight) / parseFloat(s.fontSize)).toFixed(2)));
 
 const heading = (s: Style) => ({
@@ -92,7 +92,7 @@ export const upmoTheme = createTheme({
     Button: { defaultProps: { size: 'md', radius: 'md' } },
     TextInput: { defaultProps: { size: 'md', radius: 'md' } },
     Select: { defaultProps: { size: 'md', radius: 'md', checkIconPosition: 'right' } },
-    Card: { defaultProps: { radius: 'lg', withBorder: true, padding: 'lg', shadow: undefined } },
+    Card: { defaultProps: { radius: 'lg', withBorder: true, padding: 'md', shadow: undefined } },
     Modal: { defaultProps: { radius: 'xl', centered: true, overlayProps: { backgroundOpacity: 0.48 } } },
     Badge: { defaultProps: { radius: 'xl', variant: 'light', size: 'md' } },
     Tooltip: { defaultProps: { openDelay: 400, radius: 'md' } },

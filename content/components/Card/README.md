@@ -16,15 +16,15 @@ A bordered tile for one object, such as a task, an agent, an automation or a pro
 
 ## Behaviour
 
-- `surface-100`, 1px `border`, `radius-lg`, `space-5` padding (`space-4` on phones). No shadow at rest.
+- `surface-100`, 1px `border`, `radius-lg`, `space-4` padding. No shadow at rest.
 - Clickable: hover shows `surface-hover` and `border-strong`. Press scales by `press-scale`. Focus shows the ring.
 - Selectable: `border-strong` at rest. When selected, it gets an `emerald-deep` edge (1px plus an inner 1px), the `surface-selected` ground and the caret.
-- Grid: `auto-fill, minmax(320px, 1fr)` with `space-5` gaps. The content sets the height. Cards in a row share edges.
+- Grid: `auto-fill, minmax(320px, 1fr)` with `space-4` gaps. The content sets the height. Cards in a row share edges.
 
 ## Tokens
 
-`surface-100`, `border`, `border-strong`, `surface-hover`, `surface-selected`, `emerald-deep`, `ink`, `ink-muted`, `radius-lg`, `space-4`, `space-5`.
+`surface-100`, `border`, `border-strong`, `surface-hover`, `surface-selected`, `emerald-deep`, `ink`, `ink-muted`, `radius-lg`, `space-4`.
 
 ## Mantine
 
-`<Card withBorder radius="lg" padding="lg">` with `Group justify="space-between"` for the head. A clickable card uses `component="a"`. A selectable card is an `UnstyledButton` with `aria-pressed` and `data-selected` styles.
+`<Card withBorder radius="lg" padding="md">` with `Group justify="space-between"` for the head. A clickable card uses `component="a"`. A selectable card is an `UnstyledButton` with `aria-pressed` and `data-selected` styles.

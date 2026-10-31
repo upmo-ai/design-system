@@ -16,12 +16,12 @@ The app's main navigation: the wordmark on top, one item per section, workspace 
 ## Behaviour
 
 - From `bp-md` it is the full `sidebar` (248px) on `surface-200`. Between `bp-sm` and `bp-md` it is a 56px icon rail with tooltips. Below `bp-sm` it is a drawer that opens from the top bar. The Responsive section is the reference.
-- Items are 40px high with `radius-md`. Hover shows `surface-hover`. The current item is `surface-selected`, with `emerald-deep` text and icon at weight 600.
+- The sidebar pads `space-3`, with `space-1` between items. Items are `control-sm` (32px) high, with `body-sm` text, an `icon-sm` (16px), a `space-2` gap, `space-2` horizontal padding and `radius-sm`. On a coarse pointer, items grow to `control-md` (40px). Hover shows `surface-hover`. The current item is `surface-selected`, with `emerald-deep` text and icon at weight 600. Group labels stay `overline`.
 - The sidebar remembers if the user collapsed it. With the keyboard, Tab moves through the items. On focus, the rail shows each label in a `Tooltip`.
 
 ## Tokens
 
-`surface-200`, `surface-hover`, `surface-selected`, `emerald-deep`, `emerald`, `ink`, `ink-muted`, `radius-md`, `radius-lg`, `sidebar`, `control-md`.
+`surface-200`, `surface-hover`, `surface-selected`, `emerald-deep`, `emerald`, `ink`, `ink-muted`, `body-sm`, `overline`, `radius-sm`, `radius-lg`, `space-1`, `space-2`, `space-3`, `sidebar`, `control-sm`, `control-md`, `icon-sm`.
 
 ## Mantine
 

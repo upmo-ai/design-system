@@ -11,13 +11,13 @@
   .bk-top .bk-search { display: none; flex: 1; max-width: 240px; height: 32px; border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--surface-100); color: var(--ink-muted); font-size: 13px; align-items: center; padding: 0 10px; white-space: nowrap; overflow: hidden; }
   .bk-top .bk-sicon { margin-left: auto; }
   .bk-side { display: none; flex-direction: column; gap: 4px; padding: 10px 8px; background: var(--surface-200); border-right: 1px solid var(--border); }
-  .bk-side a { display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 8px; border-radius: var(--radius-md); color: var(--ink); font-size: 13px; font-weight: 500; text-decoration: none; white-space: nowrap; overflow: hidden; }
+  .bk-side a { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px; border-radius: var(--radius-sm); color: var(--ink); font-size: 13px; font-weight: 500; text-decoration: none; white-space: nowrap; overflow: hidden; }
   .bk-side a[aria-current] { background: var(--surface-selected); color: var(--emerald-deep); font-weight: 600; }
-  .bk-side a i { width: 20px; height: 20px; flex: none; border-radius: 4px; background: currentColor; opacity: .5; }
+  .bk-side a i { width: 16px; height: 16px; flex: none; border-radius: 4px; background: currentColor; opacity: .5; }
   .bk-side a span { display: none; }
   .bk-main { padding: 16px; overflow: auto; }
   .bk-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
-  .bk-head h3 { margin: 0; font-size: 22px; line-height: 28px; }
+  .bk-head h3 { margin: 0; font-size: 20px; line-height: 28px; font-weight: 600; }
   .bk-head .bk-actions { display: flex; gap: 8px; }
   .bk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
   .bk-card { border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-100); padding: 12px; display: flex; flex-direction: column; gap: 6px; min-height: 88px; }
@@ -35,18 +35,18 @@
     .bk-shell { grid-template-columns: 56px 1fr; }
     .bk-side { display: flex; }
     .bk-top .bk-menu { display: none; }
-    .bk-main { padding: 24px; }
+    .bk-main { padding: 16px; }
     .bk-label::after { content: "sm · 768px · icon rail · cards 2 across"; }
   }
   @container shell (min-width: 992px) {
-    .bk-shell { grid-template-columns: 200px 1fr; }
+    .bk-shell { grid-template-columns: 248px 1fr; }
     .bk-side a span { display: inline; }
     .bk-head { flex-direction: row; align-items: center; justify-content: space-between; }
-    .bk-main { padding: 28px; }
+    .bk-main { padding: 20px; }
     .bk-label::after { content: "md · 992px · full sidebar · actions beside title"; }
   }
   @container shell (min-width: 1200px) {
-    .bk-shell { grid-template-columns: 200px 1fr 220px; }
+    .bk-shell { grid-template-columns: 248px 1fr 220px; }
     .bk-panel { display: block; }
     .bk-label::after { content: "lg · 1200px · side panel"; }
   }
