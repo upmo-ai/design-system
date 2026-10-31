@@ -25,7 +25,7 @@ Write styles mobile first: base rules first, then `@media (min-width: 36em)` and
 | `bp-sm` | Icon rail 56px, labels in tooltips, expand on hover after 400ms | 48px: search field 240px, avatar | `space-4` (16px) |
 | `bp-md` | Full `sidebar` (248px) with labels, collapsible to the rail with ⌘B, choice remembered | 48px | `space-5` (20px) |
 
-The sidebar pads `space-3`, with `space-1` between items. The content column has a `max-width` of 1280px plus padding. A page title has `space-4` below it, sections sit `space-6` apart, and cards use `space-4` for padding and gaps. Prose and chat replies stay at `measure` (68ch, about 68 characters per line) inside it.
+The sidebar pads `space-3`. Items are `space-1` apart with a precise pointer and `space-2` apart on a coarse pointer, where each item is 40px. The content column has a `max-width` of 1280px plus padding. A page title has `space-4` below it, sections sit `space-6` apart, and cards use `space-4` for padding and gaps. Prose and chat replies stay at `measure` (68ch, about 68 characters per line) inside it.
 
 ## Layout rules
 
@@ -50,7 +50,7 @@ The sidebar pads `space-3`, with `space-1` between items. The content column has
 
 ## Touch and pointer
 
-- Touch targets are at least 40px by 40px, with 8px between them. With a precise pointer such as a mouse (`pointer: fine`), 32px controls are allowed in tables and toolbars.
+- Touch targets are at least 40px by 40px, with 8px (`space-2`) between them, including sidebar items. With a precise pointer (`pointer: fine`), sidebar items, table rows and toolbar controls may be 32px. Font size stays the same.
 - Hover states exist only under `(hover: hover)`. Touch devices show the pressed state and nothing else.
 - Swipe: swipe a chat list row left to reveal Archive. Swipe a toast to dismiss it. There are no other hidden gestures. Everything you can reach by swipe is also in a menu.
 - Use `100dvh`, not `100vh`, for the shell. Then the mobile browser's own bars do not hide the composer. Pad the safe area insets with `env(safe-area-inset-*)`.

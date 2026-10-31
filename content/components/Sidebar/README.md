@@ -15,8 +15,8 @@ The app's main navigation: the wordmark on top, one item per section, workspace 
 
 ## Behaviour
 
-- From `bp-md` it is the full `sidebar` (248px) on `surface-200`. Between `bp-sm` and `bp-md` it is a 56px icon rail with tooltips. Below `bp-sm` it is a drawer that opens from the top bar. The Responsive section is the reference.
-- The sidebar pads `space-3`, with `space-1` between items. Items are `control-sm` (32px) high, with `body-sm` text, an `icon-sm` (16px), a `space-2` gap, `space-2` horizontal padding and `radius-sm`. On a coarse pointer, items grow to `control-md` (40px). Hover shows `surface-hover`. The current item is `surface-selected`, with `emerald-deep` text and icon at weight 600. Group labels stay `overline`.
+- From `bp-md` it is the full `sidebar` (248px) on `surface-200`. Between `bp-sm` and `bp-md` it is a 56px icon rail with tooltips. Below `bp-sm` it is a drawer that opens from the top bar and closes on route change. The Responsive section is the reference. Tab reaches every item. On the rail, each label is in a tooltip on hover and on focus.
+- The sidebar pads `space-3`. With a precise pointer, items are `control-sm` (32px) high and `space-1` apart. On a coarse pointer they are `control-md` (40px) and `space-2` apart. Text stays `body-sm`, with an `icon-sm` (16px), a `space-2` gap, `space-2` horizontal padding and `radius-sm`. Hover, only under `(hover: hover)`, shows `surface-hover`. The current item is `surface-selected`, with `emerald-deep` text and icon at weight 600. Group labels stay `overline`.
 - The sidebar remembers if the user collapsed it. With the keyboard, Tab moves through the items. On focus, the rail shows each label in a `Tooltip`.
 
 ## Tokens

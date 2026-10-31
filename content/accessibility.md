@@ -29,7 +29,7 @@ Every Upmo surface meets WCAG 2.2 AA, the common web accessibility standard, in 
 
 ## Pointer and touch
 
-- Touch targets are at least 40px (`control-md`). With a mouse, they are at least 32px. Inline icons have an absolute floor of 24px, with 8px of space around them (WCAG 2.5.8).
+- Touch targets are at least 40px (`control-md`), with 8px (`space-2`) between them. That includes sidebar items. With a precise pointer (`pointer: fine`), sidebar items, table rows and toolbar controls may be 32px (`control-sm`). Inline icons have an absolute floor of 24px, with 8px of space around them (WCAG 2.5.8). Font size does not change between the two.
 - Hover never hides information. Anything that appears on hover also appears on focus and on tap.
 - Every drag has another way to do the same thing: buttons to reorder, or a move menu.
 - Press feedback is immediate: the fill changes and the control scales to 0.98.

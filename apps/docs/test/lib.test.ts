@@ -66,7 +66,8 @@ describe('markdown helpers', () => {
   it('extracts the Principles section from the README', () => {
     const readme = readFileSync(new URL('README.md', content), 'utf8');
     const { section, rest } = extractSection(readme, 'Principles');
-    expect(section.startsWith('1. **Up is the only metaphor.**')).toBe(true);
+    expect(section.startsWith('Accessibility and responsive behaviour govern the rest.')).toBe(true);
+    expect(section).toContain('1. **Readable before pretty.**');
     expect(rest).not.toContain('## Principles');
     expect(rest).toContain('## Content');
   });
