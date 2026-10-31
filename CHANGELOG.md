@@ -2,6 +2,10 @@
 
 The four packages under `packages/` release together under one version, tagged `v<version>` in this repository. Each package also has its own `CHANGELOG.md`, written by Changesets.
 
+## v0.3.2 (2026-10-31)
+
+Compact navigation, menus, and icon-first controls across design system surfaces. Form alert box alignment corrected.
+
 ## v0.3.1 (2026-10-31)
 
 `@upmo-ai/tokens` and `@upmo-ai/ui` tighten app page titles, sidebar items, and content insets. `@upmo-ai/icons` and `@upmo-ai/brands` have no code changes in this release. The docs site puts accessibility and responsive behaviour ahead of density.
