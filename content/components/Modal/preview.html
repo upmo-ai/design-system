@@ -1,4 +1,4 @@
-<!-- @dsCard group="Overlays" height=400 subtitle="A destructive confirmation: Cancel takes focus, the primary names the action" -->
+<!-- @dsCard group="Overlays" height=400 subtitle="A destructive confirmation: Cancel outline, primary names destructive action with icon + text" -->
 <div class="u-preview" style="padding: 0">
   <div class="u-scrim">
     <div class="u-modal" role="dialog" aria-modal="true" aria-labelledby="md-title" aria-describedby="md-desc">
@@ -6,8 +6,14 @@
       <p id="md-desc">Daily finance digest and its 14 runs, artifacts and events will be removed. Automations that use it will stop. This cannot be undone.</p>
       <label class="u-check"><input type="checkbox" id="md-confirm"><span class="u-box"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="u-check-text">Also delete the exported PDFs</span></label>
       <div class="u-modal-actions">
-        <button class="u-btn u-btn--subtle" autofocus>Cancel</button>
-        <button class="u-btn u-btn--danger" id="md-del">Delete task</button>
+        <button class="u-btn u-btn--outline" type="button">
+          <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>Cancel</span>
+        </button>
+        <button class="u-btn u-btn--danger" type="button" id="md-del">
+          <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+          <span>Delete task</span>
+        </button>
       </div>
     </div>
   </div>
@@ -15,7 +21,11 @@
 <script>
   document.getElementById('md-del').addEventListener('click', function () {
     var b = this; b.setAttribute('aria-busy', 'true'); var w = b.offsetWidth; b.style.minWidth = w + 'px';
-    b.innerHTML = '<svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="u-draw" pathLength="100" d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Deleting…';
-    setTimeout(function () { b.removeAttribute('aria-busy'); b.textContent = 'Delete task'; b.style.minWidth = ''; }, 1400);
+    b.innerHTML = '<svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="u-draw" pathLength="100" d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Deleting…</span>';
+    setTimeout(function () {
+      b.removeAttribute('aria-busy');
+      b.innerHTML = '<svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg><span>Delete task</span>';
+      b.style.minWidth = '';
+    }, 1400);
   });
 </script>

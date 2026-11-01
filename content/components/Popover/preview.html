@@ -1,11 +1,23 @@
 <!-- @dsCard group="Overlays" height=260 subtitle="Click the button to open a small inline form" -->
 <div class="u-preview" style="align-items: flex-start; min-height: 220px">
   <div class="u-pop-anchor">
-    <button class="u-btn u-btn--outline" id="po-btn" aria-haspopup="dialog" aria-expanded="true" aria-controls="po-panel">Set budget</button>
+    <button class="u-btn u-btn--outline" id="po-btn" aria-haspopup="dialog" aria-expanded="true" aria-controls="po-panel">
+      <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span>Set budget</span>
+    </button>
     <div class="u-pop" id="po-panel" role="dialog" aria-label="Task budget">
       <div class="u-pop-title">Budget for this task</div>
       <div class="u-field"><label class="u-label" for="po-amt">Maximum spend</label><div class="u-input-wrap"><input class="u-input u-input--with-left" id="po-amt" inputmode="decimal" value="5.00"><div class="u-input-left">€</div></div><div class="u-desc">The task pauses for approval when it reaches 90%.</div></div>
-      <div class="u-row" style="justify-content: flex-end"><button class="u-btn u-btn--subtle u-btn--sm" data-close>Cancel</button><button class="u-btn u-btn--filled u-btn--sm" data-close>Save</button></div>
+      <div class="u-row" style="justify-content: flex-end; gap: 8px">
+        <button class="u-btn u-btn--outline u-btn--sm" data-close>
+          <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>Cancel</span>
+        </button>
+        <button class="u-btn u-btn--filled u-btn--sm" data-close>
+          <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Save</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

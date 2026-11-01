@@ -1,21 +1,46 @@
-<!-- @dsCard group="Actions" height=230 subtitle="Press any button: it reacts at once, then shows loading for 1.5 s" -->
+<!-- @dsCard group="Actions" height=230 subtitle="Sharp-cornered action buttons: icon + text standard, crisp borders, and instantaneous press reaction" -->
 <div class="u-preview u-preview--col">
-  <div class="u-row">
-    <button class="u-btn u-btn--filled" data-demo>Start task</button>
-    <button class="u-btn u-btn--light" data-demo>Save draft</button>
-    <button class="u-btn u-btn--outline" data-demo>Export</button>
-    <button class="u-btn u-btn--subtle" data-demo>Cancel</button>
-    <button class="u-btn u-btn--danger" data-demo>Delete task</button>
-    <button class="u-btn u-btn--danger-outline" data-demo>Archive</button>
+  <div class="u-row" style="gap: 10px; flex-wrap: wrap">
+    <button class="u-btn u-btn--filled" data-demo>
+      <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      <span>New task</span>
+    </button>
+    <button class="u-btn u-btn--outline" data-demo>
+      <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4l0 12"/></svg>
+      <span>Export artifacts</span>
+    </button>
+    <button class="u-btn u-btn--outline u-btn--sm" data-demo>
+      <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span>Start task</span>
+    </button>
+    <button class="u-btn u-btn--outline u-btn--sm" data-demo>
+      <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>Review draft</span>
+    </button>
+    <button class="u-btn u-btn--light" data-demo>
+      <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+      <span>Review approval</span>
+    </button>
+    <button class="u-btn u-btn--danger-outline" data-demo>
+      <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <span>Cancel task</span>
+    </button>
   </div>
-  <div class="u-row">
-    <button class="u-btn u-btn--filled u-btn--sm" data-demo><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Send</button>
-    <button class="u-btn u-btn--filled" data-demo><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New task</button>
-    <button class="u-btn u-btn--filled u-btn--lg" data-demo>Self-host in 10 minutes</button>
-    <button class="u-btn u-btn--filled" aria-disabled="true" title="Pick a provider first">Connect</button>
-    <button class="u-btn u-btn--filled" aria-busy="true"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="u-draw" pathLength="100" d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>Starting…</button>
+  <div class="u-row" style="gap: 10px; margin-top: 4px">
+    <button class="u-btn u-btn--filled u-btn--sm" data-demo>
+      <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      <span>Send</span>
+    </button>
+    <button class="u-btn u-btn--filled u-btn--lg" data-demo>
+      <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span>Execute automation</span>
+    </button>
+    <button class="u-btn u-btn--outline" aria-disabled="true" title="Pick an agent first">
+      <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+      <span>Connect</span>
+    </button>
   </div>
-  <div class="u-note">Filled is the one main action per view. Light is for a second action, outline for neutral ones, subtle for the least important. Danger is for actions that destroy something. While loading, the button keeps its width and shows the draw caret in place of its icon.</div>
+  <div class="u-note">Buttons use sharp 2px geometry (--radius-xs), crisp 1px borders, and prioritize icon + text pairings for intuitive, rapid identification.</div>
 </div>
 <script>
   document.querySelectorAll('[data-demo]').forEach(function (b) {
