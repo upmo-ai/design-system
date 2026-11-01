@@ -1,6 +1,6 @@
 {
   "name": "@upmo-ai/tokens",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Upmo design tokens: CSS variables for the light, dark and high-contrast themes, and a typed object of every value.",
   "license": "AGPL-3.0-only",
   "type": "module",

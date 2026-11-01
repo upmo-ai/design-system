@@ -2,6 +2,10 @@
 
 The four packages under `packages/` release together under one version, tagged `v<version>` in this repository. Each package also has its own `CHANGELOG.md`, written by Changesets.
 
+## v0.3.3 (2026-11-01)
+
+Compact density and UI typography adjustments: streamlined button dimensions, tightened alert containers, centered sidebar version number, and compact form control defaults.
+
 ## v0.3.2 (2026-10-31)
 
 Compact navigation, menus, and icon-first controls across design system surfaces. Form alert box alignment corrected.
