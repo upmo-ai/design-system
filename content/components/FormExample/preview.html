@@ -18,9 +18,15 @@
       <label class="u-check"><input type="checkbox"><span class="u-box"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="u-check-text">Search the web</span></label>
     </div>
     <label class="u-switch"><input type="checkbox" checked><span class="u-track"></span><span>Enable now</span></label>
-    <div class="u-row" style="justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 16px">
-      <button type="button" class="u-btn u-btn--subtle">Cancel</button>
-      <button type="submit" class="u-btn u-btn--filled" id="fx-submit">Create automation</button>
+    <div class="u-row" style="justify-content: flex-end; gap: 8px; border-top: 1px solid var(--border); padding-top: 16px">
+      <button type="button" class="u-btn u-btn--outline">
+        <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <span>Cancel</span>
+      </button>
+      <button type="submit" class="u-btn u-btn--filled" id="fx-submit">
+        <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>Create automation</span>
+      </button>
     </div>
   </form>
   <div id="fx-toast" hidden class="u-toast u-toast--success" role="status" style="align-self: flex-end"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="u-toast-body"><div class="u-toast-title">Automation created</div><div class="u-toast-text">First run tomorrow at 08:00.</div></div></div>

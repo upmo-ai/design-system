@@ -1,55 +1,283 @@
-<!-- @dsCard group="Pages" height=760 width=1280 page subtitle="Tasks list: shell, notifications bell, filters, tile grid, every status" -->
+<!-- @dsCard group="Pages" height=780 width=1280 page subtitle="Tasks page: minimalist topbar, clean sidebar, approval alert, and dense data table" -->
 <div class="u-shell">
-  <nav class="u-nav" aria-label="Main" style="height: 100%">
-    <div class="u-nav-head">
-      <button class="u-nav-brand" type="button" aria-haspopup="menu" aria-label="Switch workspace">
-        <svg width="18" height="18" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="var(--emerald)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Upmo</span>
-        <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--ink-muted)"><path d="m6 9 6 6 6-6"/></svg>
+  <div class="u-topbar">
+    <div class="u-topbar-left">
+      <a class="u-topbar-brand" href="#" aria-label="Upmo home">
+        <svg width="22" height="22" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="var(--emerald)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="u-aicon u-aicon--sm" type="button" aria-label="Collapse navigation">
+        <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M9 4v16M15 10l-2 2 2 2"/></svg>
       </button>
-      <button class="u-aicon u-aicon--sm" type="button" aria-label="Collapse sidebar (⌘B)"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 4v16M15 10l-2 2 2 2"/></svg></button>
     </div>
-    <button class="u-nav-action" type="button">
-      <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-      <span>New task</span>
-      <span class="u-kbd">⌘N</span>
-    </button>
-    <a href="#"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12 12 5l7 7M7 10v9h10v-9"/></svg><span>Home</span></a>
-    <a href="#" aria-current="page"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Tasks</span><span class="u-badge u-badge--count">2</span></a>
-    <a href="#"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.5-4A8 8 0 1 1 8 18.5L4 20z"/></svg><span>Chat</span></a>
-    <a href="#"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span>Automations</span></a>
-    <a href="#"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M9 11h.01M15 11h.01M9 15h6M12 3v3"/></svg><span>Agents</span></a>
-    <div class="u-overline">Recent tasks</div>
-    <div class="u-nav-row">
-      <a href="#"><span>Daily finance digest</span></a>
-      <button class="u-nav-more" type="button" aria-label="Task actions"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
-    </div>
-    <div class="u-nav-row">
-      <a href="#"><span>Migrate ledger</span></a>
-      <button class="u-nav-more" type="button" aria-label="Task actions"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
-    </div>
-    <div class="u-nav-user" role="button" tabindex="0" aria-label="User account">
-      <span class="u-avatar u-avatar--sm">JD</span>
-      <div class="u-nav-user-info">
-        <span class="u-nav-user-name">Jane Doe</span>
-        <span class="u-nav-user-desc">Engineering</span>
+    <div class="u-topbar-center">
+      <div class="u-topbar-search">
+        <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m20 20-5-5"/></svg>
+        <span>Search for anything</span>
+        <span class="u-kbd-group"><kbd class="u-kbd">⌘</kbd><kbd class="u-kbd">K</kbd></span>
       </div>
-      <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--ink-muted)"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></svg>
     </div>
-  </nav>
-  <div class="u-main">
-    <div class="u-topbar"><button class="u-aicon u-aicon--sm" aria-label="Toggle sidebar"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><nav class="u-crumbs" aria-label="Breadcrumb"><span aria-current="page">Tasks</span></nav><button class="u-launcher"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m20 20-5-5"/></svg><span>Search or jump to…</span><span class="u-kbd-group"><kbd class="u-kbd">⌘</kbd><kbd class="u-kbd">K</kbd></span></button><button class="u-aicon u-aicon--sm" aria-label="Notifications, 2 unread"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg><span class="u-badge u-badge--count" aria-hidden="true" style="position: absolute; top: -2px; right: -4px; height: 16px; padding: 0 5px; font-size: 11px">2</span></button><button class="u-aicon u-aicon--sm" aria-label="Help"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg></button></div>
-    <div class="u-content">
-      <div class="u-page-head"><div><h1>Tasks</h1><div class="u-desc">Work you hand to Upmo. Each task plans, does and checks its own work.</div></div><button class="u-btn u-btn--filled"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New task</button></div>
-      <div class="u-alert u-alert--warning" role="status"><span class="u-alert-icon"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span><div class="u-alert-body"><div class="u-alert-title">1 task needs approval</div><div class="u-alert-text">Daily finance digest wants to email 3 people outside the company.</div></div><button class="u-btn u-btn--filled u-btn--sm" style="align-self: center">Review</button></div>
-      <div class="u-row"><div class="u-seg" role="group" aria-label="Status"><button type="button" aria-pressed="true">All</button><button type="button" aria-pressed="false">Working</button><button type="button" aria-pressed="false">Needs approval</button><button type="button" aria-pressed="false">Done</button><button type="button" aria-pressed="false">Failed</button></div><div class="u-select" style="width: 160px"><button type="button" class="u-input u-input--sm u-select-trigger" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="pm-agent-list" aria-label="Agent"><span class="u-select-value"></span><span class="u-select-caret"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></button><div class="u-select-drop"><div class="u-select-options" role="listbox" id="pm-agent-list" aria-label="Agent"><div class="u-opt" role="option" aria-selected="true"><span class="u-opt-label">All agents</span></div><div class="u-opt" role="option"><span class="u-opt-label">General</span></div><div class="u-opt" role="option"><span class="u-opt-label">Finance</span></div><div class="u-opt" role="option"><span class="u-opt-label">Engineering</span></div></div></div></div><div class="u-select" style="width: 160px"><button type="button" class="u-input u-input--sm u-select-trigger" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="pm-engine-list" aria-label="Engine"><span class="u-select-value"></span><span class="u-select-caret"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></button><div class="u-select-drop"><div class="u-select-options" role="listbox" id="pm-engine-list" aria-label="Engine"><div class="u-opt" role="option" aria-selected="true"><span class="u-opt-label">All engines</span></div><div class="u-opt" role="option"><span class="u-opt-label">Upmo</span></div><div class="u-opt" role="option"><span class="u-opt-label">Claude Code</span></div><div class="u-opt" role="option"><span class="u-opt-label">Codex</span></div></div></div></div><span class="u-note" style="margin-left: auto">6 tasks · 2 working</span></div>
-      <div class="u-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))">
-        <a class="u-card u-card--click" href="#"><div class="u-card-head"><h4 class="u-card-title">Daily finance digest</h4><span class="u-badge u-badge--warning"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Needs approval</span></div><div class="u-card-meta">Finance · Upmo · gpt-5.2 · run 14 · €0.42</div><div class="u-status"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--ink)"/><path d="M32 22l22 22" stroke="var(--ink)"/></svg>Working</div></a>
-        <a class="u-card u-card--click" href="#"><div class="u-card-head"><h4 class="u-card-title">Migrate ledger to pgvector 0.8</h4><span class="u-badge"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path class="u-lift" d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Working</span></div><div class="u-card-meta">Engineering · Claude Code · claude-opus-5-5 · 12 min</div><div class="u-status"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--ink)"/><path d="M32 22l22 22" stroke="var(--caret-idle)"/></svg>Planning</div></a>
-        <a class="u-card u-card--click" href="#"><div class="u-card-head"><h4 class="u-card-title">Vendor contract review</h4><span class="u-badge u-badge--success"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Done</span></div><div class="u-card-meta">Finance · Upmo · 2 h ago · 3 artifacts</div><div class="u-status" style="color: var(--success)"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--emerald)"/><path d="M32 22l22 22" stroke="var(--emerald)"/></svg>Done</div></a>
-        <a class="u-card u-card--click" href="#"><div class="u-card-head"><h4 class="u-card-title">Competitor pricing scan</h4><span class="u-badge"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="var(--caret-idle)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Queued</span></div><div class="u-card-meta">General · Upmo · starts after budget reset</div><div class="u-status" style="color: var(--ink-muted)"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--caret-idle)"/><path d="M32 22l22 22" stroke="var(--caret-idle)"/></svg>Queued</div></a>
-        <a class="u-card u-card--click" href="#"><div class="u-card-head"><h4 class="u-card-title">Fix flaky ledger test</h4><span class="u-badge u-badge--danger"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>Failed</span></div><div class="u-card-meta">Engineering · Codex · yesterday · provider key rejected</div><div class="u-card-foot"><button type="button" class="u-aicon u-aicon--sm u-aicon--outline" aria-label="Follow up"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg></button></div></a>
-        <a class="u-card u-card--click" href="#"><div class="u-card-head"><h4 class="u-card-title">Onboarding guide refresh</h4><span class="u-badge u-badge--success"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Done</span></div><div class="u-card-meta">General · Upmo · 3 days ago · 1 artifact</div><div class="u-status" style="color: var(--success)"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--emerald)"/><path d="M32 22l22 22" stroke="var(--emerald)"/></svg>Done</div></a>
+    <div class="u-topbar-right">
+      <button class="u-aicon u-aicon--sm" aria-label="Notifications, 2 unread">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg>
+        <span class="u-badge u-badge--count" aria-hidden="true" style="position: absolute; top: -2px; right: -4px; height: 16px; padding: 0 5px; font-size: 11px">2</span>
+      </button>
+      <button class="u-aicon u-aicon--sm" aria-label="New task">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <button class="u-aicon u-aicon--sm" aria-label="Help & Documentation">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg>
+      </button>
+      <button class="u-avatar u-avatar--sm" type="button" aria-label="User account" style="cursor: pointer; margin-left: 4px">
+        MS
+      </button>
+    </div>
+  </div>
+
+  <div class="u-shell-body">
+    <nav class="u-nav" aria-label="Main">
+      <a href="#">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12 12 5l7 7M7 10v9h10v-9"/></svg>
+        <span>Home</span>
+      </a>
+      <a href="#" aria-current="page">
+        <svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Tasks</span>
+        <span class="u-badge u-badge--count" style="margin-left: auto">2</span>
+      </a>
+      <a href="#">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.5-4A8 8 0 1 1 8 18.5L4 20z"/></svg>
+        <span>Chat</span>
+      </a>
+      <a href="#">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <span>Automations</span>
+      </a>
+      <a href="#">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M9 11h.01M15 11h.01M9 15h6M12 3v3"/></svg>
+        <span>Agents</span>
+      </a>
+      <a href="#">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>
+        <span>Knowledge</span>
+      </a>
+
+      <button class="u-nav-ask" type="button" style="margin-top: auto">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3zM19 16l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z"/></svg>
+        <span>Ask Upmo</span>
+      </button>
+    </nav>
+
+    <div class="u-main">
+      <div class="u-content">
+        <div class="u-page-head">
+          <div>
+            <h1>Tasks</h1>
+            <div class="u-desc">Work you hand to Upmo. Each task plans, executes, and checks its own progress.</div>
+          </div>
+          <button class="u-btn u-btn--filled" type="button">
+            <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            <span>New task</span>
+          </button>
+        </div>
+
+        <div class="u-alert u-alert--warning" role="status">
+          <span class="u-alert-icon">
+            <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </span>
+          <div class="u-alert-body">
+            <div class="u-alert-title">1 task needs approval</div>
+            <div class="u-alert-text">Daily finance digest wants to email 3 people outside the company.</div>
+          </div>
+          <button class="u-btn u-btn--filled u-btn--sm" style="align-self: center">
+            <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Review approval</span>
+          </button>
+        </div>
+
+        <div class="u-table-wrap">
+          <div class="u-table-toolbar">
+            <div class="u-table-toolbar-left">
+              <div class="u-table-search">
+                <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--ink-muted)"><circle cx="10" cy="10" r="6"/><path d="m20 20-5-5"/></svg>
+                <input type="text" placeholder="Search or filter tasks…" aria-label="Search or filter tasks">
+              </div>
+              <button class="u-aicon u-aicon--outline" type="button" aria-label="Filter rules">
+                <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+              </button>
+            </div>
+            <div class="u-table-toolbar-right">
+              <button class="u-btn u-btn--outline u-btn--sm" type="button">
+                <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10h14M7 10l3-3M7 10l3 3M17 14H3M17 14l-3-3M17 14l3 3"/></svg>
+                <span>Status</span>
+              </button>
+              <button class="u-aicon u-aicon--outline" type="button" aria-label="Column settings">
+                <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 3v18M15 3v18"/></svg>
+              </button>
+              <button class="u-btn u-btn--outline u-btn--sm" type="button">
+                <span>Options</span>
+                <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <table class="u-table">
+            <caption class="u-sr">Tasks list table</caption>
+            <thead>
+              <tr>
+                <th scope="col" class="u-th-check"><input type="checkbox" aria-label="Select all tasks"></th>
+                <th scope="col">Task name</th>
+                <th scope="col" class="u-num">Cost</th>
+                <th scope="col">Date</th>
+                <th scope="col">Artifacts</th>
+                <th scope="col">Status note</th>
+                <th scope="col">Engine</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="u-table-group-row">
+                <td class="u-td-check"><input type="checkbox" aria-label="Select active tasks"></td>
+                <td colspan="7">Active · 2 tasks</td>
+              </tr>
+              <tr>
+                <td class="u-td-check"><input type="checkbox" aria-label="Select Daily finance digest"></td>
+                <td>
+                  <div class="u-table-entity">
+                    <div class="u-table-entity-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <div>
+                      <div class="u-table-entity-title">Daily finance digest</div>
+                      <div class="u-table-entity-sub" style="color: var(--warning)">Needs approval</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="u-num">€0.42 EUR</td>
+                <td style="color: var(--ink-secondary)">Today 08:00</td>
+                <td>
+                  <div class="u-table-thumb-wrap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--ink-muted)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <div class="u-table-thumb-check">✓</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="u-table-memo">
+                    <span>Approval asked: send email to 3 recipients</span>
+                    <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </td>
+                <td>Upmo · gpt-5.2</td>
+                <td>
+                  <button class="u-btn u-btn--outline u-btn--sm" type="button">
+                    <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Review</span>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td class="u-td-check"><input type="checkbox" aria-label="Select Migrate ledger"></td>
+                <td>
+                  <div class="u-table-entity">
+                    <div class="u-table-entity-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+                    </div>
+                    <div>
+                      <div class="u-table-entity-title">Migrate ledger to pgvector 0.8</div>
+                      <div class="u-table-entity-sub" style="color: var(--emerald-deep)">Working · Step 2/4</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="u-num">€1.20 EUR</td>
+                <td style="color: var(--ink-secondary)">Today 08:12</td>
+                <td>
+                  <div class="u-table-thumb-wrap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--ink-muted)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <div class="u-table-thumb-check">✓</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="u-table-memo">
+                    <span>Index building completed; verifying queries</span>
+                    <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </td>
+                <td>Claude Code</td>
+                <td style="color: var(--ink-muted)">—</td>
+              </tr>
+
+              <tr class="u-table-group-row">
+                <td class="u-td-check"><input type="checkbox" aria-label="Select completed tasks"></td>
+                <td colspan="7">Completed · 2 tasks</td>
+              </tr>
+              <tr>
+                <td class="u-td-check"><input type="checkbox" aria-label="Select Vendor contract review"></td>
+                <td>
+                  <div class="u-table-entity">
+                    <div class="u-table-entity-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <div>
+                      <div class="u-table-entity-title">Vendor contract review</div>
+                      <div class="u-table-entity-sub" style="color: var(--ink-muted)">Done</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="u-num">€0.85 EUR</td>
+                <td style="color: var(--ink-secondary)">Oct 30, 2026</td>
+                <td>
+                  <div class="u-table-thumb-wrap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--ink-muted)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <div class="u-table-thumb-check">✓</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="u-table-memo">
+                    <span>12 contracts verified against budget rules</span>
+                    <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </td>
+                <td>Upmo</td>
+                <td style="color: var(--ink-muted)">—</td>
+              </tr>
+              <tr>
+                <td class="u-td-check"><input type="checkbox" aria-label="Select Onboarding guide refresh"></td>
+                <td>
+                  <div class="u-table-entity">
+                    <div class="u-table-entity-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </div>
+                    <div>
+                      <div class="u-table-entity-title">Onboarding guide refresh</div>
+                      <div class="u-table-entity-sub" style="color: var(--ink-muted)">Done</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="u-num">€0.35 EUR</td>
+                <td style="color: var(--ink-secondary)">Oct 28, 2026</td>
+                <td>
+                  <div class="u-table-thumb-wrap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--ink-muted)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <div class="u-table-thumb-check">✓</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="u-table-memo">
+                    <span>4 chapters updated with current API tokens guide</span>
+                    <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </td>
+                <td>Upmo</td>
+                <td style="color: var(--ink-muted)">—</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="u-table-foot">
+            <a href="#">1–4 of 24 tasks</a>
+            <span>·</span>
+            <span>€18.42 total spend</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -173,4 +401,12 @@
     paint();
   }
   document.querySelectorAll('.u-select').forEach(uSelect);
+
+  var shell = document.querySelector('.u-shell');
+  var navToggle = shell ? shell.querySelector('[aria-label="Collapse navigation"]') : null;
+  if (navToggle) {
+    navToggle.addEventListener('click', function () {
+      shell.classList.toggle('u-shell--rail');
+    });
+  }
 </script>

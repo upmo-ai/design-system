@@ -2,6 +2,10 @@
 
 The four packages under `packages/` release together under one version, tagged `v<version>` in this repository. Each package also has its own `CHANGELOG.md`, written by Changesets.
 
+## v0.3.4 (2026-11-01)
+
+Sharp corner radii across tokens (--radius-xs: 2px, --radius-sm: 4px), smooth motion transitions for tabs, accordions, and form controls, centered topbar search launcher, and max-width layout containment.
+
 ## v0.3.3 (2026-11-01)
 
 Compact density and UI typography adjustments: streamlined button dimensions, tightened alert containers, centered sidebar version number, and compact form control defaults.

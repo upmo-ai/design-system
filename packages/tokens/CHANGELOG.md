@@ -1,5 +1,11 @@
 # @upmo-ai/tokens
 
+## 0.3.4
+
+### Patch Changes
+
+- Sharp corner radius tokens (--radius-xs: 2px, --radius-sm: 4px, --radius-md: 6px, --radius-lg: 8px, --radius-xl: 12px).
+
 ## 0.3.3
 
 ### Patch Changes

@@ -1,137 +1,292 @@
-<!-- @dsCard group="Pages" height=980 width=1280 page subtitle="One task: header with status, notifications bell, Activity and Result tabs, side cards for budget, delivery, sources and run history" -->
-<div class="u-shell u-shell--rail">
-  <nav class="u-nav u-nav--rail" aria-label="Main" style="border-radius: 0; height: 100%">
-    <div style="padding: 6px 0 10px"><svg width="20" height="20" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="var(--emerald)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <button class="u-aicon u-aicon--sm u-aicon--filled" type="button" aria-label="New task (⌘N)" style="margin-bottom: 6px"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
-    <a href="#" aria-label="Home"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12 12 5l7 7M7 10v9h10v-9"/></svg></a>
-    <a href="#" aria-label="Chat"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.5-4A8 8 0 1 1 8 18.5L4 20z"/></svg></a>
-    <a href="#" aria-current="page" aria-label="Tasks"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    <a href="#" aria-label="Automations"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></a>
-    <a href="#" aria-label="Agents"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M9 11h.01M15 11h.01M9 15h6M12 3v3"/></svg></a>
-    <a href="#" aria-label="Settings" style="margin-top: auto"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></svg></a>
-    <span class="u-avatar u-avatar--sm" style="margin-top: 4px; cursor: pointer" aria-label="User account">JD</span>
-  </nav>
-  <div class="u-main">
-    <div class="u-topbar"><button class="u-aicon u-aicon--sm" aria-label="Expand sidebar"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><nav class="u-crumbs" aria-label="Breadcrumb"><a href="#">Tasks</a><span aria-hidden="true">/</span><a href="#">Daily finance digest</a><span aria-hidden="true">/</span><span aria-current="page">Run 14</span></nav><button class="u-launcher"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m20 20-5-5"/></svg><span>Search or jump to…</span><span class="u-kbd-group"><kbd class="u-kbd">⌘</kbd><kbd class="u-kbd">K</kbd></span></button><button class="u-aicon u-aicon--sm" aria-label="Notifications, 2 unread"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg><span class="u-badge u-badge--count" aria-hidden="true" style="position: absolute; top: -2px; right: -4px; height: 16px; padding: 0 5px; font-size: 11px">2</span></button></div>
-    <div class="u-content">
-      <div class="u-page-head"><div><div class="u-row" style="gap: 10px"><h1>Daily finance digest</h1><span class="u-badge u-badge--warning"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Needs approval</span></div><div class="u-desc">Run 14 · Upmo · gpt-5.2 · started 08:00 · <span class="u-status" style="font-weight: 500"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--ink)"/><path d="M32 22l22 22" stroke="var(--ink)"/></svg>Working</span></div></div><div class="u-row"><button class="u-btn u-btn--outline">Pause</button><button class="u-btn u-btn--filled">Review approval</button><button class="u-aicon" aria-label="More actions"><svg class="u-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div></div>
-      <div class="u-alert u-alert--warning" role="alert"><span class="u-alert-icon"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span><div class="u-alert-body"><div class="u-alert-title">Approve sending an email to 3 external recipients?</div><div class="u-alert-text">To: ap@hetzner.com, billing@vercel.com, lead@acme.example · Subject: October invoices over threshold</div><div class="u-alert-actions"><button class="u-btn u-btn--filled u-btn--sm">Approve and continue</button><button class="u-btn u-btn--subtle u-btn--sm">Deny</button><button class="u-btn u-btn--subtle u-btn--sm">View draft</button></div></div></div>
-      <div class="u-task-layout">
-        <div class="u-stack" style="gap: 0">
-          <div class="u-tabs" role="tablist" aria-label="Task views" data-page-tabs><button class="u-tab" role="tab" aria-selected="true" id="td-t-activity" aria-controls="td-p-activity" data-tab="activity">Activity</button><button class="u-tab" role="tab" aria-selected="false" tabindex="-1" id="td-t-result" aria-controls="td-p-result" data-tab="result">Result<span class="u-badge u-badge--count" aria-hidden="true">2</span><span class="u-sr">, 2 artifacts</span></button></div>
-          <div class="u-tabpanel" role="tabpanel" id="td-p-activity" aria-labelledby="td-t-activity" style="padding-top: 16px">
-            <div class="u-seg u-seg--fluid" role="group" aria-label="Activity view" data-activity-views style="margin-bottom: 16px"><button type="button" aria-pressed="true" aria-controls="td-v-summary">Summary</button><button type="button" aria-pressed="false" tabindex="-1" aria-controls="td-v-events">All events</button></div>
-            <div id="td-v-summary">
-            <ol class="u-tl">
-              <li data-done="true"><div class="u-tl-dot"><svg viewBox="0 0 64 64" width="12" height="12" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="u-tl-title">Preparing</div><div class="u-tl-meta">08:00:04 · 12 s · read 2 sources, searched finance-policies</div></div></li>
-              <li data-done="true"><div class="u-tl-dot"><svg viewBox="0 0 64 64" width="12" height="12" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="u-tl-title">Planning</div><div class="u-tl-meta">08:00:16 · 4 steps</div><div class="u-tl-body">1. Fetch October invoices · 2. Extract vendor, amount, due date · 3. Match contracts and flag over threshold · 4. Write the digest and email finance.</div></div></li>
-              <li data-current="true"><div class="u-tl-dot"><svg viewBox="0 0 64 64" width="12" height="12" fill="none" aria-hidden="true"><path class="u-lift" d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="u-tl-title">Working</div><div class="u-tl-meta">08:01:02 · paused 3 min, waiting for approval</div><div class="u-tl-body"><button class="u-msg-tools" aria-expanded="false"><svg viewBox="0 0 64 64" width="12" height="12" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="var(--emerald)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>7 tool calls · 41 s</button></div></div></li>
-              <li><div class="u-tl-dot">4</div><div><div class="u-tl-title" style="color: var(--ink-muted)">Checking</div><div class="u-tl-meta">Checks: 31 rows in table, totals match the mailbox, email sent</div></div></li>
-            </ol>
+<!-- @dsCard group="Pages" height=980 width=1280 page subtitle="One task: minimalist topbar, clean sidebar, sharp icon+text actions, Activity and Result tabs, side cards" -->
+<div class="u-shell">
+  <div class="u-topbar">
+    <div class="u-topbar-left">
+      <a class="u-topbar-brand" href="#" aria-label="Upmo home">
+        <svg width="22" height="22" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="var(--emerald)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="u-aicon u-aicon--sm" type="button" aria-label="Collapse navigation">
+        <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M9 4v16M15 10l-2 2 2 2"/></svg>
+      </button>
+    </div>
+    <div class="u-topbar-center">
+      <div class="u-topbar-search">
+        <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m20 20-5-5"/></svg>
+        <span>Search for anything</span>
+        <span class="u-kbd-group"><kbd class="u-kbd">⌘</kbd><kbd class="u-kbd">K</kbd></span>
+      </div>
+    </div>
+    <div class="u-topbar-right">
+      <button class="u-aicon u-aicon--sm" aria-label="Notifications, 2 unread">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg>
+        <span class="u-badge u-badge--count" aria-hidden="true" style="position: absolute; top: -2px; right: -4px; height: 16px; padding: 0 5px; font-size: 11px">2</span>
+      </button>
+      <button class="u-aicon u-aicon--sm" aria-label="New task">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <button class="u-aicon u-aicon--sm" aria-label="Help">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg>
+      </button>
+      <button class="u-avatar u-avatar--sm" type="button" aria-label="User account" style="cursor: pointer; margin-left: 4px">
+        MS
+      </button>
+    </div>
+  </div>
+
+  <div class="u-shell-body">
+    <nav class="u-nav" aria-label="Main">
+      <a href="#">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12 12 5l7 7M7 10v9h10v-9"/></svg>
+        <span>Home</span>
+      </a>
+      <a href="#" aria-current="page">
+        <svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Tasks</span>
+        <span class="u-badge u-badge--count" style="margin-left: auto">2</span>
+      </a>
+      <a href="#">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.5-4A8 8 0 1 1 8 18.5L4 20z"/></svg>
+        <span>Chat</span>
+      </a>
+      <a href="#">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <span>Automations</span>
+      </a>
+      <a href="#">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M9 11h.01M15 11h.01M9 15h6M12 3v3"/></svg>
+        <span>Agents</span>
+      </a>
+      <a href="#">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>
+        <span>Knowledge</span>
+      </a>
+
+      <button class="u-nav-ask" type="button" style="margin-top: auto">
+        <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3zM19 16l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z"/></svg>
+        <span>Ask Upmo</span>
+      </button>
+    </nav>
+
+    <div class="u-main">
+      <div class="u-content">
+        <div class="u-page-head">
+          <div>
+            <div class="u-row" style="gap: 10px">
+              <h1>Daily finance digest</h1>
+              <span class="u-badge u-badge--warning"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Needs approval</span>
             </div>
-            <div id="td-v-events" hidden>
-              <div class="u-evlog" data-evlog>
-                <div class="u-evlog-tools">
-                  <span class="u-evlog-count">10 events</span><span class="u-evlog-state" data-ev-state>Following live</span>
-                  <span class="u-spacer"></span>
-                  <button type="button" class="u-aicon u-aicon--sm" aria-label="Follow live" aria-pressed="true" data-ev-follow><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8"/><path d="M18 4v17"/><path d="M15 18l3 3l3 -3"/></svg></button>
-                  <button type="button" class="u-aicon u-aicon--sm" aria-label="Jump to top" data-ev-top><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10l0 10"/><path d="M12 10l4 4"/><path d="M12 10l-4 4"/><path d="M4 4l16 0"/></svg></button>
-                  <button type="button" class="u-aicon u-aicon--sm" aria-label="Jump to bottom" data-ev-bottom><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l16 0"/><path d="M12 14l0 -10"/><path d="M12 14l4 -4"/><path d="M12 14l-4 -4"/></svg></button>
-                  <button type="button" class="u-aicon u-aicon--sm" aria-label="Copy log" data-ev-copy><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z"/><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1"/></svg></button>
-                  <button type="button" class="u-aicon u-aicon--sm" aria-label="Full screen" data-ev-full><svg class="u-icon" data-ev-max viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8v-2a2 2 0 0 1 2 -2h2"/><path d="M4 16v2a2 2 0 0 0 2 2h2"/><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M16 20h2a2 2 0 0 0 2 -2v-2"/></svg><svg class="u-icon" data-ev-min viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none"><path d="M15 19v-2a2 2 0 0 1 2 -2h2"/><path d="M15 5v2a2 2 0 0 0 2 2h2"/><path d="M5 15h2a2 2 0 0 1 2 2v2"/><path d="M5 9h2a2 2 0 0 0 2 -2v-2"/></svg></button>
-                  <span class="u-sr" role="status" data-ev-status></span>
-                </div>
-                <div class="u-evlog-body" role="log" aria-label="All events" aria-live="polite" tabindex="0">
-                  <ol class="u-evlog-list">
-                    <li class="u-ev"><div class="u-ev-row"><time class="u-ev-time" datetime="08:00:00">08:00:00</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16l13 -8z"/></svg><span class="u-ev-phase">Preparing</span><span class="u-ev-msg">Task started by an automation</span></div></li>
-                    <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-1"><time class="u-ev-time" datetime="08:00:02">08:00:02</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 13a3.5 3.5 0 0 0 -3.5 3.5v1a3.5 3.5 0 0 0 7 0v-1.8"/><path d="M8.5 13a3.5 3.5 0 0 1 3.5 3.5v1a3.5 3.5 0 0 1 -7 0v-1.8"/><path d="M17.5 16a3.5 3.5 0 0 0 0 -7h-.5"/><path d="M19 9.3v-2.8a3.5 3.5 0 0 0 -7 0"/><path d="M6.5 16a3.5 3.5 0 0 1 0 -7h.5"/><path d="M5 9.3v-2.8a3.5 3.5 0 0 1 7 0v10"/></svg><span class="u-ev-phase">Preparing</span><span class="u-ev-msg">Found 2 facts in memory</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
-                      <div class="u-ev-detail" id="tde-d-1" hidden><ul class="u-ev-list"><li>Hetzner invoices arrive on the 20th of each month.</li><li>Finance wants invoices over €1,000 flagged.</li></ul><dl class="u-kv"><dt>Event type</dt><dd><code class="u-code">task.memory_recalled</code></dd></dl></div></li>
-                    <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-2"><time class="u-ev-time" datetime="08:00:04">08:00:04</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3v4a1 1 0 0 0 1 1h4"/><path d="M18 17h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h4l5 5v7a2 2 0 0 1 -2 2z"/><path d="M16 17v2a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h2"/></svg><span class="u-ev-phase">Preparing</span><span class="u-ev-msg">Files ready: 2 sources read</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
-                      <div class="u-ev-detail" id="tde-d-2" hidden><dl class="u-kv"><dt>Read</dt><dd>Finance mailbox, vendor-contracts</dd><dt>Searched</dt><dd>finance-policies</dd><dt>Event type</dt><dd><code class="u-code">task.files_ready</code></dd></dl></div></li>
-                    <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-3"><time class="u-ev-time" datetime="08:00:16">08:00:16</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 5h8"/><path d="M13 9h5"/><path d="M13 15h8"/><path d="M13 19h5"/><path d="M3 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M3 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/></svg><span class="u-ev-phase">Planning</span><span class="u-ev-msg">Plan written: 4 steps</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
-                      <div class="u-ev-detail" id="tde-d-3" hidden><ol class="u-ev-list"><li>1. Fetch October invoices</li><li>2. Extract vendor, amount, due date</li><li>3. Match contracts and flag over threshold</li><li>4. Write the digest and email finance</li></ol><dl class="u-kv"><dt>Event type</dt><dd><code class="u-code">task.plan_written</code></dd></dl></div></li>
-                    <li class="u-ev"><div class="u-ev-row"><time class="u-ev-time" datetime="08:01:02">08:01:02</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.414 10l-7.383 7.418a2.091 2.091 0 0 0 0 2.967a2.11 2.11 0 0 0 2.976 0l7.407 -7.385"/><path d="M18.121 15.293l2.586 -2.586a1 1 0 0 0 0 -1.414l-7.586 -7.586a1 1 0 0 0 -1.414 0l-2.586 2.586a1 1 0 0 0 0 1.414l7.586 7.586a1 1 0 0 0 1.414 0z"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Step 1 of 4 · Fetch October invoices</span></div></li>
-                    <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-5"><time class="u-ev-time" datetime="08:01:15">08:01:15</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1z"/><path d="M9 9h6v6h-6z"/><path d="M3 10h2"/><path d="M3 14h2"/><path d="M10 3v2"/><path d="M14 3v2"/><path d="M21 10h-2"/><path d="M21 14h-2"/><path d="M14 21v-2"/><path d="M10 21v-2"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Model turn done · 12.9 s · Upmo · gpt-5.2 · 6 tool calls</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
-                      <div class="u-ev-detail" id="tde-d-5" hidden><dl class="u-kv"><dt>Engine</dt><dd>Upmo</dd><dt>Model</dt><dd>gpt-5.2</dd><dt>Duration</dt><dd>12.9 s</dd><dt>Tool calls</dt><dd><ol class="u-ev-list"><li><code>search_mail</code> · 2.1 s</li><li><code>read_attachment</code> · 1.4 s</li><li><code>read_attachment</code> · 1.2 s</li><li><code>read_attachment</code> · 1.3 s</li><li><code>search_knowledge</code> · 0.9 s</li><li><code>save_artifact</code> · 0.4 s</li></ol></dd><dt>Event type</dt><dd><code class="u-code">task.model_turn</code></dd></dl></div></li>
-                    <li class="u-ev"><div class="u-ev-row"><time class="u-ev-time" datetime="08:01:16">08:01:16</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Artifact saved: invoices-oct.csv</span></div></li>
-                    <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-7"><time class="u-ev-time" datetime="08:02:51">08:02:51</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1z"/><path d="M9 9h6v6h-6z"/><path d="M3 10h2"/><path d="M3 14h2"/><path d="M10 3v2"/><path d="M14 3v2"/><path d="M21 10h-2"/><path d="M21 14h-2"/><path d="M14 21v-2"/><path d="M10 21v-2"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Model turn done · 9.4 s · Upmo · gpt-5.2 · 1 tool call</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
-                      <div class="u-ev-detail" id="tde-d-7" hidden><dl class="u-kv"><dt>Engine</dt><dd>Upmo</dd><dt>Model</dt><dd>gpt-5.2</dd><dt>Duration</dt><dd>9.4 s</dd><dt>Tool calls</dt><dd><ol class="u-ev-list"><li><code>save_artifact</code> · 0.3 s</li></ol></dd><dt>Event type</dt><dd><code class="u-code">task.model_turn</code></dd></dl></div></li>
-                    <li class="u-ev"><div class="u-ev-row"><time class="u-ev-time" datetime="08:03:05">08:03:05</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Artifact saved: digest-draft.md</span></div></li>
-                    <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-9"><time class="u-ev-time" datetime="08:03:06">08:03:06</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 7v5l3 3"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Approval asked: email to 3 external recipients</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
-                      <div class="u-ev-detail" id="tde-d-9" hidden><dl class="u-kv"><dt>To</dt><dd>ap@hetzner.com, billing@vercel.com, lead@acme.example</dd><dt>Subject</dt><dd>October invoices over threshold</dd><dt>Event type</dt><dd><code class="u-code">task.approval_asked</code></dd></dl></div></li>
-                  </ol>
-                </div>
-              </div>
-            </div>
-            <div class="u-composer" style="margin-top: 16px; max-width: none">
-              <textarea id="td-msg" rows="1" placeholder="Message this task…" aria-label="Message this task"></textarea>
-              <div class="u-composer-row">
-                <span class="u-composer-hint" style="margin: 0">Upmo reads it at the next step and replies here.</span>
-                <span class="u-spacer"></span>
-                <button class="u-aicon u-aicon--filled" id="td-send" aria-label="Send message" aria-disabled="true"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-              </div>
-            </div>
+            <div class="u-desc">Run 14 · Upmo · gpt-5.2 · started 08:00 · <span class="u-status" style="font-weight: 500"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 22 10 44" stroke="var(--ink)"/><path d="M32 22l22 22" stroke="var(--ink)"/></svg>Working</span> · <span style="font-weight: 600; color: var(--emerald-deep)">€0.42 spent</span></div>
           </div>
-          <div class="u-tabpanel" role="tabpanel" id="td-p-result" aria-labelledby="td-t-result" style="padding-top: 16px" hidden>
-            <div class="u-stack" style="gap: 24px">
-            <section class="u-stack" style="gap: 8px" aria-labelledby="td-r-summary">
-              <h2 class="u-card-title" id="td-r-summary" style="color: var(--ink)">Summary</h2>
-              <div class="u-card" style="padding: 16px; color: var(--ink-muted)">The final result shows up here when the task is done.</div>
-            </section>
-            <section class="u-stack" style="gap: 8px" aria-labelledby="td-r-artifacts">
-            <h2 class="u-card-title" id="td-r-artifacts" style="color: var(--ink)">Artifacts</h2>
-            <div class="u-artifacts" style="height: 420px; min-height: 0" data-artifacts>
-              <div class="u-artifact-list" role="tablist" aria-label="Artifacts" aria-orientation="vertical">
-                <button class="u-artifact" role="tab" id="tda-t-0" aria-controls="tda-p-0" aria-selected="true" data-artifact="digest-draft"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><path d="M9 9l1 0"/><path d="M9 13l6 0"/><path d="M9 17l6 0"/></svg><span class="u-artifact-name">digest-draft.md</span><span class="u-artifact-meta">Markdown · 2.8 KB · 08:03</span></button>
-                <button class="u-artifact" role="tab" id="tda-t-1" aria-controls="tda-p-1" aria-selected="false" tabindex="-1" data-artifact="invoices-oct"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z"/><path d="M3 10h18"/><path d="M10 3v18"/></svg><span class="u-artifact-name">invoices-oct.csv</span><span class="u-artifact-meta">CSV · 12 KB · 08:01</span></button>
-              </div>
-              <div class="u-artifact-view" role="tabpanel" id="tda-p-0" aria-labelledby="tda-t-0">
-                <div class="u-artifact-head"><div><h3 class="u-artifact-title">digest-draft.md</h3><div class="u-artifact-meta">Markdown · 2.8 KB · 08:03</div></div><div class="u-row" style="gap: 8px"><div class="u-seg" role="group" aria-label="Show as" data-view-toggle><button type="button" aria-pressed="true" aria-controls="tda-md-r">Rendered</button><button type="button" aria-pressed="false" aria-controls="tda-md-s">Source</button></div><button type="button" class="u-aicon u-aicon--sm u-aicon--outline" aria-label="Download artifact"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4l0 12"/></svg></button></div></div>
-                <div class="u-artifact-body">
-                  <div class="u-prose" id="tda-md-r">
-                    <h2 style="margin-top: 0">October invoices over threshold</h2>
-                    <p>Three of 31 invoices are over €1,000. Total spend this month is <strong>€18,420</strong>.</p>
-                    <ul><li>Hetzner: €2,140, due 24 Oct</li><li>Vercel: €1,310, due 28 Oct</li><li>Acme Design: €1,050, due 31 Oct</li></ul>
-                    <p>Draft. Upmo sends it to finance after approval.</p>
-                  </div>
-                  <div class="u-codeblock" id="tda-md-s" hidden><pre><span class="u-ln">1</span><span class="tk-k">## October invoices over threshold</span>
-<span class="u-ln">2</span>
-<span class="u-ln">3</span>Three of 31 invoices are over €1,000. Total spend this month is **€18,420**.
-<span class="u-ln">4</span>
-<span class="u-ln">5</span>- Hetzner: €2,140, due 24 Oct
-<span class="u-ln">6</span>- Vercel: €1,310, due 28 Oct
-<span class="u-ln">7</span>- Acme Design: €1,050, due 31 Oct
-<span class="u-ln">8</span>
-<span class="u-ln">9</span>Draft. Upmo sends it to finance after approval.</pre></div>
-                </div>
-              </div>
-              <div class="u-artifact-view" role="tabpanel" id="tda-p-1" aria-labelledby="tda-t-1" hidden>
-                <div class="u-artifact-head"><div><h3 class="u-artifact-title">invoices-oct.csv</h3><div class="u-artifact-meta">CSV · 31 rows · 12 KB · 08:01</div></div><button type="button" class="u-aicon u-aicon--sm u-aicon--outline" aria-label="Download artifact"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4l0 12"/></svg></button></div>
-                <div class="u-artifact-body">
-                  <div class="u-table-wrap">
-                    <table class="u-table" style="min-width: 0">
-                      <thead><tr><th scope="col">Vendor</th><th scope="col" class="u-num">Amount</th><th scope="col">Due</th></tr></thead>
-                      <tbody>
-                        <tr><td>Hetzner</td><td class="u-num">€2,140.00</td><td>24 Oct</td></tr>
-                        <tr><td>Vercel</td><td class="u-num">€1,310.00</td><td>28 Oct</td></tr>
-                        <tr><td>Acme Design</td><td class="u-num">€1,050.00</td><td>31 Oct</td></tr>
-                        <tr><td>GitHub</td><td class="u-num">€420.00</td><td>1 Nov</td></tr>
-                        <tr><td>Linear</td><td class="u-num">€192.00</td><td>3 Nov</td></tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-            </section>
+          <div class="u-row" style="gap: 8px">
+            <button class="u-btn u-btn--outline" type="button">
+              <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              <span>Pause</span>
+            </button>
+            <button class="u-btn u-btn--filled" type="button">
+              <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Review approval</span>
+            </button>
+            <button class="u-aicon u-aicon--outline" type="button" aria-label="More actions">
+              <svg class="u-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="u-alert u-alert--warning" role="alert">
+          <span class="u-alert-icon">
+            <svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </span>
+          <div class="u-alert-body">
+            <div class="u-alert-title">Approve sending an email to 3 external recipients?</div>
+            <div class="u-alert-text">To: ap@hetzner.com, billing@vercel.com, lead@acme.example · Subject: October invoices over threshold</div>
+            <div class="u-alert-actions">
+              <button class="u-btn u-btn--filled u-btn--sm" type="button">
+                <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Approve and continue</span>
+              </button>
+              <button class="u-btn u-btn--outline u-btn--sm" type="button">
+                <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>Deny</span>
+              </button>
+              <button class="u-btn u-btn--outline u-btn--sm" type="button">
+                <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span>View draft</span>
+              </button>
             </div>
           </div>
         </div>
-        <div class="u-task-side">
-          <div class="u-card" style="gap: 12px"><div class="u-card-head"><h4 class="u-card-title" style="font-size: 15px">Budget</h4><button type="button" class="u-aicon u-aicon--sm" aria-label="Edit budget"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"/><path d="M13.5 6.5l4 4"/></svg></button></div><div class="u-progress-row"><div class="u-progress" role="progressbar" aria-valuenow="42" aria-valuemin="0" aria-valuemax="100" aria-label="Budget used"><div style="width: 42%"></div></div><span class="u-progress-label">42%</span></div><div class="u-card-meta">€2.10 of €5.00 · 38k tokens · pauses at 90%</div><a href="#" class="u-card-meta" style="color: var(--emerald-deep)">See usage for this task</a></div>
-          <div class="u-card" style="gap: 10px"><div class="u-card-head"><h4 class="u-card-title" style="font-size: 15px">Delivery</h4><button type="button" class="u-aicon u-aicon--sm" aria-label="Change delivery channel" aria-describedby="td-dl-0"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"/><path d="M13.5 6.5l4 4"/></svg></button></div><ul class="u-dl"><li class="u-dl-row"><svg aria-hidden="true" class="u-brand u-brand--sm u-brand--deep" data-brand="slack" fill="#4A154B" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg><div class="u-dl-text"><span class="u-dl-name" id="td-dl-0">#finance on Slack</span><span class="u-dl-meta">After the task is done</span></div></li></ul></div>
-          <div class="u-card" style="gap: 10px"><h4 class="u-card-title" style="font-size: 15px">Sources</h4><div class="u-row" style="gap: 6px"><span class="u-chip" style="height: 28px; cursor: default">Finance mailbox</span><span class="u-chip" style="height: 28px; cursor: default">finance-policies</span><span class="u-chip" style="height: 28px; cursor: default">vendor-contracts</span></div></div>
-          <div class="u-card" style="gap: 8px"><h4 class="u-card-title" style="font-size: 15px">Run history</h4><div class="u-row" style="justify-content: space-between; font-size: 13px"><span>Run 13</span><span class="u-badge u-badge--danger"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>Failed</span></div><div class="u-row" style="justify-content: space-between; font-size: 13px"><span>Run 12</span><span class="u-badge u-badge--success"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Done</span></div></div>
+
+        <div class="u-task-layout">
+          <div class="u-stack" style="gap: 0">
+            <div class="u-tabs" role="tablist" aria-label="Task views" data-page-tabs>
+              <button class="u-tab" role="tab" aria-selected="true" id="td-t-activity" aria-controls="td-p-activity" data-tab="activity">Activity</button>
+              <button class="u-tab" role="tab" aria-selected="false" tabindex="-1" id="td-t-result" aria-controls="td-p-result" data-tab="result">Result<span class="u-badge u-badge--count" aria-hidden="true">2</span><span class="u-sr">, 2 artifacts</span></button>
+            </div>
+            <div class="u-tabpanel" role="tabpanel" id="td-p-activity" aria-labelledby="td-t-activity" style="padding-top: 16px">
+              <div class="u-seg u-seg--fluid" role="group" aria-label="Activity view" data-activity-views style="margin-bottom: 16px"><button type="button" aria-pressed="true" aria-controls="td-v-summary">Summary</button><button type="button" aria-pressed="false" tabindex="-1" aria-controls="td-v-events">All events</button></div>
+              <div id="td-v-summary">
+              <ol class="u-tl">
+                <li data-done="true"><div class="u-tl-dot"><svg viewBox="0 0 64 64" width="12" height="12" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="u-tl-title">Preparing</div><div class="u-tl-meta">08:00:04 · 12 s · read 2 sources, searched finance-policies</div></div></li>
+                <li data-done="true"><div class="u-tl-dot"><svg viewBox="0 0 64 64" width="12" height="12" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="u-tl-title">Planning</div><div class="u-tl-meta">08:00:16 · 4 steps</div><div class="u-tl-body">1. Fetch October invoices · 2. Extract vendor, amount, due date · 3. Match contracts and flag over threshold · 4. Write the digest and email finance.</div></div></li>
+                <li data-current="true"><div class="u-tl-dot"><svg viewBox="0 0 64 64" width="12" height="12" fill="none" aria-hidden="true"><path class="u-lift" d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="u-tl-title">Working</div><div class="u-tl-meta">08:01:02 · paused 3 min, waiting for approval</div><div class="u-tl-body"><button class="u-msg-tools" aria-expanded="false"><svg viewBox="0 0 64 64" width="12" height="12" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="var(--emerald)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>7 tool calls · 41 s</button></div></div></li>
+                <li><div class="u-tl-dot">4</div><div><div class="u-tl-title" style="color: var(--ink-muted)">Checking</div><div class="u-tl-meta">Checks: 31 rows in table, totals match the mailbox, email sent</div></div></li>
+              </ol>
+              </div>
+              <div id="td-v-events" hidden>
+                <div class="u-evlog" data-evlog>
+                  <div class="u-evlog-tools">
+                    <span class="u-evlog-count">10 events</span><span class="u-evlog-state" data-ev-state>Following live</span>
+                    <span class="u-spacer"></span>
+                    <button type="button" class="u-aicon u-aicon--sm" aria-label="Follow live" aria-pressed="true" data-ev-follow><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8"/><path d="M18 4v17"/><path d="M15 18l3 3l3 -3"/></svg></button>
+                    <button type="button" class="u-aicon u-aicon--sm" aria-label="Jump to top" data-ev-top><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10l0 10"/><path d="M12 10l4 4"/><path d="M12 10l-4 4"/><path d="M4 4l16 0"/></svg></button>
+                    <button type="button" class="u-aicon u-aicon--sm" aria-label="Jump to bottom" data-ev-bottom><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l16 0"/><path d="M12 14l0 -10"/><path d="M12 14l4 -4"/><path d="M12 14l-4 -4"/></svg></button>
+                    <button type="button" class="u-aicon u-aicon--sm" aria-label="Copy log" data-ev-copy><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z"/><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1"/></svg></button>
+                    <button type="button" class="u-aicon u-aicon--sm" aria-label="Full screen" data-ev-full><svg class="u-icon" data-ev-max viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8v-2a2 2 0 0 1 2 -2h2"/><path d="M4 16v2a2 2 0 0 0 2 2h2"/><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M16 20h2a2 2 0 0 0 2 -2v-2"/></svg><svg class="u-icon" data-ev-min viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none"><path d="M15 19v-2a2 2 0 0 1 2 -2h2"/><path d="M15 5v2a2 2 0 0 0 2 2h2"/><path d="M5 15h2a2 2 0 0 1 2 2v2"/><path d="M5 9h2a2 2 0 0 0 2 -2v-2"/></svg></button>
+                    <span class="u-sr" role="status" data-ev-status></span>
+                  </div>
+                  <div class="u-evlog-body" role="log" aria-label="All events" aria-live="polite" tabindex="0">
+                    <ol class="u-evlog-list">
+                      <li class="u-ev"><div class="u-ev-row"><time class="u-ev-time" datetime="08:00:00">08:00:00</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16l13 -8z"/></svg><span class="u-ev-phase">Preparing</span><span class="u-ev-msg">Task started by an automation</span></div></li>
+                      <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-1"><time class="u-ev-time" datetime="08:00:02">08:00:02</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 13a3.5 3.5 0 0 0 -3.5 3.5v1a3.5 3.5 0 0 0 7 0v-1.8"/><path d="M8.5 13a3.5 3.5 0 0 1 3.5 3.5v1a3.5 3.5 0 0 1 -7 0v-1.8"/><path d="M17.5 16a3.5 3.5 0 0 0 0 -7h-.5"/><path d="M19 9.3v-2.8a3.5 3.5 0 0 0 -7 0"/><path d="M6.5 16a3.5 3.5 0 0 1 0 -7h.5"/><path d="M5 9.3v-2.8a3.5 3.5 0 0 1 7 0v10"/></svg><span class="u-ev-phase">Preparing</span><span class="u-ev-msg">Found 2 facts in memory</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
+                        <div class="u-ev-detail" id="tde-d-1" hidden><ul class="u-ev-list"><li>Hetzner invoices arrive on the 20th of each month.</li><li>Finance wants invoices over €1,000 flagged.</li></ul><dl class="u-kv"><dt>Event type</dt><dd><code class="u-code">task.memory_recalled</code></dd></dl></div></li>
+                      <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-2"><time class="u-ev-time" datetime="08:00:04">08:00:04</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3v4a1 1 0 0 0 1 1h4"/><path d="M18 17h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h4l5 5v7a2 2 0 0 1 -2 2z"/><path d="M16 17v2a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h2"/></svg><span class="u-ev-phase">Preparing</span><span class="u-ev-msg">Files ready: 2 sources read</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
+                        <div class="u-ev-detail" id="tde-d-2" hidden><dl class="u-kv"><dt>Read</dt><dd>Finance mailbox, vendor-contracts</dd><dt>Searched</dt><dd>finance-policies</dd><dt>Event type</dt><dd><code class="u-code">task.files_ready</code></dd></dl></div></li>
+                      <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-3"><time class="u-ev-time" datetime="08:00:16">08:00:16</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 5h8"/><path d="M13 9h5"/><path d="M13 15h8"/><path d="M13 19h5"/><path d="M3 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M3 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/></svg><span class="u-ev-phase">Planning</span><span class="u-ev-msg">Plan written: 4 steps</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
+                        <div class="u-ev-detail" id="tde-d-3" hidden><ol class="u-ev-list"><li>1. Fetch October invoices</li><li>2. Extract vendor, amount, due date</li><li>3. Match contracts and flag over threshold</li><li>4. Write the digest and email finance</li></ol><dl class="u-kv"><dt>Event type</dt><dd><code class="u-code">task.plan_written</code></dd></dl></div></li>
+                      <li class="u-ev"><div class="u-ev-row"><time class="u-ev-time" datetime="08:01:02">08:01:02</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.414 10l-7.383 7.418a2.091 2.091 0 0 0 0 2.967a2.11 2.11 0 0 0 2.976 0l7.407 -7.385"/><path d="M18.121 15.293l2.586 -2.586a1 1 0 0 0 0 -1.414l-7.586 -7.586a1 1 0 0 0 -1.414 0l-2.586 2.586a1 1 0 0 0 0 1.414l7.586 7.586a1 1 0 0 0 1.414 0z"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Step 1 of 4 · Fetch October invoices</span></div></li>
+                      <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-5"><time class="u-ev-time" datetime="08:01:15">08:01:15</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1z"/><path d="M9 9h6v6h-6z"/><path d="M3 10h2"/><path d="M3 14h2"/><path d="M10 3v2"/><path d="M14 3v2"/><path d="M21 10h-2"/><path d="M21 14h-2"/><path d="M14 21v-2"/><path d="M10 21v-2"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Model turn done · 12.9 s · Upmo · gpt-5.2 · 6 tool calls</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
+                        <div class="u-ev-detail" id="tde-d-5" hidden><dl class="u-kv"><dt>Engine</dt><dd>Upmo</dd><dt>Model</dt><dd>gpt-5.2</dd><dt>Duration</dt><dd>12.9 s</dd><dt>Tool calls</dt><dd><ol class="u-ev-list"><li><code>search_mail</code> · 2.1 s</li><li><code>read_attachment</code> · 1.4 s</li><li><code>read_attachment</code> · 1.2 s</li><li><code>read_attachment</code> · 1.3 s</li><li><code>search_knowledge</code> · 0.9 s</li><li><code>save_artifact</code> · 0.4 s</li></ol></dd><dt>Event type</dt><dd><code class="u-code">task.model_turn</code></dd></dl></div></li>
+                      <li class="u-ev"><div class="u-ev-row"><time class="u-ev-time" datetime="08:01:16">08:01:16</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Artifact saved: invoices-oct.csv</span></div></li>
+                      <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-7"><time class="u-ev-time" datetime="08:02:51">08:02:51</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v12a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1z"/><path d="M9 9h6v6h-6z"/><path d="M3 10h2"/><path d="M3 14h2"/><path d="M10 3v2"/><path d="M14 3v2"/><path d="M21 10h-2"/><path d="M21 14h-2"/><path d="M14 21v-2"/><path d="M10 21v-2"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Model turn done · 9.4 s · Upmo · gpt-5.2 · 1 tool call</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
+                        <div class="u-ev-detail" id="tde-d-7" hidden><dl class="u-kv"><dt>Engine</dt><dd>Upmo</dd><dt>Model</dt><dd>gpt-5.2</dd><dt>Duration</dt><dd>9.4 s</dd><dt>Tool calls</dt><dd><ol class="u-ev-list"><li><code>save_artifact</code> · 0.3 s</li></ol></dd><dt>Event type</dt><dd><code class="u-code">task.model_turn</code></dd></dl></div></li>
+                      <li class="u-ev"><div class="u-ev-row"><time class="u-ev-time" datetime="08:03:05">08:03:05</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Artifact saved: digest-draft.md</span></div></li>
+                      <li class="u-ev"><button type="button" class="u-ev-row" aria-expanded="false" aria-controls="tde-d-9"><time class="u-ev-time" datetime="08:03:06">08:03:06</time><svg class="u-ev-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 7v5l3 3"/></svg><span class="u-ev-phase">Working</span><span class="u-ev-msg">Approval asked: email to 3 external recipients</span><svg class="u-ev-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg></button>
+                        <div class="u-ev-detail" id="tde-d-9" hidden><dl class="u-kv"><dt>To</dt><dd>ap@hetzner.com, billing@vercel.com, lead@acme.example</dd><dt>Subject</dt><dd>October invoices over threshold</dd><dt>Event type</dt><dd><code class="u-code">task.approval_asked</code></dd></dl></div></li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              <div class="u-composer" style="margin-top: 16px; max-width: none">
+                <textarea id="td-msg" rows="1" placeholder="Message this task…" aria-label="Message this task"></textarea>
+                <div class="u-composer-row">
+                  <span class="u-composer-hint" style="margin: 0">Upmo reads it at the next step and replies here.</span>
+                  <span class="u-spacer"></span>
+                  <button class="u-btn u-btn--filled u-btn--sm" id="td-send" aria-label="Send message" aria-disabled="true">
+                    <svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    <span>Send</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="u-tabpanel" role="tabpanel" id="td-p-result" aria-labelledby="td-t-result" style="padding-top: 16px" hidden>
+              <div class="u-stack" style="gap: 24px">
+                <section class="u-stack" style="gap: 8px" aria-labelledby="td-r-summary">
+                  <h2 class="u-card-title" id="td-r-summary" style="color: var(--ink)">Summary</h2>
+                  <div class="u-card" style="padding: 16px; color: var(--ink-muted)">The final result shows up here when the task is done.</div>
+                </section>
+                <section class="u-stack" style="gap: 8px" aria-labelledby="td-r-artifacts">
+                  <h2 class="u-card-title" id="td-r-artifacts" style="color: var(--ink)">Artifacts</h2>
+                  <div class="u-artifacts" style="height: 420px; min-height: 0" data-artifacts>
+                    <div class="u-artifact-list" role="tablist" aria-label="Artifacts" aria-orientation="vertical">
+                      <button class="u-artifact" role="tab" id="tda-t-0" aria-controls="tda-p-0" aria-selected="true" data-artifact="digest-draft"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><path d="M9 9l1 0"/><path d="M9 13l6 0"/><path d="M9 17l6 0"/></svg><span class="u-artifact-name">digest-draft.md</span><span class="u-artifact-meta">Markdown · 2.8 KB · 08:03</span></button>
+                      <button class="u-artifact" role="tab" id="tda-t-1" aria-controls="tda-p-1" aria-selected="false" tabindex="-1" data-artifact="invoices-oct"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z"/><path d="M3 10h18"/><path d="M10 3v18"/></svg><span class="u-artifact-name">invoices-oct.csv</span><span class="u-artifact-meta">CSV · 12 KB · 08:01</span></button>
+                    </div>
+                    <div class="u-artifact-view" role="tabpanel" id="tda-p-0" aria-labelledby="tda-t-0">
+                      <div class="u-artifact-head"><div><h3 class="u-artifact-title">digest-draft.md</h3><div class="u-artifact-meta">Markdown · 2.8 KB · 08:03</div></div><div class="u-row" style="gap: 8px"><div class="u-seg" role="group" aria-label="Show as" data-view-toggle><button type="button" aria-pressed="true" aria-controls="tda-md-r">Rendered</button><button type="button" aria-pressed="false" aria-controls="tda-md-s">Source</button></div><button type="button" class="u-btn u-btn--outline u-btn--sm" aria-label="Download artifact"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4l0 12"/></svg><span>Download</span></button></div></div>
+                      <div class="u-artifact-body">
+                        <div class="u-prose" id="tda-md-r">
+                          <h2 style="margin-top: 0">October invoices over threshold</h2>
+                          <p>Three of 31 invoices are over €1,000. Total spend this month is <strong>€18,420</strong>.</p>
+                          <ul><li>Hetzner: €2,140, due 24 Oct</li><li>Vercel: €1,310, due 28 Oct</li><li>Acme Design: €1,050, due 31 Oct</li></ul>
+                          <p>Draft. Upmo sends it to finance after approval.</p>
+                        </div>
+                        <div class="u-codeblock" id="tda-md-s" hidden><pre><span class="u-ln">1</span><span class="tk-k">## October invoices over threshold</span>
+<span class="u-ln">2</span>
+<span class="u-ln">3</span>Three of 31 invoices are over €1,000. Total spend this month is **€18,420**.
+<span class="u-ln">4</span>
+<span class="u-ln">5</span>* Hetzner: €2,140, due 24 Oct
+<span class="u-ln">6</span>* Vercel: €1,310, due 28 Oct
+<span class="u-ln">7</span>* Acme Design: €1,050, due 31 Oct
+<span class="u-ln">8</span>
+<span class="u-ln">9</span>Draft. Upmo sends it to finance after approval.</pre></div>
+                      </div>
+                    </div>
+                    <div class="u-artifact-view" role="tabpanel" id="tda-p-1" aria-labelledby="tda-t-1" hidden>
+                      <div class="u-artifact-head"><div><h3 class="u-artifact-title">invoices-oct.csv</h3><div class="u-artifact-meta">CSV · 31 rows · 12 KB · 08:01</div></div><button type="button" class="u-btn u-btn--outline u-btn--sm" aria-label="Download artifact"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4l0 12"/></svg><span>Download</span></button></div>
+                      <div class="u-artifact-body">
+                        <div class="u-table-wrap">
+                          <table class="u-table" style="min-width: 0">
+                            <thead><tr><th scope="col">Vendor</th><th scope="col" class="u-num">Amount</th><th scope="col">Due</th></tr></thead>
+                            <tbody>
+                              <tr><td>Hetzner</td><td class="u-num">€2,140.00</td><td>24 Oct</td></tr>
+                              <tr><td>Vercel</td><td class="u-num">€1,310.00</td><td>28 Oct</td></tr>
+                              <tr><td>Acme Design</td><td class="u-num">€1,050.00</td><td>31 Oct</td></tr>
+                              <tr><td>GitHub</td><td class="u-num">€420.00</td><td>1 Nov</td></tr>
+                              <tr><td>Linear</td><td class="u-num">€192.00</td><td>3 Nov</td></tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+          <aside class="u-task-side" aria-label="Task details sidebar">
+            <section class="u-card" style="padding: 16px; border-radius: var(--radius-sm)">
+              <div class="u-card-head">
+                <h3 class="u-card-title">Budget</h3>
+                <button type="button" class="u-aicon u-aicon--sm" aria-label="Edit budget"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"/><path d="M13.5 6.5l4 4"/></svg></button>
+              </div>
+              <div class="u-progress-row" style="margin: 8px 0 4px">
+                <div class="u-progress" role="progressbar" aria-valuenow="42" aria-valuemin="0" aria-valuemax="100" aria-label="Budget used">
+                  <div class="u-progress-bar" style="width: 42%"></div>
+                </div>
+                <span class="u-progress-label">42%</span>
+              </div>
+              <div class="u-card-meta">€2.10 of €5.00 · 38k tokens · pauses at 90%</div>
+              <a href="#" class="u-card-meta" style="color: var(--emerald-deep); margin-top: 4px; display: inline-block">See usage for this task</a>
+            </section>
+            <section class="u-card" style="padding: 16px; border-radius: var(--radius-sm)">
+              <div class="u-card-head">
+                <h3 class="u-card-title">Delivery</h3>
+                <button type="button" class="u-aicon u-aicon--sm" aria-label="Change delivery channel" aria-describedby="td-dl-0"><svg class="u-icon u-icon--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"/><path d="M13.5 6.5l4 4"/></svg></button>
+              </div>
+              <div class="u-row" style="gap: 8px; margin: 8px 0 4px">
+                <svg aria-hidden="true" class="u-brand u-brand--sm u-brand--deep" data-brand="slack" fill="#4A154B" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 18px; height: 18px; flex-shrink: 0"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>
+                <div>
+                  <div id="td-dl-0" style="font-weight: 600; font-size: 13px">#finance on Slack</div>
+                  <div class="u-card-meta">After the task is done</div>
+                </div>
+              </div>
+            </section>
+            <section class="u-card" style="padding: 16px; border-radius: var(--radius-sm)">
+              <div class="u-card-head"><h3 class="u-card-title">Sources</h3><span class="u-badge u-badge--count">3</span></div>
+              <div class="u-row" style="gap: 6px; flex-wrap: wrap; margin-top: 8px">
+                <span class="u-chip">Finance mailbox</span>
+                <span class="u-chip">finance-policies</span>
+                <span class="u-chip">vendor-contracts</span>
+              </div>
+            </section>
+            <section class="u-card" style="padding: 16px; border-radius: var(--radius-sm)">
+              <div class="u-card-head"><h3 class="u-card-title">Run history</h3><span class="u-card-meta">14 runs</span></div>
+              <ol class="u-ev-list" style="margin-top: 8px">
+                <li style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0">
+                  <span>Run 14 (current)</span>
+                  <span class="u-badge u-badge--warning"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Working</span>
+                </li>
+                <li style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0">
+                  <a href="#">Run 13</a>
+                  <span class="u-badge u-badge--danger"><svg class="u-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>Failed</span>
+                </li>
+                <li style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0">
+                  <a href="#">Run 12</a>
+                  <span class="u-badge u-badge--success"><svg class="u-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 44 32 22l22 22" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>Done</span>
+                </li>
+              </ol>
+            </section>
+          </aside>
         </div>
       </div>
     </div>
@@ -251,4 +406,12 @@
     send.addEventListener('click', function () { if (ta.value.trim()) { ta.value = ''; sync(); } ta.focus(); });
     sync();
   })();
+
+  var shell = document.querySelector('.u-shell');
+  var navToggle = shell ? shell.querySelector('[aria-label="Collapse navigation"]') : null;
+  if (navToggle) {
+    navToggle.addEventListener('click', function () {
+      shell.classList.toggle('u-shell--rail');
+    });
+  }
 </script>

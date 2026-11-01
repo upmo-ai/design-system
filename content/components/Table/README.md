@@ -16,15 +16,15 @@ Dense rows you can compare: the cost ledger, model lists, task events, knowledge
 
 ## Behaviour
 
-- The table is `surface-100` inside a `border` container with `radius-md`. The header is sticky, on `surface-200`, in `body-sm` weight 600 and `ink-muted`. Rows are 44px high, in `body`, with `border` rules. Hover shows `surface-hover`. Selected rows show `surface-selected`.
+- The table is `surface-000` inside a `border` container with `radius-sm` (4px). Above the table sits an optional toolbar with search and filter controls. Group headers span the table with bold section titles. Rows are in `body`, with `border` rules and sharp 2px checkboxes. Hover shows `surface-hover`. Selected rows show `surface-selected`.
 - Sortable headers are buttons with `aria-sort`. The active sort shows a chevron.
-- From `bp-sm`, the table shows the first four columns by priority. From `bp-lg`, it shows every column. Below its `min-width`, it scrolls sideways inside its container.
-- Below `bp-sm`, each row becomes a card. The title column leads in weight 600 and the status badge sits top right. The meta columns follow on one line in `body-sm` and `ink-muted`, split by a middle dot. Row actions go in the card foot. Other columns hide. The header stays in the accessibility tree but is hidden from view, so sorting waits for a wider screen.
+- From `bp-sm`, the table shows primary columns. From `bp-lg`, it shows every column. Below its `min-width`, it scrolls sideways inside its container.
+- Dense numeric columns use `u-num` with tabular numbers.
 - Code-like values (model ids, hashes) use `code`.
 
 ## Tokens
 
-`surface-100`, `surface-200`, `surface-hover`, `surface-selected`, `border`, `ink`, `ink-muted`, `radius-md`.
+`surface-000`, `surface-100`, `surface-hover`, `surface-selected`, `border`, `ink`, `ink-muted`, `radius-sm`, `radius-xs`.
 
 ## Mantine
 
