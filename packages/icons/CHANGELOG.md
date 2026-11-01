@@ -1,5 +1,11 @@
 # @upmo-ai/icons
 
+## 0.3.4
+
+### Patch Changes
+
+- Version bump for v0.3.4 release.
+
 ## 0.3.3
 
 ### Patch Changes

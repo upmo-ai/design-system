@@ -1,5 +1,11 @@
 # @upmo-ai/ui
 
+## 0.3.4
+
+### Patch Changes
+
+- Set sharp defaults (radius xs for Button, TextInput, Select, Badge, Tooltip; sm for Card; lg for Modal) across Mantine theme.
+
 ## 0.3.3
 
 ### Patch Changes
