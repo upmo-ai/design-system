@@ -1,5 +1,11 @@
 # @upmo-ai/brands
 
+## 0.3.3
+
+### Patch Changes
+
+- Version bump for v0.3.3 release.
+
 ## 0.3.2
 
 ## 0.3.1

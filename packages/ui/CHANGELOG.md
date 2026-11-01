@@ -1,5 +1,11 @@
 # @upmo-ai/ui
 
+## 0.3.3
+
+### Patch Changes
+
+- Set compact defaults (size sm) for buttons, text inputs, selects, cards, and badges across Mantine theme.
+
 ## 0.3.2
 
 ### Patch Changes

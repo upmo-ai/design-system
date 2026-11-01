@@ -1,6 +1,6 @@
 {
   "name": "@upmo-ai/icons",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Upmo icon concept map (concept to Tabler Icons name) and the caret and status marks as SVG.",
   "license": "AGPL-3.0-only",
   "type": "module",

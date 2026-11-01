@@ -1,5 +1,11 @@
 # @upmo-ai/tokens
 
+## 0.3.3
+
+### Patch Changes
+
+- Compact density and UI typography adjustments: streamlined button dimensions, tightened alert containers, and compact form control defaults.
+
 ## 0.3.2
 
 ### Patch Changes
