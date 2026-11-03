@@ -19,9 +19,22 @@ into three artifacts:
   copied from `@fontsource` at build time, so the package keeps no runtime
   dependency. The faces to ship are listed in `tokens.json` under `type.fonts`.
 
-No React, no runtime dependencies.
+No React, no runtime dependencies. This is the foundation of the Upmo packages:
+`@upmo-ai/theme`, `@upmo-ai/components`, `@upmo-ai/icons` and `@upmo-ai/brands`
+build on it.
+
+## Install
+
+```sh
+pnpm add @upmo-ai/tokens
+```
+
+No peer dependencies.
 
 ## Usage
+
+Import the tokens after Mantine's CSS and before `@upmo-ai/components/styles.css`
+and your own CSS.
 
 ```ts
 import '@upmo-ai/tokens/tokens.css';
@@ -56,3 +69,12 @@ Set the theme on a root element:
 ```sh
 pnpm --filter @upmo-ai/tokens build
 ```
+
+## Links
+
+- Documentation: https://design.upmo.dev
+- Source: https://github.com/upmo-ai/design-system
+
+## Licence
+
+AGPL-3.0-only.
