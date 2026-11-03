@@ -15,6 +15,17 @@ It exports three things:
 - `tokenVariables` - the raw Mantine-name to token-variable map, for tests and
   for the docs preview pipeline.
 
+It sits between `@upmo-ai/tokens` (the foundation it reads) and
+`@upmo-ai/components` (the React library that uses this theme).
+
+## Install
+
+```sh
+pnpm add @upmo-ai/theme @upmo-ai/tokens @mantine/core
+```
+
+Peer dependency: `@mantine/core` (^9.7.4).
+
 ## Usage
 
 ```tsx
@@ -32,7 +43,8 @@ export function App({ children }) {
 }
 ```
 
-Import order matters: Mantine's CSS first, then the tokens CSS, then any local
+Import order matters: Mantine's CSS first, then the tokens CSS, then
+`@upmo-ai/components/styles.css` if you use the components, then any local
 overrides.
 
 ## The dark primary fill
@@ -48,3 +60,12 @@ filled primary to the `--primary-fill` token (which is scheme-aware in
 ```sh
 pnpm --filter @upmo-ai/theme build   # tsup: ESM + d.ts
 ```
+
+## Links
+
+- Documentation: https://design.upmo.dev
+- Source: https://github.com/upmo-ai/design-system
+
+## Licence
+
+AGPL-3.0-only.
