@@ -1,6 +1,6 @@
 ---
 title: Form controls
-description: Field, Input, Textarea, Select, Checkbox, Radio and Switch.
+description: Field, Input, Textarea, Select, DateInput, Checkbox, Radio and Switch.
 ---
 
 The form controls follow the Upmo forms spec: the label always sits above the
@@ -36,6 +36,39 @@ those directly rather than wrapping them in a `Field`.
 - **Textarea**: long text; autosizes to 8 rows, then scrolls.
 - **Select**: one of several; `data` is `{ value, label }[]`, searchable above
   about ten options.
+
+## DateInput
+
+A date field: type a date or pick one from the calendar. It wraps Mantine's
+`DateInput` with the same anatomy as the other inputs (label above, description
+under it, error below) and adds `optional`, which appends "(optional)" to the
+label. The error line is Field's: the danger icon, then the message, announced
+as an alert.
+
+Dates follow Mantine 9: `onChange` receives a `YYYY-MM-DD` string, or `null`
+when the field is cleared (`YYYY-MM-DD HH:mm:ss` with `withTime`). `value` and
+`defaultValue` take that string, a `Date` or `null`, so hold the value as
+`string | null`. Bound the choice with `minDate` and `maxDate` (a string or a
+`Date`). The field shows the value as "15 Jan 2027" by default (`valueFormat`).
+
+```tsx
+import { DateInput } from '@upmo-ai/components/dates';
+
+const [expiry, setExpiry] = useState<string | null>(null);
+
+<DateInput
+  label="Expiry"
+  description="Tokens stop working at the end of this day."
+  minDate={today}
+  maxDate={inOneYear}
+  value={expiry}
+  onChange={setExpiry}
+/>;
+```
+
+It comes from `@upmo-ai/components/dates`, not the main entry, and needs the
+optional `@mantine/dates` and `dayjs` peers plus `@mantine/dates/styles.css`
+(see [Install](/getting-started/install/)).
 
 ## Choices
 

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { toCss, toData, type TokenFile } from '../scripts/lib.ts';
+import { toCss, toData, toFontFaces, type TokenFile } from '../scripts/lib.ts';
 
 const tokens: TokenFile = JSON.parse(readFileSync(new URL('../tokens.json', import.meta.url), 'utf8'));
 const data = toData(tokens);
@@ -87,6 +87,14 @@ describe('colour contrast', () => {
     expect(contrast(c('surface-selected', 'dark'), c('surface-100', 'dark'))).toBeGreaterThanOrEqual(1.25);
   });
 
+  it('gives the active nav bar 3:1 against the rail ground and the selected ground', () => {
+    for (const theme of ['light', 'dark', 'hc'] as const) {
+      expect(contrast(c('emerald-deep', theme), c('surface-200', theme)), theme).toBeGreaterThanOrEqual(3);
+      expect(contrast(c('emerald-deep', theme), c('surface-selected', theme)), theme).toBeGreaterThanOrEqual(3);
+      expect(contrast(c('emerald-deep', theme), c('surface-100', theme)), theme).toBeGreaterThanOrEqual(3);
+    }
+  });
+
   it('makes hover visible against both grounds', () => {
     for (const theme of ['light', 'dark', 'hc'] as const) {
       expect(contrast(c('surface-hover', theme), c('surface-100', theme)), theme).toBeGreaterThanOrEqual(1.2);
@@ -99,6 +107,13 @@ describe('colour contrast', () => {
     expect(disabled).toBeGreaterThanOrEqual(3);
     expect(contrast(c('ink-disabled', 'hc'), c('surface-200', 'hc'))).toBeGreaterThanOrEqual(3);
     expect(contrast(c('ink-muted', 'hc'), c('surface-000', 'hc'))).toBeGreaterThan(disabled * 2);
+  });
+
+  it('keeps danger text (calendar weekends) at 4.5:1 on overlays and their hover', () => {
+    for (const theme of ['light', 'dark', 'hc'] as const) {
+      expect(contrast(c('danger', theme), c('surface-100', theme)), theme).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(c('danger', theme), c('surface-hover', theme)), theme).toBeGreaterThanOrEqual(4.5);
+    }
   });
 
   it('keeps the idle caret at 3:1 on the page ground', () => {
@@ -129,5 +144,42 @@ describe('colour contrast', () => {
         expect(g <= b && r <= g, `${name}.${theme} ${hex}`).toBe(true);
       }
     }
+  });
+});
+
+describe('fonts', () => {
+  const fonts = tokens.type.fonts ?? [];
+  // The first family in each stack is the font the tokens ship.
+  const shipped = (family: string) =>
+    fonts.find((f) => tokens.type.families[family].startsWith(`"${f.family}"`));
+
+  it('ships a face for every family the tokens name', () => {
+    for (const family of Object.keys(tokens.type.families)) {
+      expect(shipped(family), family).toBeTruthy();
+    }
+  });
+
+  it('ships every weight a type style uses', () => {
+    for (const [name, s] of Object.entries(data.typography)) {
+      expect(shipped(String(s.family))?.weights, name).toContain(Number(s.fontWeight));
+    }
+  });
+
+  it('keeps the listed subsets, their unicode ranges, and only the woff2 source', () => {
+    const face = (subset: string, range: string) => `/* manrope-${subset}-400-normal */
+@font-face {
+  font-family: 'Manrope';
+  font-weight: 400;
+  src: url(./files/manrope-${subset}-400-normal.woff2) format('woff2'), url(./files/manrope-${subset}-400-normal.woff) format('woff');
+  unicode-range: ${range};
+}`;
+    const sheet = [face('cyrillic', 'U+0400-045F'), face('latin-ext', 'U+0100-02BA'), face('latin', 'U+0000-00FF')].join('\n\n');
+    const { css, files } = toFontFaces(sheet, 'manrope', ['latin', 'latin-ext']);
+    expect(files).toEqual(['manrope-latin-ext-400-normal.woff2', 'manrope-latin-400-normal.woff2']);
+    expect(css).toContain("src: url(./fonts/manrope-latin-400-normal.woff2) format('woff2');");
+    expect(css).toContain('unicode-range: U+0000-00FF;');
+    expect(css).toContain('unicode-range: U+0100-02BA;');
+    expect(css).not.toContain('cyrillic');
+    expect(css).not.toContain('.woff)');
   });
 });

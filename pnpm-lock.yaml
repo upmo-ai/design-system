@@ -200,6 +200,9 @@ importers:
       '@mantine/core':
         specifier: ^9.7.4
         version: 9.7.4(@mantine/hooks@9.7.4(react@19.2.0))(@types/react@19.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@mantine/dates':
+        specifier: ^9.7.4
+        version: 9.7.4(@mantine/core@9.7.4(@mantine/hooks@9.7.4(react@19.2.0))(@types/react@19.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@mantine/hooks@9.7.4(react@19.2.0))(dayjs@1.11.23)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@mantine/hooks':
         specifier: ^9.7.4
         version: 9.7.4(react@19.2.0)
@@ -215,6 +218,9 @@ importers:
       '@upmo-ai/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
+      dayjs:
+        specifier: ^1.11.23
+        version: 1.11.23
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -255,6 +261,9 @@ importers:
       '@mantine/core':
         specifier: ^9.7.4
         version: 9.7.4(@mantine/hooks@9.7.4(react@19.2.0))(@types/react@19.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@mantine/dates':
+        specifier: ^9.7.4
+        version: 9.7.4(@mantine/core@9.7.4(@mantine/hooks@9.7.4(react@19.2.0))(@types/react@19.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@mantine/hooks@9.7.4(react@19.2.0))(dayjs@1.11.23)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@mantine/hooks':
         specifier: ^9.7.4
         version: 9.7.4(react@19.2.0)
@@ -291,6 +300,9 @@ importers:
       axe-core:
         specifier: 4.10.3
         version: 4.10.3
+      dayjs:
+        specifier: ^1.11.23
+        version: 1.11.23
       jsdom:
         specifier: ^26.0.0
         version: 26.1.0
@@ -319,7 +331,17 @@ importers:
         specifier: ^8.3.5
         version: 8.5.1(postcss@8.5.32)(typescript@5.9.2)(yaml@2.9.1)
 
-  packages/tokens: {}
+  packages/tokens:
+    devDependencies:
+      '@fontsource/familjen-grotesk':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/fira-code':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/manrope':
+        specifier: 5.3.0
+        version: 5.3.0
 
 packages:
 
@@ -1025,6 +1047,15 @@ packages:
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
 
+  '@fontsource/familjen-grotesk@5.3.0':
+    resolution: {integrity: sha512-Kh6DXwAtw+kyvCSpiOI3wss/LvOJtJJRl9NTf9YpYpmcpsZ5BGQLTF9nVm9TUmnpLTe4z3iyAcvnLfsQgQR0lg==}
+
+  '@fontsource/fira-code@5.3.0':
+    resolution: {integrity: sha512-EJL968RJRkakubAj/coU8pSUaeTE5UNoRjtzAr6kGiSZ3jWuN8/AKWHwym/PFUaQL1q7IL/H+EXs4358YhrTBQ==}
+
+  '@fontsource/manrope@5.3.0':
+    resolution: {integrity: sha512-obJ1Dv3+uCA6HlHgW8u4BGYxJR9In2HW7gjJhlflEvkrj1X1iSEwu0fToL+JYGC/FEKFfIz1sBuPduvcL2gIAA==}
+
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
     engines: {node: '>=18'}
@@ -1216,6 +1247,15 @@ packages:
     resolution: {integrity: sha512-c7aTGELNn74CxG9i5/tq9BHGh0lKdKmGGz+9iDF+gR7Ipt4U1TMM286lAmLpRrKL2bR+UEaN4blZ8UJmOuGJ4Q==}
     peerDependencies:
       '@mantine/hooks': 9.7.4
+      react: ^19.2.0
+      react-dom: ^19.2.0
+
+  '@mantine/dates@9.7.4':
+    resolution: {integrity: sha512-qNrE1j8TzhBUU2k+JG1fT2phZsid0an919edpKJumwCZroe5U584Hd1i9O2u+sWdBGURhusVcAsQEvmi1jDuSg==}
+    peerDependencies:
+      '@mantine/core': 9.7.4
+      '@mantine/hooks': 9.7.4
+      dayjs: '>=1.0.0'
       react: ^19.2.0
       react-dom: ^19.2.0
 
@@ -2334,6 +2374,9 @@ packages:
   data-urls@5.0.0:
     resolution: {integrity: sha512-ZYP5VBHshaDAiVZxjbRVcFJpc+4xGgT0bK3vzy1HLN8jTO975HEbuYzZJcHoQEY5K1a0z8YayJkyVETa08eNTg==}
     engines: {node: '>=18'}
+
+  dayjs@1.11.23:
+    resolution: {integrity: sha512-QDTCU0M0MxR3hQfnlDJfwekQiaanm1ubOD231u73WBckQ/fsamwRLiE2GBz6D3a/xF1NgfiDLJjXBa1hYOYTtQ==}
 
   debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
@@ -4703,6 +4746,12 @@ snapshots:
 
   '@floating-ui/utils@0.2.12': {}
 
+  '@fontsource/familjen-grotesk@5.3.0': {}
+
+  '@fontsource/fira-code@5.3.0': {}
+
+  '@fontsource/manrope@5.3.0': {}
+
   '@img/colour@1.1.0':
     optional: true
 
@@ -4857,6 +4906,15 @@ snapshots:
       type-fest: 5.10.0
     transitivePeerDependencies:
       - '@types/react'
+
+  '@mantine/dates@9.7.4(@mantine/core@9.7.4(@mantine/hooks@9.7.4(react@19.2.0))(@types/react@19.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@mantine/hooks@9.7.4(react@19.2.0))(dayjs@1.11.23)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+    dependencies:
+      '@mantine/core': 9.7.4(@mantine/hooks@9.7.4(react@19.2.0))(@types/react@19.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@mantine/hooks': 9.7.4(react@19.2.0)
+      clsx: 2.1.1
+      dayjs: 1.11.23
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
 
   '@mantine/hooks@9.7.4(react@19.2.0)':
     dependencies:
@@ -5871,6 +5929,8 @@ snapshots:
     dependencies:
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.2.0
+
+  dayjs@1.11.23: {}
 
   debug@4.4.3:
     dependencies:

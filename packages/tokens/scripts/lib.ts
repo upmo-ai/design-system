@@ -23,11 +23,22 @@ interface Family {
   tokens: Token[];
 }
 
+export interface FontFace {
+  family: string;
+  /** The @fontsource package the woff2 files are copied from at build time. */
+  source: string;
+  /** Only the weights the tokens and component styles actually use. */
+  weights: number[];
+  usage?: string;
+}
+
 export interface TokenFile {
   name: string;
   color: { themes: { id: string; name: string }[]; tokens: Token[] };
   shadow?: Family;
   type: {
+    fonts?: FontFace[];
+    fontSubsets?: string[];
     families: Record<string, string>;
     groups: { name: string; family: string; styles: TypeStyle[] }[];
   };
@@ -161,4 +172,22 @@ export function toModule(t: TokenFile): { js: string; dts: string } {
   );
   const head = '// Generated from tokens.json by scripts/build.ts. Do not edit.\n';
   return { js: head + js.join('\n') + '\n', dts: head + dts.join('\n') + '\n' };
+}
+
+// Rewrites one @fontsource weight sheet (e.g. 400.css, every subset with its
+// unicode-range) for dist/fonts.css: keeps only the listed subsets, keeps the
+// woff2 source only (every supported browser reads it) pointed at the copied
+// file under ./fonts/, and returns the files the kept faces need.
+export function toFontFaces(css: string, slug: string, subsets: string[]): { css: string; files: string[] } {
+  const files: string[] = [];
+  const faces: string[] = [];
+  for (const [face] of css.matchAll(/(?:\/\*[^*]*\*\/\s*)?@font-face\s*\{[^}]*\}/g)) {
+    const woff2 = /url\(\.\/files\/([^)]+\.woff2)\)/.exec(face);
+    if (!woff2) throw new Error(`font face has no woff2 source: ${face}`);
+    const subset = woff2[1].slice(slug.length + 1).replace(/-\d+-(?:normal|italic)\.woff2$/, '');
+    if (!subsets.includes(subset)) continue;
+    files.push(woff2[1]);
+    faces.push(face.replace(/src:\s*[^;]+;/, `src: url(./fonts/${woff2[1]}) format('woff2');`));
+  }
+  return { css: faces.join('\n\n'), files };
 }

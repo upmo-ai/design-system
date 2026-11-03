@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/index.ts', 'src/dates.ts'],
   format: ['esm'],
   dts: { resolve: true },
   tsconfig: 'tsconfig.json',
@@ -16,6 +16,8 @@ export default defineConfig({
   external: [
     '@mantine/core',
     '@mantine/hooks',
+    '@mantine/dates',
+    'dayjs',
     '@tabler/icons-react',
     'react',
     'react-dom',

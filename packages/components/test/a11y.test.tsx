@@ -1,8 +1,8 @@
 import { IconCheck, IconFolder } from '@tabler/icons-react';
-import { act } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import type { ReactElement } from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   ApprovalCard,
   Button,
@@ -19,7 +19,14 @@ import {
   Switch,
   Table,
   Tabs,
+  AppFrame,
+  SideNav,
+  NavSection,
+  NavItem,
+  StatusAlert,
+  Wordmark,
 } from '../src/index.ts';
+import { DateInput } from '../src/dates.ts';
 import { renderThemed } from './render.tsx';
 
 // jsdom has no layout or paint, so axe cannot judge colour contrast (the token
@@ -117,6 +124,22 @@ const cases: [string, ReactElement][] = [
   ],
   ['ApprovalCard', <ApprovalCard action="Send the digest" onApprove={() => {}} onDeny={() => {}} />],
   ['Composer', <Composer value="hello" onChange={() => {}} onSend={() => {}} />],
+  [
+    'StatusAlert',
+    <StatusAlert tone="critical" title="Key rejected" onDismiss={() => {}} actions={<Button size="xs">Replace key</Button>}>
+      Anthropic answered 401.
+    </StatusAlert>,
+  ],
+  ['Wordmark', <Wordmark />],
+  ['DateInput', <DateInput label="Expiry" optional description="Europe/London" />],
+  ['DateInput with an error', <DateInput label="Expiry" error="Pick a date within the next year." />],
+  [
+    'decorative Wordmark in a named link',
+    <a href="/">
+      <Wordmark decorative />
+      <span>Home</span>
+    </a>,
+  ],
 ];
 
 describe('accessibility (axe)', () => {
@@ -133,5 +156,85 @@ describe('accessibility (axe)', () => {
       </Dialog>
     );
     expect(await violations(ui)).toEqual([]);
+  });
+});
+
+describe('accessibility (axe): AppFrame', () => {
+  const frame = (defaultCollapsed?: boolean, membersActive?: boolean) => (
+    <AppFrame
+      defaultCollapsed={defaultCollapsed}
+      header={<Wordmark compact={defaultCollapsed} />}
+      footer={<Button size="xs">Account</Button>}
+      topBar={<span>Search</span>}
+      navigation={
+        <SideNav>
+          <NavSection>
+            <NavItem label="Home" icon={<IconFolder />} href="/" />
+            <NavItem label="Tasks" icon={<IconFolder />} href="/tasks" active count={2} />
+          </NavSection>
+          <NavSection label="Workspace">
+            <NavItem label="Management" icon={<IconFolder />} defaultOpened>
+              <NavItem label="Members" href="/admin/members" active={membersActive} />
+            </NavItem>
+          </NavSection>
+        </SideNav>
+      }
+    >
+      <h1>Tasks</h1>
+    </AppFrame>
+  );
+
+  // The setup stub answers every media query with false (phone width); these
+  // cases answer for the width they test, so the navigation is scanned.
+  function atWidth(matches: (query: string) => boolean) {
+    const original = window.matchMedia;
+    vi.spyOn(window, 'matchMedia').mockImplementation((query: string) => ({ ...original(query), matches: matches(query) }));
+  }
+
+  async function scan(rules: axe.RunOptions['rules'] = {}) {
+    const results = await act(() => axe.run(document.body, { rules: { ...options.rules, ...rules } }));
+    return results.violations.map((v) => `${v.id}: ${v.help} (${v.nodes.map((n) => n.target.join(' ')).join(', ')})`);
+  }
+
+  it('full sidebar has no axe violations', async () => {
+    atWidth(() => true);
+    renderThemed(frame());
+    expect(screen.getByRole('navigation', { name: 'Main' })).toBeInTheDocument();
+    expect(await scan()).toEqual([]);
+    vi.restoreAllMocks();
+  });
+
+  it('icon rail with an open flyout has no axe violations', async () => {
+    atWidth(() => true);
+    renderThemed(frame(true));
+    fireEvent.click(screen.getByRole('button', { name: /Management/ }));
+    await screen.findByRole('menuitem', { name: 'Members' });
+    // Every open Mantine Menu fails aria-required-children under jsdom: its
+    // focus sentinel (role="presentation" with tabindex) reads as a focusable
+    // non-item child. A plain Mantine Menu fails the same way, so the rule is
+    // off for this scan only; the items themselves are menuitems.
+    expect(await scan({ 'aria-required-children': { enabled: false } })).toEqual([]);
+    vi.restoreAllMocks();
+  });
+
+  // aria-current is a global attribute in ARIA 1.2, so it is allowed on a
+  // menuitem; axe's aria-allowed-attr rule checks exactly that.
+  it('icon rail flyout with the current page in it has no axe violations', async () => {
+    atWidth(() => true);
+    renderThemed(frame(true, true));
+    fireEvent.click(screen.getByRole('button', { name: /Management/ }));
+    const members = await screen.findByRole('menuitem', { name: 'Members' });
+    expect(members).toHaveAttribute('aria-current', 'page');
+    expect(await scan({ 'aria-required-children': { enabled: false } })).toEqual([]);
+    vi.restoreAllMocks();
+  });
+
+  it('open drawer over the rail has no axe violations', async () => {
+    atWidth((query) => !query.includes('62em'));
+    renderThemed(frame());
+    fireEvent.click(screen.getByRole('button', { name: 'Open navigation' }));
+    await screen.findByRole('dialog');
+    expect(await scan()).toEqual([]);
+    vi.restoreAllMocks();
   });
 });

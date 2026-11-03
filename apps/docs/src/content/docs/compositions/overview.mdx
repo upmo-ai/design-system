@@ -1,6 +1,6 @@
 ---
 title: Compositions
-description: Primitives assembled into page patterns.
+description: Primitives assembled into page patterns, and the app frame around them.
 ---
 
 The compositions tier assembles the primitives into the patterns pages are built
@@ -13,6 +13,92 @@ Every component renders live, in light, dark and high contrast, in the
 [Storybook gallery](https://design.upmo.dev/storybook/). Run it locally with
 `pnpm --filter @upmo-ai/storybook dev`.
 :::
+
+## AppFrame, SideNav and NavItem
+
+`AppFrame` is the product frame around `PageShell`, built on Mantine
+`AppShell`. It has four slots: `header` (top of the side rail: the wordmark and
+workspace name), `navigation` (a `SideNav`), `footer` (the account menu and
+theme switch) and `topBar` (breadcrumbs, search, the notifications bell). The
+page goes in `children`.
+
+- **From md**: the full sidebar. The top bar toggle collapses it to the icon
+  rail (`collapsed`, `defaultCollapsed`, `onCollapsedChange`).
+- **Between sm and md**: the icon rail; the toggle opens the full navigation as
+  a drawer.
+- **Below sm**: no rail; the toggle opens the drawer. The drawer traps focus,
+  closes on Escape or the scrim, and closes when an item is chosen.
+
+`SideNav` is the `<nav>` landmark. `NavSection` groups items under an optional
+label, which becomes a divider in the rail. `NavItem` takes a `label`, an
+`icon`, `href` or a router `component` with `linkProps`, `active` (marks
+`aria-current="page"`), and an optional `count` or `badge`. Give it nested
+`NavItem`s to make a collapsible group; in the rail a group opens as a flyout
+menu, and a group nested inside it opens as a submenu. In the rail the label becomes the tooltip and stays the accessible name.
+A group's `opened`, `defaultOpened` and `onOpenedChange` are its expanded state
+in the full sidebar and the drawer; the rail flyout and its submenus open on
+demand with their own state and do not call `onOpenedChange`. `onClick` is
+called in every layout, the flyout trigger included.
+Slots that adapt to the rail read `useAppFrame().rail`; inside the drawer it is
+always `false`, so the header shows in full there.
+
+The frame's CSS uses logical properties, and the rail tooltips and flyouts sit
+at the inline end: for right-to-left, set `dir="rtl"` and wrap the app in
+Mantine's `DirectionProvider`, which flips them to the left.
+
+```tsx
+<AppFrame
+  header={<Brand />}
+  footer={<AccountMenu />}
+  topBar={<TopBar />}
+  navigation={
+    <SideNav>
+      <NavSection>
+        <NavItem label="Tasks" icon={<Icon concept="nav.tasks" />} component={Link} linkProps={{ to: '/tasks' }} active count={3} />
+      </NavSection>
+      <NavSection label="Workspace">
+        <NavItem label="Management" icon={<Icon concept="nav.settings" />} defaultOpened>
+          <NavItem label="Members" component={Link} linkProps={{ to: '/admin/members' }} />
+        </NavItem>
+      </NavSection>
+    </SideNav>
+  }
+>
+  <PageShell header={{ title: 'Tasks' }}>{page}</PageShell>
+</AppFrame>
+```
+
+## Wordmark
+
+The Upmo wordmark as an inline SVG: "up" and the caret in the brand emerald,
+"mo" in ink, read from tokens so it is correct in light, dark and high contrast.
+`compact` gives the caret mark alone, for the collapsed rail; `height` sizes it
+(default 24). It is a named image ("Upmo" by default, `label` to change it).
+Inside a link or button that already has a name (a "Home" link), set
+`decorative`: it is then hidden from assistive tech, with no role or name.
+
+```tsx
+function Brand() {
+  const { rail } = useAppFrame();
+  return <Wordmark compact={rail} />;
+}
+```
+
+## StatusAlert
+
+An inline message for a region or page. `tone` is `info`, `positive`,
+`attention` or `critical`, mapped onto the status tone layer (info is the
+neutral, info-blue tone). Every tone carries its own icon, so colour is never
+the only signal. Add a `title`, `actions` (one or two small buttons) and
+`onDismiss` for a labelled close button ("Dismiss", or `dismissLabel`).
+Critical alerts use `role="alert"` and are announced at once; the others use
+`role="status"`. Override with `role` when a warning is urgent.
+
+```tsx
+<StatusAlert tone="critical" title="Provider rejected the key" onDismiss={hide} actions={<Button size="xs">Replace key</Button>}>
+  Anthropic answered 401. Agents using it are paused.
+</StatusAlert>
+```
 
 ## PageHeader and PageShell
 

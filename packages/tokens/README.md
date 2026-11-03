@@ -13,6 +13,11 @@ into three artifacts:
 - `dist/tokens.js` + `dist/tokens.d.ts` - a typed JS object of every value,
   per theme, for when CSS variables are not enough (charts, canvas, JS logic).
 - `dist/tokens.json` - the raw source, copied for tooling.
+- `dist/fonts.css` + `dist/fonts/` - `@font-face` rules for the token fonts
+  (Manrope 400/500/600/700, Familjen Grotesk 700, Fira Code 400; latin and
+  latin-ext) with the woff2 files and their SIL OFL 1.1 licences. The files are
+  copied from `@fontsource` at build time, so the package keeps no runtime
+  dependency. The faces to ship are listed in `tokens.json` under `type.fonts`.
 
 No React, no runtime dependencies.
 
@@ -20,6 +25,7 @@ No React, no runtime dependencies.
 
 ```ts
 import '@upmo-ai/tokens/tokens.css';
+import '@upmo-ai/tokens/fonts.css';
 import { color, spacing, motion } from '@upmo-ai/tokens';
 
 color['emerald-deep'].light; // "#176b47"
