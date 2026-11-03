@@ -4,6 +4,12 @@ name: Release
 # version, commits it to main through the API (so GitHub signs it) and tags it;
 # publish ships the tag to npm with trusted publishing; github-release and docs
 # follow a successful publish. Every job after prepare is safe to re-run.
+#
+# prepare writes to main as the upmo-design-system-release GitHub App, a
+# bypass actor on main's ruleset; GITHUB_TOKEN cannot bypass it. Unlike a
+# GITHUB_TOKEN push, the app's release commit triggers ci.yml (push to main)
+# exactly once. Nothing loops: this workflow runs only on workflow_dispatch,
+# and ci.yml ignores the tag because it filters push on branches only.
 
 on:
   workflow_dispatch:
@@ -33,8 +39,10 @@ concurrency:
 jobs:
   prepare:
     runs-on: ubuntu-latest
+    # Every write (the commit, the tag) uses the app token, so GITHUB_TOKEN
+    # only reads.
     permissions:
-      contents: write
+      contents: read
     outputs:
       version: ${{ steps.plan.outputs.version }}
       tag: ${{ steps.plan.outputs.tag }}
@@ -42,6 +50,18 @@ jobs:
       prerelease: ${{ steps.plan.outputs.prerelease }}
       changelog: ${{ steps.plan.outputs.changelog }}
     steps:
+      - name: Require the release app secrets
+        env:
+          RELEASE_APP_ID: ${{ secrets.RELEASE_APP_ID }}
+          RELEASE_APP_PRIVATE_KEY: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+        run: |
+          missing=()
+          [ -n "$RELEASE_APP_ID" ] || missing+=(RELEASE_APP_ID)
+          [ -n "$RELEASE_APP_PRIVATE_KEY" ] || missing+=(RELEASE_APP_PRIVATE_KEY)
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::error::Missing repo secrets: ${missing[*]}. Set RELEASE_APP_ID and RELEASE_APP_PRIVATE_KEY for the release GitHub App (see README, Releasing)."
+            exit 1
+          fi
       - name: Require main
         env:
           REF: ${{ github.ref }}
@@ -50,10 +70,19 @@ jobs:
             echo "::error::Releases run only from main, not $REF."
             exit 1
           fi
+      # An installation token for this repo only, revoked when the job ends.
+      - name: Mint the release app token
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
       # The tip of main, not the dispatch commit, so a re-run sees a release
       # commit an earlier attempt already made.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          token: ${{ steps.app-token.outputs.token }}
           ref: refs/heads/main
           fetch-depth: 0
           fetch-tags: true
@@ -116,7 +145,7 @@ jobs:
         id: commit
         if: ${{ !inputs.dry_run && steps.plan.outputs.resume != 'true' }}
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO: ${{ github.repository }}
         run: |
           payload="$RUNNER_TEMP/commit.json"
@@ -129,7 +158,7 @@ jobs:
       - name: Tag the release commit
         if: ${{ !inputs.dry_run }}
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO: ${{ github.repository }}
           VERSION: ${{ steps.plan.outputs.version }}
           TAG: ${{ steps.plan.outputs.tag }}

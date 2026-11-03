@@ -96,6 +96,28 @@ To check a plan locally: `node scripts/release.ts plan --bump minor`, or
 
 ### One-time setup
 
+- Create the release GitHub App. `prepare` commits and tags main as this app,
+  because main's ruleset requires pull requests and `GITHUB_TOKEN` cannot
+  bypass it.
+  1. upmo-ai organization Settings → Developer settings → GitHub Apps → New
+     GitHub App.
+  2. GitHub App name `upmo-design-system-release`, homepage URL
+     `https://design.upmo.dev`.
+  3. Webhook: untick Active.
+  4. Repository permissions → Contents: Read and write. Leave everything else
+     at No access.
+  5. Where can this GitHub App be installed: Only on this account. Create the
+     app.
+  6. On the app's page, note the App ID, then Private keys → Generate a
+     private key and keep the downloaded `.pem` file.
+  7. Install App → upmo-ai → Only select repositories → `design-system` →
+     Install.
+  8. In this repo, Settings → Secrets and variables → Actions → New repository
+     secret: `RELEASE_APP_ID` (the App ID) and `RELEASE_APP_PRIVATE_KEY` (the
+     whole `.pem` file). Then delete the local `.pem`.
+  9. A maintainer adds the app as a bypass actor: Settings → Rules → Rulesets
+     → Protect main → Bypass list → Add bypass →
+     `upmo-design-system-release` → Save.
 - On npmjs.com, for each of the five packages, Settings → Trusted publishing →
   GitHub Actions: organization `upmo-ai`, repository `design-system`, workflow
   filename `release.yml`, environment `npm`. The publish job runs in the `npm`
@@ -104,9 +126,6 @@ To check a plan locally: `node scripts/release.ts plan --bump minor`, or
   under Settings → Environments → npm.
 - Repo secrets: `CLOUDFLARE_API_TOKEN` (a token with Cloudflare Pages edit
   permission) and `CLOUDFLARE_ACCOUNT_ID`.
-- Repo Settings → Actions → General → Workflow permissions: allow read and
-  write permissions, if the release cannot commit or tag. If main is protected,
-  let GitHub Actions bypass the rule that blocks direct pushes.
 
 ## Licence
 
