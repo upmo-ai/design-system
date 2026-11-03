@@ -21,6 +21,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./dates": {
+      "types": "./dist/dates.d.ts",
+      "default": "./dist/dates.js"
+    },
     "./styles.css": "./dist/index.css"
   },
   "scripts": {
@@ -30,13 +34,23 @@
   },
   "peerDependencies": {
     "@mantine/core": "^9.7.4",
+    "@mantine/dates": "^9.7.4",
     "@mantine/hooks": "^9.7.4",
     "@tabler/icons-react": "^3.0.0",
     "@upmo-ai/brands": "workspace:1.0.0",
     "@upmo-ai/icons": "workspace:1.0.0",
     "@upmo-ai/theme": "workspace:1.0.0",
+    "dayjs": ">=1.11.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@mantine/dates": {
+      "optional": true
+    },
+    "dayjs": {
+      "optional": true
+    }
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -44,6 +58,7 @@
   },
   "devDependencies": {
     "@mantine/core": "^9.7.4",
+    "@mantine/dates": "^9.7.4",
     "@mantine/hooks": "^9.7.4",
     "@storybook/react-vite": "^10.6.5",
     "@tabler/icons-react": "^3.50.0",
@@ -56,6 +71,7 @@
     "@upmo-ai/theme": "workspace:1.0.0",
     "@upmo-ai/tokens": "workspace:1.0.0",
     "axe-core": "4.10.3",
+    "dayjs": "^1.11.23",
     "jsdom": "^26.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

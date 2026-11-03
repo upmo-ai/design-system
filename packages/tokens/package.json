@@ -22,11 +22,17 @@
       "default": "./dist/tokens.js"
     },
     "./tokens.css": "./dist/tokens.css",
-    "./tokens.json": "./dist/tokens.json"
+    "./tokens.json": "./dist/tokens.json",
+    "./fonts.css": "./dist/fonts.css"
   },
   "scripts": {
     "build": "node scripts/build.ts",
     "prepare": "node scripts/build.ts"
+  },
+  "devDependencies": {
+    "@fontsource/familjen-grotesk": "5.3.0",
+    "@fontsource/fira-code": "5.3.0",
+    "@fontsource/manrope": "5.3.0"
   },
   "publishConfig": {
     "access": "public"

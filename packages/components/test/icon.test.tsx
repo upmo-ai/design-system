@@ -17,6 +17,12 @@ describe('Icon', () => {
     expect(container.querySelector('.upmo-caret')).toBeTruthy();
   });
 
+  it('resolves the knowledge source concept to the file-search glyph', () => {
+    expect(icons['object.source']).toBe('file-search');
+    const { container } = renderThemed(<Icon concept="object.source" />);
+    expect(container.querySelector('svg.tabler-icon-file-search')).toBeTruthy();
+  });
+
   it('applies an accessible label when given', () => {
     renderThemed(<Icon concept="action.send" aria-label="Send" />);
     expect(screen.getByLabelText('Send')).toBeInTheDocument();

@@ -115,5 +115,6 @@
   "object.memory": "brain",
   "object.automation": "clock-play",
   "object.tool": "tool",
-  "object.delivery": "send"
+  "object.delivery": "send",
+  "object.source": "file-search"
 }

@@ -2,11 +2,14 @@ import { UpmoProvider, type UpmoProviderProps } from '@upmo-ai/components';
 import type { Decorator, Preview } from '@storybook/react-vite';
 import { useEffect } from 'react';
 
-// Styles, in cascade order: Mantine base, then Upmo tokens (which switch on
-// [data-theme]), then the component library's own prefixed stylesheet.
+// Styles, in cascade order: Mantine base (core, then dates for DateInput), then
+// Upmo tokens (which switch on [data-theme]), then the component library's own
+// prefixed stylesheet, then the token fonts.
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import '@upmo-ai/tokens/tokens.css';
 import '@upmo-ai/components/styles.css';
+import '@upmo-ai/tokens/fonts.css';
 
 // Each story runs in Storybook's own preview iframe, a dedicated document, so
 // UpmoProvider owns the document root: it writes the Upmo data-theme token scope

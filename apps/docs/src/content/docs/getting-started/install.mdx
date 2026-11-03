@@ -43,11 +43,90 @@ Install from the command line:
 
 <pre><code class="language-sh">{`pnpm add @upmo-ai/tokens${installTag} @upmo-ai/theme${installTag} @upmo-ai/components${installTag} @upmo-ai/icons${installTag} @upmo-ai/brands${installTag}`}</code></pre>
 
-Set the provider up once:
+### Peer dependencies
+
+The packages share one copy of React, Mantine and Tabler with the app, so the
+app installs them itself:
+
+| Package | Range | Needed for |
+| --- | --- | --- |
+| `react`, `react-dom` | `^19.0.0` | `@upmo-ai/components` |
+| `@mantine/core`, `@mantine/hooks` | `^9.7.4` | `@upmo-ai/theme`, `@upmo-ai/components` |
+| `@tabler/icons-react` | `^3.0.0` | `@upmo-ai/components` |
+| `@mantine/dates`, `dayjs` | `^9.7.4`, `>=1.11.0` | Optional: only `DateInput`, from `@upmo-ai/components/dates` |
+
+`DateInput` lives in its own entry, `@upmo-ai/components/dates`, so an app that
+does not use it needs neither `@mantine/dates` nor `dayjs`. `@mantine/dates`
+pins `@mantine/core` to its own exact version, so keep the two on the same
+release.
+
+```sh
+pnpm add react react-dom @mantine/core @mantine/hooks @tabler/icons-react
+pnpm add @mantine/dates dayjs   # only for DateInput
+```
+
+### CSS, in this order
+
+Import the stylesheets once, at the app entry, in this order. Later sheets
+build on earlier ones: tokens override nothing in Mantine but are read by the
+component styles, and the app's own CSS comes last so it can adjust anything.
 
 ```tsx
-import '@mantine/core/styles.css';
-import '@upmo-ai/tokens/tokens.css';
+// main.tsx
+import '@mantine/core/styles.css';        // 1. Mantine base
+import '@mantine/dates/styles.css';       //    only with DateInput
+import '@upmo-ai/tokens/tokens.css';      // 2. Upmo tokens (light, dark, hc)
+import '@upmo-ai/components/styles.css';  // 3. component styles
+import '@upmo-ai/tokens/fonts.css';       // 4. token fonts
+import './app.css';                       // 5. the app's own CSS
+```
+
+### Fonts
+
+`@upmo-ai/tokens/fonts.css` holds the `@font-face` rules for the three token
+fonts, with the woff2 files bundled in the package (no CDN and no extra
+dependency). Only the weights the tokens and components use ship, in the latin
+and latin-ext subsets; `unicode-range` means a browser downloads a file only
+when the page uses its characters.
+
+| Family | Weights | Used for |
+| --- | --- | --- |
+| Manrope | 400, 500, 600, 700 | UI text |
+| Familjen Grotesk | 700 | The marketing hero, stat tile values, onboarding titles |
+| Fira Code | 400 | Code, ids, keys |
+
+All three fonts are licensed under the SIL Open Font License 1.1; each licence
+ships next to its files in `fonts/`. An app that already loads these fonts
+another way can skip the import: the token font stacks fall back to system
+fonts.
+
+### The root provider
+
+Wrap the app once in `UpmoProvider`. It sets up Mantine with the Upmo theme and
+token resolver, writes the token theme onto the document root (so portaled
+dropdowns and dialogs are themed too), and keeps Mantine's colour scheme in
+step.
+
+```tsx
+import { UpmoProvider } from '@upmo-ai/components';
+
+<UpmoProvider theme="system" reducedMotion="system">
+  <App />
+</UpmoProvider>;
+```
+
+| Prop | Values | Default |
+| --- | --- | --- |
+| `theme` | `'light'`, `'dark'`, `'hc'`, `'system'` | `'system'`: follows the OS; more contrast resolves to `hc`, then light or dark. Live-updates. |
+| `reducedMotion` | `'system'`, `'reduce'`, `'no-preference'` | `'system'`: follows the OS. `'reduce'` stops motion whatever the OS says. |
+
+Read the resolved theme (`'light'`, `'dark'` or `'hc'`) with `useUpmoTheme()`,
+for example to pick the icon of a theme switch.
+
+An app that only needs the theme, without the components, can use Mantine's
+provider directly:
+
+```tsx
 import { MantineProvider } from '@mantine/core';
 import { upmoTheme, cssVariablesResolver } from '@upmo-ai/theme';
 
@@ -55,6 +134,8 @@ import { upmoTheme, cssVariablesResolver } from '@upmo-ai/theme';
   {children}
 </MantineProvider>;
 ```
+
+It then sets `data-theme` on the root itself.
 
 ## Local development link
 

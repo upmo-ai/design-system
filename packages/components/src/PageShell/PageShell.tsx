@@ -16,9 +16,8 @@ export interface PageShellProps {
 /**
  * PageShell is the content frame for a page: a padded, single-column region
  * with an optional PageHeader and a consistent gap between the header and the
- * content. It is the inner page frame, not the full app shell (rail, top bar,
- * command palette, global liveness), which is an agent-surface concern built
- * later.
+ * content. It is the inner page frame; the product frame around it (side
+ * rail, top bar) is AppFrame.
  */
 export function PageShell({ header, children, narrow, className }: PageShellProps) {
   return (

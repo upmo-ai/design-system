@@ -68,6 +68,22 @@ export {
 
 export { PageHeader, type PageHeaderProps } from './PageHeader/PageHeader.tsx';
 export { PageShell, type PageShellProps } from './PageShell/PageShell.tsx';
+export {
+  AppFrame,
+  useAppFrame,
+  type AppFrameProps,
+  type AppFrameState,
+} from './AppFrame/AppFrame.tsx';
+export {
+  SideNav,
+  NavSection,
+  NavItem,
+  type SideNavProps,
+  type NavSectionProps,
+  type NavItemProps,
+} from './AppFrame/SideNav.tsx';
+export { Wordmark, type WordmarkProps } from './Wordmark/Wordmark.tsx';
+export { StatusAlert, type StatusAlertProps, type StatusAlertTone } from './StatusAlert/StatusAlert.tsx';
 export { Dialog, type DialogProps } from './Dialog/Dialog.tsx';
 export { ConfirmDialog, type ConfirmDialogProps } from './Dialog/ConfirmDialog.tsx';
 

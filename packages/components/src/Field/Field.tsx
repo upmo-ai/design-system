@@ -105,11 +105,27 @@ export function Field({
       ) : null}
 
       {error ? (
-        <div className="upmo-field__error" id={errId} role="alert">
-          <IconExclamationCircle size={14} stroke={2.2} aria-hidden="true" />
-          <span>{error}</span>
+        <div className={fieldErrorProps.className} id={errId} role={fieldErrorProps.role}>
+          <FieldErrorMessage>{error}</FieldErrorMessage>
         </div>
       ) : null}
     </div>
+  );
+}
+
+/**
+ * The error line's element props: the danger-tone flex row, announced as an
+ * alert. Field renders it itself; DateInput hands it to Mantine's error
+ * element (with `component: 'div'`), so both read and look the same.
+ */
+export const fieldErrorProps = { className: 'upmo-field__error', role: 'alert' } as const;
+
+/** The error line's content: the danger icon, then the message. */
+export function FieldErrorMessage({ children }: { children: ReactNode }) {
+  return (
+    <>
+      <IconExclamationCircle size={14} stroke={2.2} aria-hidden="true" />
+      <span>{children}</span>
+    </>
   );
 }

@@ -44,3 +44,32 @@ describe('styles.css control heights', () => {
     expect(body).toContain('--ai-size-xl: var(--control-lg)');
   });
 });
+
+describe('styles.css date calendar', () => {
+  it('paints weekend days with the danger token, not Mantine red', () => {
+    expect(rule(".upmo-date-input__day[data-weekend]:not([data-selected])")).toContain('color: var(--danger)');
+  });
+
+  it('marks today with an outline and an underline, not colour alone', () => {
+    const body = rule('.upmo-date-input__day[data-today]:not([data-selected], [data-in-range])');
+    expect(body).toContain('outline: 1px solid var(--border-strong)');
+    expect(body).toContain('text-decoration: underline');
+  });
+});
+
+describe('styles.css app frame', () => {
+  it('marks the active nav item with an inline-start bar, not the tint alone', () => {
+    const body = rule('.upmo-nav-item[data-active]::before,\n.upmo-nav-item__menu-item[data-active]::before');
+    expect(body).toContain('inset-inline-start: 0');
+    expect(body).toContain('background: var(--emerald-deep)');
+  });
+
+  it('uses logical inline properties in the app frame, wordmark and status alert styles', () => {
+    const start = css.indexOf('App frame: AppFrame');
+    const end = css.indexOf('In-app reduced motion');
+    expect(start).toBeGreaterThan(-1);
+    const section = css.slice(start, end);
+    expect(section).not.toMatch(/(?:^|[\s;{])(?:padding|margin|border)-(?:left|right)\b/m);
+    expect(section).not.toMatch(/(?:^|[\s;{])(?:left|right):/m);
+  });
+});
