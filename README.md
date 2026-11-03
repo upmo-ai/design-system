@@ -49,3 +49,9 @@ pnpm lint           # hex + glossary + typecheck
 ## Licence
 
 AGPL-3.0-only.
+
+## Community
+
+Licensed under [AGPL-3.0-only](LICENSE). See [CONTRIBUTING.md](CONTRIBUTING.md)
+to get involved, [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for how we work
+together, and [SECURITY.md](SECURITY.md) to report a vulnerability.
