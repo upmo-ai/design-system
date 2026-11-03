@@ -1,234 +1,184 @@
 #!/usr/bin/env node
-// Automated, lockstep release for the five @upmo-ai packages.
+// Lockstep release steps for the five @upmo-ai packages, called by the
+// release workflow (.github/workflows/release.yml). Publishing happens only in
+// that workflow; this script never publishes.
 //
-// version.json is the single source of truth. This script computes the next
-// version from it, runs the quality gate (build, lint, test, pack dry-run),
-// writes the new version into every package.json and into version.json, makes
-// one signed commit, then publishes all five in dependency order with the
-// right dist-tag (prerelease -> next, stable -> latest, and a stable release
-// moves latest onto itself).
+// version.json is the single source of truth. The next version is computed
+// from it, and the changelog from the conventional commits since the previous
+// tag: the latest v* tag for a prerelease, the latest stable tag for a stable
+// release (so a stable release lists everything its release candidates had).
 //
 // Usage:
-//   node scripts/release.ts <bump> [options]
+//   node scripts/release.ts plan  --bump <bump> [--preid rc]
+//   node scripts/release.ts apply --bump <bump> [--preid rc] [--dry-run]
+//   node scripts/release.ts gate
+//   node scripts/release.ts commit-payload --repo <owner/name> --branch <name> --head <sha>
 //
 //   bump:  major | minor | patch | premajor | preminor | prepatch | prerelease
 //          (prerelease bumps the -rc.N counter; premajor etc. start a new -rc.0)
-//   --preid=<id>     prerelease identifier (default: rc)
-//   --date=<iso>     author+committer date for the release commit (backdating)
-//   --tag=<tag>      override the npm dist-tag (default: auto from version)
-//   --dry-run        do everything except commit and publish (prints the plan)
-//   --no-gate        skip build/lint/test (NOT recommended; for debugging)
 //
-// Examples:
-//   node scripts/release.ts major --date=2026-08-13T10:30:00+02:00
-//   node scripts/release.ts prerelease                 # 1.0.0-rc.1 -> 1.0.0-rc.2
-//   node scripts/release.ts minor --dry-run
+//   plan            prints the release plan as JSON: version, tag, dist-tag
+//                   (prerelease -> next, stable -> latest), changelog markdown
+//                   and the files apply writes. Fails when there is nothing to
+//                   release. When HEAD is already the release commit for the
+//                   current version and its tag is missing (a run that failed
+//                   after committing), it plans that version with resume: true
+//                   and the workflow only creates the tag.
+//   apply           writes the version into version.json and every package,
+//                   syncs the lockfile and prepends the CHANGELOG.md section.
+//                   --dry-run prints what it would write and changes nothing.
+//   gate            build, lint, test and a pack dry-run of every package.
+//   commit-payload  prints the GraphQL createCommitOnBranch request that
+//                   commits the files apply wrote, so GitHub signs the commit.
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { prependChangelog } from './changelog.ts';
+import { planRelease, releaseHeadline } from './plan.ts';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 // Publish order: dependencies before dependents.
 const PACKAGES = ['tokens', 'icons', 'brands', 'theme', 'components'] as const;
 const PKG_NAMES = PACKAGES.map((p) => `@upmo-ai/${p}`);
+const FILES = [
+  'version.json',
+  'CHANGELOG.md',
+  'pnpm-lock.yaml',
+  ...PACKAGES.map((p) => `packages/${p}/package.json`),
+];
 
-type Args = {
-  bump: string;
-  preid: string;
-  date?: string;
-  tag?: string;
-  dryRun: boolean;
-  gate: boolean;
-};
-
-function parseArgs(argv: string[]): Args {
-  const positional: string[] = [];
+function parseArgs(argv: string[]) {
+  const [command, ...rest] = argv;
   const opts: Record<string, string | boolean> = {};
-  for (const a of argv) {
-    if (a.startsWith('--')) {
-      const [k, v] = a.slice(2).split('=');
-      opts[k] = v ?? true;
-    } else {
-      positional.push(a);
-    }
+  for (let i = 0; i < rest.length; i++) {
+    const a = rest[i];
+    if (!a.startsWith('--')) throw new Error(`Unexpected argument: ${a}`);
+    const [k, v] = a.slice(2).split('=');
+    if (v !== undefined) opts[k] = v;
+    else if (rest[i + 1] && !rest[i + 1].startsWith('--')) opts[k] = rest[++i];
+    else opts[k] = true;
   }
-  const bump = positional[0];
-  const valid = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'];
-  if (!bump || !valid.includes(bump)) {
-    throw new Error(`First argument must be one of: ${valid.join(', ')}`);
-  }
-  return {
-    bump,
-    preid: (opts.preid as string) || 'rc',
-    date: opts.date as string | undefined,
-    tag: opts.tag as string | undefined,
-    dryRun: Boolean(opts['dry-run']),
-    gate: opts['no-gate'] ? false : true,
-  };
+  return { command, opts };
 }
 
-// Minimal semver bumper covering the release/prerelease cases we use.
-function bumpVersion(current: string, bump: string, preid: string): string {
-  const m = current.match(/^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$/);
-  if (!m) throw new Error(`Cannot parse version: ${current}`);
-  let [major, minor, patch] = [Number(m[1]), Number(m[2]), Number(m[3])];
-  const pre = m[4];
-
-  const startPre = (M: number, mi: number, p: number) => `${M}.${mi}.${p}-${preid}.0`;
-
-  switch (bump) {
-    case 'major':
-      // If we are on a prerelease of this major (x.0.0-rc.N), graduate to x.0.0.
-      if (pre && minor === 0 && patch === 0) return `${major}.0.0`;
-      return `${major + 1}.0.0`;
-    case 'minor':
-      if (pre && patch === 0) return `${major}.${minor}.0`;
-      return `${major}.${minor + 1}.0`;
-    case 'patch':
-      if (pre) return `${major}.${minor}.${patch}`;
-      return `${major}.${minor}.${patch + 1}`;
-    case 'premajor':
-      return startPre(major + 1, 0, 0);
-    case 'preminor':
-      return startPre(major, minor + 1, 0);
-    case 'prepatch':
-      return startPre(major, minor, patch + 1);
-    case 'prerelease': {
-      if (!pre) return startPre(major, minor, patch + 1);
-      const parts = pre.split('.');
-      const n = Number(parts[parts.length - 1]);
-      if (Number.isNaN(n)) return `${major}.${minor}.${patch}-${pre}.0`;
-      parts[parts.length - 1] = String(n + 1);
-      return `${major}.${minor}.${patch}-${parts.join('.')}`;
-    }
-    default:
-      throw new Error(`Unhandled bump: ${bump}`);
-  }
+function option(opts: Record<string, string | boolean>, name: string): string {
+  const v = opts[name];
+  if (typeof v !== 'string' || v === '') throw new Error(`Missing --${name}`);
+  return v;
 }
 
-function isPrerelease(v: string): boolean {
-  return v.includes('-');
+function run(cmd: string, args: string[]) {
+  execFileSync(cmd, args, { cwd: root, stdio: 'inherit' });
 }
 
-function run(cmd: string, args: string[], extraEnv: Record<string, string> = {}) {
-  execFileSync(cmd, args, { cwd: root, stdio: 'inherit', env: { ...process.env, ...extraEnv } });
+function git(args: string[]): string {
+  return execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 }
 
 function readJson(path: string): any {
-  return JSON.parse(readFileSync(path, 'utf8'));
+  return JSON.parse(readFileSync(resolve(root, path), 'utf8'));
 }
 
 function writeJson(path: string, data: unknown) {
-  writeFileSync(path, JSON.stringify(data, null, 2) + '\n');
+  writeFileSync(resolve(root, path), JSON.stringify(data, null, 2) + '\n');
 }
 
-function main() {
-  const args = parseArgs(process.argv.slice(2));
-  const versionFile = resolve(root, 'version.json');
-  const current = readJson(versionFile).version as string;
-  const next = bumpVersion(current, args.bump, args.preid);
-  const tag = args.tag ?? (isPrerelease(next) ? 'next' : 'latest');
+function plan(opts: Record<string, string | boolean>) {
+  const p = planRelease({
+    git,
+    current: readJson('version.json').version as string,
+    bump: option(opts, 'bump'),
+    preid: typeof opts.preid === 'string' ? opts.preid : 'rc',
+  });
+  return {
+    ...p,
+    date: new Date().toISOString().slice(0, 10),
+    packages: PKG_NAMES,
+    files: FILES,
+  };
+}
 
-  console.log(`\nRelease plan`);
-  console.log(`  current : ${current}`);
-  console.log(`  next    : ${next}`);
-  console.log(`  dist-tag: ${tag}`);
-  console.log(`  packages: ${PKG_NAMES.join(', ')}`);
-  console.log(`  date    : ${args.date ?? '(now)'}`);
-  console.log(`  dry-run : ${args.dryRun}\n`);
-
-  // 1. Quality gate.
-  if (args.gate) {
-    console.log('> gate: build');
-    run('pnpm', ['-r', 'build']);
-    console.log('> gate: lint');
-    run('pnpm', ['run', 'lint']);
-    console.log('> gate: test');
-    run('pnpm', ['run', 'test']);
-  } else {
-    console.log('> gate skipped (--no-gate)');
+function apply(opts: Record<string, string | boolean>) {
+  const p = plan(opts);
+  if (p.resume) {
+    throw new Error(`HEAD is already the release commit for ${p.version}; only its tag is missing, nothing to apply.`);
+  }
+  if (opts['dry-run']) {
+    console.log(`Dry run: would release ${p.current} -> ${p.version} (dist-tag ${p.distTag}) and write:`);
+    for (const f of p.files) console.log(`  ${f}`);
+    console.log(`\n## ${p.version} (${p.date})\n\n${p.changelog}`);
+    return;
   }
 
-  // 2. Write the new version everywhere.
-  writeJson(versionFile, { version: next });
-  for (const p of PACKAGES) {
-    const pkgPath = resolve(root, 'packages', p, 'package.json');
-    const pkg = readJson(pkgPath);
-    pkg.version = next;
+  writeJson('version.json', { version: p.version });
+  for (const pkgDir of PACKAGES) {
+    const path = `packages/${pkgDir}/package.json`;
+    const pkg = readJson(path);
+    pkg.version = p.version;
     // Pin internal cross-refs to the exact version in every dependency block.
     for (const block of ['dependencies', 'peerDependencies', 'devDependencies'] as const) {
       const deps = pkg[block];
       if (!deps) continue;
       for (const name of Object.keys(deps)) {
-        if (PKG_NAMES.includes(name)) deps[name] = `workspace:${next}`;
+        if (PKG_NAMES.includes(name)) deps[name] = `workspace:${p.version}`;
       }
     }
-    writeJson(pkgPath, pkg);
+    writeJson(path, pkg);
   }
-  console.log(`> wrote version ${next} to version.json and ${PACKAGES.length} packages`);
-
   // Keep the lockfile in sync with the rewritten workspace specifiers.
   run('pnpm', ['install', '--lockfile-only']);
 
-  // 3. Pack dry-run sanity check.
-  if (args.gate) {
-    for (const p of PACKAGES) {
-      console.log(`> pack check: @upmo-ai/${p}`);
-      run('pnpm', ['--filter', `@upmo-ai/${p}`, 'publish', '--tag', tag, '--no-git-checks', '--dry-run']);
-    }
-  }
-
-  if (args.dryRun) {
-    // Restore the files we touched so a dry run leaves the tree unchanged.
-    // version.json may be untracked, so rewrite it explicitly; the package
-    // manifests and lockfile are tracked, so restore them from git.
-    writeJson(versionFile, { version: current });
-    const tracked = [
-      'pnpm-lock.yaml',
-      ...PACKAGES.map((p) => `packages/${p}/package.json`),
-    ];
-    for (const f of tracked) {
-      try {
-        run('git', ['checkout', '--', f]);
-      } catch {
-        /* ignore: file may be untracked in a fresh checkout */
-      }
-    }
-    console.log('> dry run: reverted version edits');
-    console.log('\nDry run complete. No commit, no publish.');
-    return;
-  }
-
-  // 4. Signed commit.
-  const files = [
-    'version.json',
-    'pnpm-lock.yaml',
-    ...PACKAGES.map((p) => `packages/${p}/package.json`),
-  ];
-  run('git', ['add', ...files]);
-  const dateEnv: Record<string, string> = args.date
-    ? { GIT_AUTHOR_DATE: args.date, GIT_COMMITTER_DATE: args.date }
-    : {};
-  run('git', ['commit', '-S', '-m', `release: version packages at ${next}`], dateEnv);
-  console.log(`> committed release ${next}${args.date ? ` dated ${args.date}` : ''}`);
-
-  // 5. Publish in dependency order.
-  for (const p of PACKAGES) {
-    console.log(`> publish @upmo-ai/${p}@${next} (tag: ${tag})`);
-    run('pnpm', ['--filter', `@upmo-ai/${p}`, 'publish', '--tag', tag, '--no-git-checks']);
-  }
-
-  // 6. For a stable release, make sure latest points at it.
-  if (!isPrerelease(next)) {
-    for (const name of PKG_NAMES) {
-      console.log(`> dist-tag add ${name}@${next} latest`);
-      run('npm', ['dist-tag', 'add', `${name}@${next}`, 'latest']);
-    }
-  }
-
-  console.log(`\nReleased ${next} (dist-tag: ${tag}). Run "pnpm deploy:docs" to publish the docs.`);
+  const changelogPath = resolve(root, 'CHANGELOG.md');
+  writeFileSync(changelogPath, prependChangelog(readFileSync(changelogPath, 'utf8'), p.version, p.date, p.changelog));
+  console.log(`Wrote ${p.version} to ${p.files.join(', ')}`);
 }
 
-main();
+function gate() {
+  run('pnpm', ['-r', 'build']);
+  run('pnpm', ['run', 'lint']);
+  run('pnpm', ['run', 'test']);
+  for (const name of PKG_NAMES) run('pnpm', ['--filter', name, 'pack', '--dry-run']);
+}
+
+function commitPayload(opts: Record<string, string | boolean>) {
+  const version = readJson('version.json').version as string;
+  const query =
+    'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid url } } }';
+  const input = {
+    branch: { repositoryNameWithOwner: option(opts, 'repo'), branchName: option(opts, 'branch') },
+    expectedHeadOid: option(opts, 'head'),
+    message: { headline: releaseHeadline(version) },
+    fileChanges: {
+      additions: FILES.map((path) => ({
+        path,
+        contents: readFileSync(resolve(root, path)).toString('base64'),
+      })),
+    },
+  };
+  return { query, variables: { input } };
+}
+
+try {
+  const { command, opts } = parseArgs(process.argv.slice(2));
+  switch (command) {
+    case 'plan':
+      console.log(JSON.stringify(plan(opts), null, 2));
+      break;
+    case 'apply':
+      apply(opts);
+      break;
+    case 'gate':
+      gate();
+      break;
+    case 'commit-payload':
+      console.log(JSON.stringify(commitPayload(opts)));
+      break;
+    default:
+      throw new Error('Usage: node scripts/release.ts <plan|apply|gate|commit-payload> [options]');
+  }
+} catch (err) {
+  console.error(`release: ${err instanceof Error ? err.message : String(err)}`);
+  process.exit(1);
+}

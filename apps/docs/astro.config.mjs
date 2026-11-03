@@ -34,7 +34,7 @@ export default defineConfig({
         replacesTitle: true,
       },
       favicon: '/favicon.svg',
-      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/upmo-ai/upmo-design-system' }],
+      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/upmo-ai/design-system' }],
       // Tokens theme the docs chrome (Starlight variables map to Upmo tokens in
       // docs.css). Live component previews live in Storybook, not here, so the
       // components stylesheet and the React runtime are no longer loaded.

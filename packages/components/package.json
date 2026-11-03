@@ -7,7 +7,7 @@
   "homepage": "https://design.upmo.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/upmo-ai/upmo-design-system.git",
+    "url": "git+https://github.com/upmo-ai/design-system.git",
     "directory": "packages/components"
   },
   "files": [

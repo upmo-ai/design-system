@@ -1,0 +1,276 @@
+name: Release
+
+# Manual, lockstep release of the five @upmo-ai packages. prepare bumps the
+# version, commits it to main through the API (so GitHub signs it) and tags it;
+# publish ships the tag to npm with trusted publishing; github-release and docs
+# follow a successful publish. Every job after prepare is safe to re-run.
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Version bump
+        type: choice
+        required: true
+        default: patch
+        options: [patch, minor, major, prepatch, preminor, premajor, prerelease]
+      preid:
+        description: Prerelease identifier (for pre* bumps)
+        type: string
+        required: true
+        default: rc
+      dry_run:
+        description: Dry run (print the plan, write nothing)
+        type: boolean
+        default: false
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.plan.outputs.version }}
+      tag: ${{ steps.plan.outputs.tag }}
+      dist_tag: ${{ steps.plan.outputs.dist_tag }}
+      prerelease: ${{ steps.plan.outputs.prerelease }}
+      changelog: ${{ steps.plan.outputs.changelog }}
+    steps:
+      - name: Require main
+        env:
+          REF: ${{ github.ref }}
+        run: |
+          if [ "$REF" != "refs/heads/main" ]; then
+            echo "::error::Releases run only from main, not $REF."
+            exit 1
+          fi
+      # The tip of main, not the dispatch commit, so a re-run sees a release
+      # commit an earlier attempt already made.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: refs/heads/main
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.1
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+
+      - name: Plan
+        id: plan
+        env:
+          BUMP: ${{ inputs.bump }}
+          PREID: ${{ inputs.preid }}
+        run: |
+          plan="$RUNNER_TEMP/plan.json"
+          node scripts/release.ts plan --bump "$BUMP" --preid "$PREID" > "$plan"
+          delim="EOF_$(openssl rand -hex 16)"
+          {
+            echo "version=$(jq -r .version "$plan")"
+            echo "tag=$(jq -r .tag "$plan")"
+            echo "dist_tag=$(jq -r .distTag "$plan")"
+            echo "prerelease=$(jq -r .prerelease "$plan")"
+            echo "resume=$(jq -r .resume "$plan")"
+            echo "changelog<<$delim"
+            jq -r .changelog "$plan"
+            echo "$delim"
+          } >> "$GITHUB_OUTPUT"
+          {
+            echo "## Release plan"
+            echo
+            if [ "$(jq -r .resume "$plan")" = true ]; then
+              echo "Resuming: main's HEAD is the release commit for $(jq -r .version "$plan") and its tag is missing. Only the tag is created; the bump inputs are ignored."
+              echo
+            fi
+            jq -r '"- version: \(.current) -> \(.version)\n- tag: \(.tag)\n- dist-tag: \(.distTag)\n- prerelease: \(.prerelease)\n- changes since: \(.since // "the first commit")"' "$plan"
+            echo "- files:"
+            jq -r '.files[] | "  - `\(.)`"' "$plan"
+            echo
+            echo "## Changelog"
+            echo
+            jq -r .changelog "$plan"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Gate (build, lint, test, pack dry-run)
+        run: node scripts/release.ts gate
+
+      - name: Write the version bump
+        if: ${{ !inputs.dry_run && steps.plan.outputs.resume != 'true' }}
+        env:
+          BUMP: ${{ inputs.bump }}
+          PREID: ${{ inputs.preid }}
+        run: node scripts/release.ts apply --bump "$BUMP" --preid "$PREID"
+
+      # createCommitOnBranch makes GitHub sign the commit (Verified), and its
+      # expectedHeadOid makes it fail if main moved since this run started.
+      - name: Commit to main
+        id: commit
+        if: ${{ !inputs.dry_run && steps.plan.outputs.resume != 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          payload="$RUNNER_TEMP/commit.json"
+          node scripts/release.ts commit-payload --repo "$REPO" --branch main --head "$(git rev-parse HEAD)" > "$payload"
+          sha="$(gh api graphql --input "$payload" --jq .data.createCommitOnBranch.commit.oid)"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "Committed $sha" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      # On a resumed run the release commit is the checked-out HEAD.
+      - name: Tag the release commit
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          VERSION: ${{ steps.plan.outputs.version }}
+          TAG: ${{ steps.plan.outputs.tag }}
+          COMMIT_SHA: ${{ steps.commit.outputs.sha }}
+        run: |
+          sha="${COMMIT_SHA:-$(git rev-parse HEAD)}"
+          tag_sha="$(gh api "repos/$REPO/git/tags" -f tag="$TAG" -f message="Release $VERSION" -f object="$sha" -f type=commit --jq .sha)"
+          gh api "repos/$REPO/git/refs" -f ref="refs/tags/$TAG" -f sha="$tag_sha" --silent
+          echo "Tagged $TAG at $sha" | tee -a "$GITHUB_STEP_SUMMARY"
+
+  publish:
+    needs: prepare
+    if: ${{ !inputs.dry_run }}
+    runs-on: ubuntu-latest
+    # Named in each package's npm trusted publisher. Add a required reviewer to
+    # it in the repo settings to gate publishing by hand.
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: refs/tags/${{ needs.prepare.outputs.tag }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.1
+          package-manager-cache: false
+      - name: Check npm supports trusted publishing
+        run: |
+          npm_version="$(npm --version)"
+          lowest="$(printf '%s\n' 11.5.1 "$npm_version" | sort -V | head -n1)"
+          if [ "$lowest" != 11.5.1 ]; then
+            echo "::error::npm $npm_version is older than 11.5.1 and cannot use trusted publishing."
+            exit 1
+          fi
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+      # Dependency order. A version already on the registry is skipped, so
+      # "Re-run failed jobs" finishes a partial publish. pnpm pack turns the
+      # workspace: ranges into real versions; npm publishes with OIDC.
+      - name: Publish to npm
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+          DIST_TAG: ${{ needs.prepare.outputs.dist_tag }}
+        run: |
+          checked_out="$(node -p "require('./version.json').version")"
+          if [ "$checked_out" != "$VERSION" ]; then
+            echo "::error::The tag holds $checked_out, expected $VERSION."
+            exit 1
+          fi
+          # Prints "yes" or "no". Only an E404 means "not published"; any other
+          # registry error is retried with backoff, then fails the job.
+          published() {
+            local out
+            for attempt in 1 2 3 4; do
+              if out="$(npm view "$1@$VERSION" version --json 2>/dev/null)"; then
+                if [ "$(jq -r . <<< "$out")" = "$VERSION" ]; then echo yes; else echo no; fi
+                return 0
+              fi
+              if [ "$(jq -r '.error.code // empty' <<< "$out" 2>/dev/null)" = E404 ]; then
+                echo no
+                return 0
+              fi
+              echo "npm view $1@$VERSION failed (attempt $attempt): $out" >&2
+              sleep $((attempt * 15))
+            done
+            return 1
+          }
+          for pkg in tokens icons brands theme components; do
+            name="@upmo-ai/$pkg"
+            if ! state="$(published "$name")"; then
+              echo "::error::Could not check $name@$VERSION on the registry."
+              exit 1
+            fi
+            if [ "$state" = yes ]; then
+              echo "$name@$VERSION is already published, skipping"
+              continue
+            fi
+            dir="$RUNNER_TEMP/pack/$pkg"
+            mkdir -p "$dir"
+            pnpm --filter "$name" pack --pack-destination "$dir"
+            npm publish "$dir"/*.tgz --tag "$DIST_TAG" --access public --provenance
+          done
+
+  github-release:
+    needs: [prepare, publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+          NOTES: ${{ needs.prepare.outputs.changelog }}
+        run: |
+          if gh release view "$TAG" --repo "$REPO" > /dev/null 2>&1; then
+            echo "Release $TAG already exists, skipping"
+            exit 0
+          fi
+          printf '%s\n' "$NOTES" > "$RUNNER_TEMP/notes.md"
+          if [ "$PRERELEASE" = true ]; then
+            flags=(--prerelease --latest=false)
+          else
+            flags=(--latest)
+          fi
+          gh release create "$TAG" --repo "$REPO" --verify-tag --title "$TAG" --notes-file "$RUNNER_TEMP/notes.md" "${flags[@]}"
+
+  docs:
+    needs: [prepare, publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: refs/tags/${{ needs.prepare.outputs.tag }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.1
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      # A stable release goes to production (design.upmo.dev), a prerelease
+      # to the rc-preview branch.
+      - name: Deploy the docs to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+        run: |
+          if [ "$PRERELEASE" = true ]; then
+            node scripts/deploy-docs.ts --preview
+          else
+            node scripts/deploy-docs.ts
+          fi
