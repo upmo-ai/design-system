@@ -2,6 +2,12 @@
 
 Release notes for the five @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 1.2.0 (2026-11-04)
+
+### Features
+
+- **components:** add brand aliases, card rest props and wizard step control (#6) ([659fad1](https://github.com/upmo-ai/design-system/commit/659fad10a170b23d2efdc91b9c79d980828bf898))
+
 ## 1.1.0 (2026-11-04)
 
 ### Features
