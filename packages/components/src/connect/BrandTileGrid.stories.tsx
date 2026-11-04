@@ -53,3 +53,25 @@ export const Connectors: Story = {
     );
   },
 };
+
+/**
+ * A selected tile keeps its emerald border and ground when it is hovered.
+ * Hover the selected tile (Notion) and an unselected one (GitHub) to compare:
+ * only the unselected tile takes the hover style.
+ */
+export const SelectedHover: Story = {
+  render: () => {
+    const [selected, setSelected] = useState('notion');
+    return (
+      <BrandTileGrid
+        selectedId={selected}
+        onSelect={setSelected}
+        items={[
+          { id: 'github', name: 'GitHub', description: 'Repositories, issues and pull requests' },
+          { id: 'notion', name: 'Notion', description: 'Pages, databases and workspaces' },
+          { id: 'slack', name: 'Slack', description: 'Workspaces, channels and messaging' },
+        ]}
+      />
+    );
+  },
+};

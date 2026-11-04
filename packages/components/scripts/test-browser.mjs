@@ -7,7 +7,7 @@ import { dirname, resolve } from 'node:path';
 const vitestBin = resolve(dirname(createRequire(import.meta.url).resolve('vitest/package.json')), 'vitest.mjs');
 const result = spawnSync(
   process.execPath,
-  [vitestBin, 'run', 'test/app-frame-drawer.browser.test.ts', ...process.argv.slice(2)],
+  [vitestBin, 'run', '.browser.test.ts', ...process.argv.slice(2)],
   { stdio: 'inherit', env: { ...process.env, UPMO_REQUIRE_BROWSER: '1' } },
 );
 process.exit(result.status ?? 1);

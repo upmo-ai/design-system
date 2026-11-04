@@ -49,6 +49,10 @@ export interface ProviderCardProps
  * models. Unlike a connector, a provider carries an explicit status, so error
  * states (a rejected key, a rate limit) show on the same card layout.
  *
+ * Layout: the status badge keeps its content width and never truncates; the
+ * title block gives up space first and wraps. The actions are small buttons on
+ * one start-aligned row, and wrap only when the card is too narrow for both.
+ *
  * Any other prop (`data-*`, `aria-*`, `style`, event handlers) is a rest prop
  * and goes to the root `div`. Things to know:
  * - `id` is the provider id, not a DOM id; pass `data-id` or wrap the card if you
@@ -82,21 +86,23 @@ export function ProviderCard({
     <Card {...rest} withBorder radius="lg" padding="md" className={clsx('upmo-provider-card', className)}>
       <Stack justify="space-between" h="100%" gap="md">
         <div>
-          <Group justify="space-between" align="flex-start" wrap="nowrap">
-            <Group gap="sm" wrap="nowrap">
+          <Group justify="space-between" align="flex-start" wrap="nowrap" gap="sm">
+            <Group gap="sm" wrap="nowrap" className="upmo-card-head__identity">
               <span className="upmo-provider-card__mark">
                 <BrandMark brand={brand ?? id} size={32} kind="provider" />
               </span>
               <Stack gap={2} style={{ minWidth: 0 }}>
-                <Text fw={600}>{name}</Text>
+                <Text fw={600} className="upmo-card-head__text">
+                  {name}
+                </Text>
                 {adapter ? (
-                  <Text size="xs" c="dimmed">
+                  <Text size="xs" c="dimmed" className="upmo-card-head__text">
                     {adapter}
                   </Text>
                 ) : null}
               </Stack>
             </Group>
-            <Badge variant="light" color={statusColor[status]}>
+            <Badge variant="light" color={statusColor[status]} className="upmo-card-head__status">
               {status}
             </Badge>
           </Group>
@@ -130,14 +136,14 @@ export function ProviderCard({
           </Stack>
         </div>
 
-        <Group justify="flex-end" gap="xs">
+        <Group justify="flex-start" gap="xs" wrap="wrap" className="upmo-card-actions">
           {onEdit ? (
-            <Button variant="default" onClick={onEdit} leftSection={<Icon concept="action.edit" size={16} />}>
+            <Button size="sm" variant="default" onClick={onEdit} leftSection={<Icon concept="action.edit" size={16} />}>
               Edit
             </Button>
           ) : null}
           {onDisconnect ? (
-            <Button variant="subtle" color="red" onClick={onDisconnect} leftSection={<Icon concept="action.disconnect" size={16} />}>
+            <Button size="sm" variant="subtle" color="red" onClick={onDisconnect} leftSection={<Icon concept="action.disconnect" size={16} />}>
               Disconnect
             </Button>
           ) : null}

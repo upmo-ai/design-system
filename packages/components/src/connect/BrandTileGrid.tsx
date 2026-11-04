@@ -28,6 +28,8 @@ export interface BrandTileGridProps {
  * grid of selectable brand tiles, each a brand mark, name and short
  * description. The selected tile gets the emerald selected ground and is marked
  * aria-pressed, so selection is clear to pointer and assistive tech alike.
+ * The selected look holds on hover; only an unselected tile takes the hover
+ * style. In forced-colors mode the selected tile has a thicker Highlight border.
  *
  * A tile's accessible name is the brand name alone (so `getByRole('button',
  * { name: 'OpenAI' })` finds it); the adapter and description are its

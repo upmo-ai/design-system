@@ -46,6 +46,38 @@ export const Grid: Story = {
   ),
 };
 
+/**
+ * The card at the width the Upmo app gives it in a three-column grid: 320px, so
+ * 288px of content. The Connected badge keeps its width, a long title wraps
+ * beside it, and Edit permissions and Disconnect sit on one row. The browser
+ * suite measures this layout.
+ */
+export const NarrowCard: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 16, width: 320 }}>
+      <ConnectorCard
+        id="github"
+        name="GitHub"
+        description="Repositories, issues and pull requests"
+        resourceScope="these"
+        resourceIds={['upmo/web', 'upmo/brain']}
+        changes="ask"
+        onEdit={() => {}}
+        onDisconnect={() => {}}
+      />
+      <ConnectorCard
+        id="mcp"
+        name="A very long connector name that has to wrap"
+        description="Model Context Protocol endpoint"
+        resourceScope="all"
+        changes="allow"
+        onEdit={() => {}}
+        onDisconnect={() => {}}
+      />
+    </div>
+  ),
+};
+
 /** Extra attributes (data-*, aria-*) reach the root element. */
 export const WithAttributes: Story = {
   render: () => (
