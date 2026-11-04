@@ -45,3 +45,19 @@ export const Grid: Story = {
     </SimpleGrid>
   ),
 };
+
+/** Extra attributes (data-*, aria-*) reach the root element. */
+export const WithAttributes: Story = {
+  render: () => (
+    <ConnectorCard
+      id="google-drive"
+      name="Google Drive"
+      description="Files and folders."
+      resourceScope="all"
+      changes="ask"
+      data-testid="connector-google-drive"
+      aria-label="Google Drive connector"
+      role="group"
+    />
+  ),
+};

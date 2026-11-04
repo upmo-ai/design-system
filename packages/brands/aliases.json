@@ -1,0 +1,9 @@
+{
+  "gemini": "googlegemini",
+  "google-calendar": "googlecalendar",
+  "google-cloud": "googlecloud",
+  "google-docs": "googledocs",
+  "google-drive": "googledrive",
+  "google-sheets": "googlesheets",
+  "microsoft-teams": "microsoftteams"
+}

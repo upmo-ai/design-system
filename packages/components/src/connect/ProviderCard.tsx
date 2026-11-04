@@ -1,6 +1,7 @@
 import { Badge, Card, Group, Stack, Text } from '@mantine/core';
 import { IconCpu } from '@tabler/icons-react';
 import clsx from 'clsx';
+import type { ComponentPropsWithoutRef } from 'react';
 import { Button } from '../Button/Button.tsx';
 import { Icon } from '../icon/Icon.tsx';
 import { BrandMark } from '../brand/BrandMark.tsx';
@@ -22,7 +23,8 @@ const statusColor: Record<ProviderStatus, string> = {
   Offline: 'gray',
 };
 
-export interface ProviderCardProps {
+export interface ProviderCardProps
+  extends Omit<ComponentPropsWithoutRef<'div'>, 'id' | 'children' | 'color'> {
   /** The provider id (also the brand key), e.g. "anthropic". */
   id: string;
   /** The brand key if different from the id. Defaults to the id. */
@@ -38,7 +40,6 @@ export interface ProviderCardProps {
   models?: string[];
   onEdit?: () => void;
   onDisconnect?: () => void;
-  className?: string;
 }
 
 /**
@@ -47,6 +48,21 @@ export interface ProviderCardProps {
  * rejected, Offline), the plan kind, an optional endpoint, and the enabled
  * models. Unlike a connector, a provider carries an explicit status, so error
  * states (a rejected key, a rate limit) show on the same card layout.
+ *
+ * Any other prop (`data-*`, `aria-*`, `style`, event handlers) is a rest prop
+ * and goes to the root `div`. Things to know:
+ * - `id` is the provider id, not a DOM id; pass `data-id` or wrap the card if you
+ *   need one.
+ * - Do not spread a whole API object into the card (`<ProviderCard {...item} />`):
+ *   fields the card does not know, such as `hidden`, `title` or `createdAt`,
+ *   are forwarded to the DOM. They hide the card, show as a tooltip or raise
+ *   React unknown-prop warnings. Pick the props you mean to pass.
+ * - A click handler (`onClick`) on the card also receives clicks from the
+ *   Edit and Disconnect buttons, because clicks bubble. Check `event.target`
+ *   or call `event.stopPropagation()` in the button handlers if that matters.
+ * - `aria-label` needs a `role` on a plain `div` (for example `role="group"`);
+ *   without one it is not valid ARIA. Avoid `role="button"`, which would nest
+ *   the card's buttons inside a button.
  */
 export function ProviderCard({
   id,
@@ -60,9 +76,10 @@ export function ProviderCard({
   onEdit,
   onDisconnect,
   className,
+  ...rest
 }: ProviderCardProps) {
   return (
-    <Card withBorder radius="lg" padding="md" className={clsx('upmo-provider-card', className)}>
+    <Card {...rest} withBorder radius="lg" padding="md" className={clsx('upmo-provider-card', className)}>
       <Stack justify="space-between" h="100%" gap="md">
         <div>
           <Group justify="space-between" align="flex-start" wrap="nowrap">

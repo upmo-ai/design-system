@@ -42,6 +42,20 @@ called in every layout, the flyout trigger included.
 Slots that adapt to the rail read `useAppFrame().rail`; inside the drawer it is
 always `false`, so the header shows in full there.
 
+The drawer is always as tall as the viewport, with the whole navigation in it
+and the `footer` slot pinned to the bottom edge. Its layout class
+(`upmo-app-frame__drawer`) sits on the Mantine Drawer content only; the
+full-viewport `.mantine-Drawer-inner` wrapper keeps Mantine's own layout. Before
+this was fixed (1.1.1), the class also landed on the wrapper and the drawer
+measured about 248px tall with the navigation cut off.
+
+:::note[Dropping the old workaround]
+If your app carries the workaround rule
+`.mantine-Drawer-inner.upmo-app-frame__drawer { flex-direction: row; background: none }`,
+it is harmless now: the wrapper no longer has the class, so the rule matches
+nothing. You can delete it.
+:::
+
 The frame's CSS uses logical properties, and the rail tooltips and flyouts sit
 at the inline end: for right-to-left, set `dir="rtl"` and wrap the app in
 Mantine's `DirectionProvider`, which flips them to the left.
@@ -135,3 +149,87 @@ names the outcome ("Remove member"). Destructive confirms turn the confirm
 button red, and still name the consequence, colour is never the sole signal.
 Cancel is the safe default; prefer undo over confirm where the action is safely
 reversible.
+
+## BrandMark
+
+`BrandMark` draws a service's official mark from `@upmo-ai/brands`, inline, in
+its own colours (`monochrome` uses the text colour instead). The `brand` id is
+case-insensitive. Some services also answer to the id people tend to type:
+`gemini` resolves to the `googlegemini` mark, `google-calendar` to
+`googlecalendar` and `google-drive` to `googledrive`. The alias map is exported
+from `@upmo-ai/brands` as `aliases`. An unknown id shows a plug (connector) or
+server (provider) glyph. A mark for a service that is not in the package is not
+drawn by hand: it is added only from the brand's own published artwork.
+
+```tsx
+<BrandMark brand="google-drive" size={28} />
+<BrandMark brand="gemini" kind="provider" />
+```
+
+## Connect surfaces
+
+The connect surfaces are the pieces of a "connect a service" flow:
+`BrandTileGrid`, `ConnectWizard`, `TestConnectionPanel`, and the `ConnectorCard`
+and `ProviderCard` that show what is already connected.
+
+**BrandTileGrid** is the pick-a-service step. Each tile is a toggle button
+(`aria-pressed`) named by the brand name alone, so a lookup such as
+`getByRole('button', { name: 'OpenAI' })` finds it. The `adapter` and
+`description` are the tile's accessible description (`aria-describedby`): they
+stay visible, and a screen reader reads them after the name.
+
+**ConnectorCard and ProviderCard** send their rest props, any prop the card
+does not use itself, to the root `div`: `data-*`, `aria-*`, `role`, `style` and
+event handlers. Their `id` is the connector or provider id (also the brand
+key), not a DOM id, so it is not rendered.
+
+```tsx
+<ProviderCard id="openai" name="OpenAI" status="Connected" planKind="metered" data-testid="provider-openai" />
+```
+
+Four things to watch for:
+
+- Do not spread a whole API object into the card, as in
+  `<ConnectorCard {...connectorFromApi} />`. Fields the card does not know,
+  such as `hidden`, `title` or `createdAt`, are forwarded to the DOM: `hidden`
+  hides the card, `title` becomes a tooltip, and unknown fields raise React
+  warnings. Pass the props you mean to.
+- A click handler on the card (`onClick`) also receives clicks from the Edit
+  and Disconnect buttons, because clicks bubble. Check `event.target`, or call
+  `event.stopPropagation()` in the button handlers, if the card should react
+  only to clicks on its own surface.
+- `aria-label` needs a `role` on a plain `div`. Pair it with a valid role such
+  as `role="group"`; on its own it is not valid ARIA.
+- Avoid `role="button"` on the card: it would nest the Edit and Disconnect
+  buttons inside a button.
+
+```tsx
+<ConnectorCard
+  id="github"
+  name="GitHub"
+  resourceScope="all"
+  changes="ask"
+  role="group"
+  aria-label="GitHub connector"
+/>
+```
+
+**ConnectWizard** is a stepper that only goes back; forward movement comes from
+your own Next buttons. Give a step `disabled` to lock it. A disabled step still
+shows in the stepper, dimmed with a not-allowed cursor, but it cannot be
+selected: a click does nothing, it is out of the tab order and it is exposed as
+`aria-disabled`. Use it for edit
+flows where the first step, the service, must not change. Start such a flow on
+the step you want (`active={1}`); the wizard never moves `active` for you.
+
+```tsx
+<ConnectWizard
+  active={1}
+  onStepChange={setActive}
+  steps={[
+    { label: 'Tool', description: 'GitHub', content: <p>The service cannot change.</p>, disabled: true },
+    { label: 'Authentication', content: <TokenStep /> },
+    { label: 'Permissions', content: <ScopeStep /> },
+  ]}
+/>
+```

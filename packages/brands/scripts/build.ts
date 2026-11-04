@@ -1,5 +1,5 @@
 import { copyFileSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { checkMark, checkSource, describeBrand, type Brand, type Source, toMark, toModule } from './lib.ts';
+import { checkAliases, checkMark, checkSource, describeBrand, type Brand, type Source, toMark, toModule } from './lib.ts';
 
 const assetsRoot = new URL('../assets/', import.meta.url);
 const dist = new URL('../dist/', import.meta.url);
@@ -40,13 +40,24 @@ function group(folder: string, dir: string, sourced: boolean): Brand[] {
 
 mkdirSync(dist, { recursive: true });
 const manifest = { brands: group('brands', '', true), languages: group('languages', 'languages/', false) };
+// Alternative ids for marks, checked against the marks that exist.
+const aliases: Record<string, string> = JSON.parse(
+  readFileSync(new URL('../aliases.json', import.meta.url), 'utf8'),
+);
+errors.push(
+  ...checkAliases(
+    aliases,
+    manifest.brands.map((b) => b.id),
+    manifest.languages.map((l) => l.id),
+  ).map((p) => `aliases.json: ${p}`),
+);
 if (errors.length) {
   console.error(errors.join('\n'));
   process.exit(1);
 }
-const { js, dts } = toModule(manifest, marks);
+const { js, dts } = toModule(manifest, marks, aliases);
 writeFileSync(new URL('brands.json', dist), JSON.stringify(manifest, null, 2) + '\n');
 writeFileSync(new URL('index.js', dist), js);
 writeFileSync(new URL('index.d.ts', dist), dts);
 
-console.log(`brands: ${manifest.brands.length} brands, ${manifest.languages.length} languages`);
+console.log(`brands: ${manifest.brands.length} brands, ${manifest.languages.length} languages, ${Object.keys(aliases).length} aliases`);

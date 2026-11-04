@@ -102,6 +102,26 @@ describe('AppFrame navigation landmarks', () => {
   });
 });
 
+describe('AppFrame drawer classes', () => {
+  // Mantine copies a plain `className` onto both the dialog and its
+  // full-viewport `inner` wrapper. The layout class on the wrapper made it a
+  // column whose height `flex: 0 0 var(--sidebar)` collapsed to ~248px, so the
+  // layout class must sit on the dialog alone. The measured version of this
+  // check is app-frame-drawer.browser.test.ts.
+  it('puts the drawer layout class on the dialog and leaves the wrapper neutral', async () => {
+    atWidth('medium');
+    renderThemed(frame());
+    fireEvent.click(screen.getByRole('button', { name: 'Open navigation' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Navigation' });
+    expect(dialog).toHaveClass('upmo-app-frame__drawer');
+    const wrapper = dialog.closest('.mantine-Drawer-inner');
+    expect(wrapper).not.toBeNull();
+    expect(wrapper).not.toBe(dialog);
+    expect(wrapper).not.toHaveClass('upmo-app-frame__drawer');
+    expect(document.querySelectorAll('.upmo-app-frame__drawer')).toHaveLength(1);
+  });
+});
+
 describe('AppFrame on a wide screen', () => {
   it('renders the rail slots, the navigation landmark, the top bar and the main region', () => {
     atWidth(true);

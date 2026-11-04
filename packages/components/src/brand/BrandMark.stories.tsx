@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Group, Stack, Text } from '@mantine/core';
-import { brands } from '@upmo-ai/brands';
+import { aliases, brands } from '@upmo-ai/brands';
 import { BrandMark } from './BrandMark.tsx';
 
 const meta: Meta<typeof BrandMark> = {
@@ -23,6 +23,25 @@ export const AllColorful: Story = {
           <BrandMark brand={b.id} size={36} />
           <Text size="xs" c="dimmed" ta="center" style={{ wordBreak: 'break-word' }}>
             {b.id}
+          </Text>
+        </Stack>
+      ))}
+    </Group>
+  ),
+};
+
+/** Alternative ids resolve to the same mark as the id they point at. */
+export const Aliases: Story = {
+  render: () => (
+    <Group gap="lg">
+      {Object.entries(aliases).map(([alias, id]) => (
+        <Stack key={alias} align="center" gap={4} w={110}>
+          <BrandMark brand={alias} size={36} />
+          <Text size="xs" c="dimmed" ta="center" style={{ wordBreak: 'break-word' }}>
+            {alias}
+          </Text>
+          <Text size="xs" c="dimmed" ta="center">
+            {id}
           </Text>
         </Stack>
       ))}

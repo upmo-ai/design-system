@@ -57,3 +57,19 @@ export const Grid: Story = {
     </SimpleGrid>
   ),
 };
+
+/** Extra attributes (data-*, aria-*) reach the root element. */
+export const WithAttributes: Story = {
+  render: () => (
+    <ProviderCard
+      id="gemini"
+      name="Gemini"
+      adapter="Google"
+      status="Connected"
+      planKind="metered"
+      data-testid="provider-gemini"
+      aria-label="Gemini provider"
+      role="group"
+    />
+  ),
+};

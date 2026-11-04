@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { checkMark, checkSource, describeBrand, type Source, toMark } from '../scripts/lib.ts';
+import { checkAliases, checkMark, checkSource, describeBrand, type Source, toMark, toModule } from '../scripts/lib.ts';
 
 const svg = (body: string, attrs = '') =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true"${attrs}>${body}</svg>`;
@@ -48,6 +48,57 @@ describe('checkSource', () => {
   });
 });
 
+describe('checkAliases', () => {
+  const ids = ['googlegemini', 'googledrive'];
+
+  it('accepts lowercase aliases that point at a mark', () => {
+    expect(checkAliases({ gemini: 'googlegemini', 'google-drive': 'googledrive' }, ids)).toEqual([]);
+  });
+
+  it('accepts the Google and Microsoft aliases people type', () => {
+    const aliases = JSON.parse(readFileSync(new URL('../aliases.json', import.meta.url), 'utf8'));
+    const brands = readdirSync(new URL('../assets/brands/', import.meta.url)).map((f) => f.replace(/\.svg$/, ''));
+    const languages = readdirSync(new URL('../assets/languages/', import.meta.url)).map((f) => f.replace(/\.svg$/, ''));
+    expect(aliases).toMatchObject({
+      'google-docs': 'googledocs',
+      'google-sheets': 'googlesheets',
+      'google-cloud': 'googlecloud',
+      'microsoft-teams': 'microsoftteams',
+    });
+    expect(checkAliases(aliases, brands, languages)).toEqual([]);
+  });
+
+  it('rejects an alias that shadows a language id', () => {
+    const errors = checkAliases({ python: 'googlegemini' }, ids, ['python', 'typescript']);
+    expect(errors).toEqual(['alias "python" is also a mark id']);
+    expect(checkAliases({ python: 'googlegemini' }, ids)).toEqual([]);
+  });
+
+  it('rejects an alias that shadows a mark, points nowhere or is not lowercase', () => {
+    const errors = checkAliases({ googledrive: 'googlegemini', docs: 'nothing', 'Google-Drive': 'googledrive' }, ids).join('\n');
+    expect(errors).toContain('"googledrive" is also a mark id');
+    expect(errors).toContain('"docs" points at "nothing"');
+    expect(errors).toContain('"Google-Drive" must be lowercase');
+  });
+});
+
+describe('toModule aliases', () => {
+  const manifest = { brands: [], languages: [] };
+
+  it('exports the alias map and a type for its keys', () => {
+    const { js, dts } = toModule(manifest, {}, { gemini: 'googlegemini' });
+    expect(js).toContain('export const aliases = {\n  "gemini": "googlegemini"\n};');
+    expect(dts).toContain('export type BrandAlias = "gemini";');
+    expect(dts).toContain('export declare const aliases: Readonly<Record<BrandAlias, BrandId>>;');
+  });
+
+  it('exports an empty map when there are no aliases', () => {
+    const { js, dts } = toModule(manifest, {});
+    expect(js).toContain('export const aliases = {};');
+    expect(dts).toContain('export type BrandAlias = never;');
+  });
+});
+
 describe('describeBrand', () => {
   it('treats a single near-black mark as deep and a black-and-white tile as colourful', () => {
     expect(describeBrand('a.svg', svg('<path fill="#000" d="M0 0"/>')).deep).toBe(true);
@@ -90,5 +141,16 @@ describe('the shipped marks', () => {
   it('has no source entry without a mark', () => {
     const ids = new Set(files.map((f) => f.replace(/\.svg$/, '')));
     expect(Object.keys(sources).filter((id) => !ids.has(id))).toEqual([]);
+  });
+
+  it('ships aliases for gemini, google-calendar and google-drive, each pointing at a mark', () => {
+    const aliases: Record<string, string> = JSON.parse(readFileSync(new URL('aliases.json', root), 'utf8'));
+    const ids = files.map((f) => f.replace(/\.svg$/, ''));
+    expect(checkAliases(aliases, ids)).toEqual([]);
+    expect(aliases).toMatchObject({
+      gemini: 'googlegemini',
+      'google-calendar': 'googlecalendar',
+      'google-drive': 'googledrive',
+    });
   });
 });
