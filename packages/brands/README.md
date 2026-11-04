@@ -38,6 +38,19 @@ import { BrandMark } from '@upmo-ai/components';
 <BrandMark brand="anthropic" kind="provider" monochrome />;
 ```
 
+Some marks also answer to the id people tend to type. `aliases` maps those ids
+to the mark id (`gemini` to `googlegemini`, `google-calendar` to
+`googlecalendar`, `google-docs` to `googledocs`, `google-drive` to
+`googledrive`, `microsoft-teams` to `microsoftteams`, and so on), and `BrandMark` resolves
+them for you. Look ids up in lowercase:
+
+```ts
+import { aliases, marks } from '@upmo-ai/brands';
+
+const key = 'Google-Drive'.toLowerCase();
+const mark = marks[key] ?? marks[aliases[key as keyof typeof aliases]];
+```
+
 `BrandMark` falls back to a plug (connector) or server (provider) glyph for an
 unknown brand. The package also exposes `@upmo-ai/brands/brands.json` (the
 manifest) and `@upmo-ai/brands/svg/*` (one SVG file per mark).

@@ -72,6 +72,26 @@ export function checkSource(source: Partial<Source> | undefined): string[] {
   return missing.map((k) => `source is missing "${k}"`);
 }
 
+// Alternative ids for a mark (the id a consumer is likely to type: "gemini" for
+// the "googlegemini" mark). Each alias is lowercase and may use hyphens, must
+// not shadow a real mark id (a brand or a language id, since both live in
+// `marks`), and must point at a brand mark that exists.
+export function checkAliases(
+  aliases: Record<string, string>,
+  ids: Iterable<string>,
+  languageIds: Iterable<string> = [],
+): string[] {
+  const known = new Set(ids);
+  const markIds = new Set([...known, ...languageIds]);
+  const errors: string[] = [];
+  for (const [alias, target] of Object.entries(aliases)) {
+    if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(alias)) errors.push(`alias "${alias}" must be lowercase letters, digits and hyphens`);
+    if (markIds.has(alias)) errors.push(`alias "${alias}" is also a mark id`);
+    if (!known.has(target)) errors.push(`alias "${alias}" points at "${target}", which is not a mark`);
+  }
+  return errors;
+}
+
 // dir is the folder under svg/ the file is published in ('' for brands,
 // 'languages/' for language marks).
 export function describeBrand(file: string, svg: string, dir = ''): Brand {
@@ -145,6 +165,7 @@ export function toMark(svg: string, brand: Brand): string {
 export function toModule(
   { brands, languages }: Manifest,
   marks: Record<string, string>,
+  aliases: Record<string, string> = {},
 ): { js: string; dts: string } {
   const head =
     '// Generated from assets/brands and assets/languages by scripts/build.ts. Do not edit.\n';
@@ -156,6 +177,9 @@ export function toModule(
     // marks: id -> the inner SVG markup, so a React component can inline a mark
     // (colourful or currentColor) without a network request.
     `export const marks = ${JSON.stringify(marks, null, 2)};`,
+    // aliases: alternative id -> mark id, for ids people type that differ from
+    // the mark file name ("gemini" -> "googlegemini"). Look up in lowercase.
+    `export const aliases = ${JSON.stringify(aliases, null, 2)};`,
   ];
   const entry = (name: string, idType: string) => [
     `export interface ${name} {`,
@@ -170,11 +194,13 @@ export function toModule(
   const dts = [
     `export type BrandId = ${union(brands)};`,
     `export type LanguageId = ${union(languages)};`,
+    `export type BrandAlias = ${Object.keys(aliases).length ? Object.keys(aliases).map((a) => JSON.stringify(a)).join(' | ') : 'never'};`,
     ...entry('Brand', 'BrandId'),
     ...entry('Language', 'LanguageId'),
     'export declare const brands: readonly Brand[];',
     'export declare const languages: readonly Language[];',
     'export declare const marks: Record<string, string>;',
+    'export declare const aliases: Readonly<Record<BrandAlias, BrandId>>;',
   ];
   return { js: head + js.join('\n') + '\n', dts: head + dts.join('\n') + '\n' };
 }

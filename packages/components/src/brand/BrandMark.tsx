@@ -1,11 +1,15 @@
 import { IconPlug, IconServer } from '@tabler/icons-react';
-import { marks } from '@upmo-ai/brands';
+import { aliases, marks } from '@upmo-ai/brands';
 import clsx from 'clsx';
 
 export type BrandKind = 'connector' | 'provider';
 
 export interface BrandMarkProps {
-  /** The brand id, e.g. "github", "slack", "anthropic". Case-insensitive. */
+  /**
+   * The brand id, e.g. "github", "slack", "anthropic". Case-insensitive. Common
+   * alternative ids resolve to the same mark ("gemini" for "googlegemini",
+   * "google-drive" for "googledrive"); see `aliases` in @upmo-ai/brands.
+   */
   brand: string;
   /** Pixel size. Default 24. */
   size?: number;
@@ -22,12 +26,23 @@ export interface BrandMarkProps {
   className?: string;
 }
 
+const own = (record: Record<string, string>, key: string): string | undefined =>
+  Object.hasOwn(record, key) ? record[key] : undefined;
+
+/** The mark markup for an id or alias, case-insensitive; undefined when unknown. */
+function markFor(brand: string): string | undefined {
+  const key = brand.trim().toLowerCase();
+  const alias = own(aliases, key);
+  return own(marks, key) ?? (alias === undefined ? undefined : own(marks, alias));
+}
+
 /**
  * BrandMark renders a service's official mark (connectors and providers) from
  * @upmo-ai/brands: the full set of colourful brand SVGs, inlined so they need no
  * network request. Marks are shown in their official colours by default; pass
- * monochrome to draw them in the current text colour. Unknown brands fall back
- * to a generic plug (connector) or server (provider) glyph.
+ * monochrome to draw them in the current text colour. Ids are case-insensitive
+ * and a few alternative ids resolve through the `aliases` map. Unknown brands
+ * fall back to a generic plug (connector) or server (provider) glyph.
  */
 export function BrandMark({
   brand,
@@ -36,8 +51,7 @@ export function BrandMark({
   monochrome,
   className,
 }: BrandMarkProps) {
-  const key = brand.trim().toLowerCase();
-  const inner = marks[key];
+  const inner = markFor(brand);
 
   if (!inner) {
     const Fallback = kind === 'provider' ? IconServer : IconPlug;

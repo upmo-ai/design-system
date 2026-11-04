@@ -21,7 +21,16 @@ Everything runs in Docker; you need no local Node or pnpm. From the repo root:
 
 ```sh
 docker run --rm -v "$PWD":/w -w /w node:24.22.1 sh -c \
-  "corepack enable && pnpm install --frozen-lockfile && pnpm lint && pnpm test && pnpm build"
+  "corepack enable && pnpm install --frozen-lockfile && pnpm build && pnpm lint && pnpm test"
+```
+
+`pnpm test` runs in jsdom, which has no layout. A few checks need a real
+browser (for example the AppFrame drawer height). They skip when no Chromium is
+installed, and run in Playwright's image:
+
+```sh
+docker run --rm -v "$PWD":/w -w /w mcr.microsoft.com/playwright:v1.61.1-noble \
+  sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @upmo-ai/components test:browser"
 ```
 
 Run Storybook with a published port:

@@ -30,7 +30,8 @@
   "scripts": {
     "build": "tsup",
     "prepare": "tsup",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:browser": "node scripts/test-browser.mjs"
   },
   "peerDependencies": {
     "@mantine/core": "^9.7.4",
@@ -72,7 +73,9 @@
     "@upmo-ai/tokens": "workspace:1.1.0",
     "axe-core": "4.10.3",
     "dayjs": "^1.11.23",
+    "esbuild": "0.27.7",
     "jsdom": "^26.0.0",
+    "playwright-core": "1.61.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tsup": "^8.3.5"

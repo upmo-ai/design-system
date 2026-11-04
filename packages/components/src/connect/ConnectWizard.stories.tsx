@@ -107,3 +107,46 @@ export const Flow: Story = {
     );
   },
 };
+
+/**
+ * An edit flow: the service of an existing connection is locked. The first step
+ * is `disabled`, so it shows in the stepper but cannot be picked.
+ */
+export const EditLocked: Story = {
+  render: () => {
+    const [active, setActive] = useState(1);
+    return (
+      <ConnectWizard
+        active={active}
+        onStepChange={setActive}
+        steps={[
+          { label: 'Tool', description: 'GitHub', content: <p>The service cannot change.</p>, disabled: true },
+          {
+            label: 'Authentication',
+            description: 'Credentials',
+            content: (
+              <Stack maw={420}>
+                <PasswordInput label="Access token" placeholder="ghp_..." />
+                <Group justify="flex-end">
+                  <Button onClick={() => setActive(2)}>Next</Button>
+                </Group>
+              </Stack>
+            ),
+          },
+          {
+            label: 'Permissions',
+            description: 'Scope and changes',
+            content: (
+              <Group justify="flex-end">
+                <Button variant="default" onClick={() => setActive(1)}>
+                  Back
+                </Button>
+                <Button>Save</Button>
+              </Group>
+            ),
+          },
+        ]}
+      />
+    );
+  },
+};

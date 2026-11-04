@@ -153,7 +153,10 @@ export function AppFrame({
         <AppFrameContext value={drawerState}>
           <Drawer.Root opened={drawerOpened} onClose={closeDrawer} size="var(--sidebar)" zIndex="var(--z-modal)">
             <Drawer.Overlay zIndex="var(--z-overlay)" />
-            <Drawer.Content aria-label="Navigation" className="upmo-app-frame__drawer">
+            {/* Mantine puts `className` on both the content and its full-viewport
+                `inner` wrapper. The layout class belongs on the content only, so
+                it goes through `classNames`, which targets one selector. */}
+            <Drawer.Content aria-label="Navigation" classNames={{ content: 'upmo-app-frame__drawer' }}>
               <div className="upmo-app-frame__drawer-header">
                 {header}
                 <Drawer.CloseButton aria-label="Close navigation" />

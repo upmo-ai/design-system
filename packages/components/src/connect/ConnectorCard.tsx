@@ -1,5 +1,6 @@
 import { Badge, Card, Group, Stack, Text } from '@mantine/core';
 import clsx from 'clsx';
+import type { ComponentPropsWithoutRef } from 'react';
 import { Button } from '../Button/Button.tsx';
 import { Icon } from '../icon/Icon.tsx';
 import { BrandMark } from '../brand/BrandMark.tsx';
@@ -12,7 +13,8 @@ const policyMeta: Record<ChangesPolicy, { label: string; color: string }> = {
   block: { label: 'Block', color: 'red' },
 };
 
-export interface ConnectorCardProps {
+export interface ConnectorCardProps
+  extends Omit<ComponentPropsWithoutRef<'div'>, 'id' | 'children' | 'color'> {
   /** The connector id (also the brand key), e.g. "github". */
   id: string;
   name: string;
@@ -25,7 +27,6 @@ export interface ConnectorCardProps {
   changes: ChangesPolicy;
   onEdit?: () => void;
   onDisconnect?: () => void;
-  className?: string;
 }
 
 /**
@@ -33,6 +34,21 @@ export interface ConnectorCardProps {
  * a "Connected" status, and the permission summary (what it can reach, and the
  * changes policy of Allow / Ask first / Block). Actions edit the permissions or
  * disconnect. A connector that exists is connected, so the status is implicit.
+ *
+ * Any other prop (`data-*`, `aria-*`, `style`, event handlers) is a rest prop
+ * and goes to the root `div`. Things to know:
+ * - `id` is the connector id, not a DOM id; pass `data-id` or wrap the card if you
+ *   need one.
+ * - Do not spread a whole API object into the card (`<ConnectorCard {...item} />`):
+ *   fields the card does not know, such as `hidden`, `title` or `createdAt`,
+ *   are forwarded to the DOM. They hide the card, show as a tooltip or raise
+ *   React unknown-prop warnings. Pick the props you mean to pass.
+ * - A click handler (`onClick`) on the card also receives clicks from the
+ *   Edit and Disconnect buttons, because clicks bubble. Check `event.target`
+ *   or call `event.stopPropagation()` in the button handlers if that matters.
+ * - `aria-label` needs a `role` on a plain `div` (for example `role="group"`);
+ *   without one it is not valid ARIA. Avoid `role="button"`, which would nest
+ *   the card's buttons inside a button.
  */
 export function ConnectorCard({
   id,
@@ -44,11 +60,12 @@ export function ConnectorCard({
   onEdit,
   onDisconnect,
   className,
+  ...rest
 }: ConnectorCardProps) {
   const policy = policyMeta[changes];
 
   return (
-    <Card withBorder radius="lg" padding="md" className={clsx('upmo-connector-card', className)}>
+    <Card {...rest} withBorder radius="lg" padding="md" className={clsx('upmo-connector-card', className)}>
       <Stack justify="space-between" h="100%" gap="md">
         <div>
           <Group justify="space-between" align="flex-start" wrap="nowrap">

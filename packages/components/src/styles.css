@@ -1137,6 +1137,21 @@ button.upmo-liveness:hover {
   padding-top: var(--space-4);
 }
 
+/* A locked step (ConnectWizardStep.disabled) is dimmed and shows a
+   not-allowed cursor, so it reads as unavailable and not just unclickable.
+   Only the locked step is dimmed; the other steps keep full contrast. */
+.upmo-connect-wizard .mantine-Stepper-step[aria-disabled='true'] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+@media (forced-colors: active) {
+  /* Opacity is not a reliable cue here; the system disabled colour is. */
+  .upmo-connect-wizard .mantine-Stepper-step[aria-disabled='true'] {
+    opacity: 1;
+    color: GrayText;
+  }
+}
+
 /* Step transition: content fades and slides in when the active step changes
    (the key change remounts it). Honours reduced motion. */
 .upmo-step-enter {
@@ -1974,6 +1989,10 @@ button.upmo-liveness:hover {
   outline: none;
 }
 
+/* The drawer class sits on the Mantine Drawer content only. Mantine's full-
+   viewport `.mantine-Drawer-inner` wrapper is left to its own row layout: a
+   column on the wrapper turned the content's `flex: 0 0 var(--sidebar)` into a
+   height, so the drawer measured about 248px tall. */
 .upmo-app-frame__rail,
 .upmo-app-frame__drawer {
   display: flex;

@@ -134,3 +134,28 @@ export const Phone: Story = {
   render: () => <Frame />,
   globals: { viewport: { value: 'mobile1', isRotated: false } },
 };
+
+/** Opens the navigation drawer, as a user does from the top bar toggle. */
+function openDrawer({ canvasElement }: { canvasElement: HTMLElement }) {
+  canvasElement.ownerDocument.querySelector<HTMLButtonElement>('button[aria-label="Open navigation"]')?.click();
+}
+
+/** Tablet width: the icon rail, with the toggle opening the full navigation as a drawer. */
+export const Tablet: Story = {
+  render: () => <Frame />,
+  globals: { viewport: { value: 'tablet', isRotated: false } },
+};
+
+/** The drawer open at phone width: full viewport height, the whole navigation visible. */
+export const PhoneDrawerOpen: Story = {
+  render: () => <Frame />,
+  globals: { viewport: { value: 'mobile1', isRotated: false } },
+  play: openDrawer,
+};
+
+/** The drawer open at tablet width: full viewport height, the whole navigation visible. */
+export const TabletDrawerOpen: Story = {
+  render: () => <Frame />,
+  globals: { viewport: { value: 'tablet', isRotated: false } },
+  play: openDrawer,
+};
