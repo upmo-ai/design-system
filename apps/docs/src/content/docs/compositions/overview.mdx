@@ -178,8 +178,28 @@ and `ProviderCard` that show what is already connected.
 `description` are the tile's accessible description (`aria-describedby`): they
 stay visible, and a screen reader reads them after the name.
 
-**ConnectorCard and ProviderCard** send their rest props, any prop the card
-does not use itself, to the root `div`: `data-*`, `aria-*`, `role`, `style` and
+A selected tile keeps the emerald border and ground when you hover it, and only
+an unselected tile takes the hover style. In forced-colors mode the selected
+tile has a 2px `Highlight` border, so selection does not depend on colour.
+
+**TestConnectionPanel** is the Test button and a status area. The button is as
+wide as its label and starts at the left edge; the status area is always full
+width. To stretch the button across the panel, add the `upmo-testconn--full-width`
+class:
+
+```tsx
+<TestConnectionPanel state="idle" onTest={runTest} className="upmo-testconn--full-width" />
+```
+
+**ConnectorCard and ProviderCard** are built for a 320px grid cell, 288px of
+content inside the padding. The status badge ("Connected", "Not connected")
+keeps its content width and is never truncated; the title block gives up space
+first, so a long name wraps beside the badge. The actions are small buttons on
+one start-aligned row. They wrap onto a second row, still start-aligned, only
+when the card is too narrow for both.
+
+Both cards send their rest props, any prop the card does not use itself, to the
+root `div`: `data-*`, `aria-*`, `role`, `style` and
 event handlers. Their `id` is the connector or provider id (also the brand
 key), not a DOM id, so it is not rendered.
 

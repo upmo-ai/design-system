@@ -1087,6 +1087,39 @@ button.upmo-liveness:hover {
   color: var(--ink);
 }
 
+/* ConnectorCard and ProviderCard header: the title block yields space first (its
+   text wraps), and the status badge keeps its content width, never shrinking or
+   showing an ellipsis. Doubled selectors beat Mantine's single-class badge rules
+   whatever the stylesheet order. */
+.upmo-card-head__identity {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+.upmo-card-head__text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.upmo-card-head__status.mantine-Badge-root {
+  flex: 0 0 auto;
+  width: max-content;
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+.upmo-card-head__status .mantine-Badge-label {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+/* ConnectorCard and ProviderCard actions: one start-aligned row of small
+   buttons that wraps only when the card is too narrow for both. */
+.upmo-card-actions {
+  justify-content: flex-start;
+  row-gap: var(--space-2);
+}
+
 /* BrandTileGrid: selectable service tiles. */
 .upmo-brandtile {
   display: flex;
@@ -1101,13 +1134,27 @@ button.upmo-liveness:hover {
     border-color var(--duration-fast) var(--ease-standard),
     background-color var(--duration-fast) var(--ease-standard);
 }
-.upmo-brandtile:hover {
+/* Hover applies to unselected tiles only. The selected rule below also covers
+   its own :hover, so the selected look wins whatever the rule order. */
+.upmo-brandtile:hover:not(.upmo-brandtile--selected) {
   border-color: var(--border-strong);
   background: var(--surface-hover);
 }
-.upmo-brandtile--selected {
+.upmo-brandtile--selected,
+.upmo-brandtile--selected:hover {
   border: 2px solid var(--emerald-deep);
   background: var(--surface-selected);
+}
+@media (forced-colors: active) {
+  /* Backgrounds are replaced in forced-colors mode, so the border carries the
+     state: selected is Highlight and 2px, a hovered tile is CanvasText and 1px. */
+  .upmo-brandtile:hover:not(.upmo-brandtile--selected) {
+    border-color: CanvasText;
+  }
+  .upmo-brandtile--selected,
+  .upmo-brandtile--selected:hover {
+    border-color: Highlight;
+  }
 }
 .upmo-brandtile__mark {
   color: var(--ink);
@@ -1173,11 +1220,19 @@ button.upmo-liveness:hover {
   }
 }
 
-/* TestConnectionPanel: the Test button + a toned status panel. */
+/* TestConnectionPanel: the Test button + a toned status panel. The button sizes
+   to its content; the status area is always full width. Pass the class
+   `upmo-testconn--full-width` to stretch the button too. */
 .upmo-testconn {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+}
+.upmo-testconn__button {
+  align-self: flex-start;
+}
+.upmo-testconn--full-width > .upmo-testconn__button {
+  align-self: stretch;
 }
 .upmo-testconn__status {
   display: flex;

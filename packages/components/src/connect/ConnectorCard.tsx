@@ -35,6 +35,11 @@ export interface ConnectorCardProps
  * changes policy of Allow / Ask first / Block). Actions edit the permissions or
  * disconnect. A connector that exists is connected, so the status is implicit.
  *
+ * Layout: the card is built for a 320px grid cell (288px of content). The status
+ * badge keeps its content width and never truncates; the title block gives up
+ * space first and wraps. The actions are small buttons on one start-aligned row,
+ * and wrap only when the card is too narrow for both.
+ *
  * Any other prop (`data-*`, `aria-*`, `style`, event handlers) is a rest prop
  * and goes to the root `div`. Things to know:
  * - `id` is the connector id, not a DOM id; pass `data-id` or wrap the card if you
@@ -68,21 +73,23 @@ export function ConnectorCard({
     <Card {...rest} withBorder radius="lg" padding="md" className={clsx('upmo-connector-card', className)}>
       <Stack justify="space-between" h="100%" gap="md">
         <div>
-          <Group justify="space-between" align="flex-start" wrap="nowrap">
-            <Group gap="sm" wrap="nowrap">
+          <Group justify="space-between" align="flex-start" wrap="nowrap" gap="sm">
+            <Group gap="sm" wrap="nowrap" className="upmo-card-head__identity">
               <span className="upmo-connector-card__mark">
                 <BrandMark brand={id} size={32} kind="connector" />
               </span>
               <Stack gap={2} style={{ minWidth: 0 }}>
-                <Text fw={600}>{name}</Text>
+                <Text fw={600} className="upmo-card-head__text">
+                  {name}
+                </Text>
                 {description ? (
-                  <Text size="xs" c="dimmed">
+                  <Text size="xs" c="dimmed" className="upmo-card-head__text">
                     {description}
                   </Text>
                 ) : null}
               </Stack>
             </Group>
-            <Badge variant="light" color="teal" radius="xl">
+            <Badge variant="light" color="teal" radius="xl" className="upmo-card-head__status">
               Connected
             </Badge>
           </Group>
@@ -112,14 +119,14 @@ export function ConnectorCard({
           </Stack>
         </div>
 
-        <Group justify="flex-end" gap="xs">
+        <Group justify="flex-start" gap="xs" wrap="wrap" className="upmo-card-actions">
           {onEdit ? (
-            <Button variant="default" leftSection={<Icon concept="action.settings" size={16} />} onClick={onEdit}>
+            <Button size="sm" variant="default" leftSection={<Icon concept="action.settings" size={16} />} onClick={onEdit}>
               Edit permissions
             </Button>
           ) : null}
           {onDisconnect ? (
-            <Button variant="subtle" color="red" leftSection={<Icon concept="action.disconnect" size={16} />} onClick={onDisconnect}>
+            <Button size="sm" variant="subtle" color="red" leftSection={<Icon concept="action.disconnect" size={16} />} onClick={onDisconnect}>
               Disconnect
             </Button>
           ) : null}

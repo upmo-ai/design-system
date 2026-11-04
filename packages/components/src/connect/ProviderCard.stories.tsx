@@ -58,6 +58,37 @@ export const Grid: Story = {
   ),
 };
 
+/**
+ * The card at 320px (288px of content), the width of a three-column grid. The
+ * longest status, "Not connected", keeps its width, a long name wraps beside
+ * it, and Edit and Disconnect sit on one row.
+ */
+export const NarrowCard: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 16, width: 320 }}>
+      <ProviderCard
+        id="anthropic"
+        name="Anthropic"
+        adapter="Anthropic (Claude)"
+        status="Not connected"
+        planKind="metered"
+        onEdit={() => {}}
+        onDisconnect={() => {}}
+      />
+      <ProviderCard
+        id="openai"
+        name="A very long provider name that has to wrap"
+        adapter="OpenAI (GPT)"
+        status="Rate limited"
+        planKind="metered"
+        models={['gpt-5']}
+        onEdit={() => {}}
+        onDisconnect={() => {}}
+      />
+    </div>
+  ),
+};
+
 /** Extra attributes (data-*, aria-*) reach the root element. */
 export const WithAttributes: Story = {
   render: () => (

@@ -21,3 +21,21 @@ export const States: Story = {
     </Stack>
   ),
 };
+
+/**
+ * The Test button is as wide as its label. Add the `upmo-testconn--full-width`
+ * class to stretch it across the panel; the status area is full width either way.
+ */
+export const ButtonWidth: Story = {
+  render: () => (
+    <Stack maw={420} gap="xl">
+      <TestConnectionPanel state="success" latencyMs={128} onTest={() => {}} />
+      <TestConnectionPanel
+        state="success"
+        latencyMs={128}
+        onTest={() => {}}
+        className="upmo-testconn--full-width"
+      />
+    </Stack>
+  ),
+};

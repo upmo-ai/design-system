@@ -21,6 +21,10 @@ export interface TestConnectionPanelProps {
   error?: string;
   /** Test button label. Default "Test connection". */
   testLabel?: string;
+  /**
+   * Extra class names for the panel root. The Test button sizes to its content;
+   * add `upmo-testconn--full-width` to stretch it to the panel width.
+   */
   className?: string;
 }
 
@@ -40,6 +44,10 @@ const meta: Record<
  * Success shows the latency; error shows the message. The consumer gates the
  * final "Connect" on `state === "success"`, so a connection cannot be saved
  * without a passing test.
+ *
+ * The Test button is as wide as its label and starts at the panel's left edge;
+ * the status area is always full width. Pass `className="upmo-testconn--full-width"`
+ * to stretch the button across the panel.
  */
 export function TestConnectionPanel({
   state,
@@ -67,6 +75,7 @@ export function TestConnectionPanel({
       <Button
         type="button"
         variant="outline"
+        className="upmo-testconn__button"
         onClick={onTest}
         loading={state === 'testing'}
         disabled={state === 'testing'}
