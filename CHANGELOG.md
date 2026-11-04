@@ -2,6 +2,12 @@
 
 Release notes for the five @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 1.2.1 (2026-11-04)
+
+### Fixes
+
+- **components:** keep connect card badges and actions on one row at narrow widths (#7) ([70d4310](https://github.com/upmo-ai/design-system/commit/70d43100d43878d55736b0457bb9a3287f3028fb))
+
 ## 1.2.0 (2026-11-04)
 
 ### Features
