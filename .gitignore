@@ -22,3 +22,6 @@ dark-grounds.html
 *.tmp.html
 dark-liveliness.html
 .npmrc
+
+# Brand kit files copied in for the docs site (apps/docs/scripts/copy-brand.ts)
+apps/docs/public/brand/

@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "build:site": "pnpm --filter @upmo-ai/storybook build && astro build && node scripts/assemble-site.ts",
+    "dev": "node scripts/copy-brand.ts && astro dev",
+    "build": "node scripts/copy-brand.ts && astro build",
+    "build:site": "pnpm --filter @upmo-ai/storybook build && node scripts/copy-brand.ts && astro build && node scripts/assemble-site.ts",
     "preview": "astro preview",
     "lint": "astro check"
   },

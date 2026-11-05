@@ -1,0 +1,32 @@
+{
+  "name": "@upmo-ai/brand",
+  "version": "1.3.0",
+  "description": "The Upmo brand asset kit: wordmark and caret as SVG in light, dark and mono, favicon, app icons and the social share image.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "homepage": "https://design.upmo.dev/brand/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/upmo-ai/design-system.git",
+    "directory": "packages/brand"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./svg/*": "./dist/svg/*",
+    "./web/*": "./dist/web/*",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "prepare": "node scripts/build.ts",
+    "generate": "node scripts/generate.ts"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "2.6.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

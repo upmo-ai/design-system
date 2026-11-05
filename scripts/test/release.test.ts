@@ -1,5 +1,9 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { COMMIT_URL, classify, prependChangelog, renderChangelog, type Commit } from '../changelog.ts';
+import { PACKAGES, PKG_NAMES } from '../packages.ts';
 import { planRelease, previousTag, type Git } from '../plan.ts';
 import { bumpVersion, distTag, isBump } from '../version.ts';
 
@@ -265,5 +269,39 @@ describe('prependChangelog', () => {
     expect(prependChangelog('# Changelog\n', '1.0.0', '2026-08-13', 'First.')).toBe(
       '# Changelog\n\n## 1.0.0 (2026-08-13)\n\nFirst.\n',
     );
+  });
+});
+
+const repo = join(fileURLToPath(new URL('.', import.meta.url)), '..', '..');
+const readJson = (path: string) => JSON.parse(readFileSync(join(repo, path), 'utf8'));
+
+describe('lockstep package list', () => {
+  const published = readdirSync(join(repo, 'packages'))
+    .filter((dir) => !readJson(`packages/${dir}/package.json`).private)
+    .sort();
+
+  it('names every publishable package in the workspace', () => {
+    expect([...PACKAGES].sort()).toEqual(published);
+    expect(PKG_NAMES).toEqual(PACKAGES.map((p) => readJson(`packages/${p}/package.json`).name));
+  });
+
+  it('publishes exactly those packages, in the same order, from the release workflow', () => {
+    const workflow = readFileSync(join(repo, '.github/workflows/release.yml'), 'utf8');
+    const loop = workflow.match(/for pkg in ([a-z ]+); do/);
+    expect(loop, 'the publish loop in release.yml').not.toBeNull();
+    expect(loop![1].trim().split(/\s+/)).toEqual([...PACKAGES]);
+  });
+
+  it('keeps every package at the lockstep version', () => {
+    const { version } = readJson('version.json');
+    for (const pkg of PACKAGES) expect(readJson(`packages/${pkg}/package.json`).version, pkg).toBe(version);
+  });
+
+  it('says how many packages release together', () => {
+    const words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+    const count = `the ${words[PACKAGES.length]} @upmo-ai packages`;
+    const workflow = readFileSync(join(repo, '.github/workflows/release.yml'), 'utf8');
+    expect(workflow.replace(/\s+#\s*/g, ' ')).toContain(count);
+    expect(readFileSync(join(repo, 'CHANGELOG.md'), 'utf8')).toContain(count);
   });
 });

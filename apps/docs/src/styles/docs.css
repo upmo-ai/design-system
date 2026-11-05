@@ -156,3 +156,55 @@ nav.sidebar a[aria-current='page'] {
   outline-offset: 2px;
   border-radius: var(--radius-xs);
 }
+
+/* Brand page: each tile fixes its own theme with a data-theme attribute, so a
+   dark-ground variant is previewed on a dark ground whatever the site theme.
+   Forced colours would repaint every tile with the system canvas, which hides a
+   white mark on a white ground, so the tiles opt out and keep their ground. */
+.sl-markdown-content .brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--space-4);
+  list-style: none;
+  padding: 0;
+  margin: var(--space-3) 0 var(--space-6);
+}
+.sl-markdown-content .brand-card {
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-100);
+  overflow: hidden;
+}
+.sl-markdown-content .brand-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  padding: var(--space-4);
+  background: var(--surface-000);
+  border-bottom: 1px solid var(--border);
+  forced-color-adjust: none;
+}
+.sl-markdown-content .brand-tile img {
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+}
+.sl-markdown-content .brand-card__name,
+.sl-markdown-content .brand-card__note {
+  margin: 0;
+  padding: 0 var(--space-3);
+}
+.sl-markdown-content .brand-card__name {
+  margin-top: var(--space-3);
+  font-weight: 600;
+  color: var(--ink);
+}
+.sl-markdown-content .brand-card__note {
+  color: var(--ink-muted);
+}
+.sl-markdown-content .brand-card a {
+  display: inline-block;
+  margin: var(--space-2) var(--space-3) var(--space-3);
+}

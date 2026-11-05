@@ -1,6 +1,6 @@
 # Changelog
 
-Release notes for the five @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
+Release notes for the six @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
 ## 1.3.0 (2026-11-05)
 
