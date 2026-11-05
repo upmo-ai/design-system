@@ -1,6 +1,6 @@
 {
   "name": "@upmo-ai/theme",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "The Mantine 9 theme for Upmo, built from @upmo-ai/tokens. Exports the theme object, the CSS-variables resolver that maps Mantine onto Upmo tokens, and the color-scheme wiring.",
   "license": "AGPL-3.0-only",
   "type": "module",
@@ -30,7 +30,7 @@
     "@mantine/core": "^9.7.4"
   },
   "dependencies": {
-    "@upmo-ai/tokens": "workspace:1.2.1"
+    "@upmo-ai/tokens": "workspace:1.3.0"
   },
   "devDependencies": {
     "@mantine/core": "^9.7.4",

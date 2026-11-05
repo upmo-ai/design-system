@@ -2,6 +2,12 @@
 
 Release notes for the five @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 1.3.0 (2026-11-05)
+
+### Features
+
+- **components:** shell, chat and notification surfaces (#8) ([7274cde](https://github.com/upmo-ai/design-system/commit/7274cde21a244af77e1558b65045a73c864eb569))
+
 ## 1.2.1 (2026-11-04)
 
 ### Fixes
