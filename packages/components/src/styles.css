@@ -332,6 +332,10 @@
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius-lg);
 }
+.upmo-empty-state--compact {
+  padding-block: var(--space-4);
+  padding-inline: var(--space-2);
+}
 
 /* CodeBlock: sunken mono surface with a hairline border and a bar for the
    language label and copy button. No syntax highlighting. */
@@ -603,15 +607,76 @@ button.upmo-liveness:hover {
 }
 .upmo-composer__row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-1);
   margin-top: var(--space-1);
 }
+/* The pills and icons wrap onto further lines when they do not fit; send keeps
+   its slot at the inline end of the first line. */
+.upmo-composer__tools {
+  display: flex;
+  flex: 1 1 0;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-start;
+  gap: var(--space-1);
+  min-width: 0;
+  min-height: var(--control-sm);
+}
+.upmo-composer__send {
+  flex: none;
+  border-radius: var(--radius-full);
+}
 .upmo-composer__pill {
+  max-width: 100%;
+  min-width: 0;
   border-radius: var(--radius-full);
   background: var(--surface-200);
   color: var(--ink-secondary);
   font-weight: 600;
+}
+/* The compact toolbar tightens the pills so the model, attach, dictate, tools
+   and send fit one line at 360px. */
+.upmo-composer--compact .upmo-composer__pill {
+  padding-inline: var(--space-2);
+}
+/* A long pill label ends in an ellipsis instead of being cut off. */
+.upmo-composer__pill-inner {
+  min-width: 0;
+}
+.upmo-composer__pill-label {
+  min-width: 0;
+}
+.upmo-composer__pill-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.upmo-composer__menu {
+  max-width: min(320px, calc(100vw - var(--space-6)));
+}
+.upmo-composer__option {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.upmo-composer__option-description {
+  color: var(--ink-muted);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+  white-space: normal;
+}
+.upmo-composer__group {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.upmo-composer__group-value {
+  color: var(--ink-muted);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
 }
 .upmo-composer__pill:hover {
   background: var(--surface-hover);
@@ -619,12 +684,6 @@ button.upmo-liveness:hover {
 }
 .upmo-composer__icon {
   color: var(--ink-muted);
-}
-.upmo-composer__spacer {
-  flex: 1;
-}
-.upmo-composer__send {
-  border-radius: var(--radius-full);
 }
 .upmo-composer__hint {
   display: flex;
@@ -724,6 +783,60 @@ button.upmo-liveness:hover {
   font-family: var(--font-ui);
   font-size: var(--text-caption-size);
   text-align: center;
+}
+
+/* ChatThread: the scrolling message list. It fills the space its parent gives
+   it (flex: 1 1 0 with min-height: 0 lets it shrink, so the scroller, not the
+   page, takes the overflow). The jump button floats over the newest edge. */
+.upmo-chat-thread {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.upmo-chat-thread__scroller {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.upmo-chat-thread__scroller:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+.upmo-chat-thread__jump {
+  position: absolute;
+  inset-block-end: var(--space-3);
+  inset-inline: 0;
+  width: fit-content;
+  margin-inline: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  background: var(--surface-100);
+  box-shadow: var(--shadow-md);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--text-label-size);
+  font-weight: var(--text-label-weight);
+  line-height: var(--text-label-line);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+.upmo-chat-thread__jump:hover {
+  border-color: var(--emerald-deep);
+  color: var(--emerald-deep);
+}
+.upmo-chat-thread__jump:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 /* ToolCallTrace: a collapsible one-line summary over a JSON body. */
@@ -1889,6 +2002,12 @@ button.upmo-liveness:hover {
   flex: 1;
   max-width: 320px;
 }
+/* The scrolling region is a tab stop so keyboard users can scroll sideways;
+   the ring sits inside, clear of the table's outer border. */
+.upmo-datatable__scroll:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
 .upmo-datatable__filters {
   display: flex;
   align-items: center;
@@ -2042,6 +2161,31 @@ button.upmo-liveness:hover {
 
 .upmo-app-frame__main:focus {
   outline: none;
+}
+
+/* Fill mode: main is a viewport-tall column without padding, and the last child
+   grows into the space the others leave. The rules sit in :where() so a page's
+   own styles win. Border-box keeps the header offset inside the 100dvh.
+   Main starts at the top of the window, under the fixed top bar, so
+   scroll-padding keeps focused controls from scrolling in behind it. Mantine
+   animates main's padding with --app-shell-transition-duration; the padding
+   here is a layout switch between routes, not a collapse, so it does not slide. */
+:where(.upmo-app-frame__main[data-fill]) {
+  --app-shell-padding: 0px;
+  --app-shell-transition-duration: 0ms;
+  scroll-padding-top: var(--app-shell-header-offset, 0px);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+}
+:where(.upmo-app-frame__main[data-fill]) > :where(*) {
+  flex: none;
+}
+:where(.upmo-app-frame__main[data-fill]) > :where(:last-child) {
+  flex: 1 0 auto;
 }
 
 /* The drawer class sits on the Mantine Drawer content only. Mantine's full-
@@ -2343,6 +2487,97 @@ button.upmo-liveness:hover {
 @media (forced-colors: active) {
   .upmo-status-alert {
     border-inline-start-color: CanvasText;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   NotificationBell and NotificationItem: the bell with its unread badge, and
+   the popover list. The badge is a Badge, so the forced-colors border applies.
+--------------------------------------------------------------------------- */
+.upmo-icon-button.upmo-notification-bell {
+  overflow: visible;
+}
+.upmo-badge.upmo-notification-bell__badge {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  height: 16px;
+  min-width: 16px;
+  padding-inline: var(--space-1);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+  pointer-events: none;
+}
+.mantine-Popover-dropdown.upmo-notification-bell__dropdown {
+  max-height: min(480px, 70vh);
+  padding: 0;
+  overflow-y: auto;
+}
+.upmo-notification-bell__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-block-end: 1px solid var(--border);
+}
+.upmo-notification-bell__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.upmo-notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+}
+.upmo-notification-item + .upmo-notification-item {
+  border-block-start: 1px solid var(--border);
+}
+.upmo-notification-item__icon {
+  display: inline-flex;
+  flex: none;
+  margin-block-start: 2px;
+  color: var(--ink-secondary);
+}
+.upmo-notification-item__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.upmo-notification-item__title {
+  font-family: var(--font-ui);
+  font-size: var(--text-body-sm-size);
+  line-height: var(--text-body-sm-line);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.upmo-notification-item--unread .upmo-notification-item__title {
+  font-weight: var(--text-label-weight);
+}
+.upmo-notification-item__meta {
+  margin-block-start: 2px;
+  font-family: var(--font-ui);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+  color: var(--ink-muted);
+}
+.upmo-notification-item__extra,
+.upmo-notification-item__action {
+  margin-block-start: var(--space-2);
+}
+.upmo-notification-item__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-block-start: var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--emerald-deep);
+}
+@media (forced-colors: active) {
+  .upmo-notification-item__dot {
+    forced-color-adjust: none;
+    background: CanvasText;
   }
 }
 

@@ -82,6 +82,122 @@ Mantine's `DirectionProvider`, which flips them to the left.
 </AppFrame>
 ```
 
+### Controlling the drawer
+
+Below md the toggle opens the drawer. The frame keeps that state itself, and you
+can hold it instead: `drawerOpened` and `onDrawerOpenedChange` control it, and
+`defaultDrawerOpened` sets the starting state when you leave it uncontrolled.
+`onDrawerOpenedChange` is called for every way the drawer opens or closes: the
+toggle, Escape, the scrim, the close button, a chosen `NavItem`, `closeDrawer()`
+from `useAppFrame()`, and the viewport widening to md with the drawer open. From
+md there is no drawer, so `drawerOpened` is ignored there; the rail stays
+available and the toggle collapses it as before.
+
+If the viewport widens past md while the drawer is open, the drawer closes, the
+rail behind it stops being inert, and narrowing again does not bring the drawer
+back. When focus was inside the drawer, it moves to the navigation toggle in the
+top bar, so the next Tab continues from there and not from the top of the page.
+
+### The navigation shortcut
+
+The frame does not bind a keyboard shortcut. Ctrl+B or Cmd+B is common for
+toggling navigation, and it stays in your app, where you know what else claims
+the key. The controlled props make it short to write: collapse the rail from
+md, toggle the drawer below it.
+
+```tsx
+const theme = useMantineTheme();
+const wide = useMediaQuery(`(min-width: ${theme.breakpoints.md})`, true, { getInitialValueInEffect: false });
+const [collapsed, setCollapsed] = useState(false);
+const [drawerOpened, setDrawerOpened] = useState(false);
+
+useEffect(() => {
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key.toLowerCase() !== 'b' || !(e.metaKey || e.ctrlKey)) return;
+    if (e.altKey || e.shiftKey || e.repeat || e.isComposing) return;
+    e.preventDefault(); // Firefox: Ctrl+B opens the bookmarks sidebar
+    if (wide) setCollapsed((c) => !c);
+    else setDrawerOpened((o) => !o);
+  };
+  window.addEventListener('keydown', onKey);
+  return () => window.removeEventListener('keydown', onKey);
+}, [wide]);
+
+<AppFrame
+  collapsed={collapsed}
+  onCollapsedChange={setCollapsed}
+  drawerOpened={drawerOpened}
+  onDrawerOpenedChange={setDrawerOpened}
+  /* header, navigation, footer, topBar */
+>
+  {page}
+</AppFrame>
+```
+
+Three things to know:
+
+- Keydown events still reach `window` while the drawer traps focus, so the same
+  shortcut closes it. Focus returns to what had it before the drawer opened.
+- Skip the shortcut inside rich-text editors, where Ctrl+B means bold.
+- Use the same `md` breakpoint as the frame, so the shortcut and the toggle
+  always agree on whether there is a drawer.
+
+### A page that fills the main region
+
+By default `main` is a padded column that grows with the page. Set `fill` for a
+page that owns its height, such as a chat. Main then becomes a viewport-tall
+column without padding, and it scrolls if its content overflows. Children keep
+their own height except the last one, which grows to fill what is left. Alerts
+or offers above it keep their size. `mainClassName` adds your class to the main
+region for anything else.
+
+```tsx
+<AppFrame fill mainClassName="chat-main" /* ... */>
+  {banner}
+  <section className="chat-page" aria-label="Messages">
+    <div className="chat-thread">{messages}</div>
+    <Composer /* ... */ />
+  </section>
+</AppFrame>
+```
+
+The last child grows to fill the space, but it cannot shrink below its content.
+So the page has to let its scrolling part give way. Put `min-height: 0` on the
+page and `flex: 1 1 0` on the part that scrolls (the thread), and leave the
+composer at its natural height:
+
+```css
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.chat-thread {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+```
+
+With a plain `overflow-y: auto` thread and no `flex: 1 1 0`, the thread grows to
+the height of all its messages, main scrolls instead, and the composer scrolls
+out of view.
+
+Things to know:
+
+- Fill the space with the last child. A trailing portal or a hidden live region
+  rendered as the last child would take the space instead, so render those
+  earlier or inside the page.
+- The styles for `fill` have zero specificity, so your own rules on the page and
+  on `mainClassName` always win.
+- Main starts at the top of the window, under the fixed top bar. It sets
+  `scroll-padding-top` to the bar's height, so a focused control that main
+  scrolls into view stops below the bar and not behind it.
+- Switching `fill` on does not animate main's padding. Mantine slides it when
+  the rail collapses; with `fill` the padding is a layout switch between
+  routes, so it changes at once. Switching `fill` off again still slides the
+  padding back in.
+
 ## Wordmark
 
 The Upmo wordmark as an inline SVG: "up" and the caret in the brand emerald,
@@ -131,10 +247,110 @@ A dense data table with a sticky header on the sunken ground. Use `Table.Num`
 for right-aligned tabular figures and `Table.Mono` for ids and keys. Wrap in
 `Table.ScrollContainer` for narrow screens.
 
+### DataTable
+
+`DataTable` adds a toolbar (search and a filter slot) and a footer (summary and
+pagination) around `Table`. Give every table a name, so a screen reader user can
+find it among the tables on a page. Three ways, in order of preference:
+
+- `caption` shows a visible caption above the rows and names the table with it.
+- `aria-labelledby` points at a heading above the table.
+- `aria-label` names the table when there is no visible text to point at.
+
+Nothing warns when the name is missing, so check it yourself.
+
+`minWidth` is the width, in px or any CSS length, below which the table scrolls
+sideways instead of squeezing its columns. It defaults to 480. A table with two
+short columns can use a smaller value, so it does not scroll on a phone.
+
+The scrolling part is a tab stop, so a keyboard user can focus it and scroll
+sideways with the arrow keys, even when no cell has a link or a button. It is a
+region that carries the table's name, and it shows the focus ring when focused.
+An unnamed table is still a tab stop, but is not announced as a region.
+
+```tsx
+<DataTable
+  caption="Remembered facts"
+  minWidth={320}
+  columns={columns}
+  rows={rows}
+  rowKey={(row) => row.id}
+/>
+```
+
+## Composer
+
+The chat input: an autosizing textarea over a toolbar of pills. The config pill
+fans out to nested menus (Agent, Route, Model); the tools pill picks the tools
+mode.
+
+Give an option a `description` and the menu shows it under the label, in quiet
+type. It is the item's accessible description, so the name stays the label
+("Fast", not "Fast, answers sooner") and queries by name keep working. Each
+group in the config menu shows its current value at the end of its row, again as
+a description: the item is still named "Agent".
+
+```tsx
+<Composer
+  value={draft}
+  onChange={setDraft}
+  onSend={send}
+  config={{
+    label: 'Agent, route and model',
+    groups: [
+      {
+        label: 'Route',
+        value: route,
+        onChange: setRoute,
+        options: [
+          { value: 'default', label: 'Default', description: 'Balanced speed and depth.' },
+          { value: 'fast', label: 'Fast', description: 'Answers sooner, with less depth.' },
+        ],
+      },
+      // Agent, Model
+    ],
+  }}
+/>
+```
+
+### Narrow widths
+
+The toolbar wraps instead of clipping, and a long pill label ends in an
+ellipsis. `toolbar` sets how much shows:
+
+- `"auto"` (the default) goes compact when the composer is narrower than 420px.
+- `"compact"` is always compact, `"full"` never is.
+
+In the compact toolbar the config pill shows the model instead of the whole
+selection: the selected label of the last group, or
+`compactSummary` on the config when you want other text. The pill is named by
+its label and the text it shows, for example "Agent, route and model: Claude
+Sonnet", so what a person sees is part of the name and "click Claude Sonnet"
+works by voice. The full selection ("Auto · Fast · Claude Sonnet") is the pill's
+description. The full toolbar names the pill with the full selection and has no
+description. Send keeps its place at the end of the first line.
+
+The toolbar layout changed in this release; see
+[Composer toolbar layout](/compositions/composer-layout/).
+
+The width is measured after the first render, so the first paint is the full
+toolbar. If you know the composer is narrow, say `toolbar="compact"` to skip
+that step.
+
 ## EmptyState
 
 An icon tile, a title, a supporting line, and at most one primary action. Use
 `firstRun` for the dashed invitation border.
+
+`compact` tightens the padding, shrinks the tile to 32px, sets the title at the
+h4 size and lets the supporting line use the full width, so the state fits a
+320px popover or a small panel. `headingLevel` (2 to 6, default 3) sets the
+semantic level of the title without changing how it looks: the size stays h3, or
+h4 when compact. Put the title where it belongs in the page outline.
+
+```tsx
+<EmptyState compact headingLevel={4} title="You are all caught up" description="Nothing needs your attention." />
+```
 
 ## CopyButton and CodeBlock
 

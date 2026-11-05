@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useMemo, useState } from 'react';
-import { SegmentedControl } from '@mantine/core';
+import { SegmentedControl, Title } from '@mantine/core';
 import { DataTable, type DataTableColumn } from './DataTable.tsx';
 import { StatusDot } from '../status/StatusDot.tsx';
 import type { Status } from '../status/status.ts';
@@ -99,4 +99,40 @@ export const WithToolbarAndPagination: StoryObj = {
       />
     );
   },
+};
+
+export const Named: StoryObj = {
+  render: () => (
+    <DataTable<Run>
+      columns={columns}
+      rows={allRows.slice(0, 4)}
+      rowKey={(r) => r.id}
+      caption="Recent runs"
+      summary="4 runs"
+    />
+  ),
+};
+
+export const NamedByHeading: StoryObj = {
+  render: () => (
+    <div>
+      <Title order={2} size="h3" id="runs-heading" mb="sm">
+        Recent runs
+      </Title>
+      <DataTable<Run> columns={columns} rows={allRows.slice(0, 4)} rowKey={(r) => r.id} aria-labelledby="runs-heading" />
+    </div>
+  ),
+};
+
+export const NarrowMinWidth: StoryObj = {
+  globals: { viewport: { value: 'mobile1', isRotated: false } },
+  render: () => (
+    <DataTable<Run>
+      columns={columns}
+      rows={allRows.slice(0, 4)}
+      rowKey={(r) => r.id}
+      aria-label="Recent runs"
+      minWidth={320}
+    />
+  ),
 };

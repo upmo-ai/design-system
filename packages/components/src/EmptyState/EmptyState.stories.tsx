@@ -34,3 +34,21 @@ export const FirstRun: Story = {
     />
   ),
 };
+
+export const Compact: Story = {
+  render: () => (
+    <div style={{ maxWidth: 320, border: '1px solid var(--border)' }}>
+      <EmptyState
+        compact
+        icon={<IconListCheck size={20} />}
+        title="You are all caught up"
+        description="Nothing needs your attention."
+      />
+    </div>
+  ),
+};
+
+/** The title is an h5 here and looks the same as the default. */
+export const HeadingLevel: Story = {
+  render: () => <EmptyState headingLevel={5} title="No runs yet" description="Runs show up here once your agent starts." />,
+};

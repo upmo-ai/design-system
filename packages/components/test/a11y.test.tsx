@@ -2,18 +2,23 @@ import { IconCheck, IconFolder } from '@tabler/icons-react';
 import { act, fireEvent, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import type { ReactElement } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   ApprovalCard,
   Button,
+  ChatMessage,
+  ChatThread,
   Checkbox,
   Composer,
+  DataTable,
   Dialog,
   EmptyState,
   EventStream,
   Field,
   IconButton,
   Input,
+  NotificationBell,
+  NotificationItem,
   Select,
   StatusBadge,
   Switch,
@@ -38,6 +43,9 @@ const options: axe.RunOptions = {
     region: { enabled: false },
   },
 };
+
+// A failed assertion must not leave a matchMedia stub behind for later tests.
+afterEach(() => vi.restoreAllMocks());
 
 /** Render into the Upmo theme and return axe violations as readable lines. */
 async function violations(ui: ReactElement) {
@@ -123,6 +131,40 @@ const cases: [string, ReactElement][] = [
     />,
   ],
   ['ApprovalCard', <ApprovalCard action="Send the digest" onApprove={() => {}} onDeny={() => {}} />],
+  ['approve-only ApprovalCard', <ApprovalCard action="Use the Q3 workbook?" onApprove={() => {}} />],
+  [
+    'compact EmptyState at a lower heading level',
+    <EmptyState compact headingLevel={4} title="You are all caught up" description="Nothing needs your attention." />,
+  ],
+  [
+    'ChatThread',
+    <ChatThread announcement="Upmo replied.">
+      <ChatMessage role="user" content="Reconcile the open invoices." />
+      <ChatMessage role="assistant" content="All 142 invoices are matched." model="Claude Sonnet" />
+    </ChatThread>,
+  ],
+  [
+    'ChatThread with announce="additions"',
+    <ChatThread announce="additions" busy>
+      <ChatMessage role="assistant" content="Fetching the invoices" streaming />
+    </ChatThread>,
+  ],
+  [
+    'empty ChatThread',
+    <ChatThread empty={<EmptyState compact headingLevel={2} title="Start a chat" />} />,
+  ],
+  ['NotificationBell', <NotificationBell count={4} />],
+  [
+    'NotificationBell (open) with items',
+    <NotificationBell count={2} defaultOpened>
+      <NotificationItem title="Digest sent" meta="Finance agent, 09:41" unread />
+      <NotificationItem title="Needs an answer" unread>
+        <ApprovalCard action="Use the Q3 workbook?" onApprove={() => {}} />
+      </NotificationItem>
+    </NotificationBell>,
+  ],
+  ['NotificationBell (open) and empty', <NotificationBell count={0} defaultOpened />],
+  ['NotificationBell (open) and loading', <NotificationBell count={0} defaultOpened busy />],
   ['Composer', <Composer value="hello" onChange={() => {}} onSend={() => {}} />],
   [
     'StatusAlert',
@@ -201,7 +243,6 @@ describe('accessibility (axe): AppFrame', () => {
     renderThemed(frame());
     expect(screen.getByRole('navigation', { name: 'Main' })).toBeInTheDocument();
     expect(await scan()).toEqual([]);
-    vi.restoreAllMocks();
   });
 
   it('icon rail with an open flyout has no axe violations', async () => {
@@ -214,7 +255,6 @@ describe('accessibility (axe): AppFrame', () => {
     // non-item child. A plain Mantine Menu fails the same way, so the rule is
     // off for this scan only; the items themselves are menuitems.
     expect(await scan({ 'aria-required-children': { enabled: false } })).toEqual([]);
-    vi.restoreAllMocks();
   });
 
   // aria-current is a global attribute in ARIA 1.2, so it is allowed on a
@@ -226,7 +266,6 @@ describe('accessibility (axe): AppFrame', () => {
     const members = await screen.findByRole('menuitem', { name: 'Members' });
     expect(members).toHaveAttribute('aria-current', 'page');
     expect(await scan({ 'aria-required-children': { enabled: false } })).toEqual([]);
-    vi.restoreAllMocks();
   });
 
   it('open drawer over the rail has no axe violations', async () => {
@@ -235,6 +274,107 @@ describe('accessibility (axe): AppFrame', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Open navigation' }));
     await screen.findByRole('dialog');
     expect(await scan()).toEqual([]);
-    vi.restoreAllMocks();
+  });
+});
+
+describe('accessibility (axe): AppFrame controlled drawer and fill', () => {
+  const navigation = (
+    <SideNav>
+      <NavSection>
+        <NavItem label="Home" icon={<IconFolder />} href="/" />
+        <NavItem label="Tasks" icon={<IconFolder />} href="/tasks" active />
+      </NavSection>
+    </SideNav>
+  );
+
+  async function scan() {
+    const results = await act(() => axe.run(document.body, options));
+    return results.violations.map((v) => `${v.id}: ${v.help} (${v.nodes.map((n) => n.target.join(' ')).join(', ')})`);
+  }
+
+  it('controlled drawer open over the rail has no axe violations', async () => {
+    const original = window.matchMedia;
+    vi.spyOn(window, 'matchMedia').mockImplementation((query: string) => ({
+      ...original(query),
+      matches: !query.includes('62em'),
+    }));
+    renderThemed(
+      <AppFrame drawerOpened onDrawerOpenedChange={() => {}} header={<Wordmark />} navigation={navigation}>
+        <h1>Tasks</h1>
+      </AppFrame>,
+    );
+    await screen.findByRole('dialog', { name: 'Navigation' });
+    expect(await scan()).toEqual([]);
+  });
+
+  it('fill frame has no axe violations', async () => {
+    const original = window.matchMedia;
+    vi.spyOn(window, 'matchMedia').mockImplementation((query: string) => ({ ...original(query), matches: true }));
+    renderThemed(
+      <AppFrame fill mainClassName="page" header={<Wordmark />} navigation={navigation}>
+        <h1>Chat</h1>
+        <section aria-label="Messages">Messages</section>
+      </AppFrame>,
+    );
+    expect(await scan()).toEqual([]);
+  });
+});
+
+describe('accessibility (axe): DataTable name and Composer details', () => {
+  const rows = [{ id: 'run_1', agent: 'Invoice sync' }];
+  const columns = [
+    { key: 'id', header: 'Run', render: (r: (typeof rows)[number]) => r.id, mono: true },
+    { key: 'agent', header: 'Agent', render: (r: (typeof rows)[number]) => r.agent },
+  ];
+
+  it('DataTable with a caption has no axe violations', async () => {
+    expect(await violations(<DataTable columns={columns} rows={rows} rowKey={(r) => r.id} caption="Recent runs" />)).toEqual(
+      [],
+    );
+  });
+
+  it('DataTable with aria-label and minWidth has no axe violations', async () => {
+    expect(
+      await violations(
+        <DataTable columns={columns} rows={rows} rowKey={(r) => r.id} aria-label="Recent runs" minWidth={320} />,
+      ),
+    ).toEqual([]);
+  });
+
+  it('compact Composer with an open menu of described options has no axe violations', async () => {
+    renderThemed(
+      <Composer
+        value=""
+        onChange={() => {}}
+        onSend={() => {}}
+        toolbar="compact"
+        onAttach={() => {}}
+        config={{
+          label: 'Agent, route and model',
+          groups: [
+            {
+              label: 'Agent',
+              value: 'auto',
+              onChange: () => {},
+              options: [{ value: 'auto', label: 'Auto', description: 'Pick the agent for the task.' }],
+            },
+            { label: 'Model', value: 'fast', onChange: () => {}, options: [{ value: 'fast', label: 'Fast' }] },
+          ],
+        }}
+        toolsMode={{
+          value: 'auto',
+          onChange: () => {},
+          options: [{ value: 'auto', label: 'Auto', description: 'Use tools when they help.' }],
+        }}
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Tools mode: Auto' }));
+    await screen.findByRole('menuitemradio', { name: 'Auto' });
+    // An open Mantine Menu fails aria-required-children under jsdom (see the
+    // AppFrame flyout cases above); the items themselves are menu items.
+    const results = await act(() =>
+      axe.run(document.body, { rules: { ...options.rules, 'aria-required-children': { enabled: false } } }),
+    );
+    expect(results.violations.map((v) => `${v.id}: ${v.help}`)).toEqual([]);
   });
 });

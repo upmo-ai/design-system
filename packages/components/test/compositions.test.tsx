@@ -40,6 +40,48 @@ describe('EmptyState', () => {
     expect(container.querySelector('.upmo-empty-state--first-run')).toBeTruthy();
   });
 
+  it('renders the title at headingLevel with an unchanged look', () => {
+    const { rerender } = renderThemed(<EmptyState title="Empty" />);
+    const h3 = screen.getByRole('heading', { level: 3, name: 'Empty' });
+    rerender(<EmptyState title="Empty" headingLevel={5} />);
+    const h5 = screen.getByRole('heading', { level: 5, name: 'Empty' });
+    expect(h5.style.getPropertyValue('--title-fz')).toBe(h3.style.getPropertyValue('--title-fz'));
+    expect(h5.style.getPropertyValue('--title-lh')).toBe(h3.style.getPropertyValue('--title-lh'));
+  });
+
+  it('compact drops the large padding, shrinks the icon tile and lifts the description cap', () => {
+    const measure = (container: HTMLElement) => {
+      const root = container.querySelector('.upmo-empty-state') as HTMLElement;
+      const tile = container.querySelector('.mantine-ThemeIcon-root') as HTMLElement;
+      return {
+        compactClass: root.classList.contains('upmo-empty-state--compact'),
+        // Mantine writes the padding style props inline on the root.
+        inlinePadding: /padding-(block|inline|top|bottom|left|right)/.test(root.getAttribute('style') ?? ''),
+        tile: tile.style.getPropertyValue('--ti-size'),
+        descriptionMax: screen.getByText('Nothing here.').style.maxWidth,
+        titleSize: screen.getByRole('heading').style.getPropertyValue('--title-fz'),
+      };
+    };
+
+    const regularRender = renderThemed(<EmptyState icon={<IconFolder />} title="Empty" description="Nothing here." />);
+    const regular = measure(regularRender.container);
+    regularRender.unmount();
+
+    const compactRender = renderThemed(<EmptyState compact icon={<IconFolder />} title="Empty" description="Nothing here." />);
+    const compact = measure(compactRender.container);
+
+    expect(regular.compactClass).toBe(false);
+    expect(regular.inlinePadding).toBe(true);
+    expect(regular.tile).toContain('3rem');
+    expect(regular.descriptionMax).not.toBe('');
+
+    expect(compact.compactClass).toBe(true);
+    expect(compact.inlinePadding).toBe(false);
+    expect(compact.tile).toContain('2rem');
+    expect(compact.descriptionMax).toBe('');
+    expect(compact.titleSize).not.toBe(regular.titleSize);
+  });
+
   it('renders in all three themes', () => {
     for (const theme of themes) {
       const { unmount } = renderThemed(<EmptyState title="Empty" />, theme);

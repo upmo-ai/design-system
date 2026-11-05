@@ -1,6 +1,6 @@
 import { DirectionProvider } from '@mantine/core';
-import { fireEvent, screen, waitFor, within } from '@testing-library/react';
-import type { MouseEvent } from 'react';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
+import { useState, type MouseEvent } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   AppFrame,
@@ -26,6 +26,37 @@ function atWidth(wide: boolean | 'medium') {
 }
 
 afterEach(() => vi.restoreAllMocks());
+
+// A viewport that can change after mount: tests start at medium width and then
+// widen, firing the media query listeners the way a resize does.
+function resizableWidth(startWide: boolean) {
+  let wide = startWide;
+  const listeners = new Set<{ query: string; callback: (event: { matches: boolean }) => void }>();
+  const matches = (query: string) => (query.includes('62em') ? wide : true);
+  vi.spyOn(window, 'matchMedia').mockImplementation(
+    (query: string) =>
+      ({
+        media: query,
+        get matches() {
+          return matches(query);
+        },
+        addEventListener: (_type: string, callback: (event: { matches: boolean }) => void) =>
+          listeners.add({ query, callback }),
+        removeEventListener: (_type: string, callback: (event: { matches: boolean }) => void) => {
+          for (const entry of listeners) if (entry.callback === callback) listeners.delete(entry);
+        },
+        addListener: () => {},
+        removeListener: () => {},
+        dispatchEvent: () => false,
+      }) as unknown as MediaQueryList,
+  );
+  return (next: boolean) => {
+    wide = next;
+    act(() => {
+      for (const { query, callback } of listeners) callback({ matches: matches(query) });
+    });
+  };
+}
 
 function Brand() {
   const { rail } = useAppFrame();
@@ -361,6 +392,206 @@ describe('AppFrame at medium width', () => {
     await screen.findByRole('dialog');
     // jsdom does not drop inert subtrees from role queries; browsers do.
     expect(container.querySelector('.upmo-app-frame__rail')).toHaveAttribute('inert');
+  });
+});
+
+describe('AppFrame controlled drawer', () => {
+  const navigation = (
+    <SideNav>
+      <NavItem label="Home" href="/" onClick={(event) => event.preventDefault()} />
+    </SideNav>
+  );
+
+  it('opens the drawer from a controlled drawerOpened at medium width', async () => {
+    atWidth('medium');
+    renderThemed(
+      <AppFrame drawerOpened navigation={navigation}>
+        <h1>Tasks</h1>
+      </AppFrame>,
+    );
+    expect(await screen.findByRole('dialog', { name: 'Navigation' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Open navigation' })).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('keeps the drawer closed while drawerOpened is false, and asks to open it from the toggle', () => {
+    atWidth('medium');
+    const onDrawerOpenedChange = vi.fn();
+    renderThemed(
+      <AppFrame drawerOpened={false} onDrawerOpenedChange={onDrawerOpenedChange} navigation={navigation}>
+        <h1>Tasks</h1>
+      </AppFrame>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Open navigation' }));
+    expect(onDrawerOpenedChange).toHaveBeenCalledWith(true);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('starts open from defaultDrawerOpened and reports a close when uncontrolled', async () => {
+    atWidth('medium');
+    const onDrawerOpenedChange = vi.fn();
+    renderThemed(
+      <AppFrame defaultDrawerOpened onDrawerOpenedChange={onDrawerOpenedChange} navigation={navigation}>
+        <h1>Tasks</h1>
+      </AppFrame>,
+    );
+    const drawer = await screen.findByRole('dialog', { name: 'Navigation' });
+    fireEvent.click(within(drawer).getByRole('button', { name: 'Close navigation' }));
+    expect(onDrawerOpenedChange).toHaveBeenCalledWith(false);
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  });
+
+  it('reports Escape, the close button and a chosen item through onDrawerOpenedChange(false)', async () => {
+    atWidth('medium');
+    const onDrawerOpenedChange = vi.fn();
+    renderThemed(
+      <AppFrame drawerOpened onDrawerOpenedChange={onDrawerOpenedChange} navigation={navigation}>
+        <h1>Tasks</h1>
+      </AppFrame>,
+    );
+    const drawer = await screen.findByRole('dialog', { name: 'Navigation' });
+
+    fireEvent.keyDown(drawer, { key: 'Escape' });
+    expect(onDrawerOpenedChange).toHaveBeenCalledTimes(1);
+    expect(onDrawerOpenedChange).toHaveBeenLastCalledWith(false);
+
+    fireEvent.click(within(drawer).getByRole('button', { name: 'Close navigation' }));
+    expect(onDrawerOpenedChange).toHaveBeenCalledTimes(2);
+    expect(onDrawerOpenedChange).toHaveBeenLastCalledWith(false);
+
+    fireEvent.click(within(drawer).getByRole('link', { name: 'Home' }));
+    expect(onDrawerOpenedChange).toHaveBeenCalledTimes(3);
+    expect(onDrawerOpenedChange).toHaveBeenLastCalledWith(false);
+  });
+
+  it('follows a parent that holds the state', async () => {
+    atWidth('medium');
+    function Parent() {
+      const [opened, setOpened] = useState(false);
+      return (
+        <>
+          <button type="button" onClick={() => setOpened((o) => !o)}>
+            Shortcut
+          </button>
+          <AppFrame drawerOpened={opened} onDrawerOpenedChange={setOpened} navigation={navigation}>
+            <h1>Tasks</h1>
+          </AppFrame>
+        </>
+      );
+    }
+    renderThemed(<Parent />);
+    fireEvent.click(screen.getByRole('button', { name: 'Shortcut' }));
+    const drawer = await screen.findByRole('dialog', { name: 'Navigation' });
+    fireEvent.click(within(drawer).getByRole('button', { name: 'Close navigation' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  });
+
+  it('ignores drawerOpened from md and keeps one exposed navigation', () => {
+    atWidth(true);
+    const { container } = renderThemed(
+      <AppFrame drawerOpened navigation={navigation}>
+        <h1>Tasks</h1>
+      </AppFrame>,
+    );
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(container.querySelector('.upmo-app-frame__rail')).not.toHaveAttribute('inert');
+    const navs = exposedNavigations();
+    expect(navs).toHaveLength(1);
+    expect(navs[0]).toHaveAccessibleName('Main');
+    expect(screen.getByRole('button', { name: 'Collapse navigation' })).toBeInTheDocument();
+  });
+
+  it('releases the inert rail when the viewport widens with the drawer open', async () => {
+    const resizeTo = resizableWidth(false);
+    const { container } = renderThemed(frame());
+    fireEvent.click(screen.getByRole('button', { name: 'Open navigation' }));
+    await screen.findByRole('dialog', { name: 'Navigation' });
+    const rail = container.querySelector('.upmo-app-frame__rail');
+    expect(rail).toHaveAttribute('inert');
+
+    resizeTo(true);
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    expect(container.querySelector('.upmo-app-frame__rail')).not.toHaveAttribute('inert');
+    expect(exposedNavigations()).toHaveLength(1);
+
+    // Narrowing again does not bring the old drawer back.
+    resizeTo(false);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Open navigation' })).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('moves focus to the navigation toggle when the viewport widens with focus inside the drawer', async () => {
+    const resizeTo = resizableWidth(false);
+    renderThemed(frame());
+    fireEvent.click(screen.getByRole('button', { name: 'Open navigation' }));
+    const drawer = await screen.findByRole('dialog', { name: 'Navigation' });
+    const home = within(drawer).getByRole('link', { name: 'Home' });
+    home.focus();
+    expect(home).toHaveFocus();
+
+    resizeTo(true);
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    expect(screen.getByRole('button', { name: 'Collapse navigation' })).toHaveFocus();
+  });
+
+  it('leaves focus alone when the viewport widens with the drawer closed', () => {
+    const resizeTo = resizableWidth(false);
+    renderThemed(
+      <>
+        <button type="button">Elsewhere</button>
+        {frame()}
+      </>,
+    );
+    const elsewhere = screen.getByRole('button', { name: 'Elsewhere' });
+    elsewhere.focus();
+    resizeTo(true);
+    expect(elsewhere).toHaveFocus();
+  });
+
+  it('tells a controlling parent the drawer closed when the viewport widens', async () => {
+    const resizeTo = resizableWidth(false);
+    const onDrawerOpenedChange = vi.fn();
+    renderThemed(
+      <AppFrame drawerOpened onDrawerOpenedChange={onDrawerOpenedChange} navigation={navigation}>
+        <h1>Tasks</h1>
+      </AppFrame>,
+    );
+    await screen.findByRole('dialog', { name: 'Navigation' });
+    expect(onDrawerOpenedChange).not.toHaveBeenCalled();
+    resizeTo(true);
+    await waitFor(() => expect(onDrawerOpenedChange).toHaveBeenCalledWith(false));
+  });
+});
+
+describe('AppFrame fill', () => {
+  it('leaves the main region alone by default', () => {
+    atWidth(true);
+    renderThemed(frame());
+    expect(screen.getByRole('main')).not.toHaveAttribute('data-fill');
+  });
+
+  it('marks main as a fill column and applies mainClassName', () => {
+    atWidth(true);
+    renderThemed(
+      <AppFrame fill mainClassName="chat-main" navigation={<SideNav>{null}</SideNav>}>
+        <p>Alert</p>
+        <section>Chat</section>
+      </AppFrame>,
+    );
+    const main = screen.getByRole('main');
+    expect(main).toHaveAttribute('data-fill', 'true');
+    expect(main).toHaveClass('upmo-app-frame__main', 'chat-main');
+    expect(main).toContainElement(screen.getByText('Chat'));
+  });
+
+  it('applies mainClassName without fill', () => {
+    atWidth(true);
+    renderThemed(
+      <AppFrame mainClassName="chat-main" navigation={<SideNav>{null}</SideNav>}>
+        <p>Body</p>
+      </AppFrame>,
+    );
+    expect(screen.getByRole('main')).toHaveClass('chat-main');
+    expect(screen.getByRole('main')).not.toHaveAttribute('data-fill');
   });
 });
 

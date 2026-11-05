@@ -1,4 +1,5 @@
 import { Button, Menu, Textarea } from '@mantine/core';
+import { useElementSize } from '@mantine/hooks';
 import {
   IconArrowUp,
   IconCheck,
@@ -9,15 +10,19 @@ import {
   IconPlayerStopFilled,
 } from '@tabler/icons-react';
 import clsx from 'clsx';
-import type { KeyboardEvent, ReactNode } from 'react';
+import { useId, type KeyboardEvent, type ReactNode } from 'react';
 import { IconButton } from '../IconButton/IconButton.tsx';
 import { Kbd, KbdGroup } from '../Kbd/Kbd.tsx';
 
 export interface ComposerOption {
   value: string;
   label: string;
+  /** A line under the label in the menu. It is the item's accessible description; the name stays the label. */
   description?: string;
 }
+
+/** The form is narrower than this (px) when `toolbar="auto"` goes compact. */
+const COMPACT_BELOW = 420;
 
 export interface ComposerConfigMenu {
   /** Accessible label for the whole config pill, e.g. "Agent, route and model". */
@@ -29,6 +34,13 @@ export interface ComposerConfigMenu {
     options: ComposerOption[];
     onChange: (value: string) => void;
   }[];
+  /**
+   * The pill text when the toolbar is compact. Default: the selected label of
+   * the last group (the model). In compact mode it is the pill's name after
+   * `label`, so the visible text is part of the accessible name (speech control
+   * says what it sees); the full selection becomes the pill's description.
+   */
+  compactSummary?: string;
 }
 
 export interface ComposerProps {
@@ -62,16 +74,67 @@ export interface ComposerProps {
   onAttach?: () => void;
   /** Dictate handler; shows the microphone when set. */
   onDictate?: () => void;
+  /**
+   * How much of the toolbar shows. `"compact"` shortens the config pill to
+   * `compactSummary`; `"auto"` does so when the composer is narrower than 420px.
+   * `"full"` never does. Default `"auto"`.
+   */
+  toolbar?: 'auto' | 'full' | 'compact';
   /** Hint line under the composer. Defaults to the Enter / Shift+Enter hint. */
   hint?: ReactNode;
   className?: string;
 }
 
+const pillClassNames = { inner: 'upmo-composer__pill-inner', label: 'upmo-composer__pill-label' };
+
+function currentLabel(group: ComposerConfigMenu['groups'][number]): string {
+  return group.options.find((o) => o.value === group.value)?.label ?? group.value;
+}
+
 function summarise(config?: ComposerConfigMenu): string {
   if (!config) return '';
-  return config.groups
-    .map((g) => g.options.find((o) => o.value === g.value)?.label ?? g.value)
-    .join(' · ');
+  return config.groups.map(currentLabel).join(' · ');
+}
+
+function compactLabel(config: ComposerConfigMenu): string {
+  const last = config.groups[config.groups.length - 1];
+  return config.compactSummary ?? (last ? currentLabel(last) : '');
+}
+
+/** A radio item: the label, and a quiet description under it when there is one. */
+function OptionItem({
+  option,
+  checked,
+  onChange,
+  descriptionId,
+}: {
+  option: ComposerOption;
+  checked: boolean;
+  onChange: (value: string) => void;
+  descriptionId: string;
+}) {
+  return (
+    <Menu.RadioItem
+      value={option.value}
+      checked={checked}
+      onChange={onChange}
+      checkIcon={<IconCheck size={14} />}
+      closeMenuOnClick
+      aria-label={option.label}
+      aria-describedby={option.description ? descriptionId : undefined}
+    >
+      {option.description ? (
+        <span className="upmo-composer__option">
+          <span>{option.label}</span>
+          <span id={descriptionId} className="upmo-composer__option-description">
+            {option.description}
+          </span>
+        </span>
+      ) : (
+        option.label
+      )}
+    </Menu.RadioItem>
+  );
 }
 
 /**
@@ -82,6 +145,11 @@ function summarise(config?: ComposerConfigMenu): string {
  * and send is disabled while the draft is empty. While a reply streams, send
  * turns into Stop (when `onStop` is given) so the user never digs to stop an
  * agent. The whole composer carries one emerald focus ring.
+ *
+ * Options can carry a `description`, shown under the label, and each group in
+ * the config menu shows its current value. In a narrow composer (under 420px,
+ * or `toolbar="compact"`) the config pill shortens to the model and the toolbar
+ * wraps instead of clipping.
  */
 export function Composer({
   value,
@@ -95,13 +163,20 @@ export function Composer({
   toolsMode,
   onAttach,
   onDictate,
+  toolbar = 'auto',
   hint,
   className,
 }: ComposerProps) {
+  const baseId = useId();
+  const { ref: formRef, width: formWidth } = useElementSize<HTMLFormElement>();
+  // Until the first measurement lands the width is 0, and the toolbar is full.
+  const compact = toolbar === 'compact' || (toolbar === 'auto' && formWidth > 0 && formWidth < COMPACT_BELOW);
   const empty = value.trim() === '';
   const canSend = !empty && !disabled && !streaming;
   const canStop = Boolean(streaming && onStop);
   const summary = summarise(config);
+  const pillText = config ? (compact ? compactLabel(config) : summary) : '';
+  const summaryId = `${baseId}-summary`;
   const toolsLabel = toolsMode
     ? (toolsMode.options.find((o) => o.value === toolsMode.value)?.label ?? toolsMode.value)
     : '';
@@ -121,8 +196,9 @@ export function Composer({
   }
 
   return (
-    <div className={clsx('upmo-composer', className)}>
+    <div className={clsx('upmo-composer', compact && 'upmo-composer--compact', className)}>
       <form
+        ref={formRef}
         className="upmo-composer__form"
         aria-label="Chat composer"
         onSubmit={(e) => {
@@ -145,106 +221,118 @@ export function Composer({
         />
 
         <div className="upmo-composer__row">
-          {config ? (
-            <Menu position="top-start" withinPortal>
-              <Menu.Target>
-                <Button
-                  type="button"
-                  variant="subtle"
-                  size="xs"
-                  className="upmo-composer__pill"
-                  aria-label={`${config.label}: ${summary}`}
-                  leftSection={<IconCpu size={14} />}
-                  rightSection={<IconChevronDown size={13} />}
-                >
-                  {summary}
-                </Button>
-              </Menu.Target>
-              <Menu.Dropdown>
-                {config.groups.map((group) => (
-                  <Menu.Sub key={group.label} position="right-start">
-                    <Menu.Sub.Target>
-                      <Menu.Sub.Item>{group.label}</Menu.Sub.Item>
-                    </Menu.Sub.Target>
-                    <Menu.Sub.Dropdown>
-                      {group.options.map((opt) => (
-                        <Menu.RadioItem
-                          key={opt.value}
-                          value={opt.value}
-                          checked={opt.value === group.value}
-                          onChange={group.onChange}
-                          checkIcon={<IconCheck size={14} />}
-                          closeMenuOnClick
-                        >
-                          {opt.label}
-                        </Menu.RadioItem>
-                      ))}
-                    </Menu.Sub.Dropdown>
-                  </Menu.Sub>
-                ))}
-              </Menu.Dropdown>
-            </Menu>
-          ) : null}
-
-          {onAttach ? (
-            <IconButton
-              type="button"
-              variant="subtle"
-              aria-label="Attach file"
-              tooltipPosition="top"
-              className="upmo-composer__icon"
-              onClick={onAttach}
-            >
-              <IconPaperclip size={18} />
-            </IconButton>
-          ) : null}
-
-          {onDictate ? (
-            <IconButton
-              type="button"
-              variant="subtle"
-              aria-label="Dictate"
-              tooltipPosition="top"
-              className="upmo-composer__icon"
-              onClick={onDictate}
-            >
-              <IconMicrophone size={18} />
-            </IconButton>
-          ) : null}
-
-          {toolsMode ? (
-            <Menu position="top-start" withinPortal>
-              <Menu.Target>
-                <Button
-                  type="button"
-                  variant="subtle"
-                  size="xs"
-                  className="upmo-composer__pill"
-                  aria-label={`Tools mode: ${toolsLabel}`}
-                  rightSection={<IconChevronDown size={13} />}
-                >
-                  {toolsLabel}
-                </Button>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Label>Tools and context</Menu.Label>
-                {toolsMode.options.map((opt) => (
-                  <Menu.RadioItem
-                    key={opt.value}
-                    value={opt.value}
-                    checked={opt.value === toolsMode.value}
-                    onChange={toolsMode.onChange}
-                    checkIcon={<IconCheck size={14} />}
-                    closeMenuOnClick
+          <div className="upmo-composer__tools">
+            {config ? (
+              <Menu position="top-start" withinPortal>
+                <Menu.Target>
+                  <Button
+                    type="button"
+                    variant="subtle"
+                    size="xs"
+                    className="upmo-composer__pill"
+                    classNames={pillClassNames}
+                    aria-label={`${config.label}: ${pillText}`}
+                    aria-describedby={compact ? summaryId : undefined}
+                    leftSection={<IconCpu size={14} />}
+                    rightSection={<IconChevronDown size={13} />}
                   >
-                    {opt.label}
-                  </Menu.RadioItem>
-                ))}
-              </Menu.Dropdown>
-            </Menu>
-          ) : null}
+                    <span className="upmo-composer__pill-text">{pillText}</span>
+                  </Button>
+                </Menu.Target>
+                <Menu.Dropdown className="upmo-composer__menu">
+                  {config.groups.map((group, groupIndex) => {
+                    const valueId = `${baseId}-group-${groupIndex}`;
+                    return (
+                      <Menu.Sub key={group.label} position="right-start">
+                        <Menu.Sub.Target>
+                          <Menu.Sub.Item aria-label={group.label} aria-describedby={valueId}>
+                            <span className="upmo-composer__group">
+                              <span>{group.label}</span>
+                              <span id={valueId} className="upmo-composer__group-value">
+                                {currentLabel(group)}
+                              </span>
+                            </span>
+                          </Menu.Sub.Item>
+                        </Menu.Sub.Target>
+                        <Menu.Sub.Dropdown className="upmo-composer__menu">
+                          {group.options.map((opt, optionIndex) => (
+                            <OptionItem
+                              key={opt.value}
+                              option={opt}
+                              checked={opt.value === group.value}
+                              onChange={group.onChange}
+                              descriptionId={`${baseId}-option-${groupIndex}-${optionIndex}`}
+                            />
+                          ))}
+                        </Menu.Sub.Dropdown>
+                      </Menu.Sub>
+                    );
+                  })}
+                </Menu.Dropdown>
+              </Menu>
+            ) : null}
+            {config && compact ? (
+              <span id={summaryId} hidden>
+                {summary}
+              </span>
+            ) : null}
 
-          <span className="upmo-composer__spacer" />
+            {onAttach ? (
+              <IconButton
+                type="button"
+                variant="subtle"
+                aria-label="Attach file"
+                tooltipPosition="top"
+                className="upmo-composer__icon"
+                onClick={onAttach}
+              >
+                <IconPaperclip size={18} />
+              </IconButton>
+            ) : null}
+
+            {onDictate ? (
+              <IconButton
+                type="button"
+                variant="subtle"
+                aria-label="Dictate"
+                tooltipPosition="top"
+                className="upmo-composer__icon"
+                onClick={onDictate}
+              >
+                <IconMicrophone size={18} />
+              </IconButton>
+            ) : null}
+
+            {toolsMode ? (
+              <Menu position="top-start" withinPortal>
+                <Menu.Target>
+                  <Button
+                    type="button"
+                    variant="subtle"
+                    size="xs"
+                    className="upmo-composer__pill"
+                    classNames={pillClassNames}
+                    aria-label={`Tools mode: ${toolsLabel}`}
+                    rightSection={<IconChevronDown size={13} />}
+                  >
+                    <span className="upmo-composer__pill-text">{toolsLabel}</span>
+                  </Button>
+                </Menu.Target>
+                <Menu.Dropdown className="upmo-composer__menu">
+                  <Menu.Label>Tools and context</Menu.Label>
+                  {toolsMode.options.map((opt, optionIndex) => (
+                    <OptionItem
+                      key={opt.value}
+                      option={opt}
+                      checked={opt.value === toolsMode.value}
+                      onChange={toolsMode.onChange}
+                      descriptionId={`${baseId}-tools-${optionIndex}`}
+                    />
+                  ))}
+                </Menu.Dropdown>
+              </Menu>
+            ) : null}
+          </div>
 
           {canStop ? (
             <IconButton
