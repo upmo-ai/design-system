@@ -1,0 +1,138 @@
+---
+title: Brand assets
+description: The Upmo wordmark, the caret mark, the favicon, app icons and the share image, ready to download.
+---
+
+export const files = '/brand/files';
+export const marks = [
+  { name: 'wordmark', label: 'Wordmark', width: 220 },
+  { name: 'caret', label: 'Caret mark', width: 72 },
+];
+export const variants = [
+  { id: 'light', label: 'Light', ground: 'light', note: 'For light grounds.' },
+  { id: 'dark', label: 'Dark', ground: 'dark', note: 'For dark grounds.' },
+  { id: 'mono-black', label: 'Black', ground: 'light', note: 'One colour, black.' },
+  { id: 'mono-white', label: 'White', ground: 'dark', note: 'One colour, white.' },
+  { id: 'mono', label: 'Mono', ground: 'light', note: 'Draws in currentColor. Inline it.' },
+];
+export const webFiles = [
+  { file: 'favicon.svg', use: 'The caret, recoloured for dark browsers.' },
+  { file: 'favicon.ico', use: 'The caret at 16, 32 and 48 pixels, for browsers without SVG icons.' },
+  { file: 'apple-touch-icon.png', use: '180 by 180, opaque, for the iOS home screen.' },
+  { file: 'icon-192.png', use: 'Web app icon, 192 by 192.' },
+  { file: 'icon-512.png', use: 'Web app icon, 512 by 512.' },
+  { file: 'icon-512-maskable.png', use: 'Web app icon with the mark inside the safe zone, for adaptive masks.' },
+  { file: 'og.png', use: 'Share image, 1200 by 630: the wordmark alone.' },
+  { file: 'site.webmanifest', use: 'A web app manifest that lists the icons above.' },
+  { file: 'head.html', use: 'The head tags that link the files above.' },
+];
+
+The Upmo brand kit is the wordmark and the caret mark in light, dark and mono,
+plus the files a web app needs for its tab icon, home screen icon and share
+card. The files are published as [`@upmo-ai/brand`](https://www.npmjs.com/package/@upmo-ai/brand)
+and every one is generated from a single drawing and the colour tokens, so they
+never drift from the interface.
+
+```sh
+pnpm add @upmo-ai/brand
+```
+
+## Wordmark and caret
+
+The wordmark is "up" in emerald, "mo" in ink, and the caret over the o. The
+caret mark is the same caret on its own, for small or square spaces. Text is
+outlined, so the files need no font.
+
+{marks.map((mark) => (
+  <section class="brand-set" aria-labelledby={`brand-${mark.name}`}>
+    <h3 id={`brand-${mark.name}`}>{mark.label}</h3>
+    <ul class="brand-grid">
+      {variants.map((variant) => (
+        <li class="brand-card">
+          <div class="brand-tile" data-theme={variant.ground}>
+            <img
+              src={`${files}/svg/${mark.name}-${variant.id}.svg`}
+              alt={`Upmo ${mark.label.toLowerCase()}, ${variant.label.toLowerCase()}`}
+              width={mark.width}
+            />
+          </div>
+          <p class="brand-card__name">{variant.label}</p>
+          <p class="brand-card__note">{variant.note}</p>
+          <a href={`${files}/svg/${mark.name}-${variant.id}.svg`} download>
+            Download SVG<span class="sr-only"> of the {variant.label.toLowerCase()} {mark.label.toLowerCase()}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+))}
+
+The `mono` variant is drawn in `currentColor`. Inline it in the page and it
+takes the colour of the text around it. As an `img` it renders black, so use
+`mono-black` or `mono-white` for images.
+
+## Colour
+
+The artwork takes its colours from the tokens, so the kit follows the system.
+"up" and the caret use `emerald`, and "mo" uses `ink`, each in its light or dark
+value. See [Tokens](/foundations/tokens/). Emerald is the brand green at graphic
+sizes. Do not use it for body-size text.
+
+## Using the wordmark
+
+- Pick the variant that matches the ground: light on light grounds, dark on dark
+  grounds, mono when the ground is a photo or a single-colour print.
+- Scale the artwork evenly. Do not stretch, recolour, outline or add effects.
+- Give the wordmark the accessible name "Upmo". When a link beside it already
+  says "Upmo", hide the image from assistive technology instead.
+- In React, use `Wordmark` from `@upmo-ai/components` for the interface, and the
+  files here for everything outside it.
+
+## Files for the web
+
+<table aria-label="Files for the web">
+  <thead>
+    <tr>
+      <th scope="col">File</th>
+      <th scope="col">Use</th>
+    </tr>
+  </thead>
+  <tbody>
+    {webFiles.map((item) => (
+      <tr>
+        <td><a href={`${files}/web/${item.file}`} download><code>{item.file}</code></a></td>
+        <td>{item.use}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+Copy the `web` folder into the folder your build serves from the root, then add
+the tags from `head.html` to the page head:
+
+```sh
+cp -r node_modules/@upmo-ai/brand/dist/web/. public/
+```
+
+```html
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:image" content="{{origin}}/og.png">
+```
+
+Share images need an absolute URL, so replace `{{origin}}` with the full origin
+of the site, such as `https://example.com`. The snippet in `head.html` also sets
+the theme colour and the image size and description.
+
+## Regenerating the kit
+
+Do not edit the files by hand. Change `packages/brand/src/geometry.ts` or the
+tokens, then run the generator in the pinned container so the PNG bytes match
+CI:
+
+```sh
+docker run --rm --platform linux/amd64 -v "$PWD":/w -w /w node:24.22.1 sh -c \
+  "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @upmo-ai/brand generate"
+```

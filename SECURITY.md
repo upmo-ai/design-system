@@ -30,8 +30,9 @@ Do not open a public issue for a vulnerability.
 
 In scope:
 
-- The five npm packages: `@upmo-ai/tokens`, `@upmo-ai/theme`,
-  `@upmo-ai/components`, `@upmo-ai/icons` and `@upmo-ai/brands`.
+- The six npm packages: `@upmo-ai/tokens`, `@upmo-ai/theme`,
+  `@upmo-ai/components`, `@upmo-ai/icons`, `@upmo-ai/brands` and
+  `@upmo-ai/brand`.
 - The documentation site at [design.upmo.dev](https://design.upmo.dev).
 
 Supply-chain integrity matters here: releases are published from GitHub Actions

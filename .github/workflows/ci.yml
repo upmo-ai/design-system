@@ -30,3 +30,5 @@ jobs:
       - run: pnpm build
       - run: pnpm lint
       - run: pnpm test
+      # The brand kit is generated and committed; fail if it is out of date.
+      - run: pnpm --filter @upmo-ai/brand generate --check

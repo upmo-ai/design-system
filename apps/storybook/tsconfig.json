@@ -12,7 +12,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "types": ["node"]
+    "types": ["node", "vite/client"]
   },
-  "include": [".storybook/**/*", "../../packages/components/src/**/*.stories.tsx"]
+  "include": [".storybook/**/*", "../../packages/components/src/**/*.stories.tsx", "stories/**/*"]
 }

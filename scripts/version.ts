@@ -1,4 +1,4 @@
-// Lockstep version maths for the five @upmo-ai packages.
+// Lockstep version maths for the six @upmo-ai packages.
 
 export const BUMPS = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'] as const;
 export type Bump = (typeof BUMPS)[number];

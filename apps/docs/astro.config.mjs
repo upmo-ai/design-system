@@ -54,6 +54,10 @@ export default defineConfig({
           items: ['foundations/tokens'],
         },
         {
+          label: 'Brand',
+          items: ['brand'],
+        },
+        {
           label: 'Controls',
           items: ['controls/button', 'controls/status', 'controls/forms', 'controls/navigation'],
         },

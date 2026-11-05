@@ -16,6 +16,7 @@ Tagline: Always working. Always yours.
 | `@upmo-ai/components` | The React component library: themed, accessible Mantine 9 components built on Upmo tokens. |
 | `@upmo-ai/icons` | Icon concept map (concept to Tabler Icons name) and the caret mark as SVG. |
 | `@upmo-ai/brands` | Marks of the services Upmo connects to, as `currentColor` SVG, with a typed manifest. |
+| `@upmo-ai/brand` | The Upmo brand asset kit: wordmark and caret in light, dark and mono, favicon, app icons and the share image. |
 
 ## Apps
 

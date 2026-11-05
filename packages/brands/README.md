@@ -2,7 +2,7 @@
 
 The marks of the providers and services Upmo connects to (GitHub, Slack,
 Anthropic and others), as SVG, with a typed manifest and recorded sources. It is
-data only: no React and no runtime dependencies. It is one of the five Upmo
+data only: no React and no runtime dependencies. It is one of the six Upmo
 packages: `@upmo-ai/tokens` is the foundation, and `@upmo-ai/components` reads
 `marks` from this package to draw `BrandMark`.
 

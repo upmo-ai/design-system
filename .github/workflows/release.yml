@@ -1,6 +1,6 @@
 name: Release
 
-# Manual, lockstep release of the five @upmo-ai packages. prepare bumps the
+# Manual, lockstep release of the six @upmo-ai packages. prepare bumps the
 # version, commits it to main through the API (so GitHub signs it) and tags it;
 # publish ships the tag to npm with trusted publishing; github-release and docs
 # follow a successful publish. Every job after prepare is safe to re-run.
@@ -231,7 +231,7 @@ jobs:
             done
             return 1
           }
-          for pkg in tokens icons brands theme components; do
+          for pkg in tokens icons brands brand theme components; do
             name="@upmo-ai/$pkg"
             if ! state="$(published "$name")"; then
               echo "::error::Could not check $name@$VERSION on the registry."

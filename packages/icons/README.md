@@ -5,7 +5,7 @@ The Upmo icon concept map. Each key is a concept the interface needs, such as
 resolves to, or `caret` for Upmo's own live mark (shipped as SVG). Keys never
 change once shipped, so the interface can rename a glyph without touching call
 sites. The package has no React and no runtime dependencies. It is one of the
-five Upmo packages: `@upmo-ai/tokens` is the foundation, and
+six Upmo packages: `@upmo-ai/tokens` is the foundation, and
 `@upmo-ai/components` reads this map to render icons.
 
 ## Install

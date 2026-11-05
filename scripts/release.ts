@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Lockstep release steps for the five @upmo-ai packages, called by the
+// Lockstep release steps for the six @upmo-ai packages, called by the
 // release workflow (.github/workflows/release.yml). Publishing happens only in
 // that workflow; this script never publishes.
 //
@@ -35,13 +35,11 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { prependChangelog } from './changelog.ts';
+import { PACKAGES, PKG_NAMES } from './packages.ts';
 import { planRelease, releaseHeadline } from './plan.ts';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-// Publish order: dependencies before dependents.
-const PACKAGES = ['tokens', 'icons', 'brands', 'theme', 'components'] as const;
-const PKG_NAMES = PACKAGES.map((p) => `@upmo-ai/${p}`);
 const FILES = [
   'version.json',
   'CHANGELOG.md',

@@ -1,5 +1,7 @@
 import { DirectionProvider } from '@mantine/core';
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { useState, type MouseEvent } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -13,6 +15,19 @@ import {
   type NavItemProps,
 } from '../src/index.ts';
 import { renderThemed, themes } from './render.tsx';
+
+// The shipped brand kit file, found through the @upmo-ai/brand exports map and
+// parsed, so these tests read what a consumer of the package gets.
+function brandSvg(name: string): Element {
+  const path = createRequire(import.meta.url).resolve(`@upmo-ai/brand/svg/${name}`);
+  return new DOMParser().parseFromString(readFileSync(path, 'utf8'), 'image/svg+xml').documentElement;
+}
+
+function attr(el: Element | null | undefined, name: string): string {
+  const value = el?.getAttribute(name);
+  if (!value) throw new Error(`the brand kit file has no ${name} attribute where expected`);
+  return value;
+}
 
 // The setup stub answers every media query with false (phone width). Wide
 // screens answer true to both the sm and md queries.
@@ -628,6 +643,26 @@ describe('Wordmark', () => {
     for (const part of ['up', 'mo', 'caret']) {
       expect(container.querySelector(`.upmo-wordmark__${part}`), part).toBeTruthy();
     }
+  });
+
+  it('draws the same geometry as the brand kit', () => {
+    const { container } = renderThemed(<Wordmark />);
+    const kit = brandSvg('wordmark-mono.svg');
+    const [up, mo, caret] = [...kit.querySelectorAll('path')];
+    expect(container.querySelector('svg.upmo-wordmark')).toHaveAttribute('viewBox', attr(kit, 'viewBox'));
+    expect(container.querySelector('.upmo-wordmark__up')).toHaveAttribute('d', attr(up, 'd'));
+    expect(container.querySelector('.upmo-wordmark__mo')).toHaveAttribute('d', attr(mo, 'd'));
+    expect(container.querySelector('.upmo-wordmark__caret')).toHaveAttribute('d', attr(caret, 'd'));
+    expect(container.querySelector('.upmo-wordmark__caret')).toHaveAttribute('stroke-width', attr(caret, 'stroke-width'));
+  });
+
+  it('draws the same compact mark as the brand kit', () => {
+    const { container } = renderThemed(<Wordmark compact />);
+    const kit = brandSvg('caret-mono.svg');
+    const svg = container.querySelector('svg.upmo-wordmark');
+    expect(svg).toHaveAttribute('viewBox', attr(kit, 'viewBox'));
+    expect(svg?.querySelector('path')).toHaveAttribute('d', attr(kit.querySelector('path'), 'd'));
+    expect(svg?.querySelector('path')).toHaveAttribute('stroke-width', attr(kit.querySelector('path'), 'stroke-width'));
   });
 
   it('renders the caret mark alone when compact, as a square', () => {

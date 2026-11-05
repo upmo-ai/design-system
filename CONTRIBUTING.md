@@ -12,6 +12,7 @@ Thanks for helping with the Upmo design system. By taking part you agree to the
 | `packages/components` | The React component library. |
 | `packages/icons` | The icon concept map and the caret mark. |
 | `packages/brands` | Service marks as `currentColor` SVG. |
+| `packages/brand` | The Upmo brand asset kit and its generator. |
 | `apps/docs` | The documentation site. |
 | `apps/storybook` | The component gallery. |
 
@@ -31,6 +32,16 @@ installed, and run in Playwright's image:
 ```sh
 docker run --rm -v "$PWD":/w -w /w mcr.microsoft.com/playwright:v1.61.1-noble \
   sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @upmo-ai/components test:browser"
+```
+
+The brand kit in `packages/brand` is generated and committed. After you change
+`packages/brand/src/geometry.ts` or the colour tokens, regenerate it in a
+container pinned to `linux/amd64`, so the PNG bytes match CI, and commit the
+result. `generate --check` fails when any file differs:
+
+```sh
+docker run --rm --platform linux/amd64 -v "$PWD":/w -w /w node:24.22.1 sh -c \
+  "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @upmo-ai/brand generate"
 ```
 
 Run Storybook with a published port:

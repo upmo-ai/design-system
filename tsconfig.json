@@ -16,6 +16,6 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["packages/tokens/src", "packages/tokens/scripts", "packages/tokens/test", "packages/theme/src", "packages/theme/test", "packages/icons/scripts", "packages/brands/scripts", "scripts"],
+  "include": ["packages/tokens/src", "packages/tokens/scripts", "packages/tokens/test", "packages/theme/src", "packages/theme/test", "packages/icons/scripts", "packages/brands/scripts", "packages/brand/src", "packages/brand/scripts", "packages/brand/test", "scripts"],
   "exclude": ["**/dist", "**/node_modules", "packages/components"]
 }
