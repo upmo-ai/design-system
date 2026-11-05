@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Group, Text, UnstyledButton } from '@mantine/core';
-import { useState } from 'react';
-import { AppFrame, useAppFrame } from './AppFrame.tsx';
+import { Group, Text, UnstyledButton, useMantineTheme } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
+import { useEffect, useState, type ReactNode } from 'react';
+import { AppFrame, useAppFrame, type AppFrameProps } from './AppFrame.tsx';
 import { NavItem, NavSection, SideNav } from './SideNav.tsx';
 import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs.tsx';
 import { Icon } from '../icon/Icon.tsx';
@@ -10,6 +11,7 @@ import { Input } from '../Input/Input.tsx';
 import { Menu } from '../Menu/Menu.tsx';
 import { PageShell } from '../PageShell/PageShell.tsx';
 import { Panel } from '../Panel/Panel.tsx';
+import { StatusAlert } from '../StatusAlert/StatusAlert.tsx';
 import { StatusBadge } from '../status/StatusBadge.tsx';
 import { Wordmark } from '../Wordmark/Wordmark.tsx';
 
@@ -64,7 +66,15 @@ function Account() {
   );
 }
 
-function Frame({ defaultCollapsed }: { defaultCollapsed?: boolean }) {
+function Frame({
+  defaultCollapsed,
+  frameProps,
+  content,
+}: {
+  defaultCollapsed?: boolean;
+  frameProps?: Partial<AppFrameProps>;
+  content?: ReactNode;
+}) {
   const [page, setPage] = useState('Tasks');
   const item = (label: string, concept: Parameters<typeof Icon>[0]['concept'], extra = {}) => (
     <NavItem
@@ -82,6 +92,7 @@ function Frame({ defaultCollapsed }: { defaultCollapsed?: boolean }) {
   return (
     <AppFrame
       defaultCollapsed={defaultCollapsed}
+      {...frameProps}
       header={<Brand />}
       footer={<Account />}
       topBar={
@@ -115,13 +126,15 @@ function Frame({ defaultCollapsed }: { defaultCollapsed?: boolean }) {
         </SideNav>
       }
     >
-      <PageShell header={{ title: page, description: 'Everything your workforce is doing right now.' }}>
-        <Panel p="md">
-          <Text size="sm" c="dimmed">
-            Page content sits in the main region, inside a PageShell.
-          </Text>
-        </Panel>
-      </PageShell>
+      {content ?? (
+        <PageShell header={{ title: page, description: 'Everything your workforce is doing right now.' }}>
+          <Panel p="md">
+            <Text size="sm" c="dimmed">
+              Page content sits in the main region, inside a PageShell.
+            </Text>
+          </Panel>
+        </PageShell>
+      )}
     </AppFrame>
   );
 }
@@ -158,4 +171,84 @@ export const TabletDrawerOpen: Story = {
   render: () => <Frame />,
   globals: { viewport: { value: 'tablet', isRotated: false } },
   play: openDrawer,
+};
+
+/**
+ * The app holds the drawer state, so a keyboard shortcut can open it. Press
+ * Ctrl+B or Cmd+B: from md it collapses the rail, below md it toggles the
+ * drawer. The shortcut belongs to the app; the frame only exposes the state.
+ */
+function ControlledDrawerFrame() {
+  const theme = useMantineTheme();
+  const wide = useMediaQuery(`(min-width: ${theme.breakpoints.md})`, true, { getInitialValueInEffect: false });
+  const [collapsed, setCollapsed] = useState(false);
+  const [drawerOpened, setDrawerOpened] = useState(false);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() !== 'b' || !(event.metaKey || event.ctrlKey)) return;
+      if (event.altKey || event.shiftKey || event.repeat || event.isComposing) return;
+      // Firefox opens its bookmarks sidebar on Ctrl+B.
+      event.preventDefault();
+      if (wide) setCollapsed((value) => !value);
+      else setDrawerOpened((value) => !value);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [wide]);
+
+  return (
+    <Frame
+      frameProps={{ collapsed, onCollapsedChange: setCollapsed, drawerOpened, onDrawerOpenedChange: setDrawerOpened }}
+      content={
+        <PageShell header={{ title: 'Controlled drawer', description: 'Press Ctrl+B or Cmd+B to toggle the navigation.' }}>
+          <Panel p="md">
+            <Text size="sm" c="dimmed">
+              Drawer {drawerOpened ? 'open' : 'closed'}, rail {collapsed ? 'collapsed' : 'expanded'}.
+            </Text>
+          </Panel>
+        </PageShell>
+      }
+    />
+  );
+}
+
+export const ControlledDrawer: Story = {
+  render: () => <ControlledDrawerFrame />,
+  globals: { viewport: { value: 'tablet', isRotated: false } },
+};
+
+/**
+ * `fill` makes main a viewport-tall column without padding. The alert keeps its
+ * height and the last child, the chat page, takes the rest. The page sets
+ * `min-height: 0` and gives its thread `flex: 1 1 0`, so the thread scrolls
+ * inside and the composer stays in view.
+ */
+export const FillMain: Story = {
+  render: () => (
+    <Frame
+      frameProps={{ fill: true }}
+      content={
+        <>
+          <StatusAlert tone="attention" title="Read only">
+            This workspace is paused. Messages are not sent.
+          </StatusAlert>
+          <section aria-label="Messages" style={{ display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+            <div style={{ flex: '1 1 0', minHeight: 0, overflowY: 'auto', padding: 'var(--space-4)' }}>
+              {Array.from({ length: 30 }, (_, index) => (
+                <Text key={index} size="sm" mb="xs">
+                  Message {index + 1}
+                </Text>
+              ))}
+            </div>
+            <div style={{ borderTop: '1px solid var(--border)', padding: 'var(--space-3)' }}>
+              <Text size="sm" c="dimmed">
+                The composer sits at the bottom.
+              </Text>
+            </div>
+          </section>
+        </>
+      }
+    />
+  ),
 };

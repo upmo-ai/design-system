@@ -603,15 +603,76 @@ button.upmo-liveness:hover {
 }
 .upmo-composer__row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-1);
   margin-top: var(--space-1);
 }
+/* The pills and icons wrap onto further lines when they do not fit; send keeps
+   its slot at the inline end of the first line. */
+.upmo-composer__tools {
+  display: flex;
+  flex: 1 1 0;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-start;
+  gap: var(--space-1);
+  min-width: 0;
+  min-height: var(--control-sm);
+}
+.upmo-composer__send {
+  flex: none;
+  border-radius: var(--radius-full);
+}
 .upmo-composer__pill {
+  max-width: 100%;
+  min-width: 0;
   border-radius: var(--radius-full);
   background: var(--surface-200);
   color: var(--ink-secondary);
   font-weight: 600;
+}
+/* The compact toolbar tightens the pills so the model, attach, dictate, tools
+   and send fit one line at 360px. */
+.upmo-composer--compact .upmo-composer__pill {
+  padding-inline: var(--space-2);
+}
+/* A long pill label ends in an ellipsis instead of being cut off. */
+.upmo-composer__pill-inner {
+  min-width: 0;
+}
+.upmo-composer__pill-label {
+  min-width: 0;
+}
+.upmo-composer__pill-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.upmo-composer__menu {
+  max-width: min(320px, calc(100vw - var(--space-6)));
+}
+.upmo-composer__option {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.upmo-composer__option-description {
+  color: var(--ink-muted);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+  white-space: normal;
+}
+.upmo-composer__group {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.upmo-composer__group-value {
+  color: var(--ink-muted);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
 }
 .upmo-composer__pill:hover {
   background: var(--surface-hover);
@@ -619,12 +680,6 @@ button.upmo-liveness:hover {
 }
 .upmo-composer__icon {
   color: var(--ink-muted);
-}
-.upmo-composer__spacer {
-  flex: 1;
-}
-.upmo-composer__send {
-  border-radius: var(--radius-full);
 }
 .upmo-composer__hint {
   display: flex;
@@ -1889,6 +1944,12 @@ button.upmo-liveness:hover {
   flex: 1;
   max-width: 320px;
 }
+/* The scrolling region is a tab stop so keyboard users can scroll sideways;
+   the ring sits inside, clear of the table's outer border. */
+.upmo-datatable__scroll:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
 .upmo-datatable__filters {
   display: flex;
   align-items: center;
@@ -2042,6 +2103,31 @@ button.upmo-liveness:hover {
 
 .upmo-app-frame__main:focus {
   outline: none;
+}
+
+/* Fill mode: main is a viewport-tall column without padding, and the last child
+   grows into the space the others leave. The rules sit in :where() so a page's
+   own styles win. Border-box keeps the header offset inside the 100dvh.
+   Main starts at the top of the window, under the fixed top bar, so
+   scroll-padding keeps focused controls from scrolling in behind it. Mantine
+   animates main's padding with --app-shell-transition-duration; the padding
+   here is a layout switch between routes, not a collapse, so it does not slide. */
+:where(.upmo-app-frame__main[data-fill]) {
+  --app-shell-padding: 0px;
+  --app-shell-transition-duration: 0ms;
+  scroll-padding-top: var(--app-shell-header-offset, 0px);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+}
+:where(.upmo-app-frame__main[data-fill]) > :where(*) {
+  flex: none;
+}
+:where(.upmo-app-frame__main[data-fill]) > :where(:last-child) {
+  flex: 1 0 auto;
 }
 
 /* The drawer class sits on the Mantine Drawer content only. Mantine's full-

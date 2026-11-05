@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { Pagination, Text, TextInput } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import clsx from 'clsx';
@@ -42,6 +42,19 @@ export interface DataTableProps<Row> {
   /** Shown when rows is empty. */
   emptyLabel?: ReactNode;
 
+  /** Accessible name of the table. Prefer a visible `caption` or `aria-labelledby` when the page has a heading. */
+  'aria-label'?: string;
+  /** Id of the element that names the table, e.g. the heading above it. */
+  'aria-labelledby'?: string;
+  /** A visible caption, rendered above the rows as the table's `<caption>`. It also names the table. */
+  caption?: ReactNode;
+  /**
+   * Minimum width of the scrolling table, in px or any CSS length. Below it the
+   * table scrolls sideways, inside a focusable region that takes the table's name.
+   * Default 480.
+   */
+  minWidth?: number | string;
+
   className?: string;
 }
 
@@ -50,6 +63,11 @@ export interface DataTableProps<Row> {
  * footer (a summary and pagination). Filtering, searching and paging are
  * controlled: the parent holds the data and responds to the search, filter and
  * page callbacks, so the table stays a pure presentation of the current page.
+ *
+ * Name the table with `caption`, `aria-label` or `aria-labelledby`, so screen
+ * reader users can find it among a page's tables. The same name goes on the
+ * scrolling region around it, which is a tab stop: a keyboard user focuses it
+ * and scrolls sideways with the arrow keys when the table is wider than the page.
  */
 export function DataTable<Row>({
   columns,
@@ -64,8 +82,17 @@ export function DataTable<Row>({
   onPageChange,
   summary,
   emptyLabel = 'Nothing to show',
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  caption,
+  minWidth = 480,
   className,
 }: DataTableProps<Row>) {
+  const captionId = `${useId()}-caption`;
+  // The region repeats the table's name: aria-labelledby wins over aria-label,
+  // which wins over the caption, as it does for the table itself.
+  const regionLabelledBy = ariaLabelledBy ?? (ariaLabel == null && caption != null ? captionId : undefined);
+  const named = ariaLabel != null || regionLabelledBy != null;
   const showToolbar = onSearchChange != null || filters != null;
   const showFooter = summary != null || (page != null && totalPages != null && totalPages > 1);
 
@@ -88,8 +115,18 @@ export function DataTable<Row>({
         </div>
       ) : null}
 
-      <Table.ScrollContainer minWidth={480}>
-        <Table>
+      <Table.ScrollContainer
+        minWidth={minWidth}
+        // Native scrolling: Mantine's scroll area viewport cannot take focus.
+        type="native"
+        className="upmo-datatable__scroll"
+        tabIndex={0}
+        role={named ? 'region' : undefined}
+        aria-label={ariaLabelledBy == null ? ariaLabel : undefined}
+        aria-labelledby={regionLabelledBy}
+      >
+        <Table aria-label={ariaLabel} aria-labelledby={ariaLabelledBy} captionSide="top">
+          {caption != null ? <Table.Caption id={captionId}>{caption}</Table.Caption> : null}
           <Table.Thead>
             <Table.Tr>
               {columns.map((col) => (

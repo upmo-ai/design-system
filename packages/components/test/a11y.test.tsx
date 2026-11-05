@@ -2,12 +2,13 @@ import { IconCheck, IconFolder } from '@tabler/icons-react';
 import { act, fireEvent, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import type { ReactElement } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   ApprovalCard,
   Button,
   Checkbox,
   Composer,
+  DataTable,
   Dialog,
   EmptyState,
   EventStream,
@@ -38,6 +39,9 @@ const options: axe.RunOptions = {
     region: { enabled: false },
   },
 };
+
+// A failed assertion must not leave a matchMedia stub behind for later tests.
+afterEach(() => vi.restoreAllMocks());
 
 /** Render into the Upmo theme and return axe violations as readable lines. */
 async function violations(ui: ReactElement) {
@@ -201,7 +205,6 @@ describe('accessibility (axe): AppFrame', () => {
     renderThemed(frame());
     expect(screen.getByRole('navigation', { name: 'Main' })).toBeInTheDocument();
     expect(await scan()).toEqual([]);
-    vi.restoreAllMocks();
   });
 
   it('icon rail with an open flyout has no axe violations', async () => {
@@ -214,7 +217,6 @@ describe('accessibility (axe): AppFrame', () => {
     // non-item child. A plain Mantine Menu fails the same way, so the rule is
     // off for this scan only; the items themselves are menuitems.
     expect(await scan({ 'aria-required-children': { enabled: false } })).toEqual([]);
-    vi.restoreAllMocks();
   });
 
   // aria-current is a global attribute in ARIA 1.2, so it is allowed on a
@@ -226,7 +228,6 @@ describe('accessibility (axe): AppFrame', () => {
     const members = await screen.findByRole('menuitem', { name: 'Members' });
     expect(members).toHaveAttribute('aria-current', 'page');
     expect(await scan({ 'aria-required-children': { enabled: false } })).toEqual([]);
-    vi.restoreAllMocks();
   });
 
   it('open drawer over the rail has no axe violations', async () => {
@@ -235,6 +236,107 @@ describe('accessibility (axe): AppFrame', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Open navigation' }));
     await screen.findByRole('dialog');
     expect(await scan()).toEqual([]);
-    vi.restoreAllMocks();
+  });
+});
+
+describe('accessibility (axe): AppFrame controlled drawer and fill', () => {
+  const navigation = (
+    <SideNav>
+      <NavSection>
+        <NavItem label="Home" icon={<IconFolder />} href="/" />
+        <NavItem label="Tasks" icon={<IconFolder />} href="/tasks" active />
+      </NavSection>
+    </SideNav>
+  );
+
+  async function scan() {
+    const results = await act(() => axe.run(document.body, options));
+    return results.violations.map((v) => `${v.id}: ${v.help} (${v.nodes.map((n) => n.target.join(' ')).join(', ')})`);
+  }
+
+  it('controlled drawer open over the rail has no axe violations', async () => {
+    const original = window.matchMedia;
+    vi.spyOn(window, 'matchMedia').mockImplementation((query: string) => ({
+      ...original(query),
+      matches: !query.includes('62em'),
+    }));
+    renderThemed(
+      <AppFrame drawerOpened onDrawerOpenedChange={() => {}} header={<Wordmark />} navigation={navigation}>
+        <h1>Tasks</h1>
+      </AppFrame>,
+    );
+    await screen.findByRole('dialog', { name: 'Navigation' });
+    expect(await scan()).toEqual([]);
+  });
+
+  it('fill frame has no axe violations', async () => {
+    const original = window.matchMedia;
+    vi.spyOn(window, 'matchMedia').mockImplementation((query: string) => ({ ...original(query), matches: true }));
+    renderThemed(
+      <AppFrame fill mainClassName="page" header={<Wordmark />} navigation={navigation}>
+        <h1>Chat</h1>
+        <section aria-label="Messages">Messages</section>
+      </AppFrame>,
+    );
+    expect(await scan()).toEqual([]);
+  });
+});
+
+describe('accessibility (axe): DataTable name and Composer details', () => {
+  const rows = [{ id: 'run_1', agent: 'Invoice sync' }];
+  const columns = [
+    { key: 'id', header: 'Run', render: (r: (typeof rows)[number]) => r.id, mono: true },
+    { key: 'agent', header: 'Agent', render: (r: (typeof rows)[number]) => r.agent },
+  ];
+
+  it('DataTable with a caption has no axe violations', async () => {
+    expect(await violations(<DataTable columns={columns} rows={rows} rowKey={(r) => r.id} caption="Recent runs" />)).toEqual(
+      [],
+    );
+  });
+
+  it('DataTable with aria-label and minWidth has no axe violations', async () => {
+    expect(
+      await violations(
+        <DataTable columns={columns} rows={rows} rowKey={(r) => r.id} aria-label="Recent runs" minWidth={320} />,
+      ),
+    ).toEqual([]);
+  });
+
+  it('compact Composer with an open menu of described options has no axe violations', async () => {
+    renderThemed(
+      <Composer
+        value=""
+        onChange={() => {}}
+        onSend={() => {}}
+        toolbar="compact"
+        onAttach={() => {}}
+        config={{
+          label: 'Agent, route and model',
+          groups: [
+            {
+              label: 'Agent',
+              value: 'auto',
+              onChange: () => {},
+              options: [{ value: 'auto', label: 'Auto', description: 'Pick the agent for the task.' }],
+            },
+            { label: 'Model', value: 'fast', onChange: () => {}, options: [{ value: 'fast', label: 'Fast' }] },
+          ],
+        }}
+        toolsMode={{
+          value: 'auto',
+          onChange: () => {},
+          options: [{ value: 'auto', label: 'Auto', description: 'Use tools when they help.' }],
+        }}
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Tools mode: Auto' }));
+    await screen.findByRole('menuitemradio', { name: 'Auto' });
+    // An open Mantine Menu fails aria-required-children under jsdom (see the
+    // AppFrame flyout cases above); the items themselves are menu items.
+    const results = await act(() =>
+      axe.run(document.body, { rules: { ...options.rules, 'aria-required-children': { enabled: false } } }),
+    );
+    expect(results.violations.map((v) => `${v.id}: ${v.help}`)).toEqual([]);
   });
 });
