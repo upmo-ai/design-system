@@ -6,6 +6,8 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   ApprovalCard,
   Button,
+  ChatMessage,
+  ChatThread,
   Checkbox,
   Composer,
   Dialog,
@@ -14,6 +16,8 @@ import {
   Field,
   IconButton,
   Input,
+  NotificationBell,
+  NotificationItem,
   Select,
   StatusBadge,
   Switch,
@@ -123,6 +127,40 @@ const cases: [string, ReactElement][] = [
     />,
   ],
   ['ApprovalCard', <ApprovalCard action="Send the digest" onApprove={() => {}} onDeny={() => {}} />],
+  ['approve-only ApprovalCard', <ApprovalCard action="Use the Q3 workbook?" onApprove={() => {}} />],
+  [
+    'compact EmptyState at a lower heading level',
+    <EmptyState compact headingLevel={4} title="You are all caught up" description="Nothing needs your attention." />,
+  ],
+  [
+    'ChatThread',
+    <ChatThread announcement="Upmo replied.">
+      <ChatMessage role="user" content="Reconcile the open invoices." />
+      <ChatMessage role="assistant" content="All 142 invoices are matched." model="Claude Sonnet" />
+    </ChatThread>,
+  ],
+  [
+    'ChatThread with announce="additions"',
+    <ChatThread announce="additions" busy>
+      <ChatMessage role="assistant" content="Fetching the invoices" streaming />
+    </ChatThread>,
+  ],
+  [
+    'empty ChatThread',
+    <ChatThread empty={<EmptyState compact headingLevel={2} title="Start a chat" />} />,
+  ],
+  ['NotificationBell', <NotificationBell count={4} />],
+  [
+    'NotificationBell (open) with items',
+    <NotificationBell count={2} defaultOpened>
+      <NotificationItem title="Digest sent" meta="Finance agent, 09:41" unread />
+      <NotificationItem title="Needs an answer" unread>
+        <ApprovalCard action="Use the Q3 workbook?" onApprove={() => {}} />
+      </NotificationItem>
+    </NotificationBell>,
+  ],
+  ['NotificationBell (open) and empty', <NotificationBell count={0} defaultOpened />],
+  ['NotificationBell (open) and loading', <NotificationBell count={0} defaultOpened busy />],
   ['Composer', <Composer value="hello" onChange={() => {}} onSend={() => {}} />],
   [
     'StatusAlert',

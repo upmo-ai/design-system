@@ -26,6 +26,18 @@ describe('ApprovalCard', () => {
     expect(screen.getByText('It goes to 40 people.')).toBeInTheDocument();
   });
 
+  it('renders only Approve, with an approve-only description, when onDeny is omitted', () => {
+    const onApprove = vi.fn();
+    const { rerender } = renderThemed(<ApprovalCard action="Use the Q3 workbook?" onApprove={onApprove} />);
+    expect(screen.queryByRole('button', { name: 'Deny' })).not.toBeInTheDocument();
+    expect(screen.getByText('Approve to continue.')).toBeInTheDocument();
+    expect(screen.queryByText(/deny to let the agent/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Approve' }));
+    expect(onApprove).toHaveBeenCalledOnce();
+    rerender(<ApprovalCard action="Use the Q3 workbook?" description="It is the shared one." onApprove={onApprove} />);
+    expect(screen.getByText('It is the shared one.')).toBeInTheDocument();
+  });
+
   it('is a group labelled by the action, not an alert', () => {
     renderThemed(<ApprovalCard action="Send the digest" onApprove={() => {}} onDeny={() => {}} />);
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
