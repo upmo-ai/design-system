@@ -342,6 +342,16 @@ that step.
 An icon tile, a title, a supporting line, and at most one primary action. Use
 `firstRun` for the dashed invitation border.
 
+`compact` tightens the padding, shrinks the tile to 32px, sets the title at the
+h4 size and lets the supporting line use the full width, so the state fits a
+320px popover or a small panel. `headingLevel` (2 to 6, default 3) sets the
+semantic level of the title without changing how it looks: the size stays h3, or
+h4 when compact. Put the title where it belongs in the page outline.
+
+```tsx
+<EmptyState compact headingLevel={4} title="You are all caught up" description="Nothing needs your attention." />
+```
+
 ## CopyButton and CodeBlock
 
 `CopyButton` copies to the clipboard and confirms with a brief "Copied" state.

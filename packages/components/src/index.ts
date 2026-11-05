@@ -100,11 +100,19 @@ export {
   type ComposerConfigMenu,
 } from './chat/Composer.tsx';
 export { ChatMessage, type ChatMessageProps, type ChatRole } from './chat/ChatMessage.tsx';
+export { ChatThread, type ChatThreadProps } from './chat/ChatThread.tsx';
 export {
   ToolCallTrace,
   type ToolCallTraceProps,
   type ToolCallStatus,
 } from './chat/ToolCallTrace.tsx';
+
+export {
+  NotificationBell,
+  NotificationItem,
+  type NotificationBellProps,
+  type NotificationItemProps,
+} from './notifications/NotificationBell.tsx';
 
 export { ApprovalCard, type ApprovalCardProps, type ApprovalState } from './task/ApprovalCard.tsx';
 export { PhaseRail, type PhaseRailProps } from './task/PhaseRail.tsx';

@@ -20,6 +20,15 @@ export const Attention: Story = {
   ),
 };
 
+/** Without onDeny the card offers Approve alone. */
+export const ApproveOnly: Story = {
+  render: () => (
+    <div style={{ maxWidth: 520 }}>
+      <ApprovalCard action="Use the Q3 workbook for the close?" onApprove={() => {}} />
+    </div>
+  ),
+};
+
 export const Destructive: Story = {
   render: () => (
     <div style={{ maxWidth: 520 }}>

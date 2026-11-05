@@ -1,0 +1,129 @@
+---
+title: Agent surfaces
+description: The chat thread, approvals and the notification bell, the pieces an app builds around an agent.
+---
+
+The agent surfaces are the parts of an app where a person and an agent talk and
+hand decisions back and forth: the message list of a chat, the approval
+that pauses an action, and the bell that tells you something needs you. Live
+previews are in the [Storybook gallery](https://design.upmo.dev/storybook/).
+
+## ChatThread
+
+`ChatThread` is the scrolling message list of a chat. Put `ChatMessage`
+elements in it, oldest first. It is a `role="log"` named "Messages" (`label` to
+change it), it fills the height its parent gives it, and only the thread
+scrolls: the page around it does not move. Give the parent a height and a flex
+or grid layout, with the composer under the thread.
+
+```tsx
+<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+  <ChatThread
+    busy={streaming}
+    scrollKey={lastSentId}
+    announcement={finishedReply}
+    empty={<EmptyState compact title="Start a chat" />}
+  >
+    {messages.map((m) => <ChatMessage key={m.id} {...m} />)}
+  </ChatThread>
+  <Composer value={draft} onChange={setDraft} onSend={send} />
+</div>
+```
+
+**Scroll pinning.** The thread scrolls to the newest message on mount. While the
+reader is at the newest message (within `followThreshold`, 64px by default), it
+keeps following: new messages, a reply that grows as it streams, and content
+that arrives late such as a code block. Scrolling up by any amount lets go of
+the newest message: an arrow key, Page Up or Home, the wheel, a swipe or the
+scrollbar, even a few pixels at a time while a reply streams. The thread then
+stays put, and follows again only once the reader is back within
+`followThreshold` of the bottom. When the reader is further away than that, it
+shows a "Jump to newest" button (`jumpLabel`). Pressing it scrolls
+down, smoothly unless reduced motion is on, and moves focus to the thread, since
+the button is gone by then. A change of `scrollKey` always returns to the
+newest message, even from the middle of the history. Pass the id of the message
+the user just sent.
+
+**Empty.** With no children, the `empty` slot shows instead, usually a compact
+`EmptyState`. The jump button never shows over an empty thread.
+
+**Screen readers.** The thread is focusable, so keyboard users can scroll it
+with the arrow keys. `busy` sets `aria-busy` while a reply streams.
+
+By default (`announce="manual"`) the log is silent and a visually hidden polite
+status region reads `announcement`. Set `announcement` to the finished reply, or
+a short line about it, when a reply has finished, so it is read once and not
+token by token. With `announce="additions"` the log announces each message as it
+is added, which suits a thread whose messages arrive whole.
+
+The thread clears the announcement from the page about two seconds after it is
+set, so an old line is not left in the reading order after the log. A screen
+reader speaks a change, though, so the same text for a second reply is only
+heard if the prop changed in between. Reset `announcement` to `undefined` when
+the next reply starts, and set it again when that reply finishes. Pass a
+string: an element that is new on every render counts as a new announcement.
+
+## Composer
+
+`Composer` is the chat input that sits under the thread. It has its own section
+on the [Compositions overview](/compositions/overview/#composer), including the
+config menu and the narrow-width toolbar.
+
+## ApprovalCard
+
+The agent pauses and asks before an action. Approve is the primary action and
+Deny is a quiet default. `onDeny` is optional: leave it out for something that
+has no "no" (a question the agent needs answered, a notice to acknowledge) and
+the card offers Approve alone, with the helper line "Approve to continue.". Pass
+`description` to write your own line in either case.
+
+```tsx
+<ApprovalCard action="Use the Q3 workbook for the close?" onApprove={answer} />
+```
+
+If you reuse `ApprovalCardProps` in your own types and call `props.onDeny()`,
+TypeScript now reports that it may be undefined. Guard the call, or make the
+prop required in your own type.
+
+## NotificationBell and NotificationItem
+
+`NotificationBell` is the bell button of the top bar and the popover list it
+opens. `count` is the unread count, and `NotificationItem` elements go in
+`children`, newest first.
+
+```tsx
+<NotificationBell count={unread} busy={isLoading}>
+  {items.map((n) => (
+    <NotificationItem key={n.id} unread={n.unread} title={n.title} meta={n.meta} action={n.action} />
+  ))}
+</NotificationBell>
+```
+
+- **Name and badge.** The bell is named "Notifications, 4 unread", or just
+  "Notifications" at zero (`label` and the `unreadLabel` function change the words). The
+  badge is decorative and hidden from assistive tech; it caps at "99+" (`max`)
+  while the name keeps the exact count. The name is how a screen reader learns
+  about new notifications. The bell does not announce them by itself.
+- **Popover.** It is a dialog named by its heading (`heading`, which defaults to
+  the label, at `headingLevel` 2 to 5). Focus moves to the heading when it
+  opens, not to the first button, so a key held down on the bell cannot press
+  an Approve inside. Escape closes it and focus returns to the bell. The items
+  are a list named by the same heading. It is uncontrolled by default; use
+  `opened` and `onOpenedChange` (or `defaultOpened`) to control it, the same
+  names as `NavItem`, and `width` and `position` to place it.
+- **Empty.** With no items it shows a compact `EmptyState` reading "You are all
+  caught up", with "Nothing needs your attention." under it, as a heading one
+  level below the popover's. Pass `empty` to replace it. While `busy` is set, a
+  spinner sits beside the heading (`loadingLabel` names it, "Loading" by
+  default). With no items yet, `aria-busy` is set on the popover and the empty
+  state waits. Once items are listed they stay readable, so `aria-busy` is not
+  set over them.
+- **Items.** A `NotificationItem` has a `title`, a quiet `meta` line, a
+  decorative `icon`, an `action` such as a small button, and `children` for
+  richer content. To ask for a decision, put an `ApprovalCard` in the children.
+  An unread item shows a marker and is read as "Unread: " before its title
+  (`unreadLabel` on the item sets those words and the separator), so it never
+  depends on colour alone.
+
+The popover is built on Mantine `Popover`. The design system does not export a
+`Popover` wrapper of its own.

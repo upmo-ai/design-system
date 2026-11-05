@@ -12,13 +12,18 @@ export interface ApprovalCardProps {
   action: ReactNode;
   /**
    * The helper sentence under the action while pending. Default "Approve to
-   * continue, deny to let the agent find another way."
+   * continue, deny to let the agent find another way." With no `onDeny`, the
+   * default is "Approve to continue."
    */
   description?: ReactNode;
   /** Approve handler. */
   onApprove: () => void;
-  /** Deny handler. */
-  onDeny: () => void;
+  /**
+   * Deny handler. Optional: without it the Deny button is not rendered and the
+   * card offers Approve alone, for an action that has no "no" (a question the
+   * agent needs answered, a notice to acknowledge).
+   */
+  onDeny?: () => void;
   /** Approve button label. Default "Approve". */
   approveLabel?: string;
   /** Deny button label. Default "Deny". */
@@ -56,10 +61,12 @@ const outcome: Record<Exclude<ApprovalState, 'pending'>, { word: string; Icon: t
 
 /**
  * ApprovalCard is "autonomy with a hand on the wheel": the agent pauses and asks
- * before an action, naming the action and offering Approve or Deny. By default
- * it is attention-toned (the agent wants a decision); mark it destructive to
- * turn it critical when the action is irreversible or costly. Approve is the
- * primary action; Deny is a quiet default, since denying is always safe.
+ * before an action, naming the action and offering Approve, and Deny when
+ * `onDeny` is given. Leave `onDeny` out for a question that has no "no" (the
+ * card then offers Approve alone). By default it is attention-toned (the agent
+ * wants a decision); mark it destructive to turn it critical when the action is
+ * irreversible or costly. Approve is the primary action; Deny is a quiet
+ * default, since denying is always safe.
  *
  * An approval has a lifecycle: once approved, denied or expired, the card keeps
  * the record (who and when) in place of the buttons. It is a labelled group, not
@@ -67,7 +74,7 @@ const outcome: Record<Exclude<ApprovalState, 'pending'>, { word: string; Icon: t
  */
 export function ApprovalCard({
   action,
-  description = 'Approve to continue, deny to let the agent find another way.',
+  description,
   onApprove,
   onDeny,
   approveLabel = 'Approve',
@@ -82,6 +89,12 @@ export function ApprovalCard({
   className,
 }: ApprovalCardProps) {
   const titleId = useId();
+  const helper =
+    description === undefined
+      ? onDeny
+        ? 'Approve to continue, deny to let the agent find another way.'
+        : 'Approve to continue.'
+      : description;
   const decided = state === 'pending' ? null : outcome[state];
   const Icon = decided ? decided.Icon : destructive ? IconAlertTriangle : IconShieldCheck;
   const tone = decided ? decided.tone : destructive ? 'upmo-tone-critical' : 'upmo-tone-attention';
@@ -100,7 +113,7 @@ export function ApprovalCard({
         <div className="upmo-approval__title" id={titleId}>
           {action}
         </div>
-        {!decided && description ? <div className="upmo-approval__description">{description}</div> : null}
+        {!decided && helper ? <div className="upmo-approval__description">{helper}</div> : null}
         {children ? <div className="upmo-approval__extra">{children}</div> : null}
         {cost ? <div className="upmo-approval__cost">{cost}</div> : null}
         {decided ? (
@@ -124,16 +137,18 @@ export function ApprovalCard({
             >
               {approveLabel}
             </Button>
-            <Button
-              type="button"
-              size="sm"
-              variant="default"
-              onClick={onDeny}
-              disabled={busy}
-              leftSection={<UpmoIcon concept="action.deny" size={16} />}
-            >
-              {denyLabel}
-            </Button>
+            {onDeny ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="default"
+                onClick={onDeny}
+                disabled={busy}
+                leftSection={<UpmoIcon concept="action.deny" size={16} />}
+              >
+                {denyLabel}
+              </Button>
+            ) : null}
           </Group>
         )}
       </div>

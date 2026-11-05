@@ -59,7 +59,11 @@ export default defineConfig({
         },
         {
           label: 'Compositions',
-          items: ['compositions/overview', 'compositions/composer-layout'],
+          items: [
+            'compositions/overview',
+            'compositions/composer-layout',
+            'compositions/agent-surfaces',
+          ],
         },
       ],
     }),
