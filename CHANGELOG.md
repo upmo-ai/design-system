@@ -2,6 +2,12 @@
 
 Release notes for the six @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 1.4.0 (2026-11-05)
+
+### Features
+
+- **brand:** add @upmo-ai/brand with logos, icons and social image (#9) ([f6b0f64](https://github.com/upmo-ai/design-system/commit/f6b0f64899117b53076812154ed27d4d3e3e1f6b))
+
 ## 1.3.0 (2026-11-05)
 
 ### Features
