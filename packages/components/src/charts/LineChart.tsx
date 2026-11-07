@@ -13,7 +13,7 @@ import {
   type Curve,
 } from './chartKit.ts';
 import { legendFormatter, tickFormatter, tooltipFormatter } from './chartFormat.ts';
-import { axisNavPlan, lineOption, type LineRow } from './chartOptions.ts';
+import { axisNavPlan, lineOption, type ChartSize, type LineRow } from './chartOptions.ts';
 import {
   ChartDataTable,
   ChartLegend,
@@ -211,7 +211,8 @@ function SeriesLineChart({
   const showArea = stacked || (area ?? rows.length === 1);
   const optionKey = [dataKey, [...hidden].join(','), stacked, showArea, curve, signature].join('|');
   const build = useCallback(
-    (theme: ChartTheme) => lineOption({ labels, rows: visible, stacked, area: showArea, curve, tick, tip }, theme),
+    (theme: ChartTheme, size: ChartSize) =>
+      lineOption({ labels, rows: visible, stacked, area: showArea, curve, tick, tip, size }, theme),
     // The key stands for the content of labels, visible, tick and tip.
     [optionKey],
   );
@@ -255,6 +256,7 @@ function SeriesLineChart({
         height={height}
         width={width}
         build={build}
+        responsive
         chartRef={chartRef}
         active={nav.active}
         navPlan={navPlan}

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
-import type { Action, NavPlan } from './chartOptions.ts';
+import type { Action, ChartSize, NavPlan } from './chartOptions.ts';
 import { observeChartTheme, readChartTheme, themeKey, type ChartTheme } from './chartTheme.ts';
 import type { ECharts, EChartsCoreOption } from './echartsSetup.ts';
 
@@ -33,10 +33,17 @@ export interface EChartFrameProps {
   /** Keep the plot square, as wide as its container allows (the donut). */
   square?: boolean;
   /**
-   * Builds the ECharts option from the live theme. Keep it stable (useCallback) for
-   * unchanged inputs: a new function re-applies the option, which closes the tooltip.
+   * Builds the ECharts option from the live theme and the drawn size in px. Keep it
+   * stable (useCallback) for unchanged inputs: a new function re-applies the option,
+   * which closes the tooltip.
    */
-  build: (theme: ChartTheme) => EChartsCoreOption;
+  build: (theme: ChartTheme, size: ChartSize) => EChartsCoreOption;
+  /**
+   * Build again when the drawn size changes, for a chart whose axes depend on it (how many
+   * ticks fit). The new option is merged into the drawing, so the tooltip and animation are
+   * left alone. Off by default: the donut does not care.
+   */
+  responsive?: boolean;
   /** Receives the chart instance while one exists, for dispatchAction from legends. */
   chartRef?: MutableRefObject<ECharts | null>;
   /** The keyboard-focused position, or null. Its tooltip and highlight follow it. */
@@ -59,6 +66,7 @@ export function EChartFrame({
   width,
   square = false,
   build,
+  responsive = false,
   chartRef,
   active = null,
   navPlan,
@@ -72,11 +80,23 @@ export function EChartFrame({
   const [theme, setTheme] = useState<ChartTheme | null>(null);
   const [epoch, setEpoch] = useState(0);
   const [ready, setReady] = useState(false);
+  // The drawn size, in px, that the option was last built for. A change after the first draw
+  // bumps the counter, which rebuilds a responsive chart's option.
+  const sizeRef = useRef<ChartSize>({ width, height });
+  const [sizeEpoch, setSizeEpoch] = useState(0);
 
   // What the keyboard position currently shows, so the next change can undo it.
   const shown = useRef<{ tip: boolean; highlight: Action | null }>({ tip: false, highlight: null });
-  const latest = useRef({ active, navPlan });
-  latest.current = { active, navPlan };
+  const latest = useRef({ active, navPlan, build, theme, responsive });
+  latest.current = { active, navPlan, build, theme, responsive };
+
+  /** Notes the drawn size; a responsive chart builds its option again when it changed. */
+  const noteSize = (next: ChartSize) => {
+    const last = sizeRef.current;
+    if (last.width === next.width && last.height === next.height) return;
+    sizeRef.current = next;
+    if (latest.current.responsive) setSizeEpoch((e) => e + 1);
+  };
 
   useEffect(() => {
     let alive = true;
@@ -119,6 +139,8 @@ export function EChartFrame({
     });
     instanceRef.current = chart;
     fallbackSize.current = measured ? null : { width, height };
+    // The option below is built for this size; nothing to rebuild yet.
+    sizeRef.current = measured ? { width: host.clientWidth, height: host.clientHeight } : { width, height };
     if (chartRef) chartRef.current = chart;
     shown.current = { tip: false, highlight: null };
 
@@ -134,6 +156,7 @@ export function EChartFrame({
         // size when the host is shown.
         if (host.clientWidth === 0 || host.clientHeight === 0) return;
         chart.resize();
+        noteSize({ width: host.clientWidth, height: host.clientHeight });
       });
       observer.observe(host);
     }
@@ -155,17 +178,27 @@ export function EChartFrame({
     if (!chart || !last || (last.width === width && last.height === height)) return;
     fallbackSize.current = { width, height };
     chart.resize({ width, height });
+    noteSize({ width, height });
   }, [width, height]);
 
   useEffect(() => {
     const chart = instanceRef.current;
     if (!chart || !theme) return;
-    chart.setOption(build(theme), true);
+    chart.setOption(build(theme, sizeRef.current), true);
     // A fresh option starts with nothing shown; bring the keyboard position back.
     shown.current = { tip: false, highlight: null };
     syncPosition(chart, shown.current, latest.current.active, latest.current.navPlan);
     setReady(true);
   }, [runtime, epoch, theme, build]);
+
+  // A size change after the first draw: merge the rebuilt option (new tick count, same data)
+  // into the drawing, so the tooltip and the series are not replayed.
+  useEffect(() => {
+    const chart = instanceRef.current;
+    const { theme: current, build: rebuild, responsive: on } = latest.current;
+    if (!chart || !current || !on || sizeEpoch === 0) return;
+    chart.setOption(rebuild(current, sizeRef.current));
+  }, [sizeEpoch]);
 
   useEffect(() => {
     const chart = instanceRef.current;
