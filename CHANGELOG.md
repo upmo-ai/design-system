@@ -2,6 +2,12 @@
 
 Release notes for the six @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 1.6.0 (2026-11-07)
+
+### Features
+
+- **charts:** draw the multi-series charts with a lazy, themed ECharts (#11) ([5ff74ea](https://github.com/upmo-ai/design-system/commit/5ff74ea6f91a1eaddad006b4f562b1a320410e61))
+
 ## 1.5.0 (2026-11-07)
 
 ### Features
