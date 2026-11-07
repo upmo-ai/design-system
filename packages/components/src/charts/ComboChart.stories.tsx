@@ -53,6 +53,22 @@ export const Empty: Story = {
   ),
 };
 
+const themed = () => (
+  <div style={{ maxWidth: 560 }}>
+    <ComboChart
+      title="Runs and success rate"
+      bars={{ name: 'Runs', points: runs }}
+      line={{ name: 'Success rate', points: rate }}
+      formatLine={(n) => `${n}%`}
+    />
+  </div>
+);
+
+export const Dark: Story = { render: themed, globals: { theme: 'dark' } };
+
+/** Bars gain a fill pattern and the line shows a marker at every point. */
+export const HighContrast: Story = { render: themed, globals: { theme: 'hc' } };
+
 export const Narrow: Story = {
   render: () => (
     <div style={{ maxWidth: 280 }}>

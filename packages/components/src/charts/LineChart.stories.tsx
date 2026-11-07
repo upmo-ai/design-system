@@ -49,10 +49,36 @@ export const MultiSeries: Story = {
   ),
 };
 
-export const Smooth: Story = {
+/** A gradient under each line, fading to nothing at the baseline. */
+export const Areas: Story = {
   render: () => (
     <div style={{ maxWidth: 560 }}>
-      <LineChart title="Tokens per day" series={tokens()} curve="smooth" area formatValue={formatTokens} />
+      <LineChart title="Tokens per day" series={tokens()} area formatValue={formatTokens} />
+    </div>
+  ),
+};
+
+/** Straight segments, for data where the path between two points means nothing. */
+export const Linear: Story = {
+  render: () => (
+    <div style={{ maxWidth: 560 }}>
+      <LineChart title="Tokens per day" series={tokens()} curve="linear" formatValue={formatTokens} />
+    </div>
+  ),
+};
+
+/** No formatValue: ticks and the legend's Mean and Max read 536k, 2.3M, never 536,440.143. */
+export const LargeNumbers: Story = {
+  render: () => (
+    <div style={{ maxWidth: 560 }}>
+      <LineChart
+        title="Tokens per day"
+        series={[
+          wave('Input', 1_400_000, 600_000, 0),
+          wave('Output', 536_440.143, 200_000, 1),
+          wave('Cached', 90_000, 30_000, 2),
+        ]}
+      />
     </div>
   ),
 };
@@ -119,3 +145,14 @@ export const Narrow: Story = {
     </div>
   ),
 };
+
+const themed = () => (
+  <div style={{ maxWidth: 560 }}>
+    <LineChart title="Tokens per day" series={tokens()} formatValue={formatTokens} />
+  </div>
+);
+
+export const Dark: Story = { render: themed, globals: { theme: 'dark' } };
+
+/** Lines gain a marker at every point and the later ones are dashed, so colour is not the only cue. */
+export const HighContrast: Story = { render: themed, globals: { theme: 'hc' } };

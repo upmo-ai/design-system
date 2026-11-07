@@ -31,7 +31,7 @@ installed, and run in Playwright's image:
 
 ```sh
 docker run --rm -v "$PWD":/w -w /w mcr.microsoft.com/playwright:v1.61.1-noble \
-  sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @upmo-ai/components test:browser"
+  sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm build && pnpm --filter @upmo-ai/components test:browser"
 ```
 
 The brand kit in `packages/brand` is generated and committed. After you change

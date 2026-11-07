@@ -1,16 +1,13 @@
 /**
- * Pure helpers shared by the multi-series charts: axis scales, curve paths,
- * label thinning and the six-colour cap. No React and no DOM here, so the maths
- * is unit-tested on its own.
+ * Pure helpers shared by the multi-series charts: axis scales, the six-colour
+ * cap and rounded shares. No React and no DOM here, so the maths is unit-tested
+ * on its own. Drawing is ECharts' job; see chartOptions.ts.
  */
 
 export type ColorIndex = 1 | 2 | 3 | 4 | 5 | 6;
 
 /** A plotted value; null is a gap and is never drawn as zero. */
 export type Cell = number | null;
-
-/** Average glyph width in px for the caption size; used to budget label room. */
-export const CHAR_W = 7;
 
 /** How many series, slices or bars a chart colours before it folds the rest into "Other". */
 export const MAX_SERIES = 6;
@@ -92,12 +89,6 @@ export function percentTexts(amounts: readonly number[]): string[] {
   });
 }
 
-/** Shortens a label to at most `max` characters, ending in an ellipsis. */
-export function truncate(label: string, max: number): string {
-  if (label.length <= max) return label;
-  return `${label.slice(0, Math.max(1, max - 1))}\u2026`;
-}
-
 // --- Axis scale ---------------------------------------------------------------
 
 export interface Scale {
@@ -150,100 +141,21 @@ export function niceScale(lo: number, hi: number, count?: number): Scale {
   return candidates.sort((x, y) => Math.abs(x.ticks.length - 4.5) - Math.abs(y.ticks.length - 4.5))[0];
 }
 
-/** Maps a value in [min, max] linearly onto [from, to]. */
-export function linear(min: number, max: number, from: number, to: number) {
-  const span = max - min || 1;
-  return (v: number) => from + ((v - min) / span) * (to - from);
-}
-
-// --- Label thinning -------------------------------------------------------------
-
 /**
- * Show every nth label so labels of `maxChars` characters do not touch when
- * their anchors are `spacing` px apart.
+ * A scale with exactly `count` ticks, so a second value axis shares the
+ * gridlines of the first. A nice step is used when one gives that count;
+ * otherwise the nice range is split into equal parts, which keeps the
+ * gridlines aligned at the cost of rounder labels.
  */
-export function thinStep(maxChars: number, spacing: number): number {
-  const need = maxChars * CHAR_W + 12;
-  return Math.max(1, Math.ceil(need / Math.max(1, spacing)));
+export function alignedScale(lo: number, hi: number, count: number): Scale {
+  const scale = niceScale(lo, hi, count);
+  if (scale.ticks.length === count || count < 2) return scale;
+  const step = (scale.max - scale.min) / (count - 1);
+  const ticks = Array.from({ length: count }, (_, i) => Number((scale.min + i * step).toFixed(10)));
+  return { ticks, min: scale.min, max: scale.max, step };
 }
 
-// --- Paths ----------------------------------------------------------------------
-
-export type Pt = readonly [number, number];
 export type Curve = 'linear' | 'smooth';
-
-const r2 = (n: number) => Math.round(n * 100) / 100;
-
-/**
- * The segments after the first point of a run: `L` steps for linear, monotone
- * cubic steps for smooth. The curve never overshoots the data, so a smooth
- * line cannot dip below a zero baseline between two points.
- */
-export function segments(points: readonly Pt[], curve: Curve): string {
-  if (points.length < 2) return '';
-  if (curve === 'linear' || points.length === 2) {
-    return points
-      .slice(1)
-      .map(([x, y]) => `L ${r2(x)},${r2(y)}`)
-      .join(' ');
-  }
-  const n = points.length;
-  const d: number[] = [];
-  for (let i = 0; i < n - 1; i++) {
-    const dx = points[i + 1][0] - points[i][0];
-    d.push(dx === 0 ? 0 : (points[i + 1][1] - points[i][1]) / dx);
-  }
-  const m: number[] = new Array(n);
-  m[0] = d[0];
-  m[n - 1] = d[n - 2];
-  for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
-  for (let i = 0; i < n - 1; i++) {
-    if (d[i] === 0) {
-      m[i] = 0;
-      m[i + 1] = 0;
-      continue;
-    }
-    const a = m[i] / d[i];
-    const b = m[i + 1] / d[i];
-    const s = a * a + b * b;
-    if (s > 9) {
-      const t = 3 / Math.sqrt(s);
-      m[i] = t * a * d[i];
-      m[i + 1] = t * b * d[i];
-    }
-  }
-  const out: string[] = [];
-  for (let i = 0; i < n - 1; i++) {
-    const [x0, y0] = points[i];
-    const [x1, y1] = points[i + 1];
-    const h = x1 - x0;
-    out.push(
-      `C ${r2(x0 + h / 3)},${r2(y0 + (m[i] * h) / 3)} ${r2(x1 - h / 3)},${r2(y1 - (m[i + 1] * h) / 3)} ${r2(x1)},${r2(y1)}`,
-    );
-  }
-  return out.join(' ');
-}
-
-/** A run of points as an open path. */
-export function linePath(points: readonly Pt[], curve: Curve): string {
-  if (points.length === 0) return '';
-  return `M ${r2(points[0][0])},${r2(points[0][1])} ${segments(points, curve)}`.trim();
-}
-
-/** A run of points closed down to a flat baseline, for an area wash. */
-export function areaPath(points: readonly Pt[], baseline: number, curve: Curve): string {
-  if (points.length === 0) return '';
-  const first = points[0];
-  const last = points[points.length - 1];
-  return `M ${r2(first[0])},${r2(baseline)} L ${r2(first[0])},${r2(first[1])} ${segments(points, curve)} L ${r2(last[0])},${r2(baseline)} Z`;
-}
-
-/** The band between a lower and an upper edge, for stacked areas. */
-export function bandPath(upper: readonly Pt[], lower: readonly Pt[], curve: Curve): string {
-  if (upper.length === 0) return '';
-  const back = [...lower].reverse();
-  return `M ${r2(upper[0][0])},${r2(upper[0][1])} ${segments(upper, curve)} L ${r2(back[0][0])},${r2(back[0][1])} ${segments(back, curve)} Z`;
-}
 
 /** Index ranges of consecutive non-null cells; a null ends a run. */
 export function runsOf(values: readonly Cell[]): number[][] {
@@ -261,18 +173,6 @@ export function runsOf(values: readonly Cell[]): number[][] {
   return runs;
 }
 
-/** An annular sector, or a full ring when the sweep covers the whole circle. */
-export function arcPath(cx: number, cy: number, rOuter: number, rInner: number, a0: number, a1: number): string {
-  const pt = (r: number, a: number) => `${r2(cx + r * Math.sin(a))},${r2(cy - r * Math.cos(a))}`;
-  if (a1 - a0 >= Math.PI * 2 - 1e-6) {
-    const ring = (r: number) =>
-      `M ${r2(cx)},${r2(cy - r)} A ${r},${r} 0 1 1 ${r2(cx)},${r2(cy + r)} A ${r},${r} 0 1 1 ${r2(cx)},${r2(cy - r)} Z`;
-    return `${ring(rOuter)} ${ring(rInner)}`;
-  }
-  const large = a1 - a0 > Math.PI ? 1 : 0;
-  return `M ${pt(rOuter, a0)} A ${rOuter},${rOuter} 0 ${large} 1 ${pt(rOuter, a1)} L ${pt(rInner, a1)} A ${rInner},${rInner} 0 ${large} 0 ${pt(rInner, a0)} Z`;
-}
-
 // --- Series styling -------------------------------------------------------------
 
 export type MarkerShape = 'circle' | 'square' | 'triangle' | 'diamond';
@@ -282,7 +182,11 @@ export interface SeriesStyle {
   dashed: boolean;
 }
 
-/** Circle, square, triangle, diamond, then the same four dashed. */
+/**
+ * Circle, square, triangle, diamond, then the same four dashed. Used only when
+ * colour must not be the sole cue (high contrast): the normal themes draw plain
+ * lines.
+ */
 export const seriesStyles: readonly SeriesStyle[] = [
   { marker: 'circle', dashed: false },
   { marker: 'square', dashed: false },
@@ -295,15 +199,6 @@ export const seriesStyles: readonly SeriesStyle[] = [
 ];
 
 export const styleAt = (position: number): SeriesStyle => seriesStyles[position % seriesStyles.length];
-
-export const DASH = '6 4';
-
-export type PatternKind = 'solid' | 'stripe' | 'dots' | 'stripe-back' | 'lines' | 'grid';
-
-/** Fill textures for bars and slices, so a fill is never told apart by colour alone. */
-export const patternKinds: readonly PatternKind[] = ['solid', 'stripe', 'dots', 'stripe-back', 'lines', 'grid'];
-
-export const patternAt = (position: number): PatternKind => patternKinds[position % patternKinds.length];
 
 // --- The six-colour cap ---------------------------------------------------------
 

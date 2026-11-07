@@ -9,6 +9,14 @@ ticks and a title naming what it measures. Live previews are in the
 [Storybook gallery](https://design.upmo.dev/storybook/). The rules every chart
 follows are on the [Charts overview](/charts/overview/).
 
+:::note[Built on ECharts, loaded lazily]
+The drawing uses Apache ECharts, fetched in its own chunk the first time a chart
+mounts, so a page without a chart never loads it. Until it arrives the chart
+holds its height with a quiet placeholder and nothing moves. See the
+[Charts overview](/charts/overview/) for the bundle size and the hover, legend
+and number rules shared by every chart.
+:::
+
 ```tsx
 <ComboChart
   title="Runs and success rate"
@@ -23,26 +31,32 @@ follows are on the [Charts overview](/charts/overview/).
 | Prop | Type | Default | Notes |
 | --- | --- | --- | --- |
 | `bars` | `ComboSeries` | required | `{ name, points }`. A point is `{ label, value: number or null, display? }`. Drawn against the left axis in `chart-1`. |
-| `line` | `ComboSeries` | required | Same shape. Drawn against the right axis in `chart-2` with circle markers. Matched to the bars by position. |
-| `formatBar` | `(n: number) => string` | plain number | Left axis ticks and bar values without a `display`. |
-| `formatLine` | `(n: number) => string` | plain number | Right axis ticks and line values without a `display`. |
+| `line` | `ComboSeries` | required | Same shape. Drawn against the right axis in `chart-2` as a smooth line. Matched to the bars by position. |
+| `formatBar` | `(n: number) => string` | compact numbers | Left axis ticks, tooltip and bar values without a `display`. |
+| `formatLine` | `(n: number) => string` | compact numbers | Right axis ticks, tooltip and line values without a `display`. |
 | `title` | `string` | "Combo chart" | Names the group and captions the hidden table. |
 | `height` | `number` | 220 | In px. |
-| `width` | `number` | 480 | Starting width before the chart measures its container. |
+| `width` | `number` | 480 | Used only while the container has no measurable width. |
 | `emptyText` | `string` | "No data to show" | |
 | `className` | `string` | none | |
 
 ## Axes
 
-Both axes have 4 or 5 round ticks and include zero. The right axis is asked for
-the same number of ticks as the left, so its ticks line up with the gridlines
-whenever a round step allows it. Only the left axis draws gridlines. The x labels
-come from the longer of the two series (the bars when they are equal) and thin
-out when they would overlap. The shorter series shows gaps where it has no point,
-and the hidden table lists every point of both.
+Both axes have 4 or 5 round ticks and include zero. The right axis is given the
+same number of ticks as the left and the range is split into equal parts, so
+both axes' ticks sit on the same gridlines (the right axis labels can be less
+round than the left in exchange). Only one set of gridlines is drawn. The x
+labels come from the longer of the two series (the bars when they are equal) and
+overlapping labels are dropped. The shorter series shows gaps where it has no
+point, and the hidden table lists every point of both.
 
-The line has a thin halo in the surface colour so it stays readable where it
-crosses a bar.
+## Tooltip and legend
+
+Hovering a position shades its band and shows a tooltip with both values, each
+through its own formatter, with the bars first as the axes read. The legend under
+the plot is two buttons: click one, or press Enter or Space, to hide or show the
+bars or the line (its axis goes with it). The last visible series cannot be
+hidden, and hovering or focusing an item highlights that series.
 
 ## Gaps
 
@@ -51,11 +65,14 @@ as zero, and the hidden table says "No data".
 
 ## Accessibility
 
-- The legend repeats the bar swatch and the line marker, and the axis titles name
-  the series, so the two are never told apart by colour alone.
-- The SVG is hidden from assistive technology. A visually hidden table, captioned
-  with `title`, has a row per x label and a column for the bars and one for the
-  line.
-- The chart is one tab stop. The arrow keys, Home and End move along the x axis
-  and a readout line gives the label and both values. Hovering shows the same
-  readout.
+- The legend and the axis titles name the series, so the two are never told apart
+  by colour alone. In high contrast (the `hc` theme, `prefers-contrast: more` or
+  forced colours) the bars also gain a fill pattern and the line shows a marker
+  at every point.
+- The drawing is hidden from assistive technology. A visually hidden table,
+  captioned with `title`, has a row per x label and a column for the bars and one
+  for the line.
+- The chart is one tab stop. The arrow keys, Home and End move along the x axis;
+  a readout line gives the label and both values, and the tooltip and highlight
+  follow on the plot. Escape clears it.
+- Animation is off for reduced motion.

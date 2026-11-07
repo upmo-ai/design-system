@@ -90,3 +90,14 @@ export const Narrow: Story = {
     </div>
   ),
 };
+
+const themed = () => (
+  <div style={{ maxWidth: 560 }}>
+    <GroupedBarChart title="Run outcomes per day" groups={outcomes} />
+  </div>
+);
+
+export const Dark: Story = { render: themed, globals: { theme: 'dark' } };
+
+/** Bars gain fill patterns, so colour is not the only cue. */
+export const HighContrast: Story = { render: themed, globals: { theme: 'hc' } };
