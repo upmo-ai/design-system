@@ -1,0 +1,87 @@
+---
+title: Charts overview
+description: The usage charts, how they use colour, and what they all do for keyboards, screen readers and empty data.
+---
+
+The chart components draw usage and trend data for pages that show how agents
+are doing: runs per day, tokens by type, spend by connector. They are plain SVG
+and CSS with no charting dependency, and they read colour from the chart tokens
+only, so they follow the active theme (light, dark and high contrast).
+
+:::tip[Live previews are in Storybook]
+Every chart renders live, with its many-series, gap, empty and narrow cases, in
+the [Storybook gallery](https://design.upmo.dev/storybook/). Run it locally with
+`pnpm --filter @upmo-ai/storybook dev`.
+:::
+
+| Component | Use it for |
+| --- | --- |
+| `StatTile` | One number with a trend. |
+| `UsageMeter` | Usage against a limit. |
+| `BarChart` | One series of bars with a value on each. |
+| [`LineChart`](/charts/line-chart/) | One line from `data`, or several lines, areas or stacked areas from `series`. |
+| [`DonutChart`](/charts/donut-chart/) | The share each part has of a whole. |
+| [`GroupedBarChart`](/charts/grouped-bar-chart/) | Two or three measures side by side for each group. |
+| [`ComboChart`](/charts/combo-chart/) | A count as bars and a rate as a line on a second axis. |
+
+## Colour: six at most
+
+The chart tokens give six categorical colours, `chart-1` to `chart-6`, plus the
+neutral `chart-mid`. They are validated to be told apart in every theme, but no
+chart needs more than six, and more than a handful is hard to read. So every
+chart that takes many series folds the surplus into one **Other** series drawn
+in `chart-mid`:
+
+- **LineChart** with more than six series keeps the five with the highest
+  maximum value (in their original order) and sums the rest, point by point,
+  into Other. Six or fewer are drawn as given. Pass `colorIndex` on a series to
+  keep its colour steady when the ranking changes between loads.
+- **DonutChart** keeps the first five slices in the order you pass and sums the
+  rest into Other. Sort largest first to keep the largest five.
+- **GroupedBarChart** keeps the first three bars of each group (`chart-1` to
+  `chart-3`) and sums the rest into Other.
+
+The Other series is always a sum. That is right for counts, tokens and spend. For
+a rate or an average, merge the series yourself before you pass them in. The
+visually hidden data table of each chart still lists every series you passed, so
+nothing is lost to a screen reader.
+
+## Never colour alone
+
+Colour is never the only cue:
+
+- Lines differ by marker shape and dash: circle, square, triangle, diamond, then
+  the same four dashed. The legend shows the same marker and dash.
+- Bars and slices differ by fill texture (solid, stripes, dots, and so on). The
+  legend swatch has the same texture.
+- The donut legend lists the label, value and share of every slice in text.
+- Every chart has a readout line that names a position and its values in words.
+
+## Keyboard and screen readers
+
+- The drawing is hidden from assistive technology. A visually hidden table,
+  captioned with the chart `title`, carries every data point.
+- The chart is one tab stop. Focus it and the readout line shows the first
+  position; the arrow keys, Home and End move along the x steps, groups or
+  slices, and Escape clears it. Hovering a position shows the same readout.
+- The readout is a polite live region while the chart has focus, so each
+  position is read out as you move.
+- Give every chart a `title`. It names the group and captions the hidden table.
+
+## Empty, gaps and narrow containers
+
+- No points, or no series, shows a short empty state instead of a drawing. Set
+  its words with `emptyText`.
+- A `null` value is a gap in a line or a skipped bar. It is never drawn as zero,
+  and the hidden table says "No data".
+- The drawing measures its container and keeps its text at a fixed size. In a
+  narrow container the x labels thin out (every nth is shown) and long legends
+  wrap. `width` sets only the starting width before the first measurement.
+- Nothing animates, so there is no motion to reduce.
+
+## Values and formatting
+
+Each chart takes a `formatValue` (the combo takes `formatBar` and `formatLine`)
+for axis ticks, the legend and the readout. A point's own `display` wins over the
+formatter for that point. Axes use 4 or 5 round ticks (steps of 1, 2, 2.5 or 5
+times a power of ten) and always include zero.

@@ -1,0 +1,97 @@
+---
+title: LineChart
+description: One line, or several lines, areas and stacked areas on a shared x axis.
+---
+
+`LineChart` draws a trend. Pass `data` for one line, or `series` for several
+lines on one x axis. Live previews are in the
+[Storybook gallery](https://design.upmo.dev/storybook/). The rules every chart
+follows are on the [Charts overview](/charts/overview/).
+
+## One line
+
+The original form is unchanged: `data` is a list of points, and the chart is a
+sparkline-style line with a soft wash under it. Pair it with a `StatTile` so the
+trend reads without the curve.
+
+```tsx
+<LineChart
+  title="Spend over the last 14 days"
+  data={days.map((d) => ({ label: d.label, value: d.spend }))}
+/>
+```
+
+The props below that are marked "series" apply only when you pass `series`.
+
+## Several series
+
+```tsx
+<LineChart
+  title="Tokens per day"
+  formatValue={(n) => `${n.toLocaleString()} tok`}
+  series={[
+    { name: 'Input', points: days.map((d) => ({ label: d.label, value: d.input })) },
+    { name: 'Output', points: days.map((d) => ({ label: d.label, value: d.output })) },
+  ]}
+/>
+```
+
+Every series has the same length, and the x labels come from the first series. A
+point's `value` can be `null`: the line breaks there and starts again, and the
+point is never drawn as zero. Under the plot, the legend is a real table with
+one row per series: its marker, name, mean and max (both through `formatValue`).
+Means ignore `null` points.
+
+Series differ by marker shape and dash as well as colour: circle, square,
+triangle, diamond, then the same four dashed. The legend shows the same marker.
+
+## Props
+
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `data` | `LinePoint[]` | none | One line. `{ label, value, display? }`. |
+| `series` | `LineSeries[]` | none | `{ name, colorIndex?, points }`, where a point is `{ label, value: number or null, display? }`. Wins over `data`. |
+| `title` | `string` | "Line chart" | Names the group and captions the hidden table. |
+| `height` | `number` | 160 for `data`, 220 for `series` | In px. |
+| `width` | `number` | 480 | The viewBox width for `data`. For `series` the starting width before the chart measures its container. |
+| `colorIndex` | `1` to `6` | 1 | `data` only. Each series sets its own. |
+| `area` | `boolean` | true for `data` and one series, false for several | Soft wash under each line. |
+| `stacked` | `boolean` | false | Series only. Stacks the areas. |
+| `curve` | `'linear'` or `'smooth'` | `'linear'` | Series only. Smooth never overshoots the data. |
+| `formatValue` | `(n: number) => string` | plain number | Series only. Ticks, legend and readout. |
+| `legend` | `boolean` | true | Series only. |
+| `otherLabel` | `string` | "Other" | Series only. Name of the merged series. |
+| `emptyText` | `string` | "No data to show" | Series only. |
+| `className` | `string` | none | |
+
+## Stacked areas
+
+`stacked` stacks the series in order, first at the bottom, and fills each band.
+It suits parts of a total, such as token consumption by input, output and tool
+definitions. The axis is sized to the stack total. Values should be zero or more:
+a negative value adds nothing to the stack. A missing (`null`) point in a stacked
+series contributes nothing to the stack, and that band is not drawn at that x.
+
+```tsx
+<LineChart title="Token consumption" series={tokens} stacked />
+```
+
+There is no separate area chart: `area` on a line chart, or `stacked`, covers it.
+
+## More than six series
+
+The chart never needs a seventh colour. With more than six series it keeps the
+five with the highest maximum value, in their original order, and sums the rest
+into one "Other" series in `chart-mid`. Ties keep the earlier series, and a
+series with no values ranks last. Six or fewer are drawn as given. The hidden
+data table still has a column for every series you passed.
+
+## Accessibility
+
+- The SVG is hidden from assistive technology. A visually hidden table, captioned
+  with `title`, has a row per x label and a column per series, with "No data" for
+  a `null`.
+- The chart is one tab stop. The arrow keys, Home and End move along the x axis
+  and a readout line under the plot gives the label and every series value.
+  Hovering shows the same readout.
+- The legend is a visible table named "(title) series".

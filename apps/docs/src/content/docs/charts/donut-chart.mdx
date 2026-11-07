@@ -1,0 +1,70 @@
+---
+title: DonutChart
+description: The share each part has of a whole, with a legend that lists every slice.
+---
+
+`DonutChart` shows how a total divides: runs by model, spend by connector. The
+centre carries a label and a value, and a legend list beside the ring gives each
+slice its label, value and share as text. Live previews are in the
+[Storybook gallery](https://design.upmo.dev/storybook/). The rules every chart
+follows are on the [Charts overview](/charts/overview/).
+
+```tsx
+<DonutChart
+  title="Runs by model"
+  centerLabel="Runs"
+  centerValue="1,284"
+  data={[
+    { label: 'Claude Sonnet', value: 640, display: '640 runs' },
+    { label: 'Claude Haiku', value: 380, display: '380 runs' },
+    { label: 'Nova Pro', value: 264, display: '264 runs' },
+  ]}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `data` | `DonutDatum[]` | required | `{ label, value, display? }`. Slices run clockwise from the top, in the order you pass. |
+| `title` | `string` | "Donut chart" | Names the group and captions the hidden table. |
+| `centerLabel` | `string` | "Total" | Small text in the ring. |
+| `centerValue` | `string` | the formatted total | The figure in the ring. |
+| `size` | `number` | 200 | Diameter in px. The ring scales down in a narrow container. |
+| `formatValue` | `(n: number) => string` | plain number | For values without a `display`, and the default centre value. |
+| `otherLabel` | `string` | "Other" | Name of the merged slice. |
+| `emptyText` | `string` | "No data to show" | Shown in the empty ring. |
+| `className` | `string` | none | |
+
+## Share and the legend
+
+Each legend row shows a swatch, the label, the value (`display`, or `formatValue`
+of the value) and the share of the total. Shares of 10% and over are whole
+numbers; below that they have one decimal. The shares are rounded together
+(largest remainder first), so the legend always adds up to exactly 100%. A slice with a zero value stays in
+the legend at 0% and has no arc. Negative and non-finite values count as zero.
+
+## Five slices, then Other
+
+The first five slices, in the order you pass them, keep `chart-1` to `chart-5`.
+Every slice after the fifth is summed into one "Other" slice in `chart-mid`, so
+the ring never needs a seventh colour. Sort your data largest first if you want
+the five largest to stay. The hidden data table still lists every slice you
+passed.
+
+## Empty
+
+When the total is zero, or there are no slices, the ring is drawn empty in
+`chart-mid` with the `emptyText` in its centre. Zero-value slices still appear in
+the legend.
+
+## Accessibility
+
+- Slices differ by fill texture as well as colour (solid, stripes, dots, and so
+  on). The legend swatch has the same texture, and the legend text gives the
+  numbers, so the ring is never read by colour alone.
+- The SVG is hidden from assistive technology. A visually hidden table, captioned
+  with `title`, lists every slice with its value and share.
+- The chart is one tab stop. The arrow keys move between slices and a readout line
+  gives the slice, its value and share. Hovering a slice or a legend row shows
+  the same readout.

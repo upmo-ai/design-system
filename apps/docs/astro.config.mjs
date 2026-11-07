@@ -62,6 +62,16 @@ export default defineConfig({
           items: ['controls/button', 'controls/status', 'controls/forms', 'controls/navigation'],
         },
         {
+          label: 'Charts',
+          items: [
+            'charts/overview',
+            'charts/line-chart',
+            'charts/donut-chart',
+            'charts/grouped-bar-chart',
+            'charts/combo-chart',
+          ],
+        },
+        {
           label: 'Compositions',
           items: [
             'compositions/overview',

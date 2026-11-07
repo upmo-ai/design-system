@@ -73,3 +73,42 @@ describe('styles.css app frame', () => {
     expect(section).not.toMatch(/(?:^|[\s;{])(?:left|right):/m);
   });
 });
+
+/** The body of every rule inside a forced-colors media block whose selector list contains `selector`. */
+function forcedRules(selector: string): string[] {
+  const bodies: string[] = [];
+  let from = css.indexOf('@media (forced-colors: active)');
+  while (from !== -1) {
+    const open = css.indexOf('{', from);
+    let depth = 1;
+    let i = open + 1;
+    while (depth > 0 && i < css.length) {
+      if (css[i] === '{') depth++;
+      else if (css[i] === '}') depth--;
+      i++;
+    }
+    const block = css.slice(open + 1, i - 1);
+    for (const m of block.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      const selectors = m[1]
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .split(',')
+        .map((s) => s.trim());
+      if (selectors.includes(selector)) bodies.push(m[2]);
+    }
+    from = css.indexOf('@media (forced-colors: active)', i);
+  }
+  return bodies;
+}
+
+describe('styles.css chart marks in forced colours', () => {
+  it.each(['.upmo-grouped-bar__bar', '.upmo-donut__slice', '.upmo-combo__bar', '.upmo-chart__marker'])(
+    'gives %s a CanvasText edge',
+    (selector) => {
+      expect(forcedRules(selector).join('\n')).toMatch(/stroke:\s*CanvasText/);
+    },
+  );
+
+  it.each(['.upmo-linechart__run', '.upmo-combo__line'])('paints %s in CanvasText', (selector) => {
+    expect(forcedRules(selector).join('\n')).toMatch(/stroke:\s*CanvasText/);
+  });
+});

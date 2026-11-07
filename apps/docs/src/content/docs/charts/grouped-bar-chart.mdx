@@ -1,0 +1,66 @@
+---
+title: GroupedBarChart
+description: Two or three measures side by side for each group, vertical or horizontal.
+---
+
+`GroupedBarChart` compares a few measures across groups: passed, failed and
+cancelled runs for each day. Live previews are in the
+[Storybook gallery](https://design.upmo.dev/storybook/). The rules every chart
+follows are on the [Charts overview](/charts/overview/).
+
+```tsx
+<GroupedBarChart
+  title="Run outcomes per day"
+  groups={[
+    { label: 'Mon', bars: [{ name: 'Passed', value: 42 }, { name: 'Failed', value: 3 }] },
+    { label: 'Tue', bars: [{ name: 'Passed', value: 51 }, { name: 'Failed', value: null }] },
+  ]}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `groups` | `BarGroup[]` | required | `{ label, bars }`. A bar is `{ name, value: number or null, display? }`. |
+| `orientation` | `'vertical'` or `'horizontal'` | `'vertical'` | Horizontal puts the group labels on the left. |
+| `title` | `string` | "Grouped bar chart" | Names the group and captions the hidden table. |
+| `height` | `number` | 220 vertical; grows with the groups when horizontal | In px. |
+| `width` | `number` | 480 | Starting width before the chart measures its container. |
+| `formatValue` | `(n: number) => string` | plain number | Axis ticks and values without a `display`. |
+| `otherLabel` | `string` | "Other" | Name of the merged bar. |
+| `emptyText` | `string` | "No data to show" | |
+| `className` | `string` | none | |
+
+Every group has the same bars in the same order. The bar names come from the
+first group. The value axis has 4 or 5 round ticks and always includes zero.
+
+## Colour and Other
+
+Bars use `chart-1` to `chart-3` by their position in the group. If a group has
+more than three bars, the first three keep their colours and the rest are summed
+into one "Other" bar in `chart-mid`. The legend lists the bar names with the same
+swatch each bar has, and the hidden data table still has a column for every bar
+you passed.
+
+Each bar position also has its own fill texture (solid, stripes, dots, and so
+on), so bars are not told apart by colour alone.
+
+## Gaps
+
+A `null` value skips the bar and leaves its slot empty, so the other bars keep
+their place. It is never drawn as zero. The hidden table says "No data".
+
+## Narrow containers
+
+The chart measures its container and keeps its text at a fixed size. When group
+labels would overlap, every nth is shown. Long labels in the horizontal layout
+are shortened with an ellipsis; the readout and hidden table keep the full label.
+
+## Accessibility
+
+- The SVG is hidden from assistive technology. A visually hidden table, captioned
+  with `title`, has a row per group and a column per bar.
+- The chart is one tab stop. The arrow keys, Home and End move between groups and
+  a readout line gives the group label and the value of every bar. Hovering a
+  group shows the same readout.
