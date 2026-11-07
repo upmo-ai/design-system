@@ -2,6 +2,12 @@
 
 Release notes for the six @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 1.5.0 (2026-11-07)
+
+### Features
+
+- **charts:** add multi-series line, donut, grouped bar and combo charts (#10) ([a847da9](https://github.com/upmo-ai/design-system/commit/a847da96c3cfd5ab9487a04df4581a1b14497605))
+
 ## 1.4.0 (2026-11-05)
 
 ### Features
