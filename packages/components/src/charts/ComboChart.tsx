@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useCallback, useRef } from 'react';
 import { colorVar, toCell, type Cell } from './chartKit.ts';
 import { tickFormatter, tooltipFormatter } from './chartFormat.ts';
-import { COMBO_BARS_KEY, COMBO_LINE_KEY, axisNavPlan, comboOption } from './chartOptions.ts';
+import { COMBO_BARS_KEY, COMBO_LINE_KEY, axisNavPlan, comboOption, type ChartSize } from './chartOptions.ts';
 import {
   ChartDataTable,
   ChartLegend,
@@ -113,7 +113,7 @@ export function ComboChart({
 
   const optionKey = [dataKey, showBars, showLine, barFormat.signature, lineFormat.signature].join('|');
   const build = useCallback(
-    (theme: ChartTheme) =>
+    (theme: ChartTheme, size: ChartSize) =>
       comboOption(
         {
           labels,
@@ -125,6 +125,7 @@ export function ComboChart({
           tickLine,
           tipBar,
           tipLine,
+          size,
         },
         theme,
       ),
@@ -175,6 +176,7 @@ export function ComboChart({
         height={height}
         width={width}
         build={build}
+        responsive
         chartRef={chartRef}
         active={nav.active}
         navPlan={navPlan}

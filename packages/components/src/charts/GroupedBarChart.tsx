@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useCallback, useRef } from 'react';
 import { MAX_GROUP_BARS, colorVar, sumCells, toCell, type Cell } from './chartKit.ts';
 import { tickFormatter, tooltipFormatter } from './chartFormat.ts';
-import { axisNavPlan, groupedBarOption, type BarRow } from './chartOptions.ts';
+import { axisNavPlan, groupedBarOption, type BarRow, type ChartSize } from './chartOptions.ts';
 import {
   ChartDataTable,
   ChartLegend,
@@ -115,7 +115,7 @@ export function GroupedBarChart({
 
   const optionKey = [dataKey, [...hidden].join(','), horizontal, signature].join('|');
   const build = useCallback(
-    (theme: ChartTheme) => groupedBarOption({ labels, bars: visible, horizontal, tick, tip }, theme),
+    (theme: ChartTheme, size: ChartSize) => groupedBarOption({ labels, bars: visible, horizontal, tick, tip, size }, theme),
     // The key stands for the content of labels, visible, tick and tip.
     [optionKey],
   );
@@ -158,6 +158,7 @@ export function GroupedBarChart({
         height={h}
         width={width}
         build={build}
+        responsive
         chartRef={chartRef}
         active={nav.active}
         navPlan={navPlan}

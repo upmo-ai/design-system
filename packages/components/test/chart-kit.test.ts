@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   alignedScale,
+  fitScale,
   maxOfCells,
   meanOf,
   niceScale,
@@ -10,6 +11,7 @@ import {
   runsOf,
   styleAt,
   sumCells,
+  type AxisFit,
 } from '../src/charts/chartKit.ts';
 
 describe('niceScale', () => {
@@ -48,6 +50,13 @@ describe('niceScale', () => {
   it('honours a requested tick count when a nice step can give it', () => {
     expect(niceScale(0, 100, 5).ticks).toHaveLength(5);
     expect(niceScale(0, 8, 5).ticks).toHaveLength(5);
+  });
+
+  it('caps the ticks at maxTicks: the most that fit at the tightest step, never fewer than two', () => {
+    expect(niceScale(0, 100, undefined, 4).ticks).toEqual([0, 50, 100]);
+    expect(niceScale(0, 100, undefined, 2).ticks).toEqual([0, 100]);
+    // Two ticks cannot span a range across zero; the fewest there are wins.
+    expect(niceScale(-100, 100, undefined, 2).ticks).toEqual([-100, 0, 100]);
   });
 });
 
@@ -189,5 +198,40 @@ describe('alignedScale', () => {
     expect(scale.ticks).toHaveLength(6);
     expect(scale.ticks[0]).toBe(0);
     expect(scale.ticks[5]).toBe(scale.max);
+  });
+});
+
+describe('fitScale', () => {
+  // A stacked 12px label takes 12 * 1.25 line height + 8px gap = 23px, so 200px holds nine,
+  // 69px holds four, 46px holds three, 30px and 1px hold two.
+  const y = (length: number): AxisFit => ({ length, direction: 'y', fontSize: 12 });
+  const make = (lo: number, hi: number) => (cap: number) => niceScale(lo, hi, undefined, cap);
+
+  it('keeps the usual scale when every label fits, and with no fit at all', () => {
+    const usual = niceScale(0, 100);
+    expect(fitScale(make(0, 100), String, y(200))).toEqual(usual);
+    expect(fitScale(make(0, 100), String, undefined)).toEqual(usual);
+  });
+
+  it('thins the ticks until the labels fit, down to two', () => {
+    expect(fitScale(make(0, 100), String, y(69)).ticks).toEqual([0, 50, 100]);
+    expect(fitScale(make(0, 100), String, y(30)).ticks).toEqual([0, 100]);
+    // Side by side, the widest label sets the pitch: dollar labels crowd fast.
+    const dollar = (n: number) => `US$${n.toFixed(2)}`;
+    expect(fitScale(make(0, 100), dollar, { length: 60, direction: 'x', fontSize: 12 }).ticks).toEqual([0, 100]);
+  });
+
+  it('never thins below two ticks', () => {
+    expect(fitScale(make(0, 100), String, y(1)).ticks).toEqual([0, 100]);
+    // A range across zero stops at the three a nice step can give.
+    expect(fitScale(make(-100, 100), String, y(1)).ticks).toEqual([-100, 0, 100]);
+  });
+
+  it('gives both axes of a combo one common tick count', () => {
+    const left = fitScale(make(0, 80), (n) => `${n} runs`, y(46));
+    expect(left.ticks).toEqual([0, 50, 100]);
+    const right = alignedScale(0, 100, left.ticks.length);
+    expect(right.ticks).toEqual([0, 50, 100]);
+    expect(right.ticks).toHaveLength(left.ticks.length);
   });
 });

@@ -9,7 +9,17 @@
  * bar tops and a quiet emphasis. Colour is never the only cue in high contrast:
  * decals, symbols and dashes switch on there.
  */
-import { alignedScale, niceScale, type Cell, type Curve, type Scale, type SeriesStyle } from './chartKit.ts';
+import {
+  alignedScale,
+  fitScale,
+  niceScale,
+  textWidth,
+  type AxisFit,
+  type Cell,
+  type Curve,
+  type Scale,
+  type SeriesStyle,
+} from './chartKit.ts';
 import { escapeHtml } from './chartFormat.ts';
 import { paint, withAlpha, type ChartTheme } from './chartTheme.ts';
 import type { EChartsCoreOption } from './echartsSetup.ts';
@@ -106,7 +116,39 @@ function base(theme: ChartTheme): Obj {
   };
 }
 
-const grid = (extra: Obj = {}): Obj => ({ top: 12, right: 16, bottom: 4, left: 4, containLabel: true, ...extra });
+const GRID = { top: 12, right: 16, bottom: 4, left: 4 };
+const grid = (extra: Obj = {}): Obj => ({ ...GRID, containLabel: true, ...extra });
+
+/** The drawn size of a chart in px, which decides how many ticks its value axis can label. */
+export interface ChartSize {
+  width: number;
+  height: number;
+}
+
+const CATEGORY_LABEL_MARGIN = 10;
+const HORIZONTAL_CATEGORY_LABEL_MAX = 120;
+const HORIZONTAL_CATEGORY_LABEL_MARGIN = 8;
+
+/**
+ * The room a vertical value axis has: the chart height less the grid padding and
+ * the category labels under the plot. Its labels stack, so each needs a line.
+ */
+function verticalFit(theme: ChartTheme, size: ChartSize | undefined, top: number = GRID.top): AxisFit | undefined {
+  if (!size) return undefined;
+  const categoryRow = CATEGORY_LABEL_MARGIN + theme.fontSize * 1.25;
+  return { direction: 'y', fontSize: theme.fontSize, length: size.height - top - GRID.bottom - categoryRow };
+}
+
+/**
+ * The room a horizontal value axis has (horizontal bars): the chart width less the
+ * grid padding and the category labels at the left, which are cut at 120 px.
+ */
+function horizontalFit(theme: ChartTheme, size: ChartSize | undefined, labels: readonly string[]): AxisFit | undefined {
+  if (!size) return undefined;
+  const widest = Math.max(0, ...labels.map((l) => textWidth(l, theme.fontSize)));
+  const categoryColumn = Math.min(widest, HORIZONTAL_CATEGORY_LABEL_MAX) + HORIZONTAL_CATEGORY_LABEL_MARGIN;
+  return { direction: 'x', fontSize: theme.fontSize, length: size.width - GRID.left - GRID.right - categoryColumn };
+}
 
 function categoryAxis(theme: ChartTheme, labels: readonly string[], extra: Obj = {}, labelExtra: Obj = {}): Obj {
   return {
@@ -139,6 +181,7 @@ function valueAxis(theme: ChartTheme, scale: Scale, tick: (n: number) => string,
       fontFamily: theme.fontFamily,
       fontSize: theme.fontSize,
       margin: 8,
+      hideOverlap: true,
       formatter: (value: number) => tick(value),
     },
     splitLine: { show: grid, lineStyle: { color: theme.border, opacity: theme.contrast ? 1 : 0.7 } },
@@ -220,6 +263,8 @@ export interface LineArgs {
   curve: Curve;
   tick: (n: number) => string;
   tip: (n: number) => string;
+  /** The drawn size, so the y axis can thin its ticks to the room. Without it the axis has its usual 4 or 5. */
+  size?: ChartSize;
 }
 
 /** The running totals of stacked series: a null adds nothing, a negative adds nothing. */
@@ -234,17 +279,23 @@ export function stackTops(rows: readonly { values: Cell[] }[], n: number): numbe
   });
 }
 
-export function lineScale(args: Pick<LineArgs, 'rows' | 'stacked' | 'labels'>): Scale {
+export function lineScale(
+  args: Pick<LineArgs, 'rows' | 'stacked' | 'labels'> & Partial<Pick<LineArgs, 'tick' | 'size'>>,
+  theme?: ChartTheme,
+): Scale {
   const plotted = args.stacked
     ? stackTops(args.rows, args.labels.length).flat()
     : args.rows.flatMap((r) => finite(r.values));
-  return niceScale(Math.min(0, ...plotted), Math.max(0, ...plotted));
+  const lo = Math.min(0, ...plotted);
+  const hi = Math.max(0, ...plotted);
+  const fit = theme && args.tick ? verticalFit(theme, args.size) : undefined;
+  return fitScale((cap) => niceScale(lo, hi, undefined, cap), args.tick ?? String, fit);
 }
 
 export function lineOption(args: LineArgs, theme: ChartTheme): EChartsCoreOption {
   const { labels, rows, stacked, area, curve, tick, tip } = args;
   const n = labels.length;
-  const scale = lineScale(args);
+  const scale = lineScale(args, theme);
   const tops = stacked ? stackTops(rows, n) : [];
   const smooth = curve === 'smooth';
 
@@ -359,11 +410,15 @@ export interface GroupedBarArgs {
   horizontal: boolean;
   tick: (n: number) => string;
   tip: (n: number) => string;
+  /** The drawn size, so the value axis can thin its ticks to the room. Without it the axis has its usual 4 or 5. */
+  size?: ChartSize;
 }
 
-export function barScale(bars: readonly { values: Cell[] }[]): Scale {
+export function barScale(bars: readonly { values: Cell[] }[], tick?: (n: number) => string, fit?: AxisFit): Scale {
   const nums = bars.flatMap((b) => finite(b.values));
-  return niceScale(Math.min(0, ...nums), Math.max(0, ...nums));
+  const lo = Math.min(0, ...nums);
+  const hi = Math.max(0, ...nums);
+  return fitScale((cap) => niceScale(lo, hi, undefined, cap), tick ?? String, fit);
 }
 
 const BAR_MAX_WIDTH = 28;
@@ -392,8 +447,9 @@ function shadowPointer(theme: ChartTheme): Obj {
 }
 
 export function groupedBarOption(args: GroupedBarArgs, theme: ChartTheme): EChartsCoreOption {
-  const { labels, bars, horizontal, tick, tip } = args;
-  const scale = barScale(bars);
+  const { labels, bars, horizontal, tick, tip, size } = args;
+  const fit = horizontal ? horizontalFit(theme, size, labels) : verticalFit(theme, size);
+  const scale = barScale(bars, tick, fit);
   const valueAxisConfig = valueAxis(theme, scale, tick);
   const categoryConfig = horizontal
     ? categoryAxis(
@@ -451,23 +507,36 @@ export interface ComboArgs {
   tickLine: (n: number) => string;
   tipBar: (n: number) => string;
   tipLine: (n: number) => string;
+  /** The drawn size, so the two y axes can thin their ticks to the room. Without it they keep their usual 4 or 5. */
+  size?: ChartSize;
 }
 
 export const COMBO_BARS_KEY = 'bars';
 export const COMBO_LINE_KEY = 'line';
 
-/** Two scales that share a gridline count: the left from the bars, the right pinned to the same number of ticks. */
-export function comboScales(bars: readonly Cell[], line: readonly Cell[]): { left: Scale; right: Scale } {
+/**
+ * Two scales that share a gridline count: the left from the bars, the right pinned to the same number of ticks.
+ * With a `fit`, the left axis is thinned to the room and the right follows it, so the rules still line up.
+ */
+export function comboScales(
+  bars: readonly Cell[],
+  line: readonly Cell[],
+  tickBar?: (n: number) => string,
+  fit?: AxisFit,
+): { left: Scale; right: Scale } {
   const b = finite(bars);
   const l = finite(line);
-  const left = niceScale(Math.min(0, ...b), Math.max(0, ...b));
+  const lo = Math.min(0, ...b);
+  const hi = Math.max(0, ...b);
+  const left = fitScale((cap) => niceScale(lo, hi, undefined, cap), tickBar ?? String, fit);
   const right = alignedScale(Math.min(0, ...l), Math.max(0, ...l), left.ticks.length);
   return { left, right };
 }
 
 export function comboOption(args: ComboArgs, theme: ChartTheme): EChartsCoreOption {
   const { labels, bars, line, showBars, showLine } = args;
-  const { left, right } = comboScales(bars.values, line.values);
+  const top = 32;
+  const { left, right } = comboScales(bars.values, line.values, args.tickBar, verticalFit(theme, args.size, top));
   const barColor = paint(theme, bars.color);
   const lineColor = paint(theme, line.color);
 
@@ -556,7 +625,7 @@ export function comboOption(args: ComboArgs, theme: ChartTheme): EChartsCoreOpti
 
   return {
     ...base(theme),
-    grid: grid({ top: 32, right: 16 }),
+    grid: grid({ top }),
     xAxis: categoryAxis(theme, labels),
     yAxis: [
       valueAxis(theme, left, args.tickBar, { show: showBars, ...axisName(bars.name, 'left') }),

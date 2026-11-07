@@ -726,6 +726,168 @@ describe.skipIf(!enabled)('ECharts-backed charts in a real browser', () => {
   });
 });
 
+// UPM-213: at 360 px the dollar labels of a horizontal bar chart's value axis were drawn
+// on top of each other ("US$0.00US$0.50US$1.00US$1.50"). Real text boxes are needed to see
+// that, so this renders the charts that have axes in narrow viewports and compares the boxes
+// of every label the SVG actually paints.
+describe.skipIf(!enabled)('axis labels on narrow charts', () => {
+  let browser: Browser;
+  let js = '';
+  let css = '';
+
+  beforeAll(async () => {
+    const result = await build({
+      entryPoints: [resolve(__dirname, 'fixtures/charts-axes-entry.tsx')],
+      bundle: true,
+      write: false,
+      outdir: 'out',
+      format: 'iife',
+      platform: 'browser',
+      jsx: 'automatic',
+      minify: true,
+      define: { 'process.env.NODE_ENV': '"production"' },
+      logLevel: 'silent',
+    });
+    js = result.outputFiles.find((f) => f.path.endsWith('.js'))!.text;
+    css = result.outputFiles.find((f) => f.path.endsWith('.css'))!.text;
+    browser = await chromium.launch();
+  }, 120_000);
+
+  afterAll(async () => {
+    await browser?.close();
+  });
+
+  const LINE_AXES = 'Cost per day';
+  const BARS_VERTICAL = 'Cost by weekday';
+  const BARS_HORIZONTAL = 'Cost per task';
+  const COMBO_AXES = 'Spend and success rate';
+  const DONUT_AXES = 'Runs by model';
+  const VERTICAL_AXES = [LINE_AXES, BARS_VERTICAL, COMBO_AXES];
+  const WITH_AXES = [LINE_AXES, BARS_VERTICAL, BARS_HORIZONTAL, COMBO_AXES];
+
+  /** Draws the five charts of the axes fixture in a viewport `width` px wide, then runs `run`. */
+  async function withAxes<T>(width: number, short: boolean, run: (page: Page) => Promise<T>) {
+    const context = await browser.newContext({ viewport: { width, height: 2400 }, reducedMotion: 'reduce' });
+    try {
+      const page = await context.newPage();
+      await page.setContent('<!doctype html><html><head></head><body style="margin:0"><div id="root"></div></body></html>');
+      await page.addStyleTag({ content: css });
+      await page.evaluate((isShort) => {
+        (window as unknown as { __AXES_SHORT__: boolean }).__AXES_SHORT__ = isShort;
+      }, short);
+      await page.addScriptTag({ content: js });
+      await page.locator('[data-chart-ready="true"]').nth(4).waitFor({ state: 'visible', timeout: 20_000 });
+      return await run(page);
+    } finally {
+      await context.close();
+    }
+  }
+
+  interface Label {
+    text: string;
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+  }
+
+  /**
+   * The ComboChart's two axis names. They are text in the SVG too, but they are titles, not tick
+   * labels (ECharts' hideOverlap does not cover them), and at 320 and 360 px they crowd each
+   * other. That is a separate defect from UPM-213, noted in its report, so they are left out here.
+   */
+  const AXIS_NAMES = new Set(['Spend', 'Success rate']);
+
+  /** The text boxes a chart's SVG paints for its axes: tick labels, not axis names. Labels ECharts hides are not painted. */
+  const labelsOf = (page: Page, name: string): Promise<Label[]> =>
+    page.locator(`[aria-label="${name}"] .upmo-chart__plot svg`).first().evaluate((svg, names) =>
+      [...svg.querySelectorAll('text')]
+        .filter((el) => {
+          const style = getComputedStyle(el);
+          const text = (el.textContent ?? '').trim();
+          return style.display !== 'none' && style.visibility !== 'hidden' && text !== '' && !names.includes(text);
+        })
+        .map((el) => {
+          const r = el.getBoundingClientRect();
+          return { text: el.textContent ?? '', left: r.left, right: r.right, top: r.top, bottom: r.bottom };
+        })
+        .filter((l) => l.right - l.left > 0 && l.bottom - l.top > 0),
+      [...AXIS_NAMES],
+    );
+
+  /** Pairs of labels whose boxes share more than half a pixel in both directions. */
+  function overlaps(labels: readonly Label[]): string[] {
+    const found: string[] = [];
+    for (let i = 0; i < labels.length; i++) {
+      for (let j = i + 1; j < labels.length; j++) {
+        const a = labels[i];
+        const b = labels[j];
+        const x = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+        const y = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+        if (x > 0.5 && y > 0.5) {
+          const box = (l: Label) => `${l.left.toFixed(0)}-${l.right.toFixed(0)} x ${l.top.toFixed(0)}-${l.bottom.toFixed(0)}`;
+          found.push(
+            `"${a.text}" (${box(a)}) and "${b.text}" (${box(b)}) overlap by ${x.toFixed(1)} x ${y.toFixed(1)} px`,
+          );
+        }
+      }
+    }
+    return found;
+  }
+
+  /** The value axis labels: the ones that read as a number, not the day names or the axis names. */
+  const valueLabels = (labels: readonly Label[]) => labels.filter((l) => /^(US\$)?[\d.,]+%?$/.test(l.text));
+
+  for (const width of [320, 360]) {
+    it(`draws no overlapping axis labels at ${width} px`, async () => {
+      await withAxes(width, false, async (page) => {
+        for (const name of WITH_AXES) {
+          const labels = await labelsOf(page, name);
+          expect(overlaps(labels), `${name} at ${width} px`).toEqual([]);
+          // Not vacuous: the axis still has labels to read (at least its first and last tick).
+          expect(valueLabels(labels).length, `${name} keeps value labels at ${width} px`).toBeGreaterThanOrEqual(2);
+        }
+        // The donut has no axes, so there is nothing to overlap.
+        expect(await labelsOf(page, DONUT_AXES), 'donut').toEqual([]);
+      });
+    });
+
+    it(`draws no overlapping axis labels at ${width} px when the vertical-axis charts are only 80 px tall`, async () => {
+      await withAxes(width, true, async (page) => {
+        for (const name of VERTICAL_AXES) {
+          const labels = await labelsOf(page, name);
+          expect(overlaps(labels), `${name} at ${width} px, 80 px tall`).toEqual([]);
+          expect(valueLabels(labels).length, `${name} keeps value labels`).toBeGreaterThanOrEqual(2);
+        }
+      });
+    });
+  }
+
+  it('keeps every tick of the Cost per task axis on a wide screen', async () => {
+    await withAxes(700, false, async (page) => {
+      const labels = await labelsOf(page, BARS_HORIZONTAL);
+      expect(overlaps(labels)).toEqual([]);
+      expect(valueLabels(labels).map((l) => l.text)).toEqual(['US$0.00', 'US$0.50', 'US$1.00', 'US$1.50']);
+    });
+  });
+
+  it('thins the ticks again when the viewport narrows after the first draw', async () => {
+    await withAxes(700, false, async (page) => {
+      const wide = valueLabels(await labelsOf(page, BARS_HORIZONTAL)).length;
+      await page.setViewportSize({ width: 320, height: 2400 });
+      await expect
+        .poll(
+          async () => {
+            const labels = await labelsOf(page, BARS_HORIZONTAL);
+            return overlaps(labels).length === 0 && valueLabels(labels).length < wide;
+          },
+          { timeout: 20_000 },
+        )
+        .toBe(true);
+    });
+  });
+});
+
 describe.skipIf(!enabled)('ECharts bundle', () => {
   it('lands in a lazy chunk: the entry has no ECharts code, and the chunk size is reported', async () => {
     const result = await build({

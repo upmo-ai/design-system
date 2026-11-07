@@ -101,14 +101,19 @@ export interface Scale {
 
 const MANTISSAS = [1, 2, 2.5, 5];
 
+/** The most ticks a value axis draws when there is room for them (niceScale picks 4 or 5). */
+export const MAX_TICKS = 5;
+
 /**
  * A "nice" axis for the range lo..hi: a step of 1, 2, 2.5 or 5 times a power
  * of ten, bounds rounded out to whole steps, and 4 or 5 ticks. The tightest
  * step that gives 4 or 5 ticks wins. Pass `count` to ask for exactly that many
  * ticks (to line up the gridlines of a second axis); it is honoured when a
- * nice step can give it.
+ * nice step can give it. Pass `maxTicks` below 5 to thin the axis for a tight
+ * space: the scale then has the most ticks, never more than `maxTicks` and
+ * never fewer than 2 where a nice step can give them, at the tightest step.
  */
-export function niceScale(lo: number, hi: number, count?: number): Scale {
+export function niceScale(lo: number, hi: number, count?: number, maxTicks: number = MAX_TICKS): Scale {
   let a = Number.isFinite(lo) ? lo : 0;
   let b = Number.isFinite(hi) ? hi : 1;
   if (b < a) [a, b] = [b, a];
@@ -136,6 +141,15 @@ export function niceScale(lo: number, hi: number, count?: number): Scale {
     const exact = candidates.filter((c) => c.ticks.length === count).sort(byStep);
     if (exact.length) return exact[0];
   }
+  if (maxTicks < MAX_TICKS) {
+    const cap = Math.max(2, Math.floor(maxTicks));
+    // The most ticks that fit, and of those the tightest step.
+    const best = candidates
+      .filter((c) => c.ticks.length <= cap)
+      .sort((x, y) => y.ticks.length - x.ticks.length || x.step - y.step)[0];
+    // No nice step is that short (a range across zero needs 3): take the fewest there are.
+    return best ?? candidates.sort((x, y) => x.ticks.length - y.ticks.length || x.step - y.step)[0];
+  }
   const fit = candidates.filter((c) => c.ticks.length >= 4 && c.ticks.length <= 5).sort(byStep);
   if (fit.length) return fit[0];
   return candidates.sort((x, y) => Math.abs(x.ticks.length - 4.5) - Math.abs(y.ticks.length - 4.5))[0];
@@ -153,6 +167,60 @@ export function alignedScale(lo: number, hi: number, count: number): Scale {
   const step = (scale.max - scale.min) / (count - 1);
   const ticks = Array.from({ length: count }, (_, i) => Number((scale.min + i * step).toFixed(10)));
   return { ticks, min: scale.min, max: scale.max, step };
+}
+
+// --- Fitting ticks to the room ----------------------------------------------------
+
+/** The room a value axis has for its labels. */
+export interface AxisFit {
+  /** The axis length in px, from the first tick to the last. */
+  length: number;
+  /** 'x' lays the labels side by side, so each needs its text width; 'y' stacks them, so each needs a line. */
+  direction: 'x' | 'y';
+  fontSize: number;
+}
+
+/** Average glyph width, in em, of the digits, currency signs and units an axis prints. */
+const GLYPH_EM = 0.6;
+/** Line height, in em, of an axis label. */
+const LINE_EM = 1.25;
+/** Clear space kept between two neighbouring labels, in px. */
+const LABEL_GAP = 8;
+
+/** A rough width in px of `text` at `fontSize`; exact enough to choose a tick count, never to place text. */
+export function textWidth(text: string, fontSize: number): number {
+  return [...text].length * fontSize * GLYPH_EM;
+}
+
+/** How many labels of these `texts` fit along the axis, at least 2. */
+export function ticksThatFit(texts: readonly string[], fit: AxisFit): number {
+  if (fit.direction === 'y') {
+    return Math.max(2, Math.floor(fit.length / (fit.fontSize * LINE_EM + LABEL_GAP)) + 1);
+  }
+  const widest = Math.max(0, ...texts.map((t) => textWidth(t, fit.fontSize)));
+  // The last label is centred on the end of the axis, so half of it hangs past.
+  const usable = fit.length - widest / 2;
+  return Math.max(2, Math.floor(usable / (widest + LABEL_GAP)) + 1);
+}
+
+/**
+ * The scale for a value axis with the ticks thinned to the room its labels
+ * have. `make(maxTicks)` builds the scale (niceScale, with that cap) and `label`
+ * prints a tick. With room for the usual four or five ticks, or no `fit` at all,
+ * the result is exactly `make(MAX_TICKS)`, so a wide chart is unchanged. When
+ * the labels would crowd, the cap drops until they fit (or two ticks are left).
+ */
+export function fitScale(make: (maxTicks: number) => Scale, label: (n: number) => string, fit?: AxisFit): Scale {
+  let scale = make(MAX_TICKS);
+  if (!fit || !Number.isFinite(fit.length) || !Number.isFinite(fit.fontSize)) return scale;
+  for (let pass = 0; pass < MAX_TICKS; pass++) {
+    const room = ticksThatFit(scale.ticks.map(label), fit);
+    if (scale.ticks.length <= room) break;
+    const next = make(Math.min(room, scale.ticks.length - 1));
+    if (next.ticks.length >= scale.ticks.length) break;
+    scale = next;
+  }
+  return scale;
 }
 
 export type Curve = 'linear' | 'smooth';
