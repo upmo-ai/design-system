@@ -4,9 +4,51 @@ description: The usage charts, how they use colour, and what they all do for key
 ---
 
 The chart components draw usage and trend data for pages that show how agents
-are doing: runs per day, tokens by type, spend by connector. They are plain SVG
-and CSS with no charting dependency, and they read colour from the chart tokens
-only, so they follow the active theme (light, dark and high contrast).
+are doing: runs per day, tokens by type, spend by connector. `StatTile`,
+`UsageMeter`, `BarChart` and the single-series `LineChart data` form are plain
+SVG and CSS with no charting dependency. The multi-series charts (`LineChart`
+with `series`, `DonutChart`, `GroupedBarChart` and `ComboChart`) are built on
+ECharts, loaded lazily. All of them read colour from the chart tokens only, so
+they follow the active theme (light, dark and high contrast).
+
+## Built on ECharts, loaded lazily
+
+The four multi-series charts draw with [Apache ECharts](https://echarts.apache.org)
+(`echarts`, Apache-2.0, installed with `@upmo-ai/components`). Nothing is loaded
+until a chart mounts: the library arrives through a dynamic import, so a bundler
+puts it in its own chunk (about 190 kB gzipped), and importing the package, a
+server render, or a page that only uses `BarChart` or `LineChart data` never
+fetches it. While the chunk loads, the chart holds its height with a quiet
+placeholder, so nothing on the page moves. Only the pieces the charts need are
+registered (line, bar and pie series, the grid, tooltip and aria modules, and the
+SVG renderer), and the drawing is SVG so text stays sharp at any zoom and prints
+cleanly.
+
+Colours are read from the token variables at runtime, from the chart's own
+element, so the chart follows `data-theme`, the colour scheme, `prefers-contrast`
+and forced colours, and redraws when any of them changes. Every prop and data
+shape is the same as before.
+
+## Hover, tooltip and legend
+
+- **Tooltip.** Hovering a position shows a floating tooltip with a pointer line
+  (a shaded band for bars). It lists every visible series with a round swatch,
+  its name and its value, largest first, through the chart's `formatValue`. A
+  missing value reads "No data".
+- **Legend.** Under the plot, a compact list of buttons: a round swatch and the
+  series name. On the multi-series `LineChart` each item also shows the series'
+  Mean and Max. Click, or press Enter or Space, to hide or show a series; the
+  axis and any stacked total follow. A hidden item is struck through and its
+  swatch is hollow. At least one series always stays visible. Hovering or
+  focusing an item highlights that series in the plot.
+
+## Compact numbers
+
+Axis ticks and the legend's Mean and Max use a compact form when you do not pass a
+formatter: `536k`, `2.3M`, `1.2B`, and at most three significant digits below a
+thousand. A long decimal such as 536,440.143 is never printed. When you pass
+`formatValue`, it is used instead (currency, percent, durations), and a computed
+figure such as a mean is rounded tidily before it reaches your function.
 
 :::tip[Live previews are in Storybook]
 Every chart renders live, with its many-series, gap, empty and narrow cases, in
@@ -18,7 +60,7 @@ the [Storybook gallery](https://design.upmo.dev/storybook/). Run it locally with
 | --- | --- |
 | `StatTile` | One number with a trend. |
 | `UsageMeter` | Usage against a limit. |
-| `BarChart` | One series of bars with a value on each. |
+| `BarChart` | One series of bars with a value on each (plain CSS, no dependency). |
 | [`LineChart`](/charts/line-chart/) | One line from `data`, or several lines, areas or stacked areas from `series`. |
 | [`DonutChart`](/charts/donut-chart/) | The share each part has of a whole. |
 | [`GroupedBarChart`](/charts/grouped-bar-chart/) | Two or three measures side by side for each group. |
@@ -50,20 +92,26 @@ nothing is lost to a screen reader.
 
 Colour is never the only cue:
 
-- Lines differ by marker shape and dash: circle, square, triangle, diamond, then
-  the same four dashed. The legend shows the same marker and dash.
-- Bars and slices differ by fill texture (solid, stripes, dots, and so on). The
-  legend swatch has the same texture.
-- The donut legend lists the label, value and share of every slice in text.
-- Every chart has a readout line that names a position and its values in words.
+- The legend names every series, the tooltip lists name and value beside each
+  swatch, and the donut legend lists the label, value and share of every slice in
+  text. Every chart has a readout line that names a position and its values in
+  words.
+- In the normal themes lines are plain and bars and slices are solid; there is no
+  hatching and no marker on every point.
+- In **high contrast** the charts add what colour alone cannot say. When the
+  `hc` theme is on, or the system asks for `prefers-contrast: more` or forced
+  colours, bars and slices gain ECharts decal patterns (stripes, dots and so on),
+  and lines show a marker at every point (circle, square, triangle, diamond) with
+  the second four dashed.
 
 ## Keyboard and screen readers
 
 - The drawing is hidden from assistive technology. A visually hidden table,
   captioned with the chart `title`, carries every data point.
 - The chart is one tab stop. Focus it and the readout line shows the first
-  position; the arrow keys, Home and End move along the x steps, groups or
-  slices, and Escape clears it. Hovering a position shows the same readout.
+  position, with the tooltip and highlight on the plot; the arrow keys, Home and
+  End move along the x steps, groups or slices, and Escape clears it. Hovering a
+  position shows the tooltip.
 - The readout is a polite live region while the chart has focus, so each
   position is read out as you move.
 - Give every chart a `title`. It names the group and captions the hidden table.
@@ -74,14 +122,16 @@ Colour is never the only cue:
   its words with `emptyText`.
 - A `null` value is a gap in a line or a skipped bar. It is never drawn as zero,
   and the hidden table says "No data".
-- The drawing measures its container and keeps its text at a fixed size. In a
-  narrow container the x labels thin out (every nth is shown) and long legends
-  wrap. `width` sets only the starting width before the first measurement.
-- Nothing animates, so there is no motion to reduce.
+- The drawing follows its container with a resize observer and keeps its text at
+  a fixed size. In a narrow container overlapping x labels are dropped and long
+  legends wrap. `width` sets only the starting width while the container has no
+  measurable width (a hidden tab, a server render).
+- Charts draw in with a short animation. It is off when the system asks for
+  reduced motion or the app sets `reducedMotion="reduce"`.
 
 ## Values and formatting
 
 Each chart takes a `formatValue` (the combo takes `formatBar` and `formatLine`)
-for axis ticks, the legend and the readout. A point's own `display` wins over the
-formatter for that point. Axes use 4 or 5 round ticks (steps of 1, 2, 2.5 or 5
-times a power of ten) and always include zero.
+for axis ticks, the tooltip, the legend and the readout. A point's own `display`
+wins over the formatter for that point. Axes use 4 or 5 round ticks (steps of 1,
+2, 2.5 or 5 times a power of ten) and always include zero.

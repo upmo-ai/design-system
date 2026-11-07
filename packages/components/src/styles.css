@@ -1592,8 +1592,10 @@ button.upmo-liveness:hover {
 }
 
 /* Multi-series charts (LineChart series, DonutChart, GroupedBarChart,
-   ComboChart). Nothing here animates, so there is no motion to reduce. Colours
-   are chart tokens plus the text and border tokens, which change per theme. */
+   ComboChart). The plot is drawn by ECharts, which reads the colour, text and
+   border tokens at runtime (chartTheme.ts) and follows the user's motion
+   setting itself, so nothing in this block animates. The rules here cover the
+   frame, the loading placeholder, the tooltip and the legend. */
 .upmo-chart {
   display: flex;
   flex-direction: column;
@@ -1606,55 +1608,23 @@ button.upmo-liveness:hover {
   border-radius: var(--radius-sm);
 }
 .upmo-chart__plot {
+  position: relative;
   width: 100%;
   min-width: 0;
 }
-.upmo-chart__svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  overflow: visible;
+.upmo-chart__plot--square {
+  aspect-ratio: 1 / 1;
 }
-.upmo-chart__grid {
-  stroke: var(--border);
-  stroke-width: 1;
+.upmo-chart__canvas {
+  position: absolute;
+  inset: 0;
 }
-.upmo-chart__grid--zero {
-  stroke: var(--border-strong);
-}
-.upmo-chart__tick,
-.upmo-chart__axis-title {
-  font-family: var(--font-ui);
-  font-size: var(--text-caption-size);
-  fill: var(--ink-muted);
-  font-variant-numeric: tabular-nums;
-}
-.upmo-chart__guide {
-  stroke: var(--border-strong);
-  stroke-width: 1;
-}
-.upmo-chart__band--active {
-  fill: var(--surface-hover);
-}
-.upmo-chart__hit {
-  fill: transparent;
-}
-.upmo-chart__marker {
-  stroke: var(--surface-100);
-  stroke-width: 1.5;
-}
-.upmo-chart__marker--active {
-  stroke: var(--ink);
-  stroke-width: 2;
-}
-.upmo-chart__pattern-ink {
-  fill: var(--surface-100);
-  opacity: 0.9;
-}
-.upmo-chart__swatch {
-  display: block;
-  flex: none;
-  overflow: visible;
+.upmo-chart__loading {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface-hover);
+  opacity: 0.5;
 }
 .upmo-chart__readout {
   min-height: 1.5em;
@@ -1678,41 +1648,53 @@ button.upmo-liveness:hover {
   border-radius: var(--radius-md);
 }
 
-/* Legend table (LineChart series): swatch and name, mean, max. */
-.upmo-chart__legend {
-  width: 100%;
-  border-collapse: collapse;
+/* Tooltip: ECharts appends it inside the plot; the box colours come from the
+   theme, the spacing and type from here. */
+.upmo-chart__tip {
+  min-width: 9em;
+  max-width: 20em;
+  padding: var(--space-2) var(--space-3);
   font-family: var(--font-ui);
   font-size: var(--text-body-sm-size);
+  line-height: 1.4;
   color: var(--ink);
+  white-space: normal;
 }
-.upmo-chart__legend th,
-.upmo-chart__legend td {
-  padding: var(--space-1) var(--space-2);
-  border-top: 1px solid var(--border);
-  text-align: start;
-  font-weight: 400;
-  vertical-align: middle;
-}
-.upmo-chart__legend thead th {
-  border-top: 0;
-  font-size: var(--text-caption-size);
+.upmo-chart__tip-title {
+  margin-bottom: var(--space-1);
   font-weight: 600;
+}
+.upmo-chart__tip-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--space-2);
+  padding-block: 1px;
+}
+.upmo-chart__tip-row--muted {
   color: var(--ink-muted);
 }
-.upmo-chart__legend .upmo-chart__legend-num {
+.upmo-chart__tip-swatch {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-full);
+  forced-color-adjust: none;
+}
+.upmo-chart__tip-name {
+  overflow-wrap: anywhere;
+}
+.upmo-chart__tip-value {
+  font-weight: 600;
   text-align: end;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-.upmo-chart__legend-name {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  overflow-wrap: anywhere;
+.upmo-chart__tip-row--muted .upmo-chart__tip-value {
+  font-weight: 400;
 }
 
-/* Legend list (GroupedBarChart, ComboChart): wraps when it is long. */
+/* Legend: a wrapping list of toggle buttons, each a round swatch and a name,
+   with small figures after it when the chart has them. */
 .upmo-chart__legend-list {
   display: flex;
   flex-wrap: wrap;
@@ -1729,42 +1711,95 @@ button.upmo-liveness:hover {
   align-items: center;
   gap: var(--space-2);
   min-width: 0;
+}
+.upmo-chart__legend-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  padding: var(--space-1) var(--space-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.upmo-chart__legend-button:hover {
+  background: var(--surface-hover);
+}
+.upmo-chart__legend-button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.upmo-chart__legend-button[aria-disabled='true'] {
+  cursor: default;
+}
+.upmo-chart__dot {
+  flex: none;
+  box-sizing: border-box;
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--upmo-dot);
+  forced-color-adjust: none;
+}
+.upmo-chart__legend-button[aria-pressed='false'] .upmo-chart__dot {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--upmo-dot);
+}
+.upmo-chart__legend-button[aria-pressed='false'] {
+  color: var(--ink-muted);
+}
+.upmo-chart__legend-button[aria-pressed='false'] .upmo-chart__legend-name {
+  text-decoration: line-through;
+}
+.upmo-chart__legend-name {
   overflow-wrap: anywhere;
 }
-
-/* LineChart series. */
-.upmo-linechart__run {
-  fill: none;
-  stroke-width: 2;
-  stroke-linejoin: round;
-  stroke-linecap: round;
+.upmo-chart__legend-stats {
+  display: inline-flex;
+  gap: var(--space-3);
+  font-size: var(--text-caption-size);
+  color: var(--ink-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
-.upmo-linechart__area {
-  stroke: none;
+.upmo-chart__legend-stat-value {
+  color: var(--ink);
 }
-
-/* GroupedBarChart. */
-.upmo-grouped-bar__bar {
-  stroke: var(--surface-100);
-  stroke-width: 0.5;
+.upmo-chart__legend-value,
+.upmo-chart__legend-share {
+  text-align: end;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
-
-/* ComboChart. */
-.upmo-combo__line {
-  fill: none;
-  stroke-width: 2.5;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-.upmo-combo__halo {
-  fill: none;
-  stroke: var(--surface-100);
-  stroke-width: 5;
-  stroke-linejoin: round;
-  stroke-linecap: round;
+.upmo-chart__legend-share {
+  min-inline-size: 4ch;
+  color: var(--ink-muted);
 }
 
-/* DonutChart: ring, centre text and the legend list. */
+/* The donut's legend is a column of rows: swatch, name, value, share. */
+.upmo-chart__legend-list--rows {
+  flex: 1 1 200px;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.upmo-chart__legend-list--rows .upmo-chart__legend-item {
+  display: block;
+}
+.upmo-chart__legend-list--rows .upmo-chart__legend-button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  width: 100%;
+  column-gap: var(--space-2);
+}
+
+/* DonutChart: ring and centre text. */
 .upmo-donut__body {
   display: flex;
   flex-wrap: wrap;
@@ -1775,15 +1810,14 @@ button.upmo-liveness:hover {
   position: relative;
   flex: 0 1 auto;
 }
-.upmo-donut__slice {
-  stroke: var(--surface-100);
-  stroke-width: 2;
-}
-.upmo-donut__slice--active {
-  stroke: var(--ink);
+.upmo-donut__ring .upmo-chart__loading {
+  border-radius: var(--radius-full);
+  background: radial-gradient(circle closest-side, transparent 0 62%, var(--surface-hover) 62% 100%, transparent 100%);
 }
 .upmo-donut__empty-ring {
-  stroke: var(--chart-mid);
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: radial-gradient(circle closest-side, transparent 0 66%, var(--chart-mid) 66% 100%, transparent 100%);
 }
 .upmo-donut__center {
   position: absolute;
@@ -1808,52 +1842,6 @@ button.upmo-liveness:hover {
   font-weight: var(--text-h3-weight);
   color: var(--ink);
   font-variant-numeric: tabular-nums;
-}
-.upmo-donut__legend {
-  flex: 1 1 200px;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-.upmo-donut__row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-  align-items: center;
-  column-gap: var(--space-2);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-ui);
-  font-size: var(--text-body-sm-size);
-  color: var(--ink);
-}
-.upmo-donut__row--active {
-  background: var(--surface-hover);
-}
-.upmo-donut__name {
-  overflow-wrap: anywhere;
-}
-.upmo-donut__value,
-.upmo-donut__pct {
-  text-align: end;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
-.upmo-donut__pct {
-  min-inline-size: 4ch;
-  color: var(--ink-muted);
-}
-@media (forced-colors: active) {
-  .upmo-chart__grid {
-    stroke: GrayText;
-  }
-  .upmo-chart__tick,
-  .upmo-chart__axis-title {
-    fill: CanvasText;
-  }
 }
 
 /* UsageMeter. */

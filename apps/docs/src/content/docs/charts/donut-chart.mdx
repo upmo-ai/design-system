@@ -9,6 +9,14 @@ slice its label, value and share as text. Live previews are in the
 [Storybook gallery](https://design.upmo.dev/storybook/). The rules every chart
 follows are on the [Charts overview](/charts/overview/).
 
+:::note[Built on ECharts, loaded lazily]
+The drawing uses Apache ECharts, fetched in its own chunk the first time a chart
+mounts, so a page without a chart never loads it. Until it arrives the chart
+holds its height with a quiet placeholder and nothing moves. See the
+[Charts overview](/charts/overview/) for the bundle size and the hover, legend
+and number rules shared by every chart.
+:::
+
 ```tsx
 <DonutChart
   title="Runs by model"
@@ -38,11 +46,24 @@ follows are on the [Charts overview](/charts/overview/).
 
 ## Share and the legend
 
-Each legend row shows a swatch, the label, the value (`display`, or `formatValue`
-of the value) and the share of the total. Shares of 10% and over are whole
-numbers; below that they have one decimal. The shares are rounded together
-(largest remainder first), so the legend always adds up to exactly 100%. A slice with a zero value stays in
-the legend at 0% and has no arc. Negative and non-finite values count as zero.
+Each legend row shows a round swatch, the label, the value (`display`, or
+`formatValue` of the value) and the share of the total. Shares of 10% and over are
+whole numbers; below that they have one decimal. The shares are rounded together
+(largest remainder first), so the legend always adds up to exactly 100%. A slice
+with a zero value stays in the legend at 0% and has no arc. Negative and
+non-finite values count as zero.
+
+The legend is also the control. Click a row, or press Enter or Space on it, to
+hide or show that slice: the ring, the shares and the centre total follow
+(hiding a slice makes the centre show the total of the slices still drawn), and
+the last visible slice cannot be hidden. A hidden row is struck through with a
+hollow swatch. Hovering or focusing a row highlights its slice.
+
+## Tooltip
+
+Hovering a slice shows a floating tooltip with the label, the value and the
+share. Slice labels on the ring are off; the legend carries them. The hover
+emphasis is a small, quiet growth of the slice.
 
 ## Five slices, then Other
 
@@ -60,11 +81,13 @@ the legend.
 
 ## Accessibility
 
-- Slices differ by fill texture as well as colour (solid, stripes, dots, and so
-  on). The legend swatch has the same texture, and the legend text gives the
-  numbers, so the ring is never read by colour alone.
-- The SVG is hidden from assistive technology. A visually hidden table, captioned
-  with `title`, lists every slice with its value and share.
-- The chart is one tab stop. The arrow keys move between slices and a readout line
-  gives the slice, its value and share. Hovering a slice or a legend row shows
-  the same readout.
+- The legend text gives every number, so the ring is never read by colour alone.
+  In high contrast (the `hc` theme, `prefers-contrast: more` or forced colours)
+  the slices also gain fill patterns (stripes, dots and so on). The normal themes
+  are solid.
+- The drawing is hidden from assistive technology. A visually hidden table,
+  captioned with `title`, lists every slice with its value and share.
+- The chart is one tab stop. The arrow keys, Home and End move between slices; a
+  readout line gives the slice, its value and share, and the tooltip and
+  highlight follow on the ring. Escape clears it.
+- Animation is off for reduced motion.

@@ -32,3 +32,16 @@ jobs:
       - run: pnpm test
       # The brand kit is generated and committed; fail if it is out of date.
       - run: pnpm --filter @upmo-ai/brand generate --check
+
+  # The checks that need a real browser (layout, SVG, computed colours). They skip
+  # under `pnpm test` (jsdom); this job runs them in Playwright's image. The command
+  # and the image tag are the ones in CONTRIBUTING.md.
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: |
+          docker run --rm -v "$PWD":/w -w /w mcr.microsoft.com/playwright:v1.61.1-noble \
+            sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @upmo-ai/components test:browser"

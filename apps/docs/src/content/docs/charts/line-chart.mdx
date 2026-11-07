@@ -10,9 +10,9 @@ follows are on the [Charts overview](/charts/overview/).
 
 ## One line
 
-The original form is unchanged: `data` is a list of points, and the chart is a
-sparkline-style line with a soft wash under it. Pair it with a `StatTile` so the
-trend reads without the curve.
+The original form is unchanged and still dependency free: `data` is a list of
+points, and the chart is a sparkline-style line with a soft wash under it. Pair
+it with a `StatTile` so the trend reads without the curve.
 
 ```tsx
 <LineChart
@@ -24,6 +24,14 @@ trend reads without the curve.
 The props below that are marked "series" apply only when you pass `series`.
 
 ## Several series
+
+:::note[Built on ECharts, loaded lazily]
+The drawing uses Apache ECharts, fetched in its own chunk the first time a chart
+mounts, so a page without a chart never loads it. Until it arrives the chart
+holds its height with a quiet placeholder and nothing moves. See the
+[Charts overview](/charts/overview/) for the bundle size and the hover, legend
+and number rules shared by every chart.
+:::
 
 ```tsx
 <LineChart
@@ -38,12 +46,33 @@ The props below that are marked "series" apply only when you pass `series`.
 
 Every series has the same length, and the x labels come from the first series. A
 point's `value` can be `null`: the line breaks there and starts again, and the
-point is never drawn as zero. Under the plot, the legend is a real table with
-one row per series: its marker, name, mean and max (both through `formatValue`).
-Means ignore `null` points.
+point is never drawn as zero.
 
-Series differ by marker shape and dash as well as colour: circle, square,
-triangle, diamond, then the same four dashed. The legend shows the same marker.
+Lines are smooth monotone curves by default (they never dip below or above the
+data between two points), with no markers until you hover or focus a position.
+Pass `curve="linear"` for straight segments.
+
+### Tooltip and crosshair
+
+Hovering shows a vertical pointer line and a floating tooltip that lists every
+visible series with a round swatch, its name and its value, largest first, through
+`formatValue`. A series with no value at that position reads "No data".
+
+### Legend
+
+Under the plot, a compact list of buttons. Each shows a round swatch and the
+series name, and, with `legend` on, the series' **Mean** and **Max** as compact
+numbers (`536k`, `2.3M`, `1.2B`) or through your `formatValue`. Means ignore `null`
+points. Click an item, or press Enter or Space on it, to hide or show that
+series; the axis and, for `stacked`, the totals are recomputed. A hidden item is
+struck through with a hollow swatch, and the last visible series cannot be
+hidden. Hovering or focusing an item highlights its series.
+
+### High contrast
+
+In the `hc` theme, with `prefers-contrast: more`, or with forced colours, each
+line shows a marker at every point (circle, square, triangle, diamond) and the
+second four series are dashed. The normal themes use neither.
 
 ## Props
 
@@ -53,13 +82,13 @@ triangle, diamond, then the same four dashed. The legend shows the same marker.
 | `series` | `LineSeries[]` | none | `{ name, colorIndex?, points }`, where a point is `{ label, value: number or null, display? }`. Wins over `data`. |
 | `title` | `string` | "Line chart" | Names the group and captions the hidden table. |
 | `height` | `number` | 160 for `data`, 220 for `series` | In px. |
-| `width` | `number` | 480 | The viewBox width for `data`. For `series` the starting width before the chart measures its container. |
+| `width` | `number` | 480 | The viewBox width for `data`. For `series` the width used only while the container has no measurable width. |
 | `colorIndex` | `1` to `6` | 1 | `data` only. Each series sets its own. |
-| `area` | `boolean` | true for `data` and one series, false for several | Soft wash under each line. |
+| `area` | `boolean` | true for `data` and one series, false for several | A gradient under each line, from about 25% of the series colour at the line to nothing at the baseline. |
 | `stacked` | `boolean` | false | Series only. Stacks the areas. |
-| `curve` | `'linear'` or `'smooth'` | `'linear'` | Series only. Smooth never overshoots the data. |
-| `formatValue` | `(n: number) => string` | plain number | Series only. Ticks, legend and readout. |
-| `legend` | `boolean` | true | Series only. |
+| `curve` | `'linear'` or `'smooth'` | `'smooth'` | Series only. Smooth never overshoots the data. In 1.5.0 the default was `'linear'`. |
+| `formatValue` | `(n: number) => string` | compact numbers | Series only. Ticks, tooltip, legend and readout. Without it, ticks and legend figures read `536k`, `2.3M`, `1.2B`. |
+| `legend` | `boolean` | true | Series only. Shows the legend with each series' Mean and Max. |
 | `otherLabel` | `string` | "Other" | Series only. Name of the merged series. |
 | `emptyText` | `string` | "No data to show" | Series only. |
 | `className` | `string` | none | |
@@ -70,7 +99,7 @@ triangle, diamond, then the same four dashed. The legend shows the same marker.
 It suits parts of a total, such as token consumption by input, output and tool
 definitions. The axis is sized to the stack total. Values should be zero or more:
 a negative value adds nothing to the stack. A missing (`null`) point in a stacked
-series contributes nothing to the stack, and that band is not drawn at that x.
+series contributes nothing to the stack, and that band has no point at that x.
 
 ```tsx
 <LineChart title="Token consumption" series={tokens} stacked />
@@ -88,10 +117,13 @@ data table still has a column for every series you passed.
 
 ## Accessibility
 
-- The SVG is hidden from assistive technology. A visually hidden table, captioned
-  with `title`, has a row per x label and a column per series, with "No data" for
-  a `null`.
-- The chart is one tab stop. The arrow keys, Home and End move along the x axis
-  and a readout line under the plot gives the label and every series value.
-  Hovering shows the same readout.
-- The legend is a visible table named "(title) series".
+- The drawing is hidden from assistive technology. A visually hidden table,
+  captioned with `title`, has a row per x label and a column per series, with "No
+  data" for a `null`.
+- The chart is one tab stop. The arrow keys, Home and End move along the x axis;
+  a readout line under the plot gives the label and every series value, and the
+  tooltip and highlight follow on the plot. Escape clears it.
+- The legend is a list of buttons named "(title) series", with `aria-pressed` for
+  shown or hidden.
+- Colour is not the only cue in high contrast (markers, dashes), and animation is
+  off for reduced motion.

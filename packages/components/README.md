@@ -45,6 +45,14 @@ export function App() {
 default) and `reducedMotion` (`'system'`, `'reduce'` or `'no-preference'`).
 `StatusBadge` takes a `status` such as `Working`, `Done` or `Needs approval`.
 
+## Charts
+
+`LineChart` with `series`, `DonutChart`, `GroupedBarChart` and `ComboChart` are
+drawn with [Apache ECharts](https://echarts.apache.org), a dependency of this
+package. It is loaded lazily, in its own chunk, the first time one of those
+charts mounts, so importing the package or using `BarChart` and `LineChart data`
+does not load it. See `THIRD_PARTY_NOTICES.md`.
+
 ## Links
 
 - Documentation: https://design.upmo.dev

@@ -2,56 +2,22 @@ import { VisuallyHidden } from '@mantine/core';
 import clsx from 'clsx';
 import {
   useCallback,
-  useEffect,
-  useId,
   useRef,
   useState,
   type CSSProperties,
   type FocusEvent,
   type KeyboardEvent,
-  type ReactNode,
+  type MutableRefObject,
 } from 'react';
-import { DASH, type MarkerShape, type PatternKind } from './chartKit.ts';
-
-/** An id that is safe inside url(#...) and CSS selectors. */
-export function useSafeId(): string {
-  return useId().replace(/[^a-zA-Z0-9_-]/g, '');
-}
-
-const MIN_WIDTH = 120;
+import { defaultFormat } from './chartKit.ts';
+import type { ECharts } from './echartsSetup.ts';
 
 /**
- * The drawing width in px. It starts at `fallback` (also what a server render
- * and a layout-less test see) and follows the container, so the viewBox is the
- * real size and labels keep their size while the chart scales.
- */
-export function useChartWidth(fallback: number) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(fallback);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    // No layout (server render, jsdom, a hidden tab): follow the fallback prop.
-    const measure = () => {
-      const w = Math.round(el.clientWidth);
-      setWidth(w > 0 ? w : fallback);
-    };
-    measure();
-    if (typeof ResizeObserver === 'undefined') return;
-    const observer = new ResizeObserver(measure);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [fallback]);
-
-  return [ref, Math.max(MIN_WIDTH, width)] as const;
-}
-
-/**
- * Keyboard and pointer navigation over `count` positions (x steps, groups or
- * slices). Focusing the chart shows the first; the arrow keys, Home and End move
- * through them; hovering a position shows it too. Spread `figureProps` on the
- * focusable figure.
+ * Keyboard navigation over `count` positions (x steps, groups or slices).
+ * Focusing the chart shows the first; the arrow keys, Home and End move through
+ * them and Escape clears. The position drives the live readout line and, through
+ * EChartFrame, the tooltip and highlight. Pointer hover is ECharts' own tooltip.
+ * Spread `figureProps` on the focusable figure.
  */
 export function useChartNav(count: number) {
   const [raw, setRaw] = useState<number | null>(null);
@@ -99,120 +65,7 @@ export function useChartNav(count: number) {
     },
   };
 
-  const hover = useCallback((index: number) => setRaw(index), []);
-  const leave = useCallback(() => {
-    if (!focused) setRaw(null);
-  }, [focused]);
-
-  return { active, focused, figureProps, hover, leave };
-}
-
-// --- Marks ----------------------------------------------------------------------
-
-export function Marker({
-  shape,
-  cx,
-  cy,
-  r,
-  className,
-  style,
-}: {
-  shape: MarkerShape;
-  cx: number;
-  cy: number;
-  r: number;
-  className?: string;
-  style?: CSSProperties;
-}) {
-  const common = { className, style, 'data-marker': shape };
-  switch (shape) {
-    case 'square':
-      return <rect {...common} x={cx - r} y={cy - r} width={r * 2} height={r * 2} rx={1} />;
-    case 'triangle':
-      return (
-        <polygon
-          {...common}
-          points={`${cx},${cy - r * 1.2} ${cx + r * 1.15},${cy + r * 0.9} ${cx - r * 1.15},${cy + r * 0.9}`}
-        />
-      );
-    case 'diamond':
-      return (
-        <polygon
-          {...common}
-          points={`${cx},${cy - r * 1.3} ${cx + r * 1.3},${cy} ${cx},${cy + r * 1.3} ${cx - r * 1.3},${cy}`}
-        />
-      );
-    default:
-      return <circle {...common} cx={cx} cy={cy} r={r} />;
-  }
-}
-
-/** The fill for a bar or slice: the plain colour, or a texture in that colour. */
-export const fillFor = (id: string, kind: PatternKind, color: string) =>
-  kind === 'solid' ? color : `url(#${id})`;
-
-/** A hatch or dot texture in `color`, cut with the surface colour, for fills that must not rely on colour alone. */
-export function PatternDef({ id, color, kind }: { id: string; color: string; kind: PatternKind }) {
-  if (kind === 'solid') return null;
-  const rotate = kind === 'stripe' ? 'rotate(45)' : kind === 'stripe-back' ? 'rotate(-45)' : undefined;
-  return (
-    <pattern id={id} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform={rotate}>
-      <rect width="6" height="6" style={{ fill: color }} />
-      {kind === 'stripe' || kind === 'stripe-back' ? (
-        <rect className="upmo-chart__pattern-ink" width="2" height="6" />
-      ) : null}
-      {kind === 'dots' ? <circle className="upmo-chart__pattern-ink" cx="3" cy="3" r="1.3" /> : null}
-      {kind === 'lines' ? <rect className="upmo-chart__pattern-ink" y="2" width="6" height="2" /> : null}
-      {kind === 'grid' ? (
-        <>
-          <rect className="upmo-chart__pattern-ink" width="6" height="1.5" />
-          <rect className="upmo-chart__pattern-ink" width="1.5" height="6" />
-        </>
-      ) : null}
-    </pattern>
-  );
-}
-
-/** The legend mark: the same marker and dash, or the same texture, the plot uses. */
-export function Swatch({
-  kind,
-  color,
-  marker = 'circle',
-  dashed = false,
-  pattern = 'solid',
-}: {
-  kind: 'line' | 'bar';
-  color: string;
-  marker?: MarkerShape;
-  dashed?: boolean;
-  pattern?: PatternKind;
-}) {
-  const id = `${useSafeId()}-sw`;
-  if (kind === 'line') {
-    return (
-      <svg className="upmo-chart__swatch" width="28" height="12" viewBox="0 0 28 12" aria-hidden="true" data-kind="line">
-        <line
-          x1="1"
-          x2="27"
-          y1="6"
-          y2="6"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeDasharray={dashed ? DASH : undefined}
-          style={{ stroke: color }}
-        />
-        <Marker shape={marker} cx={14} cy={6} r={3.5} className="upmo-chart__marker" style={{ fill: color }} />
-      </svg>
-    );
-  }
-  return (
-    <svg className="upmo-chart__swatch" width="14" height="12" viewBox="0 0 14 12" aria-hidden="true" data-kind="bar">
-      <defs>
-        <PatternDef id={id} color={color} kind={pattern} />
-      </defs>
-      <rect x="0" y="1" width="14" height="10" rx="2" style={{ fill: fillFor(id, pattern, color) }} />
-    </svg>
-  );
+  return { active, focused, figureProps };
 }
 
 // --- Text parts -----------------------------------------------------------------
@@ -286,91 +139,164 @@ export function ChartDataTable({
   );
 }
 
-export function ChartLegendList({ items, className }: { items: { name: string; swatch: ReactNode }[]; className?: string }) {
+// --- Legend ---------------------------------------------------------------------
+
+const NONE: ReadonlySet<number> = new Set();
+
+/**
+ * Which series the reader has hidden through the legend, by position. The set
+ * resets when `signature` (the series names) changes, and the last visible series
+ * can never be hidden.
+ */
+export function useHiddenSeries(signature: string, total: number) {
+  const [state, setState] = useState<{ signature: string; hidden: ReadonlySet<number> }>({
+    signature,
+    hidden: NONE,
+  });
+  const hidden = state.signature === signature ? state.hidden : NONE;
+
+  const toggle = useCallback(
+    (index: number) =>
+      setState((prev) => {
+        const current = prev.signature === signature ? prev.hidden : NONE;
+        const next = new Set(current);
+        if (next.has(index)) next.delete(index);
+        else if (total - next.size > 1) next.add(index);
+        else return prev;
+        return { signature, hidden: next };
+      }),
+    [signature, total],
+  );
+
+  return [hidden, toggle] as const;
+}
+
+export interface LegendEntry {
+  /** The series colour as a CSS value, normally `var(--chart-N)`. */
+  color: string;
+  name: string;
+  hidden: boolean;
+  /** Small labelled figures after the name, such as Mean and Max. */
+  stats?: { label: string; value: string }[];
+  /** The ring legend's value and share columns. */
+  value?: string;
+  share?: string;
+}
+
+type DotStyle = CSSProperties & { '--upmo-dot': string };
+
+/**
+ * A compact legend that also toggles series. Each item is a button: Enter or
+ * Space (or a click) hides or shows its series, and the last visible one stays.
+ * Hovering or focusing an item highlights its series in the plot. A hidden item
+ * is struck through and its swatch is hollow, so state never rests on colour.
+ */
+export function ChartLegend({
+  items,
+  label,
+  layout = 'inline',
+  onToggle,
+  onHover,
+}: {
+  items: readonly LegendEntry[];
+  /** Names the list for assistive technology. */
+  label: string;
+  /** 'inline' wraps items; 'rows' is the donut's column of name, value and share. */
+  layout?: 'inline' | 'rows';
+  onToggle: (index: number) => void;
+  /** Called with the item's position on hover or focus, and null on leave or blur. */
+  onHover?: (index: number | null) => void;
+}) {
+  const visible = items.filter((i) => !i.hidden).length;
   return (
-    <ul className={clsx('upmo-chart__legend-list', className)}>
+    <ul className={clsx('upmo-chart__legend-list', layout === 'rows' && 'upmo-chart__legend-list--rows')} aria-label={label}>
       {items.map((item, i) => (
         <li key={i} className="upmo-chart__legend-item">
-          {item.swatch}
-          <span>{item.name}</span>
+          <button
+            type="button"
+            className="upmo-chart__legend-button"
+            aria-pressed={!item.hidden}
+            aria-disabled={!item.hidden && visible <= 1 ? true : undefined}
+            onClick={() => onToggle(i)}
+            onMouseEnter={() => onHover?.(i)}
+            onMouseLeave={() => onHover?.(null)}
+            onFocus={() => onHover?.(i)}
+            onBlur={() => onHover?.(null)}
+          >
+            <span className="upmo-chart__dot" style={{ '--upmo-dot': item.color } as DotStyle} aria-hidden="true" />
+            <span className="upmo-chart__legend-name">{item.name}</span>
+            {item.value !== undefined ? <span className="upmo-chart__legend-value">{item.value}</span> : null}
+            {item.share !== undefined ? <span className="upmo-chart__legend-share">{item.share}</span> : null}
+          </button>
+          {item.stats ? (
+            <span className="upmo-chart__legend-stats">
+              {item.stats.map((s) => (
+                <span key={s.label} className="upmo-chart__legend-stat">
+                  {s.label} <span className="upmo-chart__legend-stat-value">{s.value}</span>
+                </span>
+              ))}
+            </span>
+          ) : null}
         </li>
       ))}
     </ul>
   );
 }
 
-// --- Axes -----------------------------------------------------------------------
+// --- Stable inputs ----------------------------------------------------------------
 
-export function YAxis({
-  ticks,
-  y,
-  gridFrom,
-  gridTo,
-  labelX,
-  anchor,
-  format,
-  grid = true,
-}: {
-  ticks: readonly number[];
-  y: (v: number) => number;
-  gridFrom: number;
-  gridTo: number;
-  labelX: number;
-  anchor: 'start' | 'end';
-  format: (n: number) => string;
-  grid?: boolean;
-}) {
-  return (
-    <g>
-      {ticks.map((t) => (
-        <g key={t}>
-          {grid ? (
-            <line
-              className={clsx('upmo-chart__grid', t === 0 && 'upmo-chart__grid--zero')}
-              x1={gridFrom}
-              x2={gridTo}
-              y1={y(t)}
-              y2={y(t)}
-            />
-          ) : null}
-          <text className="upmo-chart__tick" x={labelX} y={y(t)} dy="0.32em" textAnchor={anchor}>
-            {format(t)}
-          </text>
-        </g>
-      ))}
-    </g>
-  );
+/**
+ * Returns `value` from the last render where `key` changed. Callers often pass
+ * fresh arrays and arrow functions on every render; keying on content means the
+ * chart is redrawn only when the data really changes, so an open tooltip is not
+ * closed by an unrelated parent render.
+ */
+export function useKeyed<T>(value: T, key: string): T {
+  const ref = useRef({ key, value });
+  if (ref.current.key !== key) ref.current = { key, value };
+  return ref.current.value;
 }
 
-export function XLabels({
-  labels,
-  x,
-  baseline,
-  step,
-  firstAnchor = 'middle',
-}: {
-  labels: readonly string[];
-  x: (i: number) => number;
-  baseline: number;
-  step: number;
-  /** Anchor of the first label. 'start' keeps it from reaching left of its x, into a label column. Default 'middle'. */
-  firstAnchor?: 'start' | 'middle';
-}) {
-  return (
-    <g>
-      {labels.map((label, i) =>
-        i % step === 0 ? (
-          <text
-            key={i}
-            className="upmo-chart__tick upmo-chart__tick--x"
-            x={x(i)}
-            y={baseline}
-            textAnchor={i === 0 ? firstAnchor : 'middle'}
-          >
-            {label}
-          </text>
-        ) : null,
-      )}
-    </g>
+const PROBES = [0, 1, 12.5, 1234.5, 1_000_000, -3];
+
+/**
+ * An identity-stable formatter that always calls the latest `formatValue`, and a
+ * signature of what it prints for a few probe values. The signature changes when
+ * the caller's formatting really changes, even if the function is new every render.
+ */
+export function useFormatter(formatValue: ((n: number) => string) | undefined) {
+  const latest = useRef(formatValue);
+  latest.current = formatValue;
+  const fmt = useCallback((n: number) => (latest.current ?? defaultFormat)(n), []);
+  const given = formatValue !== undefined;
+  const signature = formatValue ? PROBES.map((p) => formatValue(p)).join('\u0001') : '';
+  return { fmt, given, signature };
+}
+
+/**
+ * Highlights a series in the plot while its legend item is hovered or focused.
+ * `target` maps an item position to the action fields that select its series
+ * (null when it is hidden).
+ */
+export function useLegendHover(
+  chartRef: MutableRefObject<ECharts | null>,
+  target: (index: number) => Record<string, unknown> | null,
+) {
+  const last = useRef<Record<string, unknown> | null>(null);
+  return useCallback(
+    (index: number | null) => {
+      const chart = chartRef.current;
+      if (!chart) return;
+      if (last.current) {
+        chart.dispatchAction({ ...last.current, type: 'downplay' });
+        last.current = null;
+      }
+      if (index === null) return;
+      const fields = target(index);
+      if (!fields) return;
+      chart.dispatchAction({ ...fields, type: 'highlight' });
+      last.current = fields;
+    },
+    [chartRef, target],
   );
 }

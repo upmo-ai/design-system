@@ -1,22 +1,20 @@
 import clsx from 'clsx';
-import {
-  MAX_SLICES,
-  arcPath,
-  colorVar,
-  defaultFormat,
-  patternAt,
-  percentTexts,
-  toCell,
-} from './chartKit.ts';
+import { useCallback, useRef } from 'react';
+import { MAX_SLICES, colorVar, percentTexts, toCell } from './chartKit.ts';
+import { sliceNavPlan, donutOption, type DonutSlice } from './chartOptions.ts';
 import {
   ChartDataTable,
+  ChartLegend,
   ChartReadout,
-  PatternDef,
-  Swatch,
-  fillFor,
   useChartNav,
-  useSafeId,
+  useFormatter,
+  useHiddenSeries,
+  useKeyed,
+  useLegendHover,
 } from './chartParts.tsx';
+import type { ChartTheme } from './chartTheme.ts';
+import { EChartFrame } from './EChartFrame.tsx';
+import type { ECharts } from './echartsSetup.ts';
 
 export interface DonutDatum {
   label: string;
@@ -37,7 +35,11 @@ export interface DonutChartProps {
   title?: string;
   /** Small label in the centre of the ring. Default "Total". */
   centerLabel?: string;
-  /** Value in the centre of the ring. Defaults to the formatted total. */
+  /**
+   * Value in the centre of the ring. Defaults to the formatted total. When the
+   * reader hides a slice in the legend the centre shows the formatted total of
+   * the slices still drawn instead.
+   */
   centerValue?: string;
   /** Diameter in px. The ring scales down to fit a narrow container. Default 200. */
   size?: number;
@@ -50,12 +52,18 @@ export interface DonutChartProps {
   className?: string;
 }
 
+interface SliceRow extends DonutSlice {
+  display: string;
+}
+
 /**
- * A dependency-free donut chart drawn as SVG. A legend list beside the ring gives
- * every slice its label, value and share, so the ring is never read by colour
- * alone: slices also carry a fill texture, repeated in the legend. Hover, or
- * focus the chart and use the arrow keys, to read a slice. The SVG is hidden from
- * assistive tech; a visually hidden table (caption = title) carries the data.
+ * A donut chart drawn with ECharts (loaded lazily on first use). The legend beside
+ * the ring gives every slice its label, value and share, rounded together so the
+ * shares add up to 100%, and it is clickable: a slice can be hidden, and the shares
+ * and the centre follow. Hover shows a tooltip; focus the chart and use the arrow
+ * keys to step through slices. In high contrast the slices gain fill patterns. The
+ * drawing is hidden from assistive tech; a visually hidden table (caption = title)
+ * carries the data.
  */
 export function DonutChart({
   data,
@@ -69,56 +77,80 @@ export function DonutChart({
   className,
 }: DonutChartProps) {
   const label = title ?? 'Donut chart';
-  const fmt = formatValue ?? defaultFormat;
-  const uid = useSafeId();
+  const { fmt, signature } = useFormatter(formatValue);
+  const chartRef = useRef<ECharts | null>(null);
 
-  const cleaned = data.map((d) => ({ ...d, amount: Math.max(0, toCell(d.value) ?? 0) }));
-  const total = cleaned.reduce((sum, d) => sum + d.amount, 0);
-  const slices = [
-    ...cleaned.slice(0, MAX_SLICES).map((d, i) => ({
-      label: d.label,
-      amount: d.amount,
-      display: d.display ?? fmt(d.amount),
-      color: colorVar((i + 1) as 1 | 2 | 3 | 4 | 5),
-    })),
-    ...(cleaned.length > MAX_SLICES
-      ? (() => {
-          const amount = cleaned.slice(MAX_SLICES).reduce((sum, d) => sum + d.amount, 0);
-          return [{ label: otherLabel, amount, display: fmt(amount), color: colorVar('mid') }];
-        })()
-      : []),
-  ];
-  const nav = useChartNav(slices.length);
+  const dataKey = `${JSON.stringify([data, otherLabel])}|${signature}`;
+  const cleaned = useKeyed(
+    data.map((d) => ({ ...d, amount: Math.max(0, toCell(d.value) ?? 0) })),
+    dataKey,
+  );
+  const slices = useKeyed<SliceRow[]>(
+    [
+      ...cleaned.slice(0, MAX_SLICES).map((d, i) => ({
+        key: `d${i}`,
+        label: d.label,
+        amount: d.amount,
+        display: d.display ?? fmt(d.amount),
+        color: colorVar((i + 1) as 1 | 2 | 3 | 4 | 5),
+      })),
+      ...(cleaned.length > MAX_SLICES
+        ? (() => {
+            const amount = cleaned.slice(MAX_SLICES).reduce((sum, d) => sum + d.amount, 0);
+            return [{ key: 'other', label: otherLabel, amount, display: fmt(amount), color: colorVar('mid') }];
+          })()
+        : []),
+    ],
+    dataKey,
+  );
+
+  const [hidden, toggle] = useHiddenSeries(slices.map((s) => s.label).join('\u0000'), slices.length);
+  const visible = useKeyed(slices.filter((_, i) => !hidden.has(i)), `${dataKey}|${[...hidden].join(',')}`);
+  const total = visible.reduce((sum, s) => sum + s.amount, 0);
+
   // Rounded together so the legend adds up to 100%; the table rounds all the
   // source items together, since it lists them before the Other merge.
-  const sliceShares = percentTexts(slices.map((s) => s.amount));
+  const visibleShares = useKeyed(percentTexts(visible.map((s) => s.amount)), `${dataKey}|${[...hidden].join(',')}`);
   const itemShares = percentTexts(cleaned.map((d) => d.amount));
 
-  const rOuter = size / 2 - 2;
-  const thickness = rOuter * 0.34;
-  const rInner = rOuter - thickness;
-  const c = size / 2;
+  const nav = useChartNav(visible.length);
 
-  let cumulative = 0;
-  const arcs = slices.map((s, i) => {
-    const a0 = (cumulative / total) * Math.PI * 2;
-    cumulative += s.amount;
-    const a1 = (cumulative / total) * Math.PI * 2;
-    return { s, i, a0, a1 };
-  });
+  const build = useCallback(
+    (theme: ChartTheme) =>
+      donutOption({ slices: visible, displays: visible.map((s) => s.display), shares: visibleShares }, theme),
+    [visible, visibleShares],
+  );
+  const navPlan = useCallback((i: number) => sliceNavPlan(i), []);
+  const legendTarget = useCallback(
+    (i: number) =>
+      hidden.has(i) ? null : { seriesIndex: 0, dataIndex: slices.slice(0, i).filter((_, k) => !hidden.has(k)).length },
+    [hidden, slices],
+  );
+  const hover = useLegendHover(chartRef, legendTarget);
 
+  const drawn = total > 0;
   const readout =
-    nav.active === null
+    nav.active === null || !visible[nav.active]
       ? null
       : {
-          label: slices[nav.active].label,
-          items: [
-            {
-              name: '',
-              value: `${slices[nav.active].display} (${sliceShares[nav.active]})`,
-            },
-          ],
+          label: visible[nav.active].label,
+          items: [{ name: '', value: `${visible[nav.active].display} (${visibleShares[nav.active]})` }],
         };
+
+  let visibleIndex = -1;
+  const legendItems = slices.map((s, i) => {
+    const isHidden = hidden.has(i);
+    if (!isHidden) visibleIndex += 1;
+    return {
+      color: s.color,
+      name: s.label,
+      hidden: isHidden,
+      value: s.display,
+      share: isHidden ? '' : visibleShares[visibleIndex],
+    };
+  });
+
+  const centre = hidden.size > 0 || centerValue === undefined ? fmt(total) : centerValue;
 
   return (
     <figure
@@ -129,48 +161,24 @@ export function DonutChart({
     >
       <div className="upmo-donut__body">
         <div className="upmo-donut__ring" style={{ width: size, maxWidth: '100%' }}>
-          <svg
-            className="upmo-chart__svg"
-            viewBox={`0 0 ${size} ${size}`}
-            aria-hidden="true"
-            focusable="false"
-            onMouseLeave={nav.leave}
-          >
-            <defs>
-              {slices.map((s, i) => (
-                <PatternDef key={i} id={`${uid}-s${i}`} color={s.color} kind={patternAt(i)} />
-              ))}
-            </defs>
-            {total > 0 ? (
-              arcs
-                .filter(({ s }) => s.amount > 0)
-                .map(({ s, i, a0, a1 }) => (
-                  <path
-                    key={i}
-                    className={clsx('upmo-donut__slice', nav.active === i && 'upmo-donut__slice--active')}
-                    d={arcPath(c, c, rOuter, rInner, a0, a1)}
-                    fillRule="evenodd"
-                    data-slice={i}
-                    style={{ fill: fillFor(`${uid}-s${i}`, patternAt(i), s.color) }}
-                    onMouseEnter={() => nav.hover(i)}
-                  />
-                ))
-            ) : (
-              <circle
-                className="upmo-donut__empty-ring"
-                cx={c}
-                cy={c}
-                r={(rOuter + rInner) / 2}
-                strokeWidth={thickness}
-                fill="none"
-              />
-            )}
-          </svg>
+          {drawn ? (
+            <EChartFrame
+              square
+              height={size}
+              width={size}
+              build={build}
+              chartRef={chartRef}
+              active={nav.active}
+              navPlan={navPlan}
+            />
+          ) : (
+            <div className="upmo-donut__empty-ring" aria-hidden="true" />
+          )}
           <div className="upmo-donut__center">
-            {total > 0 ? (
+            {drawn ? (
               <>
                 <span className="upmo-donut__center-label">{centerLabel}</span>
-                <span className="upmo-donut__center-value">{centerValue ?? fmt(total)}</span>
+                <span className="upmo-donut__center-value">{centre}</span>
               </>
             ) : (
               <span className="upmo-donut__center-label">{emptyText}</span>
@@ -178,21 +186,13 @@ export function DonutChart({
           </div>
         </div>
         {slices.length > 0 ? (
-          <ul className="upmo-donut__legend">
-            {slices.map((s, i) => (
-              <li
-                key={i}
-                className={clsx('upmo-donut__row', nav.active === i && 'upmo-donut__row--active')}
-                onMouseEnter={() => nav.hover(i)}
-                onMouseLeave={nav.leave}
-              >
-                <Swatch kind="bar" color={s.color} pattern={patternAt(i)} />
-                <span className="upmo-donut__name">{s.label}</span>
-                <span className="upmo-donut__value">{s.display}</span>
-                <span className="upmo-donut__pct">{sliceShares[i]}</span>
-              </li>
-            ))}
-          </ul>
+          <ChartLegend
+            label={`${label} slices`}
+            layout="rows"
+            items={legendItems}
+            onToggle={toggle}
+            onHover={hover}
+          />
         ) : null}
       </div>
       <ChartReadout data={readout} live={nav.focused} />

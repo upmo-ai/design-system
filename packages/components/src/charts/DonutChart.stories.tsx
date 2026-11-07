@@ -70,6 +70,26 @@ export const Empty: Story = {
   ),
 };
 
+const themed = () => (
+  <div style={{ maxWidth: 520 }}>
+    <DonutChart
+      title="Runs by model"
+      centerLabel="Runs"
+      data={[
+        { label: 'Claude Sonnet', value: 640, display: '640 runs' },
+        { label: 'Claude Haiku', value: 380, display: '380 runs' },
+        { label: 'Nova Pro', value: 164, display: '164 runs' },
+        { label: 'Llama 3', value: 100, display: '100 runs' },
+      ]}
+    />
+  </div>
+);
+
+export const Dark: Story = { render: themed, globals: { theme: 'dark' } };
+
+/** Slices gain fill patterns, so colour is not the only cue. */
+export const HighContrast: Story = { render: themed, globals: { theme: 'hc' } };
+
 export const Narrow: Story = {
   render: () => (
     <div style={{ maxWidth: 240 }}>

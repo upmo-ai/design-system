@@ -1,16 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import {
-  arcPath,
-  linePath,
+  alignedScale,
+  maxOfCells,
+  meanOf,
   niceScale,
   percentText,
   percentTexts,
   resolveSeries,
   runsOf,
-  segments,
   styleAt,
-  thinStep,
-  truncate,
+  sumCells,
 } from '../src/charts/chartKit.ts';
 
 describe('niceScale', () => {
@@ -154,34 +153,41 @@ describe('helpers', () => {
     expect(percentTexts([])).toEqual([]);
   });
 
-  it('thins labels by how much room they need', () => {
-    expect(thinStep(3, 100)).toBe(1);
-    expect(thinStep(6, 10)).toBeGreaterThan(3);
+  it('sums, averages and maxes over the real values only', () => {
+    expect(sumCells([1, null, 4])).toBe(5);
+    expect(sumCells([null, null])).toBeNull();
+    expect(meanOf([2, null, 4])).toBe(3);
+    expect(meanOf([null])).toBeNull();
+    expect(maxOfCells([2, null, 9, 4])).toBe(9);
+    expect(maxOfCells([])).toBeNull();
   });
+});
 
-  it('truncates long labels with an ellipsis', () => {
-    expect(truncate('short', 8)).toBe('short');
-    expect(truncate('a very long label', 8)).toBe('a very \u2026');
-  });
-
-  it('draws a smooth curve that never leaves the range of its points', () => {
-    const pts = [
+describe('alignedScale', () => {
+  it('gives exactly the requested number of ticks, so two axes share their gridlines', () => {
+    for (const [lo, hi] of [
       [0, 100],
-      [10, 0],
-      [20, 0],
-      [30, 100],
-      [40, 60],
-    ] as const;
-    expect(linePath(pts, 'linear')).not.toContain('C');
-    const smooth = segments(pts, 'smooth');
-    expect(smooth).toContain('C');
-    const ys = [...smooth.matchAll(/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g)].map((m) => Number(m[2]));
-    expect(Math.min(...ys)).toBeGreaterThanOrEqual(0);
-    expect(Math.max(...ys)).toBeLessThanOrEqual(100);
+      [0, 99.9],
+      [0, 1],
+      [0, 7.3],
+      [-5, 40],
+      [0, 100000],
+    ] as const) {
+      for (const count of [4, 5]) {
+        const scale = alignedScale(lo, hi, count);
+        expect(scale.ticks, `${lo}..${hi} x${count}`).toHaveLength(count);
+        expect(scale.min).toBeLessThanOrEqual(lo);
+        expect(scale.max).toBeGreaterThanOrEqual(hi);
+        const gaps = scale.ticks.slice(1).map((t, i) => Number((t - scale.ticks[i]).toFixed(8)));
+        expect(new Set(gaps).size, 'equal steps').toBe(1);
+      }
+    }
   });
 
-  it('draws a full circle as a ring with a hole', () => {
-    expect(arcPath(50, 50, 40, 20, 0, Math.PI * 2).match(/M /g)).toHaveLength(2);
-    expect(arcPath(50, 50, 40, 20, 0, 1).match(/M /g)).toHaveLength(1);
+  it('splits the nice range into equal parts when no nice step gives that count', () => {
+    const scale = alignedScale(0, 100, 6);
+    expect(scale.ticks).toHaveLength(6);
+    expect(scale.ticks[0]).toBe(0);
+    expect(scale.ticks[5]).toBe(scale.max);
   });
 });
