@@ -1591,6 +1591,271 @@ button.upmo-liveness:hover {
   display: block;
 }
 
+/* Multi-series charts (LineChart series, DonutChart, GroupedBarChart,
+   ComboChart). Nothing here animates, so there is no motion to reduce. Colours
+   are chart tokens plus the text and border tokens, which change per theme. */
+.upmo-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.upmo-chart:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+.upmo-chart__plot {
+  width: 100%;
+  min-width: 0;
+}
+.upmo-chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.upmo-chart__grid {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+.upmo-chart__grid--zero {
+  stroke: var(--border-strong);
+}
+.upmo-chart__tick,
+.upmo-chart__axis-title {
+  font-family: var(--font-ui);
+  font-size: var(--text-caption-size);
+  fill: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.upmo-chart__guide {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+.upmo-chart__band--active {
+  fill: var(--surface-hover);
+}
+.upmo-chart__hit {
+  fill: transparent;
+}
+.upmo-chart__marker {
+  stroke: var(--surface-100);
+  stroke-width: 1.5;
+}
+.upmo-chart__marker--active {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.upmo-chart__pattern-ink {
+  fill: var(--surface-100);
+  opacity: 0.9;
+}
+.upmo-chart__swatch {
+  display: block;
+  flex: none;
+  overflow: visible;
+}
+.upmo-chart__readout {
+  min-height: 1.5em;
+  font-family: var(--font-ui);
+  font-size: var(--text-body-sm-size);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.upmo-chart__readout-label {
+  font-weight: 600;
+}
+.upmo-chart__empty {
+  margin: 0;
+  padding: var(--space-4);
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: var(--text-body-sm-size);
+  color: var(--ink-muted);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+}
+
+/* Legend table (LineChart series): swatch and name, mean, max. */
+.upmo-chart__legend {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-ui);
+  font-size: var(--text-body-sm-size);
+  color: var(--ink);
+}
+.upmo-chart__legend th,
+.upmo-chart__legend td {
+  padding: var(--space-1) var(--space-2);
+  border-top: 1px solid var(--border);
+  text-align: start;
+  font-weight: 400;
+  vertical-align: middle;
+}
+.upmo-chart__legend thead th {
+  border-top: 0;
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+.upmo-chart__legend .upmo-chart__legend-num {
+  text-align: end;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.upmo-chart__legend-name {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  overflow-wrap: anywhere;
+}
+
+/* Legend list (GroupedBarChart, ComboChart): wraps when it is long. */
+.upmo-chart__legend-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-ui);
+  font-size: var(--text-body-sm-size);
+  color: var(--ink);
+}
+.upmo-chart__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* LineChart series. */
+.upmo-linechart__run {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.upmo-linechart__area {
+  stroke: none;
+}
+
+/* GroupedBarChart. */
+.upmo-grouped-bar__bar {
+  stroke: var(--surface-100);
+  stroke-width: 0.5;
+}
+
+/* ComboChart. */
+.upmo-combo__line {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.upmo-combo__halo {
+  fill: none;
+  stroke: var(--surface-100);
+  stroke-width: 5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* DonutChart: ring, centre text and the legend list. */
+.upmo-donut__body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+.upmo-donut__ring {
+  position: relative;
+  flex: 0 1 auto;
+}
+.upmo-donut__slice {
+  stroke: var(--surface-100);
+  stroke-width: 2;
+}
+.upmo-donut__slice--active {
+  stroke: var(--ink);
+}
+.upmo-donut__empty-ring {
+  stroke: var(--chart-mid);
+}
+.upmo-donut__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24%;
+  text-align: center;
+  pointer-events: none;
+  overflow-wrap: anywhere;
+}
+.upmo-donut__center-label {
+  font-family: var(--font-ui);
+  font-size: var(--text-caption-size);
+  color: var(--ink-muted);
+}
+.upmo-donut__center-value {
+  font-family: var(--font-ui);
+  font-size: var(--text-h3-size);
+  font-weight: var(--text-h3-weight);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.upmo-donut__legend {
+  flex: 1 1 200px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.upmo-donut__row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  column-gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-ui);
+  font-size: var(--text-body-sm-size);
+  color: var(--ink);
+}
+.upmo-donut__row--active {
+  background: var(--surface-hover);
+}
+.upmo-donut__name {
+  overflow-wrap: anywhere;
+}
+.upmo-donut__value,
+.upmo-donut__pct {
+  text-align: end;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.upmo-donut__pct {
+  min-inline-size: 4ch;
+  color: var(--ink-muted);
+}
+@media (forced-colors: active) {
+  .upmo-chart__grid {
+    stroke: GrayText;
+  }
+  .upmo-chart__tick,
+  .upmo-chart__axis-title {
+    fill: CanvasText;
+  }
+}
+
 /* UsageMeter. */
 .upmo-usage-meter__head {
   display: flex;
@@ -2641,5 +2906,27 @@ button.upmo-liveness:hover {
   :focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 2px;
+  }
+  /* Chart marks: fills and washes can be dropped, so bars, slices and markers
+     get a CanvasText edge and lines paint in CanvasText (series stay apart by
+     dash, marker shape and texture, never by colour alone). */
+  .upmo-grouped-bar__bar,
+  .upmo-donut__slice,
+  .upmo-combo__bar,
+  .upmo-chart__marker {
+    stroke: CanvasText;
+    stroke-width: 1px;
+  }
+  .upmo-donut__slice--active,
+  .upmo-chart__marker--active {
+    stroke: Highlight;
+    stroke-width: 2px;
+  }
+  .upmo-linechart__run,
+  .upmo-combo__line {
+    stroke: CanvasText !important;
+  }
+  .upmo-combo__halo {
+    stroke: Canvas;
   }
 }

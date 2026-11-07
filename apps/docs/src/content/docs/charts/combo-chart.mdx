@@ -1,0 +1,61 @@
+---
+title: ComboChart
+description: Bars on the left axis and one line on the right axis over the same x labels.
+---
+
+`ComboChart` puts a count beside a rate: runs per day as bars and the success
+rate as a line. The two series keep their own scales, so each axis has its own
+ticks and a title naming what it measures. Live previews are in the
+[Storybook gallery](https://design.upmo.dev/storybook/). The rules every chart
+follows are on the [Charts overview](/charts/overview/).
+
+```tsx
+<ComboChart
+  title="Runs and success rate"
+  bars={{ name: 'Runs', points: days.map((d) => ({ label: d.label, value: d.runs })) }}
+  line={{ name: 'Success rate', points: days.map((d) => ({ label: d.label, value: d.rate })) }}
+  formatLine={(n) => `${n}%`}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `bars` | `ComboSeries` | required | `{ name, points }`. A point is `{ label, value: number or null, display? }`. Drawn against the left axis in `chart-1`. |
+| `line` | `ComboSeries` | required | Same shape. Drawn against the right axis in `chart-2` with circle markers. Matched to the bars by position. |
+| `formatBar` | `(n: number) => string` | plain number | Left axis ticks and bar values without a `display`. |
+| `formatLine` | `(n: number) => string` | plain number | Right axis ticks and line values without a `display`. |
+| `title` | `string` | "Combo chart" | Names the group and captions the hidden table. |
+| `height` | `number` | 220 | In px. |
+| `width` | `number` | 480 | Starting width before the chart measures its container. |
+| `emptyText` | `string` | "No data to show" | |
+| `className` | `string` | none | |
+
+## Axes
+
+Both axes have 4 or 5 round ticks and include zero. The right axis is asked for
+the same number of ticks as the left, so its ticks line up with the gridlines
+whenever a round step allows it. Only the left axis draws gridlines. The x labels
+come from the longer of the two series (the bars when they are equal) and thin
+out when they would overlap. The shorter series shows gaps where it has no point,
+and the hidden table lists every point of both.
+
+The line has a thin halo in the surface colour so it stays readable where it
+crosses a bar.
+
+## Gaps
+
+A `null` bar is skipped and a `null` line value breaks the line. Neither is drawn
+as zero, and the hidden table says "No data".
+
+## Accessibility
+
+- The legend repeats the bar swatch and the line marker, and the axis titles name
+  the series, so the two are never told apart by colour alone.
+- The SVG is hidden from assistive technology. A visually hidden table, captioned
+  with `title`, has a row per x label and a column for the bars and one for the
+  line.
+- The chart is one tab stop. The arrow keys, Home and End move along the x axis
+  and a readout line gives the label and both values. Hovering shows the same
+  readout.

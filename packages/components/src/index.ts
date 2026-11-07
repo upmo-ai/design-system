@@ -156,7 +156,26 @@ export {
 
 export { StatTile, type StatTileProps, type TrendDirection } from './charts/StatTile.tsx';
 export { BarChart, type BarChartProps, type BarDatum } from './charts/BarChart.tsx';
-export { LineChart, type LineChartProps, type LinePoint } from './charts/LineChart.tsx';
+export {
+  LineChart,
+  type LineChartProps,
+  type LinePoint,
+  type LineSeries,
+  type LineSeriesPoint,
+} from './charts/LineChart.tsx';
+export { DonutChart, type DonutChartProps, type DonutDatum } from './charts/DonutChart.tsx';
+export {
+  GroupedBarChart,
+  type GroupedBarChartProps,
+  type BarGroup,
+  type GroupedBarDatum,
+} from './charts/GroupedBarChart.tsx';
+export {
+  ComboChart,
+  type ComboChartProps,
+  type ComboSeries,
+  type ComboPoint,
+} from './charts/ComboChart.tsx';
 export { UsageMeter, type UsageMeterProps } from './charts/UsageMeter.tsx';
 
 export {
