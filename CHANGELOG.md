@@ -2,6 +2,12 @@
 
 Release notes for the six @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 1.6.1 (2026-11-07)
+
+### Fixes
+
+- **charts:** thin value-axis labels so they never overlap on narrow charts (#12) ([6b94cba](https://github.com/upmo-ai/design-system/commit/6b94cba0cc7ce1e5f14fd74075c1a4fd35f82ab8))
+
 ## 1.6.0 (2026-11-07)
 
 ### Features

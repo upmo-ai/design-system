@@ -295,19 +295,19 @@ importers:
         specifier: ^19.2.0
         version: 19.2.0(@types/react@19.2.0)
       '@upmo-ai/brand':
-        specifier: workspace:1.6.0
+        specifier: workspace:1.6.1
         version: link:../brand
       '@upmo-ai/brands':
-        specifier: workspace:1.6.0
+        specifier: workspace:1.6.1
         version: link:../brands
       '@upmo-ai/icons':
-        specifier: workspace:1.6.0
+        specifier: workspace:1.6.1
         version: link:../icons
       '@upmo-ai/theme':
-        specifier: workspace:1.6.0
+        specifier: workspace:1.6.1
         version: link:../theme
       '@upmo-ai/tokens':
-        specifier: workspace:1.6.0
+        specifier: workspace:1.6.1
         version: link:../tokens
       axe-core:
         specifier: 4.10.3
@@ -339,7 +339,7 @@ importers:
   packages/theme:
     dependencies:
       '@upmo-ai/tokens':
-        specifier: workspace:1.6.0
+        specifier: workspace:1.6.1
         version: link:../tokens
     devDependencies:
       '@mantine/core':
