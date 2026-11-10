@@ -2,6 +2,12 @@
 
 Release notes for the six @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 1.7.0 (2026-11-10)
+
+### Features
+
+- **components:** add search and grouping to composer menus (#13) ([d6ad07f](https://github.com/upmo-ai/design-system/commit/d6ad07f968540d43d09027b7cf2cfd69934b9fa7))
+
 ## 1.6.1 (2026-11-07)
 
 ### Fixes
