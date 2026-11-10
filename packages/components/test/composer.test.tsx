@@ -228,3 +228,127 @@ describe('Composer toolbar', () => {
     }
   });
 });
+
+describe('Composer grouped and searchable options', () => {
+  const modelOptions = [
+    { value: 'auto', label: 'Auto', pinned: true, group: 'Recommended' },
+    { value: 'opus', label: 'Claude Opus', description: 'Hard problems.', group: 'Anthropic' },
+    { value: 'sonnet', label: 'Claude Sonnet', group: 'Anthropic' },
+    { value: 'gpt', label: 'GPT', description: 'General purpose.', group: 'OpenAI' },
+  ];
+  function modelConfig(searchable = true, onChange: (value: string) => void = () => {}) {
+    return config({
+      groups: [{ label: 'Model', value: 'auto', onChange, options: modelOptions, searchable }],
+    });
+  }
+  const pillName = /^Agent, route and model/;
+  const filter = () => screen.getByRole('searchbox', { name: 'Filter Model' });
+
+  // @testing-library/user-event is not a dependency here, so keys go to the
+  // element that really has focus, and typing sets the focused field's value.
+  const press = (key: string) => fireEvent.keyDown(document.activeElement!, { key });
+  const typeText = (text: string) => {
+    expect(filter()).toHaveFocus();
+    fireEvent.change(filter(), { target: { value: text } });
+  };
+
+  /** Opens the config menu and the Model submenu from the keyboard. */
+  async function openModel() {
+    // A click focuses the pill in a browser, and Mantine returns focus to it.
+    act(() => screen.getByRole('button', { name: pillName }).focus());
+    fireEvent.click(screen.getByRole('button', { name: pillName }));
+    const item = await screen.findByRole('menuitem', { name: 'Model' });
+    act(() => item.focus());
+    press('ArrowRight');
+    await screen.findByRole('menuitemradio', { name: 'GPT' });
+  }
+
+  it('focuses the filter when the submenu opens, and typing filters by label, ignoring case', async () => {
+    renderThemed(composer({ config: modelConfig() }));
+    await openModel();
+    await waitFor(() => expect(filter()).toHaveFocus());
+    typeText('SONN');
+    expect(filter()).toHaveValue('SONN');
+    expect(screen.getByRole('menuitemradio', { name: 'Claude Sonnet' })).toBeInTheDocument();
+    expect(screen.queryByRole('menuitemradio', { name: 'GPT' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('menuitemradio', { name: 'Claude Opus' })).not.toBeInTheDocument();
+  });
+
+  it('filters options by description', async () => {
+    renderThemed(composer({ config: modelConfig() }));
+    await openModel();
+    await waitFor(() => expect(filter()).toHaveFocus());
+    typeText('general');
+    expect(screen.getByRole('menuitemradio', { name: 'GPT' })).toBeInTheDocument();
+    expect(screen.queryByRole('menuitemradio', { name: 'Claude Opus' })).not.toBeInTheDocument();
+  });
+
+  it('moves through the options with ArrowDown, points the filter at the active one, and Enter selects it', async () => {
+    const onChange = vi.fn();
+    renderThemed(composer({ config: modelConfig(true, onChange) }));
+    await openModel();
+    await waitFor(() => expect(filter()).toHaveFocus());
+    typeText('gpt');
+    // The pinned Auto row is first; GPT is the second.
+    press('ArrowDown');
+    press('ArrowDown');
+    const gpt = screen.getByRole('menuitemradio', { name: 'GPT' });
+    await waitFor(() => expect(filter()).toHaveAttribute('aria-activedescendant', gpt.id));
+    expect(filter()).toHaveFocus();
+    press('Enter');
+    expect(onChange).toHaveBeenCalledWith('gpt');
+  });
+
+  it('shows "No matches" as a status when nothing matches, and keeps the pinned option', async () => {
+    renderThemed(composer({ config: modelConfig() }));
+    await openModel();
+    await waitFor(() => expect(filter()).toHaveFocus());
+    typeText('zzz');
+    expect(screen.getByRole('status')).toHaveTextContent('No matches');
+    expect(screen.getByRole('menuitemradio', { name: 'Auto' })).toBeInTheDocument();
+    expect(screen.queryByRole('menuitemradio', { name: 'GPT' })).not.toBeInTheDocument();
+  });
+
+  it('keeps the pinned option first, outside any section label even when it has a group', async () => {
+    renderThemed(composer({ config: modelConfig() }));
+    await openModel();
+    const items = await screen.findAllByRole('menuitemradio');
+    expect(items[0]).toHaveAccessibleName('Auto');
+    expect(screen.queryByText('Recommended')).not.toBeInTheDocument();
+    expect(screen.getByText('Anthropic')).toBeInTheDocument();
+  });
+
+  it('wraps each section in a group named by its label, and hides a label with no matching option', async () => {
+    renderThemed(composer({ config: modelConfig() }));
+    await openModel();
+    expect(screen.getAllByText('Anthropic')).toHaveLength(1);
+    const anthropic = screen.getByRole('group', { name: 'Anthropic' });
+    expect(within(anthropic).getAllByRole('menuitemradio')).toHaveLength(2);
+    expect(screen.getByRole('group', { name: 'OpenAI' })).toBeInTheDocument();
+    await waitFor(() => expect(filter()).toHaveFocus());
+    typeText('gpt');
+    expect(screen.queryByText('Anthropic')).not.toBeInTheDocument();
+    expect(screen.queryByRole('group', { name: 'Anthropic' })).not.toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'OpenAI' })).toBeInTheDocument();
+  });
+
+  it('shows no filter field for a group that is not searchable', async () => {
+    renderThemed(composer({ config: modelConfig(false) }));
+    await openModel();
+    expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
+    expect(screen.getByText('Anthropic')).toBeInTheDocument();
+  });
+
+  it('closes the whole menu on Escape, returns focus to the pill, and starts empty on reopen', async () => {
+    renderThemed(composer({ config: modelConfig() }));
+    await openModel();
+    await waitFor(() => expect(filter()).toHaveFocus());
+    typeText('sonnet');
+    press('Escape');
+    await waitFor(() => expect(screen.queryByRole('menu')).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('button', { name: pillName })).toHaveFocus());
+    await openModel();
+    await waitFor(() => expect(filter()).toHaveFocus());
+    expect(filter()).toHaveValue('');
+  });
+});

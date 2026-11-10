@@ -667,6 +667,15 @@ button.upmo-liveness:hover {
   line-height: var(--text-caption-line);
   white-space: normal;
 }
+.upmo-composer__search {
+  margin-bottom: var(--space-1);
+}
+.upmo-composer__empty {
+  padding: var(--space-2) var(--space-3);
+  color: var(--ink-muted);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+}
 .upmo-composer__group {
   display: flex;
   align-items: baseline;
