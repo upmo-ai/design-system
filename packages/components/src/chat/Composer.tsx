@@ -10,7 +10,7 @@ import {
   IconPlayerStopFilled,
 } from '@tabler/icons-react';
 import clsx from 'clsx';
-import { useId, type KeyboardEvent, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { IconButton } from '../IconButton/IconButton.tsx';
 import { Kbd, KbdGroup } from '../Kbd/Kbd.tsx';
 
@@ -19,6 +19,16 @@ export interface ComposerOption {
   label: string;
   /** A line under the label in the menu. It is the item's accessible description; the name stays the label. */
   description?: string;
+  /**
+   * A section label in a config-group menu. Consecutive options with the same
+   * `group` sit under one label; options without one have no label.
+   */
+  group?: string;
+  /**
+   * Keep the option at the top of its config-group menu, above every section
+   * label. A pinned option is never filtered out.
+   */
+  pinned?: boolean;
 }
 
 /** The form is narrower than this (px) when `toolbar="auto"` goes compact. */
@@ -33,6 +43,11 @@ export interface ComposerConfigMenu {
     value: string;
     options: ComposerOption[];
     onChange: (value: string) => void;
+    /**
+     * Show a filter field at the top of the group's menu. It matches the label
+     * and description, ignoring case. The text clears when the menu closes.
+     */
+    searchable?: boolean;
   }[];
   /**
    * The pill text when the toolbar is compact. Default: the selected label of
@@ -107,14 +122,17 @@ function OptionItem({
   checked,
   onChange,
   descriptionId,
+  itemId,
 }: {
   option: ComposerOption;
   checked: boolean;
   onChange: (value: string) => void;
   descriptionId: string;
+  itemId?: string;
 }) {
   return (
     <Menu.RadioItem
+      id={itemId}
       value={option.value}
       checked={checked}
       onChange={onChange}
@@ -137,6 +155,106 @@ function OptionItem({
   );
 }
 
+function matches(option: ComposerOption, query: string): boolean {
+  return `${option.label} ${option.description ?? ''}`.toLowerCase().includes(query);
+}
+
+/**
+ * The options of one config group: pinned ones first, then the rest under
+ * their section labels. With `searchable`, a filter field narrows the rest.
+ * The state lives here, so it resets when the menu closes and this unmounts.
+ */
+function GroupOptions({
+  group,
+  groupId,
+}: {
+  group: ComposerConfigMenu['groups'][number];
+  groupId: string;
+}) {
+  const [query, setQuery] = useState('');
+  const [activeId, setActiveId] = useState<string>();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const needle = query.trim().toLowerCase();
+  const entries = group.options.map((option, index) => ({ option, index }));
+  const pinned = entries.filter((e) => e.option.pinned);
+  const rest = entries.filter((e) => !e.option.pinned && (!needle || matches(e.option, needle)));
+  // Consecutive options with one `group` form a section; the others stand alone.
+  const sections: { label?: string; entries: typeof entries }[] = [];
+  for (const entry of rest) {
+    const last = sections[sections.length - 1];
+    if (last && last.label === entry.option.group) last.entries.push(entry);
+    else sections.push({ label: entry.option.group, entries: [entry] });
+  }
+
+  // Opening with the arrow key makes Mantine focus the first item after a beat.
+  // Move focus on to the filter, but only when that happened (not on hover).
+  useEffect(() => {
+    if (!group.searchable) return;
+    const timer = window.setTimeout(() => {
+      const dropdown = inputRef.current?.closest('[data-menu-dropdown]');
+      if (dropdown?.contains(document.activeElement) && document.activeElement !== inputRef.current) {
+        inputRef.current?.focus();
+      }
+    }, 40);
+    return () => window.clearTimeout(timer);
+  }, [group.searchable]);
+
+  // Focus stays in the filter, so point the input at the option Mantine marks active.
+  useEffect(() => {
+    const dropdown = inputRef.current?.closest('[data-menu-dropdown]');
+    if (!group.searchable || !dropdown) return;
+    const sync = () => setActiveId(dropdown.querySelector('[data-menu-active]')?.id || undefined);
+    const observer = new MutationObserver(sync);
+    observer.observe(dropdown, { attributes: true, attributeFilter: ['data-menu-active'], subtree: true });
+    return () => observer.disconnect();
+  }, [group.searchable]);
+
+  const renderItem = ({ option, index }: (typeof entries)[number]) => {
+    const descriptionId = `${groupId}-option-${index}`;
+    return (
+      <OptionItem
+        key={option.value}
+        option={option}
+        checked={option.value === group.value}
+        onChange={group.onChange}
+        descriptionId={descriptionId}
+        itemId={`${descriptionId}-item`}
+      />
+    );
+  };
+  return (
+    <>
+      {group.searchable ? (
+        <Menu.Search
+          ref={inputRef}
+          className="upmo-composer__search"
+          aria-label={`Filter ${group.label}`}
+          aria-activedescendant={activeId}
+          placeholder="Filter"
+          value={query}
+          onChange={(e) => setQuery(e.currentTarget.value)}
+        />
+      ) : null}
+      {pinned.map(renderItem)}
+      {sections.map((section, i) => {
+        if (!section.label) return section.entries.map(renderItem);
+        const labelId = `${groupId}-section-${i}`;
+        return (
+          <div key={`${section.label}-${i}`} role="group" aria-labelledby={labelId}>
+            <Menu.Label id={labelId}>{section.label}</Menu.Label>
+            {section.entries.map(renderItem)}
+          </div>
+        );
+      })}
+      {needle && rest.length === 0 ? (
+        <div className="upmo-composer__empty" role="status">
+          No matches
+        </div>
+      ) : null}
+    </>
+  );
+}
+
 /**
  * The chat composer: a borderless autosizing textarea over a pill toolbar. The
  * config pill fans out to nested Agent / Route / Model menus; the tools pill
@@ -147,7 +265,9 @@ function OptionItem({
  * agent. The whole composer carries one emerald focus ring.
  *
  * Options can carry a `description`, shown under the label, and each group in
- * the config menu shows its current value. In a narrow composer (under 420px,
+ * the config menu shows its current value. A config group can list long
+ * options under section labels (`group`), keep some on top (`pinned`) and show
+ * a filter field (`searchable`). In a narrow composer (under 420px,
  * or `toolbar="compact"`) the config pill shortens to the model and the toolbar
  * wraps instead of clipping.
  */
@@ -255,15 +375,7 @@ export function Composer({
                           </Menu.Sub.Item>
                         </Menu.Sub.Target>
                         <Menu.Sub.Dropdown className="upmo-composer__menu">
-                          {group.options.map((opt, optionIndex) => (
-                            <OptionItem
-                              key={opt.value}
-                              option={opt}
-                              checked={opt.value === group.value}
-                              onChange={group.onChange}
-                              descriptionId={`${baseId}-option-${groupIndex}-${optionIndex}`}
-                            />
-                          ))}
+                          <GroupOptions group={group} groupId={`${baseId}-option-${groupIndex}`} />
                         </Menu.Sub.Dropdown>
                       </Menu.Sub>
                     );

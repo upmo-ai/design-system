@@ -313,6 +313,37 @@ a description: the item is still named "Agent".
 />
 ```
 
+### Grouped and searchable options
+
+A long list, such as models from several providers, can be organised in its
+config group:
+
+- `group` on an option puts consecutive options with the same value under one
+  section label. Options without `group` have no label.
+- `pinned` on an option keeps it at the top, above every label. A pinned option
+  is never filtered out. The design system gives no option special treatment, so
+  set `pinned` on your own "Auto" row.
+- `searchable` on the group adds a filter field at the top of its menu, named
+  "Filter" plus the group label. It matches the label and the description,
+  ignoring case, hides labels with no matching option, and shows "No matches"
+  when nothing is left. Opening the submenu from the keyboard puts focus in the
+  field, so typing filters at once, and the arrow keys still move through the
+  options (Enter picks one). The text clears when the menu closes.
+
+```tsx
+{
+  label: 'Model',
+  value: model,
+  onChange: setModel,
+  searchable: true,
+  options: [
+    { value: 'auto', label: 'Auto', pinned: true },
+    { value: 'opus', label: 'Claude Opus', group: 'Anthropic' },
+    { value: 'gpt', label: 'GPT', group: 'OpenAI' },
+  ],
+}
+```
+
 ### Narrow widths
 
 The toolbar wraps instead of clipping, and a long pill label ends in an

@@ -189,3 +189,34 @@ export const Narrow: Story = {
 export const Compact: Story = {
   render: () => <DescribedComposer width={640} toolbar="compact" />,
 };
+
+const models = [
+  { value: 'auto', label: 'Auto', description: 'Picks the model that fits the task.', pinned: true },
+  { value: 'opus', label: 'Claude Opus', description: 'Hard problems and long documents.', group: 'Anthropic' },
+  { value: 'sonnet', label: 'Claude Sonnet', description: 'Everyday work.', group: 'Anthropic' },
+  { value: 'haiku', label: 'Claude Haiku', description: 'Quick answers.', group: 'Anthropic' },
+  { value: 'gpt', label: 'GPT', description: 'General purpose.', group: 'OpenAI' },
+  { value: 'mini', label: 'GPT mini', description: 'Fast and light.', group: 'OpenAI' },
+  { value: 'gemini', label: 'Gemini', description: 'Long context.', group: 'Google' },
+];
+
+/** The Model group lists models under provider labels, keeps Auto on top and has a filter. Open the config pill. */
+export const SearchableModels: Story = {
+  render: () => {
+    const [value, setValue] = useState('');
+    const [model, setModel] = useState('auto');
+    return (
+      <div style={{ maxWidth: 640 }}>
+        <Composer
+          value={value}
+          onChange={setValue}
+          onSend={() => setValue('')}
+          config={{
+            label: 'Model',
+            groups: [{ label: 'Model', value: model, onChange: setModel, options: models, searchable: true }],
+          }}
+        />
+      </div>
+    );
+  },
+};
