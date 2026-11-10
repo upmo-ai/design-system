@@ -352,3 +352,45 @@ describe('Composer grouped and searchable options', () => {
     expect(filter()).toHaveValue('');
   });
 });
+
+describe('Composer disabled pickers', () => {
+  function lockedModel() {
+    const menu = config();
+    menu.groups[2]!.disabled = true;
+    return menu;
+  }
+
+  it('opens a group that is not disabled while another is', async () => {
+    const onChange = vi.fn();
+    const menu = lockedModel();
+    menu.groups[1]!.onChange = onChange;
+    renderThemed(composer({ config: menu }));
+    await openGroup('Route');
+    fireEvent.click(await screen.findByRole('menuitemradio', { name: 'Default' }));
+    expect(onChange).toHaveBeenCalledWith('default');
+  });
+
+  it('shows a disabled group with its current value and does not open its menu', async () => {
+    renderThemed(composer({ config: lockedModel() }));
+    fireEvent.click(screen.getByRole('button', { name: /^Agent, route and model/ }));
+    const model = await screen.findByRole('menuitem', { name: 'Model' });
+    expect(model).toBeDisabled();
+    expect(model).toHaveAccessibleDescription('Claude Sonnet');
+    fireEvent.click(model);
+    fireEvent.keyDown(model, { key: 'ArrowRight' });
+    expect(screen.queryByRole('menuitemradio', { name: 'Claude Opus' })).not.toBeInTheDocument();
+  });
+
+  it('disables the tools pill and keeps its menu closed', () => {
+    const onChange = vi.fn();
+    renderThemed(
+      composer({
+        toolsMode: { value: 'auto', onChange, disabled: true, options: [{ value: 'auto', label: 'Auto' }, { value: 'off', label: 'Disabled' }] },
+      }),
+    );
+    const pill = screen.getByRole('button', { name: 'Tools mode: Auto' });
+    expect(pill).toBeDisabled();
+    fireEvent.click(pill);
+    expect(screen.queryByText('Tools and context')).not.toBeInTheDocument();
+  });
+});
