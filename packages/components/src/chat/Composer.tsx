@@ -48,6 +48,11 @@ export interface ComposerConfigMenu {
      * and description, ignoring case. The text clears when the menu closes.
      */
     searchable?: boolean;
+    /**
+     * Lock the group. Its row still shows the current value, but the menu does
+     * not open, so the value cannot change. Say why in `hint`.
+     */
+    disabled?: boolean;
   }[];
   /**
    * The pill text when the toolbar is compact. Default: the selected label of
@@ -84,6 +89,8 @@ export interface ComposerProps {
     value: string;
     options: ComposerOption[];
     onChange: (value: string) => void;
+    /** Lock the pill. It shows the current value, but the menu does not open. Say why in `hint`. */
+    disabled?: boolean;
   };
   /** Attach handler; shows the paperclip when set. */
   onAttach?: () => void;
@@ -362,16 +369,26 @@ export function Composer({
                 <Menu.Dropdown className="upmo-composer__menu">
                   {config.groups.map((group, groupIndex) => {
                     const valueId = `${baseId}-group-${groupIndex}`;
+                    const row = (
+                      <span className="upmo-composer__group">
+                        <span>{group.label}</span>
+                        <span id={valueId} className="upmo-composer__group-value">
+                          {currentLabel(group)}
+                        </span>
+                      </span>
+                    );
+                    if (group.disabled) {
+                      return (
+                        <Menu.Item key={group.label} disabled aria-label={group.label} aria-describedby={valueId}>
+                          {row}
+                        </Menu.Item>
+                      );
+                    }
                     return (
                       <Menu.Sub key={group.label} position="right-start">
                         <Menu.Sub.Target>
                           <Menu.Sub.Item aria-label={group.label} aria-describedby={valueId}>
-                            <span className="upmo-composer__group">
-                              <span>{group.label}</span>
-                              <span id={valueId} className="upmo-composer__group-value">
-                                {currentLabel(group)}
-                              </span>
-                            </span>
+                            {row}
                           </Menu.Sub.Item>
                         </Menu.Sub.Target>
                         <Menu.Sub.Dropdown className="upmo-composer__menu">
@@ -425,6 +442,7 @@ export function Composer({
                     className="upmo-composer__pill"
                     classNames={pillClassNames}
                     aria-label={`Tools mode: ${toolsLabel}`}
+                    disabled={toolsMode.disabled}
                     rightSection={<IconChevronDown size={13} />}
                   >
                     <span className="upmo-composer__pill-text">{toolsLabel}</span>

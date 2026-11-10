@@ -220,3 +220,43 @@ export const SearchableModels: Story = {
     );
   },
 };
+
+/** The Route group stays open; Model and the tools pill are locked, and the hint says why. */
+export const LockedPickers: Story = {
+  render: () => {
+    const [value, setValue] = useState('');
+    const [route, setRoute] = useState('default');
+    return (
+      <div style={{ maxWidth: 640 }}>
+        <Composer
+          value={value}
+          onChange={setValue}
+          onSend={() => setValue('')}
+          hint="Only the route is used."
+          config={{
+            label: 'Route and model',
+            groups: [
+              {
+                label: 'Route',
+                value: route,
+                onChange: setRoute,
+                options: [
+                  { value: 'default', label: 'Default' },
+                  { value: 'fast', label: 'Fast' },
+                ],
+              },
+              {
+                label: 'Model',
+                value: 'sonnet',
+                onChange: () => {},
+                disabled: true,
+                options: [{ value: 'sonnet', label: 'Claude Sonnet' }],
+              },
+            ],
+          }}
+          toolsMode={{ value: 'auto', onChange: () => {}, disabled: true, options: [{ value: 'auto', label: 'Auto' }] }}
+        />
+      </div>
+    );
+  },
+};
