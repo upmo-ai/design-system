@@ -2,6 +2,12 @@
 
 Release notes for the six @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 1.8.0 (2026-11-10)
+
+### Features
+
+- **components:** add per-picker disabled to the composer (#14) ([412bd7b](https://github.com/upmo-ai/design-system/commit/412bd7bef013b4d076b6047e1ea8ae8c48d8da88))
+
 ## 1.7.0 (2026-11-10)
 
 ### Features
