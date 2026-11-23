@@ -87,6 +87,17 @@ export const Caret: Story = {
   ),
 };
 
+export const Square: Story = {
+  render: () => (
+    <div style={grid}>
+      <Tile name="light" ground="light" src={urlFor(svg, 'square-light.svg')} width={96} />
+      <Tile name="dark" ground="dark" src={urlFor(svg, 'square-dark.svg')} width={96} />
+      <Tile name="mono black" ground="light" src={urlFor(svg, 'square-mono-black.svg')} width={96} />
+      <Tile name="mono white" ground="dark" src={urlFor(svg, 'square-mono-white.svg')} width={96} />
+    </div>
+  ),
+};
+
 export const AppIcons: Story = {
   render: () => (
     <div style={grid}>

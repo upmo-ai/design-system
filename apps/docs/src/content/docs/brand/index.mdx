@@ -7,6 +7,7 @@ export const files = '/brand/files';
 export const marks = [
   { name: 'wordmark', label: 'Wordmark', width: 220 },
   { name: 'caret', label: 'Caret mark', width: 72 },
+  { name: 'square', label: 'Square mark', width: 96 },
 ];
 export const variants = [
   { id: 'light', label: 'Light', ground: 'light', note: 'For light grounds.' },
@@ -39,11 +40,13 @@ never drift from the interface.
 pnpm add @upmo-ai/brand
 ```
 
-## Wordmark and caret
+## Wordmark, caret and square mark
 
 The wordmark is "up" in emerald, "mo" in ink, and the caret over the o. The
 caret mark is the same caret on its own, for small or square spaces. Text is
-outlined, so the files need no font.
+outlined, so the files need no font. The square mark puts the caret over the
+wordmark on a full square, for profile pictures and app icons. Its mono variants
+are cut out of a solid square, so the ground shows through the art.
 
 {marks.map((mark) => (
   <section class="brand-set" aria-labelledby={`brand-${mark.name}`}>

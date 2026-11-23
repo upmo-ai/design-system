@@ -13,8 +13,9 @@ pnpm add @upmo-ai/brand
 
 ## What is in the kit
 
-SVG, in `svg/`. Each comes as `wordmark-<variant>.svg` and
-`caret-<variant>.svg`:
+SVG, in `svg/`. Each comes as `wordmark-<variant>.svg`,
+`caret-<variant>.svg` and `square-<variant>.svg` (the caret over the wordmark on a
+square, for avatars; the mono ones are cut out of a solid square):
 
 | Variant | Colours |
 | --- | --- |

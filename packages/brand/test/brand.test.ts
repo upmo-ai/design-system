@@ -14,6 +14,7 @@ import {
   ogSvg,
   palette,
   profileSvg,
+  squareSvg,
   toIco,
   tokenColour,
   variants,
@@ -76,7 +77,7 @@ describe('wordmark and caret colours', () => {
       expect(svg, name).toContain('aria-label="Upmo"');
       expect(svg, name).toContain('<title>Upmo</title>');
       expect(svg, name).not.toMatch(/<(script|style|image|text)\b/);
-      expect(svg, name).not.toMatch(/\s(width|height)=/);
+      expect(svg.match(/<svg[^>]*>/)![0], name).not.toMatch(/\s(width|height)=/);
     }
   });
 
@@ -159,6 +160,22 @@ describe('app icons', () => {
     const svg = profileSvg(themes);
     expect(svg).toContain(`<rect width="512" height="512" fill="${themes.light.emerald}"/>`);
     expect(svg).not.toContain('rx=');
+  });
+});
+
+describe('square mark', () => {
+  it('ships in every variant, and the light one is the profile art', () => {
+    for (const variant of variants) expect(existsSync(join(pkg, `assets/svg/square-${variant}.svg`))).toBe(true);
+    expect(squareSvg('light', themes)).toBe(profileSvg(themes));
+    expect(text('assets/web/profile.svg')).toBe(profileSvg(themes));
+  });
+
+  it('knocks the art out of a solid square in the mono variants', () => {
+    for (const [variant, colour] of [['mono', 'currentColor'], ['mono-black', 'black'], ['mono-white', 'white']] as const) {
+      const svg = squareSvg(variant, themes);
+      expect(svg).toContain(`fill="${colour}" mask=`);
+      expect(svg).not.toMatch(/#[0-9a-f]{3,8}\b/i);
+    }
   });
 });
 

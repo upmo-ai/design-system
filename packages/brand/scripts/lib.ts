@@ -91,34 +91,44 @@ export function caretSvg(fills: Fills): string {
 
 const iconSide = 512;
 /**
- * The profile picture: a full-bleed emerald square with the caret over the wordmark
- * in the page ground. Square, for social avatars and large app icons. The
- * corners are transparent; platforms that crop to a circle fill them.
+ * The square mark: the caret over the wordmark on a full-bleed square, for
+ * profile pictures and app icons. light and dark paint the art in the page
+ * ground on emerald. The mono variants knock the art out of a solid square, so
+ * the ground shows through it.
  */
 // The art stays inside the 40% safe circle that maskable icons guarantee (the
 // farthest point, the foot of the "u", is about 190 of the 205 pixels allowed),
 // so one drawing serves the profile picture and every app icon.
-export function profileSvg(themes: Record<Theme, Palette>): string {
-  const p = themes.light;
+export function squareSvg(variant: Variant, themes: Record<Theme, Palette>): string {
   const side = iconSide;
-  // The caret spans 37.5% of the tile, the wordmark 56%, centred on "up" to "mo" (5.5 to 242.3).
+  // The caret spans 37.5% of the square, the wordmark 56%, centred on "up" to "mo" (5.5 to 242.3).
   const caretScale = (0.375 * side) / markWidth;
   const cx = side / 2 - markCentre.x * caretScale;
   const cy = 0.33 * side - markCentre.y * caretScale;
   const wordScale = (0.56 * side) / (242.33 - 5.5);
   const wx = side / 2 - ((5.5 + 242.33) / 2) * wordScale;
   const wy = 0.74 * side;
-  return (
-    `<svg ${xmlns} viewBox="0 0 ${side} ${side}" role="img" aria-label="Upmo">${title}` +
-    `<rect width="${side}" height="${side}" fill="${p.emerald}"/>` +
+  const art = (colour: string) =>
     `<path transform="translate(${round(cx)} ${round(cy)}) scale(${round(caretScale)})" d="${mark}" fill="none" ` +
-    `stroke="${p.ground}" stroke-width="${markStrokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>` +
-    `<g transform="translate(${round(wx)} ${round(wy)}) scale(${round(wordScale)})" fill="${p.ground}">` +
+    `stroke="${colour}" stroke-width="${markStrokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>` +
+    `<g transform="translate(${round(wx)} ${round(wy)}) scale(${round(wordScale)})" fill="${colour}">` +
     `<path d="${up}"/><path d="${mo}"/>` +
-    `<path d="${caret}" fill="none" stroke="${p.ground}" stroke-width="${caretStrokeWidth}" ` +
-    `stroke-linecap="round" stroke-linejoin="round"/></g></svg>\n`
+    `<path d="${caret}" fill="none" stroke="${colour}" stroke-width="${caretStrokeWidth}" ` +
+    `stroke-linecap="round" stroke-linejoin="round"/></g>`;
+  const open = `<svg ${xmlns} viewBox="0 0 ${side} ${side}" role="img" aria-label="Upmo">${title}`;
+  if (variant === 'light' || variant === 'dark') {
+    const p = themes[variant];
+    return `${open}<rect width="${side}" height="${side}" fill="${p.emerald}"/>${art(p.ground)}</svg>\n`;
+  }
+  const solid = fillsFor(variant, themes).up;
+  return (
+    `${open}<mask id="art"><rect width="${side}" height="${side}" fill="white"/>${art('black')}</mask>` +
+    `<rect width="${side}" height="${side}" fill="${solid}" mask="url(#art)"/></svg>\n`
   );
 }
+
+/** The profile picture and app icons: the light square mark. */
+export const profileSvg = (themes: Record<Theme, Palette>) => squareSvg('light', themes);
 
 /** The favicon: the caret in the page ground on a full-bleed emerald square. */
 export function faviconSvg(themes: Record<Theme, Palette>): string {
@@ -237,6 +247,7 @@ export function buildSvgFiles(tokens: TokenFile): Map<string, string> {
     const fills = fillsFor(variant, themes);
     files.set(`assets/svg/wordmark-${variant}.svg`, wordmarkSvg(fills));
     files.set(`assets/svg/caret-${variant}.svg`, caretSvg(fills));
+    files.set(`assets/svg/square-${variant}.svg`, squareSvg(variant, themes));
   }
   files.set('assets/web/favicon.svg', faviconSvg(themes));
   files.set('assets/web/profile.svg', profileSvg(themes));
