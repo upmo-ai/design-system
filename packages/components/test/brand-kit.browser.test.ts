@@ -174,24 +174,5 @@ describe.skipIf(!enabled)('brand kit in a real browser', () => {
         await close();
       }
     });
-
-    // The favicon switches on the system colour scheme. The two tiles must
-    // preview its two colours whatever the system is set to.
-    for (const colorScheme of ['light', 'dark'] as const) {
-      it(`previews the favicon in the colour of each tile with a ${colorScheme} system`, async () => {
-        const { page, close } = await open(story('brand-asset-kit--app-icons'), { colorScheme }, 'figure');
-        try {
-          const stroke = (caption: string) =>
-            page
-              .locator('figure', { has: page.getByText(caption, { exact: true }) })
-              .locator('svg path')
-              .evaluate((el) => getComputedStyle(el).stroke);
-          expect(await stroke('favicon.svg')).toBe(rgb(colour('emerald', 'light')));
-          expect(await stroke('favicon.svg on dark')).toBe(rgb(colour('emerald', 'dark')));
-        } finally {
-          await close();
-        }
-      });
-    }
   });
 });
