@@ -2,6 +2,12 @@
 
 Release notes for the six @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 1.9.0 (2026-11-23)
+
+### Features
+
+- **brand:** add square mark and use it for the favicon and app icons (#15) ([4b9ff74](https://github.com/upmo-ai/design-system/commit/4b9ff745e774cc5208370dc199c86206f91d29ee))
+
 ## 1.8.0 (2026-11-10)
 
 ### Features
