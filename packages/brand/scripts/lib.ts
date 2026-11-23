@@ -2,7 +2,6 @@ import {
   caret,
   caretStrokeWidth,
   markCentre,
-  markReach,
   mark,
   markStrokeWidth,
   markViewBox,
@@ -90,57 +89,50 @@ export function caretSvg(fills: Fills): string {
   );
 }
 
-// A square viewBox cropped to the drawn caret, centred on it. Used where the
-// mark stands alone with no ground, such as a browser tab.
-const tabSide = 62;
-const tabViewBox = `${markCentre.x - tabSide / 2} ${markCentre.y - tabSide / 2} ${tabSide} ${tabSide}`;
-
-/** The favicon: the caret on a transparent ground, recoloured for dark browsers. */
-export function faviconSvg(themes: Record<Theme, Palette>): string {
-  return (
-    `<svg ${xmlns} viewBox="${tabViewBox}">` +
-    `<style>path{stroke:${themes.light.emerald}}` +
-    `@media (prefers-color-scheme:dark){path{stroke:${themes.dark.emerald}}}</style>` +
-    `<path d="${mark}" fill="none" stroke-width="${markStrokeWidth}" ` +
-    `stroke-linecap="round" stroke-linejoin="round"/></svg>\n`
-  );
-}
-
-/** The caret as a flat, single-colour SVG, for the sizes inside favicon.ico. */
-export function tabIconSvg(colour: string): string {
-  return (
-    `<svg ${xmlns} viewBox="${tabViewBox}">` +
-    `<path d="${mark}" fill="none" stroke="${colour}" stroke-width="${markStrokeWidth}" ` +
-    `stroke-linecap="round" stroke-linejoin="round"/></svg>\n`
-  );
-}
-
 const iconSide = 512;
-/** The share of the canvas width the caret spans in the standard app icons. */
-export const iconMarkShare = 0.72;
-/** The same for the maskable icon, which must sit inside the central safe circle. */
-export const maskableMarkShare = 0.6;
-// Maskable icons are cropped to a shape; the platform guarantees only a circle
-// of 40% of the width around the centre.
-export const maskableSafeRadius = iconSide * 0.4;
-
-/** A square app icon: the caret in emerald on the light page ground, full bleed. */
-export function appIconSvg(themes: Record<Theme, Palette>, share: number): string {
-  const scale = (share * iconSide) / markWidth;
-  const x = iconSide / 2 - markCentre.x * scale;
-  const y = iconSide / 2 - markCentre.y * scale;
+/**
+ * The profile picture: a full-bleed emerald square with the caret over the wordmark
+ * in the page ground. Square, for social avatars and large app icons. The
+ * corners are transparent; platforms that crop to a circle fill them.
+ */
+// The art stays inside the 40% safe circle that maskable icons guarantee (the
+// farthest point, the foot of the "u", is about 190 of the 205 pixels allowed),
+// so one drawing serves the profile picture and every app icon.
+export function profileSvg(themes: Record<Theme, Palette>): string {
+  const p = themes.light;
+  const side = iconSide;
+  // The caret spans 37.5% of the tile, the wordmark 56%, centred on "up" to "mo" (5.5 to 242.3).
+  const caretScale = (0.375 * side) / markWidth;
+  const cx = side / 2 - markCentre.x * caretScale;
+  const cy = 0.33 * side - markCentre.y * caretScale;
+  const wordScale = (0.56 * side) / (242.33 - 5.5);
+  const wx = side / 2 - ((5.5 + 242.33) / 2) * wordScale;
+  const wy = 0.74 * side;
   return (
-    `<svg ${xmlns} viewBox="0 0 ${iconSide} ${iconSide}">` +
-    `<rect width="${iconSide}" height="${iconSide}" fill="${themes.light.ground}"/>` +
-    `<path transform="translate(${round(x)} ${round(y)}) scale(${round(scale)})" d="${mark}" fill="none" ` +
-    `stroke="${themes.light.emerald}" stroke-width="${markStrokeWidth}" ` +
-    `stroke-linecap="round" stroke-linejoin="round"/></svg>\n`
+    `<svg ${xmlns} viewBox="0 0 ${side} ${side}" role="img" aria-label="Upmo">${title}` +
+    `<rect width="${side}" height="${side}" fill="${p.emerald}"/>` +
+    `<path transform="translate(${round(cx)} ${round(cy)}) scale(${round(caretScale)})" d="${mark}" fill="none" ` +
+    `stroke="${p.ground}" stroke-width="${markStrokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>` +
+    `<g transform="translate(${round(wx)} ${round(wy)}) scale(${round(wordScale)})" fill="${p.ground}">` +
+    `<path d="${up}"/><path d="${mo}"/>` +
+    `<path d="${caret}" fill="none" stroke="${p.ground}" stroke-width="${caretStrokeWidth}" ` +
+    `stroke-linecap="round" stroke-linejoin="round"/></g></svg>\n`
   );
 }
 
-/** How far the caret reaches from the icon centre, in icon pixels. */
-export function appIconReach(share: number): number {
-  return markReach * ((share * iconSide) / markWidth);
+/** The favicon: the caret in the page ground on a full-bleed emerald square. */
+export function faviconSvg(themes: Record<Theme, Palette>): string {
+  const p = themes.light;
+  const side = iconSide;
+  const scale = (0.6 * side) / markWidth;
+  const x = side / 2 - markCentre.x * scale;
+  const y = side / 2 - markCentre.y * scale;
+  return (
+    `<svg ${xmlns} viewBox="0 0 ${side} ${side}">` +
+    `<rect width="${side}" height="${side}" fill="${p.emerald}"/>` +
+    `<path transform="translate(${round(x)} ${round(y)}) scale(${round(scale)})" d="${mark}" fill="none" ` +
+    `stroke="${p.ground}" stroke-width="${markStrokeWidth}" stroke-linecap="round" stroke-linejoin="round"/></svg>\n`
+  );
 }
 
 export const ogSize = { width: 1200, height: 630 };
@@ -247,6 +239,7 @@ export function buildSvgFiles(tokens: TokenFile): Map<string, string> {
     files.set(`assets/svg/caret-${variant}.svg`, caretSvg(fills));
   }
   files.set('assets/web/favicon.svg', faviconSvg(themes));
+  files.set('assets/web/profile.svg', profileSvg(themes));
   files.set('assets/web/site.webmanifest', webManifest(themes));
   files.set('assets/web/head.html', headHtml(themes));
   return files;
@@ -255,21 +248,22 @@ export function buildSvgFiles(tokens: TokenFile): Map<string, string> {
 /** The PNGs to draw, keyed by path relative to the package. */
 export function buildRasters(tokens: TokenFile): Map<string, Raster> {
   const themes = { light: palette(tokens, 'light'), dark: palette(tokens, 'dark') };
-  const standard = appIconSvg(themes, iconMarkShare);
+  const profile = profileSvg(themes);
   return new Map<string, Raster>([
-    ['assets/web/apple-touch-icon.png', { svg: standard, width: 180 }],
-    ['assets/web/icon-192.png', { svg: standard, width: 192 }],
-    ['assets/web/icon-512.png', { svg: standard, width: 512 }],
-    ['assets/web/icon-512-maskable.png', { svg: appIconSvg(themes, maskableMarkShare), width: 512 }],
+    ['assets/web/apple-touch-icon.png', { svg: profile, width: 180 }],
+    ['assets/web/icon-192.png', { svg: profile, width: 192 }],
+    ['assets/web/icon-512.png', { svg: profile, width: 512 }],
+    ['assets/web/icon-512-maskable.png', { svg: profile, width: 512 }],
+    ['assets/web/profile-1024.png', { svg: profile, width: 1024 }],
     ['assets/web/og.png', { svg: ogSvg(themes), width: ogSize.width }],
   ]);
 }
 
 export const icoSizes = [16, 32, 48];
 
-/** The flat caret drawn into favicon.ico, in the light-theme emerald. */
+/** The favicon drawn into favicon.ico. */
 export function icoSource(tokens: TokenFile): string {
-  return tabIconSvg(palette(tokens, 'light').emerald);
+  return faviconSvg({ light: palette(tokens, 'light'), dark: palette(tokens, 'dark') });
 }
 
 /**
