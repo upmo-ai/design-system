@@ -2,6 +2,12 @@
 
 Release notes for the six @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 1.9.1 (2026-11-23)
+
+### Fixes
+
+- **docs:** link the ico and touch icon from the docs head (#16) ([1093cb1](https://github.com/upmo-ai/design-system/commit/1093cb1bfcf920a5519070b1f22230bf32937dfa))
+
 ## 1.9.0 (2026-11-23)
 
 ### Features
