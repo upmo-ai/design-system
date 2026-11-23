@@ -40,6 +40,8 @@ export default defineConfig({
       // components stylesheet and the React runtime are no longer loaded.
       customCss: ['@upmo-ai/tokens/tokens.css', './src/styles/docs.css'],
       head: [
+        { tag: 'link', attrs: { rel: 'icon', href: '/brand/files/web/favicon.ico', sizes: '48x48' } },
+        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/brand/files/web/apple-touch-icon.png' } },
         { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
         { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true } },
         { tag: 'link', attrs: { rel: 'stylesheet', href: fonts } },
