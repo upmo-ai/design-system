@@ -1,0 +1,66 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Upmo social cover</title>
+<!-- One template for every cover. render.mjs opens it with ?f=<format> and
+     screenshots it. Colours and fonts come from the token build. -->
+<link rel="stylesheet" href="../packages/tokens/dist/tokens.css">
+<link rel="stylesheet" href="../packages/tokens/dist/fonts.css">
+<style>
+html, body { margin: 0; }
+body {
+  position: relative; overflow: hidden; font-family: var(--font-ui); font-weight: 600;
+  background:
+    radial-gradient(700px 420px at 12% 105%, color-mix(in srgb, var(--emerald) 18%, var(--surface-000)) 0, transparent 70%),
+    radial-gradient(600px 360px at 62% -10%, var(--emerald-soft) 0, transparent 70%),
+    var(--surface-000);
+  --w: 1584px; --h: 396px; --left: 520px; --title: 50px; --logo: 120px; --url: 22px;
+  --badge: 560px; --badge-right: -110px; --carets: 520px; --bar: 6px;
+  width: var(--w); height: var(--h);
+}
+body.facebook  { --w: 1640px; --h: 624px; --left: 200px; --title: 68px; --logo: 150px; --url: 28px; --badge: 760px; --badge-right: -150px; --carets: 780px; --bar: 8px; }
+body.twitter   { --w: 1500px; --h: 500px; --left: 330px; --title: 58px; --logo: 130px; --url: 24px; --badge: 620px; --badge-right: -120px; --carets: 640px; --bar: 8px; }
+body.instagram { --w: 1080px; --h: 1350px; --left: 90px; --title: 78px; --logo: 210px; --url: 36px; --carets: 760px; --bar: 10px; }
+
+.dots {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(color-mix(in srgb, var(--emerald) 22%, var(--surface-000)) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(90deg, transparent 30%, #000 100%);
+}
+.carets { position: absolute; left: 0; bottom: 0; width: var(--carets); }
+.bar { position: absolute; left: 0; right: 0; bottom: 0; height: var(--bar); background: linear-gradient(90deg, var(--emerald), color-mix(in srgb, var(--emerald) 60%, white) 60%, var(--emerald-soft)); }
+.badge { position: absolute; right: var(--badge-right); top: 50%; width: var(--badge); height: var(--badge); transform: translateY(-50%); }
+.text { position: absolute; left: var(--left); top: 50%; transform: translateY(-50%); }
+.text img { display: block; width: var(--logo); margin: 0 0 calc(var(--logo) * .18); }
+h1 { white-space: nowrap; font: 700 var(--title) / 1.12 var(--font-display); letter-spacing: -.02em; color: var(--ink); margin: 0; }
+h1 em { font-style: normal; color: var(--emerald-deep); }
+.urls { margin: calc(var(--title) * .48) 0 0; font-size: var(--url); color: var(--ink-secondary); display: flex; gap: 14px; align-items: center; }
+.urls i { width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); }
+
+/* Instagram is a portrait post: text on top, badge below. */
+body.instagram .text { top: 150px; transform: none; }
+body.instagram .badge { top: auto; bottom: -170px; right: -150px; width: 860px; height: 860px; transform: none; }
+body.instagram .dots { mask-image: linear-gradient(0deg, #000, transparent 70%); }
+</style>
+<div class="dots"></div>
+<svg class="carets" viewBox="0 0 520 396" fill="none" stroke="var(--emerald)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" preserveAspectRatio="xMinYMax meet">
+  <path d="M40 330 200 170l160 160" stroke-opacity=".07"/>
+  <path d="M40 390 200 230l160 160" stroke-opacity=".11"/>
+  <path d="M40 270 200 110l160 160" stroke-opacity=".045"/>
+  <path d="M40 210 200 50l160 160" stroke-opacity=".025"/>
+</svg>
+<div class="bar"></div>
+<svg class="badge" viewBox="0 0 560 560">
+  <circle cx="280" cy="280" r="270" fill="var(--emerald-soft)" opacity=".45"/>
+  <circle cx="280" cy="280" r="210" fill="none" stroke="var(--emerald)" stroke-opacity=".25" stroke-width="2" stroke-dasharray="3 9" stroke-linecap="round"/>
+  <circle cx="280" cy="280" r="150" fill="var(--emerald-soft)" stroke="var(--emerald)" stroke-opacity=".35" stroke-width="2"/>
+  <circle cx="280" cy="280" r="92" fill="var(--emerald)"/>
+  <path d="M240 282l30 30 52-58" fill="none" stroke="var(--surface-000)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="280" cy="70" r="9" fill="var(--emerald)"/><circle cx="490" cy="280" r="9" fill="var(--emerald)" opacity=".6"/><circle cx="130" cy="428" r="9" fill="var(--emerald)" opacity=".4"/>
+</svg>
+<div class="text">
+  <img src="../packages/brand/assets/svg/wordmark-light.svg" alt="Upmo">
+  <h1>AI agents can do the work.<br><em>We make them safe to trust.</em></h1>
+  <p class="urls"><span>upmo.ai</span><i></i><span>upmo.dev</span></p>
+</div>
+<script>document.body.className = new URLSearchParams(location.search).get('f') ?? 'linkedin';</script>
