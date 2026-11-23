@@ -13,8 +13,9 @@ pnpm add @upmo-ai/brand
 
 ## What is in the kit
 
-SVG, in `svg/`. Each comes as `wordmark-<variant>.svg` and
-`caret-<variant>.svg`:
+SVG, in `svg/`. Each comes as `wordmark-<variant>.svg`,
+`caret-<variant>.svg` and `square-<variant>.svg` (the caret over the wordmark on a
+square, for avatars; the mono ones are cut out of a solid square):
 
 | Variant | Colours |
 | --- | --- |
@@ -28,11 +29,13 @@ For the site, in `web/`:
 
 | File | Use |
 | --- | --- |
-| `favicon.svg` | The caret, recoloured for dark browsers. |
-| `favicon.ico` | The caret at 16, 32 and 48 pixels, for browsers without SVG icons. |
+| `favicon.svg` | The caret in the page ground on a full-bleed emerald square. |
+| `favicon.ico` | The same at 16, 32 and 48 pixels, for browsers without SVG icons. |
 | `apple-touch-icon.png` | 180 by 180, opaque, for the iOS home screen. |
 | `icon-192.png`, `icon-512.png` | Web app icons. |
 | `icon-512-maskable.png` | Web app icon with the mark inside the safe zone, for adaptive masks. |
+| `profile.svg` | Square profile picture: the caret over the wordmark on a full-bleed emerald square. |
+| `profile-1024.png` | The same as PNG, for social media avatars. |
 | `og.png` | 1200 by 630 share image: the wordmark alone. |
 | `site.webmanifest` | A web app manifest that lists the icons above. |
 | `head.html` | The `<head>` tags that link the files above. |

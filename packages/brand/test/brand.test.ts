@@ -5,19 +5,16 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { mark, markStrokeWidth, markViewBox } from '../src/geometry.ts';
 import {
-  appIconReach,
-  appIconSvg,
   buildRasters,
   buildSvgFiles,
   fillsFor,
   headHtml,
-  iconMarkShare,
-  maskableMarkShare,
-  maskableSafeRadius,
   mirrors,
   ogSize,
   ogSvg,
   palette,
+  profileSvg,
+  squareSvg,
   toIco,
   tokenColour,
   variants,
@@ -80,7 +77,7 @@ describe('wordmark and caret colours', () => {
       expect(svg, name).toContain('aria-label="Upmo"');
       expect(svg, name).toContain('<title>Upmo</title>');
       expect(svg, name).not.toMatch(/<(script|style|image|text)\b/);
-      expect(svg, name).not.toMatch(/\s(width|height)=/);
+      expect(svg.match(/<svg[^>]*>/)![0], name).not.toMatch(/\s(width|height)=/);
     }
   });
 
@@ -104,11 +101,11 @@ describe('geometry', () => {
 });
 
 describe('favicon', () => {
-  it('recolours itself for dark browsers', () => {
+  it('is the caret on a full-bleed emerald square', () => {
     const svg = text('assets/web/favicon.svg');
-    expect(svg).toContain('prefers-color-scheme:dark');
-    expect(svg).toContain(themes.light.emerald);
-    expect(svg).toContain(themes.dark.emerald);
+    expect(svg).toContain(`fill="${themes.light.emerald}"`);
+    expect(svg).toContain(`stroke="${themes.light.ground}"`);
+    expect(svg).not.toContain('rx=');
   });
 
   it('packs 16, 32 and 48 pixel PNGs into favicon.ico', () => {
@@ -159,24 +156,26 @@ describe('app icons', () => {
     expect(pngSize(read('assets/web/icon-512-maskable.png'))).toEqual({ width: 512, height: 512 });
   });
 
-  it('paints a full-bleed ground, so the icon is opaque', () => {
-    for (const share of [iconMarkShare, maskableMarkShare]) {
-      const svg = appIconSvg(themes, share);
-      expect(svg).toContain(`<rect width="512" height="512" fill="${themes.light.ground}"/>`);
+  it('draws every icon from the profile art, full bleed and opaque', () => {
+    const svg = profileSvg(themes);
+    expect(svg).toContain(`<rect width="512" height="512" fill="${themes.light.emerald}"/>`);
+    expect(svg).not.toContain('rx=');
+  });
+});
+
+describe('square mark', () => {
+  it('ships in every variant, and the light one is the profile art', () => {
+    for (const variant of variants) expect(existsSync(join(pkg, `assets/svg/square-${variant}.svg`))).toBe(true);
+    expect(squareSvg('light', themes)).toBe(profileSvg(themes));
+    expect(text('assets/web/profile.svg')).toBe(profileSvg(themes));
+  });
+
+  it('knocks the art out of a solid square in the mono variants', () => {
+    for (const [variant, colour] of [['mono', 'currentColor'], ['mono-black', 'black'], ['mono-white', 'white']] as const) {
+      const svg = squareSvg(variant, themes);
+      expect(svg).toContain(`fill="${colour}" mask=`);
+      expect(svg).not.toMatch(/#[0-9a-f]{3,8}\b/i);
     }
-  });
-
-  it('keeps the maskable icon inside the safe circle, and the standard icon in the canvas', () => {
-    expect(appIconReach(maskableMarkShare)).toBeLessThanOrEqual(maskableSafeRadius);
-    expect(appIconReach(iconMarkShare)).toBeLessThan(256);
-    expect(appIconReach(maskableMarkShare)).toBeLessThan(appIconReach(iconMarkShare));
-  });
-
-  it('centres the caret on its drawn bounds', () => {
-    const svg = appIconSvg(themes, iconMarkShare);
-    const [, tx, ty, scale] = svg.match(/translate\(([\d.-]+) ([\d.-]+)\) scale\(([\d.-]+)\)/)!.map(Number);
-    expect(tx + 32 * scale).toBeCloseTo(256, 1);
-    expect(ty + 33 * scale).toBeCloseTo(256, 1);
   });
 });
 

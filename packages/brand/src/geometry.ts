@@ -20,5 +20,3 @@ export const caretStrokeWidth = 8.85;
 export const markCentre = { x: 32, y: 33 };
 /** The width of the drawn mark, stroke caps included, in markViewBox units. */
 export const markWidth = 54;
-/** The distance from the centre to the farthest point of the drawn mark (a stroke end cap). */
-export const markReach = Math.hypot(22, 11) + markStrokeWidth / 2;
