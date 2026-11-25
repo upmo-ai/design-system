@@ -156,7 +156,7 @@
 
 /* The caret: brand mark + liveness signature. A draw-ramp conveys "filling up"
    toward the live state: Preparing = faint outline, Planning = half-drawn,
-   Working/Checking = fully drawn and sweeping. The distinction is draw-state,
+   Working/Verifying = fully drawn and sweeping. The distinction is draw-state,
    not hue, so the live states read as alive without the pre-live ones competing. */
 .upmo-caret {
   display: inline-block;

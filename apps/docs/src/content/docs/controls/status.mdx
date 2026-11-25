@@ -5,10 +5,10 @@ description: The StatusBadge, StatusDot and the live caret.
 
 The status surface expresses the Upmo status model: two enums sharing one tone
 layer. **Phase** is the low-level task progress (Preparing, Planning, Working,
-Checking, Done, Failed). **Attention** is the high-level hint to the user
+Verifying, Done, Failed). **Attention** is the high-level hint to the user
 (Queued, Needs approval, Paused, Stopped). A run can hold both at once.
 
-The live caret is the signature of liveness: it sweeps for Working and Checking,
+The live caret is the signature of liveness: it sweeps for Working and Verifying,
 and collapses to a static drawn caret under reduced motion. Everything else uses
 a familiar icon. Colour is never the sole signal: every state carries a word and
 a mark.

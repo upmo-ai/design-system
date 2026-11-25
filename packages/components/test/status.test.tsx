@@ -9,6 +9,7 @@ import {
   phaseMeta,
   phases,
   statusMeta,
+  type Status,
 } from '../src/index.ts';
 import { renderThemed, themes } from './render.tsx';
 
@@ -26,15 +27,16 @@ describe('status model', () => {
     }
   });
 
-  it('uses the live caret only for Working and Checking', () => {
+  it('uses the live caret only for Working and Verifying', () => {
     expect(phaseMeta.Working.mark).toBe('caret-live');
-    expect(phaseMeta.Checking.mark).toBe('caret-live');
+    expect(phaseMeta.Verifying.mark).toBe('caret-live');
     expect(phaseMeta.Done.mark).toBe('icon');
     expect(phaseMeta.Failed.mark).toBe('icon');
   });
 
   it('assigns the agreed tones', () => {
     expect(phaseMeta.Working.tone).toBe('active');
+    expect(phaseMeta.Verifying.tone).toBe('active');
     expect(phaseMeta.Done.tone).toBe('positive');
     expect(phaseMeta.Failed.tone).toBe('critical');
     expect(attentionMeta['Needs approval'].tone).toBe('attention');
@@ -45,6 +47,12 @@ describe('status model', () => {
   it('throws on an unknown status', () => {
     // @ts-expect-error intentional bad input
     expect(() => statusMeta('Nope')).toThrow();
+  });
+
+  it('does not keep Checking as a phase', () => {
+    expect((phases as readonly string[]).includes('Checking')).toBe(false);
+    // @ts-expect-error Checking was removed from Phase
+    expect(() => statusMeta('Checking')).toThrow();
   });
 });
 
@@ -66,6 +74,14 @@ describe('StatusBadge', () => {
 
   it('draws the live caret for Working', () => {
     const { container } = renderThemed(<StatusBadge status="Working" />);
+    expect(container.querySelector('.upmo-caret--live')).toBeTruthy();
+    expect(container.querySelector('.upmo-caret__sweep')).toBeTruthy();
+  });
+
+  it('accepts Verifying and draws the live caret with the word', () => {
+    const status = 'Verifying' satisfies Status;
+    const { container } = renderThemed(<StatusBadge status={status} />);
+    expect(screen.getByText('Verifying')).toBeInTheDocument();
     expect(container.querySelector('.upmo-caret--live')).toBeTruthy();
     expect(container.querySelector('.upmo-caret__sweep')).toBeTruthy();
   });

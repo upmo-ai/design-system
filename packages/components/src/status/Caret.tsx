@@ -20,7 +20,7 @@ export interface CaretProps {
  * chevron drawn in two strokes. State determines how much is drawn:
  * - undrawn: both strokes faint (Preparing)
  * - partial: left stroke drawn, right faint (Planning)
- * - live: both strokes drawn, the up-stroke sweeps on a loop (Working, Checking)
+ * - live: both strokes drawn, the up-stroke sweeps on a loop (Working, Verifying)
  *
  * The live sweep uses the duration-sweep / ease-caret tokens. Under reduced
  * motion it collapses to a static, fully drawn caret (see styles.css), so the

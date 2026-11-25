@@ -33,7 +33,7 @@ export interface StatusBadgeProps extends Omit<BadgeProps, 'color' | 'leftSectio
   /** A Phase or Attention status word. Drives the tone, the mark, and the label. */
   status: Status;
   /**
-   * Whether the live caret (Working, Checking) sweeps. Default true. Pass false
+   * Whether the live caret (Working, Verifying) sweeps. Default true. Pass false
    * when the badge labels a settled event, so only the in-flight one animates;
    * the caret then shows its final drawn state.
    */
@@ -43,7 +43,7 @@ export interface StatusBadgeProps extends Omit<BadgeProps, 'color' | 'leftSectio
 /**
  * StatusBadge renders an Upmo status (Phase or Attention) as a pill: the tone
  * ground and text from the token-backed tone, a mark (the live caret for
- * Working/Checking, a familiar icon otherwise), and the status word. Colour is
+ * Working/Verifying, a familiar icon otherwise), and the status word. Colour is
  * never alone: the word and the mark always accompany it.
  */
 export function StatusBadge({ status, live = true, className, ...rest }: StatusBadgeProps) {

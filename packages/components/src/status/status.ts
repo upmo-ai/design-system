@@ -3,14 +3,14 @@
 // to the user. The two can co-occur on one run (e.g. Working + Needs approval).
 //
 // Every state carries a WORD and a TONE, so colour is never the sole signal.
-// Active states (Working, Checking) use the live caret draw-sweep; terminal and
+// Active states (Working, Verifying) use the live caret draw-sweep; terminal and
 // discrete states use a familiar icon. See status.tsx for the rendering.
 
 /** The shared tone layer. Drives colour and ground across both enums. */
 export type Tone = 'neutral' | 'active' | 'positive' | 'attention' | 'critical';
 
 /** Phase: the lifecycle a task moves through. Mostly automatic, linear. */
-export type Phase = 'Preparing' | 'Planning' | 'Working' | 'Checking' | 'Done' | 'Failed';
+export type Phase = 'Preparing' | 'Planning' | 'Working' | 'Verifying' | 'Done' | 'Failed';
 
 /** Attention: what the run wants from the user, or what happened to it. */
 export type Attention = 'Queued' | 'Needs approval' | 'Paused' | 'Stopped';
@@ -32,7 +32,7 @@ export const phaseMeta: Record<Phase, StatusMeta> = {
   Preparing: { tone: 'neutral', mark: 'caret-undrawn' },
   Planning: { tone: 'neutral', mark: 'caret-partial' },
   Working: { tone: 'active', mark: 'caret-live' },
-  Checking: { tone: 'active', mark: 'caret-live' },
+  Verifying: { tone: 'active', mark: 'caret-live' },
   Done: { tone: 'positive', mark: 'icon', icon: 'check' },
   Failed: { tone: 'critical', mark: 'icon', icon: 'x' },
 };

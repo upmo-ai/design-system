@@ -16,7 +16,7 @@ export const States: Story = {
     <Group align="flex-start" gap={64}>
       <PhaseRail current="Working" />
       <PhaseRail current={null} done />
-      <PhaseRail current="Checking" failed />
+      <PhaseRail current="Verifying" failed />
     </Group>
   ),
 };

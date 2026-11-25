@@ -16,7 +16,7 @@ const base: EventItem[] = [
   { id: '2', time: '08:01:02', status: 'Planning', message: 'Drafted a 4-step plan.', detail: ['1. Fetch open invoices', '2. Match to payments'] },
   { id: '3', time: '08:01:09', status: 'Working', message: 'Fetched 142 open invoices from Stripe.' },
   { id: '4', time: '08:01:14', status: 'Working', message: 'Matched 138 of 142 to payments.' },
-  { id: '5', time: '08:01:20', status: 'Checking', message: 'Verifying 4 unmatched invoices.', live: true },
+  { id: '5', time: '08:01:20', status: 'Verifying', message: 'Verifying 4 unmatched invoices.', live: true },
 ];
 
 export const Static: Story = {
@@ -31,7 +31,7 @@ export const Done: Story = {
     const [following, setFollowing] = useState(true);
     const events: EventItem[] = [
       ...base.slice(0, 4),
-      { id: '5', time: '08:01:20', status: 'Checking', message: 'Verified all invoices.' },
+      { id: '5', time: '08:01:20', status: 'Verifying', message: 'Verified all invoices.' },
       { id: '6', time: '08:01:26', status: 'Done', message: 'Invoice sync finished. 142 processed.' },
     ];
     return <EventStream events={events} following={following} onFollowChange={setFollowing} />;

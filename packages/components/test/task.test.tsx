@@ -89,7 +89,7 @@ describe('PhaseRail', () => {
   it('marks done, current and future phases', () => {
     const { container } = renderThemed(<PhaseRail current="Working" />);
     const items = container.querySelectorAll('.upmo-phaserail__item');
-    // Preparing, Planning done; Working current; Checking future.
+    // Preparing, Planning done; Working current; Verifying future.
     expect(items[0].getAttribute('data-done')).toBe('true');
     expect(items[1].getAttribute('data-done')).toBe('true');
     expect(items[2].getAttribute('data-current')).toBe('true');

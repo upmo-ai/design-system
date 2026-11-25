@@ -25,7 +25,7 @@ export interface StatusDotProps {
 
 /**
  * A compact status indicator for dense rows (tables, lists). Active states
- * (Working, Checking) show the small live caret; everything else is a filled
+ * (Working, Verifying) show the small live caret; everything else is a filled
  * dot in the tone colour. Always carries an accessible label, since a dot or
  * caret alone would carry meaning by colour only.
  */
