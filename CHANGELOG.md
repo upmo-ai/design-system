@@ -2,6 +2,16 @@
 
 Release notes for the six @upmo-ai packages, which share one version. Each section is generated from the conventional commits in that release.
 
+## 2.0.0 (2026-11-25)
+
+### Breaking changes
+
+- **components:** rename the Checking phase to Verifying (#18) ([691c601](https://github.com/upmo-ai/design-system/commit/691c6014d479deb93bd0b69317173d5fd09bf2dc))
+
+### Features
+
+- **socials:** add LinkedIn, Facebook, Twitter and Instagram covers (#17) ([2b4af8e](https://github.com/upmo-ai/design-system/commit/2b4af8ed35c2f927b1d8c08a6687a0272719d92e))
+
 ## 1.9.1 (2026-11-23)
 
 ### Fixes
