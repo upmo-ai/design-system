@@ -26,7 +26,7 @@ export const Phases: Story = {
   render: () => (
     <Stack gap="sm">
       <Text size="sm" c="dimmed">
-        Phase: the lifecycle a task moves through. Working and Checking draw the live caret.
+        Phase: the lifecycle a task moves through. Working and Verifying draw the live caret.
       </Text>
       <Group>
         {phases.map((p) => (

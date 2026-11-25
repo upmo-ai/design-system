@@ -5,7 +5,7 @@ import { phases as allPhases } from '../status/status.ts';
 export interface PhaseRailProps {
   /**
    * The phases to show, in order. Defaults to the four lifecycle phases
-   * (Preparing, Planning, Working, Checking). Done and Failed are task
+   * (Preparing, Planning, Working, Verifying). Done and Failed are task
    * outcomes, not rail nodes.
    */
   phases?: Phase[];

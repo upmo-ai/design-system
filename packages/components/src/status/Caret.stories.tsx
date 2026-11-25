@@ -40,7 +40,7 @@ export const DrawRamp: Story = {
       <Stack align="center" gap={4}>
         <Caret mark="caret-live" size={48} />
         <Text size="xs" c="dimmed">
-          Live, sweeping (Working / Checking)
+          Live, sweeping (Working / Verifying)
         </Text>
       </Stack>
     </Group>

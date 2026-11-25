@@ -6,7 +6,7 @@ import { renderThemed, themes } from './render.tsx';
 const events: EventItem[] = [
   { id: '1', time: '08:01:02', status: 'Planning', message: 'Drafted a plan.' },
   { id: '2', time: '08:01:09', status: 'Working', message: 'Fetched 142 invoices.' },
-  { id: '3', time: '08:01:20', status: 'Checking', message: 'Verifying results.', live: true },
+  { id: '3', time: '08:01:20', status: 'Verifying', message: 'Verifying results.', live: true },
 ];
 
 // jsdom has no layout: give the list fixed scroll metrics with a writable
@@ -35,7 +35,7 @@ describe('EventStream', () => {
     expect(screen.getByText('08:01:02')).toBeInTheDocument();
     expect(screen.getByText('Fetched 142 invoices.')).toBeInTheDocument();
     // The status word appears via StatusBadge.
-    expect(screen.getByText('Checking')).toBeInTheDocument();
+    expect(screen.getByText('Verifying')).toBeInTheDocument();
   });
 
   it('shows the count and the "Following live" header when following', () => {
@@ -125,7 +125,7 @@ describe('EventStream', () => {
   it('sweeps the caret only on the live row', () => {
     renderThemed(<EventStream events={events} following />);
     const list = screen.getByRole('log');
-    // Working (settled) and Checking (live) both draw the live caret...
+    // Working (settled) and Verifying (live) both draw the live caret...
     expect(list.querySelectorAll('.upmo-caret--live')).toHaveLength(2);
     // ...but only the live row animates.
     const sweeps = list.querySelectorAll('.upmo-caret__sweep');

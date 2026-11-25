@@ -27,7 +27,7 @@ const allRows: Run[] = [
   { id: 'run_4818', agent: 'Report builder', status: 'Failed', items: 0 },
   { id: 'run_4817', agent: 'Invoice sync', status: 'Done', items: 120 },
   { id: 'run_4816', agent: 'Lead triage', status: 'Done', items: 44 },
-  { id: 'run_4815', agent: 'Digest', status: 'Checking', items: 5 },
+  { id: 'run_4815', agent: 'Digest', status: 'Verifying', items: 5 },
   { id: 'run_4814', agent: 'Report builder', status: 'Done', items: 61 },
   { id: 'run_4813', agent: 'Refund review', status: 'Done', items: 12 },
   { id: 'run_4812', agent: 'Digest', status: 'Done', items: 5 },
@@ -58,7 +58,7 @@ export const WithToolbarAndPagination: StoryObj = {
 
     const filtered = useMemo(() => {
       let rows = allRows;
-      if (filter === 'Live') rows = rows.filter((r) => r.status === 'Working' || r.status === 'Checking');
+      if (filter === 'Live') rows = rows.filter((r) => r.status === 'Working' || r.status === 'Verifying');
       else if (filter === 'Done') rows = rows.filter((r) => r.status === 'Done');
       if (search.trim()) {
         const q = search.toLowerCase();

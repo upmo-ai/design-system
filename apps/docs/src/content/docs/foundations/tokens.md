@@ -21,8 +21,8 @@ focus), never a surface fill.
 ## Status and liveness
 
 Two enums share one tone layer. Phase is the low-level task progress (Preparing,
-Planning, Working, Checking, Done, Failed). Attention is the high-level hint to
+Planning, Working, Verifying, Done, Failed). Attention is the high-level hint to
 the user (Queued, Needs approval, Paused, Stopped). The tones are neutral,
 active, positive, attention and critical. The live caret draws itself on a
-steady loop for Working and Checking, and collapses to a static drawn caret
+steady loop for Working and Verifying, and collapses to a static drawn caret
 under reduced motion.

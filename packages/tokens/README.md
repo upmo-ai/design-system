@@ -57,7 +57,7 @@ Set the theme on a root element:
   structure; shadows lift floating layers only. Emerald is a sparing accent,
   never a surface fill.
 - **Status / liveness tones.** neutral / active / positive / attention /
-  critical. The live caret (Working, Checking) draws itself on the
+  critical. The live caret (Working, Verifying) draws itself on the
   `duration-sweep` loop and collapses to a static drawn caret under reduced
   motion.
 - **Accessible floor.** Body text clears 4.5:1 on its stated ground; control

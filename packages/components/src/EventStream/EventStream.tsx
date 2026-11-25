@@ -22,7 +22,7 @@ export interface EventItem {
   dateTime?: string;
   /**
    * The status this event belongs to (a Phase or an Attention word). Drives the
-   * tone and the mark: active phases (Working, Checking) carry the caret, which
+   * tone and the mark: active phases (Working, Verifying) carry the caret, which
    * sweeps only on the live row, so settled history stays still. Matches the
    * Upmo status model.
    */
